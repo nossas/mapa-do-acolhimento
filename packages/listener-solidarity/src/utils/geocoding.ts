@@ -1,6 +1,6 @@
 import dbg from "../dbg";
 import axios from "axios";
-import { GoogleMapsResponse, IndividualGeolocation, User } from "../types";
+import { GoogleMapsResponse, IndividualGeolocation } from "../types";
 
 const log = dbg.extend("getGeocoding");
 
