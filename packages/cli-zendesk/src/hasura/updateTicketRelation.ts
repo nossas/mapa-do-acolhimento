@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from "axios";
 
 const mutation = `mutation(
   $id: Int
@@ -17,23 +17,30 @@ const mutation = `mutation(
     affected_rows
   }
 }
-`
+`;
 
-const updateTicketRelation = async (id: number, webhooks_registry_id: number) => {
-  const { HASURA_API_URL, X_HASURA_ADMIN_SECRET } = process.env
-  const response = await axios.post(HASURA_API_URL, {
-    query: mutation,
-    variables: {
-      id,
-      webhooks_registry_id,
+const updateTicketRelation = async (
+  id: number,
+  webhooks_registry_id: number
+) => {
+  const { HASURA_API_URL = "", X_HASURA_ADMIN_SECRET } = process.env;
+  const response = await axios.post(
+    HASURA_API_URL,
+    {
+      query: mutation,
+      variables: {
+        id,
+        webhooks_registry_id
+      }
     },
-  }, {
-    headers: {
-      'x-hasura-admin-secret': X_HASURA_ADMIN_SECRET,
-    },
-  })
+    {
+      headers: {
+        "x-hasura-admin-secret": X_HASURA_ADMIN_SECRET
+      }
+    }
+  );
 
-  return response
-}
+  return response;
+};
 
-export default updateTicketRelation
+export default updateTicketRelation;

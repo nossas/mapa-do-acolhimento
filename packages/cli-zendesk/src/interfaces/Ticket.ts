@@ -105,3 +105,10 @@ export const handleCustomFields = (ticket: Ticket) => {
 
   return finalTicket;
 };
+
+export interface TicketResponse {
+  tickets: Ticket[];
+  next_page: string;
+  end_time: number;
+  count: number;
+}
