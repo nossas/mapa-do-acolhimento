@@ -11,12 +11,15 @@
     "eslint-plugin-prettier": "^3.1.2",
     "eslint-plugin-react": "^7.18.3",
     "eslint-plugin-react-hooks": "^2.4.0",
-    "prettier": "^1.19.1",
-    "tsc-watch": "^4.0.0",
-    "typescript": "3.9.3"
+    "prettier": "^1.19.1"
   },
   "scripts": {
     "lint": "eslint ./packages/listener-solidarity **/*.ts --fix",
-    "clean": "rm -rf node_modules"
+    "clean": "rm -rf **/*/dist && rm -rf **/*/tsconfig.tsbuildinfo"
+  },
+  "dependencies": {
+    "tsc-watch": "4.2.8",
+    "tslib": "^2.0.0",
+    "typescript": "3.9.5"
   }
 }
