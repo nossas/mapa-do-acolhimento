@@ -2,7 +2,9 @@ import ZendeskBase from "./ZendeskBase";
 import { TicketZendesk } from "../interfaces/Ticket";
 
 interface ResponseTickets {
-  tickets: TicketZendesk[];
+  data: {
+    tickets: TicketZendesk[];
+  };
 }
 
 /**
@@ -10,7 +12,9 @@ interface ResponseTickets {
  * @param requester_id Requester's id
  * @returns ResponseTickets object
  */
-const getUserRequestedTickets = (requester_id: number | string) =>
-  ZendeskBase.get<ResponseTickets>(`users/${requester_id}/tickets/requested`);
+const getUserRequestedTickets = async (
+  requester_id: number | string
+): Promise<ResponseTickets> =>
+  await ZendeskBase.get(`users/${requester_id}/tickets/requested`);
 
 export default getUserRequestedTickets;

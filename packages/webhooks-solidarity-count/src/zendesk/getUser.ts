@@ -2,9 +2,12 @@ import ZendeskBase from "./ZendeskBase";
 import User from "../interfaces/User";
 
 interface Response {
-  user: User;
+  data: {
+    user: User;
+  };
 }
 
-const getUser = (id: number) => ZendeskBase.get<Response>(`users/${id}`);
+const getUser = async (id: number): Promise<Response> =>
+  await ZendeskBase.get(`users/${id}`);
 
 export default getUser;
