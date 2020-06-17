@@ -20,6 +20,7 @@
   "dependencies": {
     "tsc-watch": "4.2.8",
     "tslib": "^2.0.0",
+    "tsutils": "^3.17.1",
     "typescript": "3.9.5"
   }
 }
