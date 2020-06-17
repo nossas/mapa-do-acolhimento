@@ -137,7 +137,7 @@ class PsicologaCreateUser extends Base {
   };
 
   private verificaLocalização = async (
-    condition: [CONDITION],
+    _condition: [CONDITION],
     data: object
   ) => {
     const verificaCep = yup

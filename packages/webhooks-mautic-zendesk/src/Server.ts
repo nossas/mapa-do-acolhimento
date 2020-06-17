@@ -12,26 +12,26 @@ import { FILTER_FORM_NAME_STATUS, filterFormName } from "./filterFormName";
 import BondeCreatedDate from "./integrations/BondeCreatedDate";
 import addTagsToTicket from "./zendesk/addTagsToTicket";
 
-interface DataType {
-  data: {
-    logTable: {
-      returning: {
-        id: number;
-      }[];
-    };
-  };
-}
+// interface DataType {
+//   data: {
+//     logTable: {
+//       returning: {
+//         id: number;
+//       }[];
+//     };
+//   };
+// }
 
-interface FormData {
-  cep: string;
-}
+// interface FormData {
+//   cep: string;
+// }
 
 class Server {
   private server = Express().use(Express.json());
 
   private dbg: Debugger;
 
-  private formData?: FormData;
+  // private formData?: FormData;
 
   constructor() {
     this.dbg = debug("webhooks-mautic-zendesk");

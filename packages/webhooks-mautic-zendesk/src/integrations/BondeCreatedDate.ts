@@ -102,8 +102,8 @@ class BondeCreatedDate {
       const [
         { value: name },
         { value: lastname },
-        _,
-        __,
+        // _,
+        // __,
         { value: cep }
       ] = JSON.parse(filteredFormEntries[0].fields);
       const aux = {
