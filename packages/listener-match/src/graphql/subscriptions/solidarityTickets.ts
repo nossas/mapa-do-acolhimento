@@ -14,7 +14,10 @@ const SOLIDARITY_USERS_SUBSCRIPTION = gql`
           { status_acolhimento: { _eq: "solicitação_repetida" } }
           { status_acolhimento: { _eq: "solicitação_recebida" } }
         ]
-        subject: { _similar: "%(Psicológico|Jurídico)%" }
+        _and: [
+          { subject: { _similar: "%(Psicológico|Jurídico)%" } }
+          { subject: { _nlike: "%- INT%" } }
+        ]
         nome_msr: { _is_null: false }
         status: { _nin: ["closed", "deleted", "solved"] }
         match_syncronized: { _eq: false }
@@ -40,9 +43,9 @@ export default async (): Promise<any> => {
     const observable = GraphQLAPI.subscribe({
       query: SOLIDARITY_USERS_SUBSCRIPTION,
       variables: {
-        organization_id: 360273031591,
+        organization_id: 360273031591
       },
-      fetchPolicy: "network-only",
+      fetchPolicy: "network-only"
     }).subscribe({ next: handleMatch(), error });
 
     return observable;
