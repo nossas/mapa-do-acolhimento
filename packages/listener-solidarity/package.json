@@ -13,8 +13,7 @@
     "@types/url-join": "^4.0.0",
     "@types/ws": "^7.2.4",
     "jest": "26.0.1",
-    "rimraf": "~3.0.2",
-    "ts-jest": "~26.1.0"
+    "rimraf": "~3.0.2"
   },
   "scripts": {
     "start": "DEBUG=listener-solidarity* node -r dotenv-safe/config dist/main.js",

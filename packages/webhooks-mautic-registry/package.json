@@ -14,8 +14,7 @@
     "express": "^4.17.1",
     "jest": "26.0.1",
     "source-map-support": "^0.5.16",
-    "supertest": "^4.0.2",
-    "ts-jest": "^26.1.0"
+    "supertest": "^4.0.2"
   },
   "scripts": {
     "start": "DEBUG=webhooks-mautic-registry* node dist/index.js",

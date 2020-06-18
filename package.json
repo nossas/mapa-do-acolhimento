@@ -18,6 +18,7 @@
     "clean": "rm -rf **/*/dist && rm -rf **/*/tsconfig.tsbuildinfo"
   },
   "dependencies": {
+    "ts-jest": "^26.1.0",
     "tsc-watch": "4.2.8",
     "tslib": "^2.0.0",
     "tsutils": "^3.17.1",
