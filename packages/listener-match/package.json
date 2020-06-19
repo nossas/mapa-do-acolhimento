@@ -14,6 +14,7 @@
     "@types/throng": "^4.0.2",
     "@types/url-join": "^4.0.0",
     "@types/ws": "^7.2.5",
+    "@types/yup": "^0.29.3",
     "jest": "26.0.1",
     "rimraf": "~3.0.2"
   },

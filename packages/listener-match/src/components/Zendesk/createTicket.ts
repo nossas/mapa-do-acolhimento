@@ -11,18 +11,27 @@ const schema = yup.object().shape({
   assignee_id: yup.number().required(),
   status: yup.string().required(),
   subject: yup.string().required(),
-  comment: yup.object().shape({
-    body: yup.string().required(),
-    author_id: yup.number().required(),
-    public: yup.boolean().required()
-  }),
-  fields: yup
+  comment: yup
+    .object()
+    .shape({
+      body: yup.string().required(),
+      author_id: yup.number().required(),
+      public: yup.boolean().required()
+    })
+    .required(),
+  custom_fields: yup
     .array()
     .of(
-      yup.object().shape({
-        id: yup.number(),
-        value: yup.string().nullable()
-      })
+      yup
+        .object()
+        .shape({
+          id: yup.number().required(),
+          value: yup
+            .mixed()
+            .oneOf([yup.string(), yup.number()])
+            .required()
+        })
+        .required()
     )
     .min(4)
     .required(),
@@ -30,7 +39,9 @@ const schema = yup.object().shape({
 });
 
 export default async (ticket: Ticket): Promise<Ticket | undefined> => {
-  log(`${new Date()}: CREATE TICKET`);
+  log(
+    `${new Date()}: Creating volunteer ${ticket.requester_id} ticket in Zendesk`
+  );
   try {
     const validatedTicket = await schema.validate(ticket, {
       stripUnknown: true

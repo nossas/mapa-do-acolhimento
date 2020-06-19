@@ -5,6 +5,7 @@ export type IndividualTicket = {
   requester_id: number;
   nome_msr: string;
   status_acolhimento: string;
+  external_id: number;
 };
 export type SubscriptionResponse = {
   data: {
@@ -40,6 +41,7 @@ export type Individual = {
 };
 
 export type Ticket = {
+  id?: number;
   requester_id: number;
   submitter_id: number;
   assignee_id: number;
@@ -50,7 +52,7 @@ export type Ticket = {
     author_id: number;
     public: boolean;
   };
-  fields: Array<{ id: number; value: any }>;
+  custom_fields: Array<{ id: number; value: string | number }>;
   external_id: number;
 };
 
@@ -66,6 +68,28 @@ export type UpdateTicket = {
     author_id: number;
     public: boolean;
   };
-  fields?: Array<{ id: number; value: any }>;
+  custom_fields?: Array<{ id: number; value: any }>;
   external_id: number;
+};
+
+export type MatchTicket = {
+  individuals_ticket_id: number;
+  volunteers_ticket_id: number;
+  individuals_user_id: number;
+  volunteers_user_id: number;
+  community_id: number;
+  status: string;
+};
+
+export type CustomFields = {
+  status_acolhimento?: string;
+  data_inscricao_bonde?: string;
+  nome_msr?: string;
+  nome_voluntaria?: null;
+  link_match?: null;
+  data_encaminhamento?: null;
+  status_inscricao?: null;
+  telefone?: null;
+  estado?: null;
+  cidade?: null;
 };

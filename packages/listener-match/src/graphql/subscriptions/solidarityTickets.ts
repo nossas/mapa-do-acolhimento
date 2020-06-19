@@ -30,6 +30,7 @@ const SOLIDARITY_USERS_SUBSCRIPTION = gql`
       requester_id
       nome_msr
       status_acolhimento
+      external_id
     }
   }
 `;
