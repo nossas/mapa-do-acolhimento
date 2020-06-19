@@ -2,7 +2,7 @@ import gql from "graphql-tag";
 import {
   fetchSolidarityUsers,
   fetchSolidarityMatches
-} from "../../graphql/query";
+} from "../../graphql/queries";
 import { zendeskOrganizations } from "../../services/utils";
 import { Volunteer, PendingTickets } from "../../types";
 import dbg from "../../dbg";

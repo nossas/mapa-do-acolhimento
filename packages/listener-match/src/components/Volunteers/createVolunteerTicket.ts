@@ -1,94 +1,54 @@
 import * as yup from "yup";
-import { Ticket, IndividualTicket, CustomFields, Volunteer } from "../../types";
+import { IndividualTicket, Volunteer, CustomFields } from "../../types";
 import { getCurrentDate, getVolunteerType } from "../../services/utils";
 import { createTicket } from "../Zendesk";
 import { saveSolidarityTicket } from "../../graphql/mutations";
 import dbg from "../../dbg";
-
 const log = dbg.extend("createVolunteerTicket");
 
-const AGENT = Number(process.env.AGENT_ID) || 0;
-
-const hasuraSchema = yup.object().shape({
-  community_id: yup.number().required(),
-  ticket_id: yup.number().required(),
-  assignee_id: yup.number().required(),
-  created_at: yup.string().required(),
-  custom_fields: yup
-    .array()
-    .of(
-      yup
-        .object()
-        .shape({
-          id: yup.number().required(),
-          value: yup
-            .mixed()
-            .oneOf([yup.string(), yup.number()])
-            .required()
-        })
-        .required()
-    )
-    .min(4)
-    .required(),
-  description: yup.string().required(),
-  organization_id: yup.number().required(),
-  requester_id: yup.number().required(),
-  status: yup.string().required(),
-  subject: yup.string().required(),
-  submitter_id: yup.number().required(),
-  tags: yup.array().of(yup.string()),
-  updated_at: yup.string().required(),
-  external_id: yup.number().required(),
-  link_match: yup.string().required(),
-  data_encaminhamento: yup.string().required(),
-  nome_msr: yup.string().required(),
-  nome_voluntaria: yup.string().required(),
-  status_acolhimento: yup.string().required()
-});
-
 const dicio = {
-  360014379412: "status_acolhimento",
-  360016631592: "nome_voluntaria",
-  360016631632: "link_match",
   360016681971: "nome_msr",
+  360016631632: "link_match",
+  360014379412: "status_acolhimento",
   360017432652: "data_encaminhamento"
 };
+const AGENT = Number(process.env.AGENT_ID) || 0;
 
-const saveTicketInHasura = async (
-  ticket: Ticket
-): Promise<number | undefined> => {
-  log("Preparing volunteer ticket to be saved in Hasura");
-  const custom_fields: CustomFields = ticket.custom_fields.reduce(
-    (newObj, old) => {
-      const key = dicio[old.id] && dicio[old.id];
-      return {
-        ...newObj,
-        [key]: old.value
-      };
-    },
-    {}
-  );
-
-  const hasuraTicket = {
-    ...ticket,
-    ...custom_fields,
-    ticket_id: ticket.id,
-    community_id: Number(process.env.COMMUNITY_ID)
-  };
-
-  try {
-    const validatedTicket = await hasuraSchema.validate(hasuraTicket, {
-      stripUnknown: true
-    });
-    // log({ hasuraTicket: JSON.stringify(hasuraTicket, null, 2) });
-    const inserted = await saveSolidarityTicket(validatedTicket);
-    if (!inserted) return undefined;
-    return inserted;
-  } catch (e) {
-    log(`failed to save ticket: '${hasuraTicket.id}' in Hasura`.red, e);
-    return undefined;
-  }
-};
+const hasuraSchema = yup
+  .object()
+  .shape({
+    assignee_id: yup.number().required(),
+    requester_id: yup.number().required(),
+    submitter_id: yup.number().required(),
+    status: yup.string().required(),
+    subject: yup.string().required(),
+    description: yup.string().required(),
+    external_id: yup.number().required(),
+    custom_fields: yup
+      .array()
+      .of(
+        yup
+          .object()
+          .shape({
+            id: yup.number(),
+            value: yup.string().nullable()
+          })
+          .required()
+      )
+      .min(4)
+      .required(),
+    community_id: yup.number().required(),
+    ticket_id: yup.number().required(),
+    created_at: yup.string().required(),
+    organization_id: yup.number().required(),
+    tags: yup.array().of(yup.string()),
+    updated_at: yup.string().required(),
+    link_match: yup.string().required(),
+    data_encaminhamento: yup.string().required(),
+    nome_msr: yup.string().required(),
+    status_acolhimento: yup.string().required()
+  })
+  .required();
 
 export default async (volunteer: Volunteer, individual: IndividualTicket) => {
   const ticket = {
@@ -129,9 +89,35 @@ export default async (volunteer: Volunteer, individual: IndividualTicket) => {
     if (!zendeskTicket) {
       throw new Error("Zendesk ticket creation returned errors");
     }
-    return await saveTicketInHasura(zendeskTicket);
+
+    log("Preparing ticket to be saved in Hasura");
+    const custom_fields: CustomFields = zendeskTicket.custom_fields.reduce(
+      (newObj, old) => {
+        const key = dicio[old.id] && dicio[old.id];
+        return {
+          ...newObj,
+          [key]: old.value
+        };
+      },
+      {}
+    );
+    const hasuraTicket = {
+      ...zendeskTicket,
+      ...custom_fields,
+      ticket_id: zendeskTicket.id,
+      community_id: Number(process.env.COMMUNITY_ID)
+    };
+    // log({ hasuraTicket: JSON.stringify(hasuraTicket, null, 2) });
+
+    const validatedTicket = await hasuraSchema.validate(hasuraTicket, {
+      stripUnknown: true
+    });
+
+    const inserted = await saveSolidarityTicket(validatedTicket);
+    if (!inserted) return undefined;
+    return inserted;
   } catch (e) {
-    log("failed to create ticket in zendesk: ".red, e);
+    log("failed to create ticket: ".red, e);
     return undefined;
   }
 };

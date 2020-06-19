@@ -57,19 +57,14 @@ export type Ticket = {
 };
 
 export type UpdateTicket = {
-  id: number;
-  requester_id?: number;
-  submitter_id?: number;
-  assignee_id?: number;
-  status?: string;
-  subject?: string;
+  status: string;
+  assignee_id: number;
+  custom_fields: Array<{ id: number; value: string }>;
   comment: {
     body: string;
     author_id: number;
     public: boolean;
   };
-  custom_fields?: Array<{ id: number; value: any }>;
-  external_id: number;
 };
 
 export type MatchTicket = {

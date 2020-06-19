@@ -37,8 +37,11 @@ const CREATE_TICKETS_MUTATION = gql`
   }
 `;
 
-export default async ticket => {
-  log(`Saving ticket '${ticket.id}' in Hasura...`);
+export default async (ticket: {
+  ticket_id: number;
+}): Promise<number | undefined> => {
+  log({ ticket });
+  log(`Saving ticket '${ticket.ticket_id}' in Hasura...`);
   try {
     // log(validatedTicket);
     const res = await GraphQLAPI.mutate({
