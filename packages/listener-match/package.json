@@ -42,7 +42,7 @@
     "dotenv-safe": "^8.2.0",
     "graphql": "^15.1.0",
     "graphql-tag": "^2.10.3",
-    "node-zendesk": "^2.0.0",
+    "node-zendesk": "1.4.0",
     "subscriptions-transport-ws": "^0.9.16",
     "throng": "^4.0.0",
     "ws": "^7.3.0",

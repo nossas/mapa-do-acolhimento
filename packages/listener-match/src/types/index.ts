@@ -38,3 +38,34 @@ export type Individual = {
   longitude: string;
   state: string;
 };
+
+export type Ticket = {
+  requester_id: number;
+  submitter_id: number;
+  assignee_id: number;
+  status: string;
+  subject: string;
+  comment: {
+    body: string;
+    author_id: number;
+    public: boolean;
+  };
+  fields: Array<{ id: number; value: any }>;
+  external_id: number;
+};
+
+export type UpdateTicket = {
+  id: number;
+  requester_id?: number;
+  submitter_id?: number;
+  assignee_id?: number;
+  status?: string;
+  subject?: string;
+  comment: {
+    body: string;
+    author_id: number;
+    public: boolean;
+  };
+  fields?: Array<{ id: number; value: any }>;
+  external_id: number;
+};
