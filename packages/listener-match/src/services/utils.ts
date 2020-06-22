@@ -76,3 +76,9 @@ export const composeCustomFields = custom_fields =>
       [key]: old.value
     };
   }, {});
+
+export const agentDicio = {
+  1: 377510044432,
+  2: 377511446392,
+  3: 377577169651
+};

@@ -1,12 +1,14 @@
 import * as yup from "yup";
 import { updateTicket } from "../Zendesk";
-import { getCurrentDate, composeCustomFields } from "../../services/utils";
+import {
+  getCurrentDate,
+  composeCustomFields,
+  agentDicio
+} from "../../services/utils";
 import dbg from "../../dbg";
 import { updateSolidarityTickets } from "../../graphql/mutations";
 
 const log = dbg.extend("updateIndividualTicket");
-
-const AGENT = Number(process.env.AGENT_ID) || 0;
 
 const hasuraSchema = yup
   .object()
@@ -34,11 +36,11 @@ const hasuraSchema = yup
   })
   .required();
 
-export default async (ticket_id: number, state: string) => {
+export default async (ticket_id: number, state: string, agent: number) => {
   log("Entering forwardPublicService");
   const ticket = {
     status: "pending",
-    assignee_id: AGENT,
+    assignee_id: agentDicio[agent],
     custom_fields: [
       {
         id: 360021879791,
@@ -55,7 +57,7 @@ export default async (ticket_id: number, state: string) => {
     ],
     comment: {
       body: `Ticket da MSR foi atualizado após ela ser encaminhada para um serviço público`,
-      author_id: AGENT,
+      author_id: agentDicio[agent],
       public: false
     }
   };

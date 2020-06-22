@@ -1,13 +1,15 @@
 import * as yup from "yup";
 import { updateTicket } from "../Zendesk";
 import { IndividualTicket, Volunteer } from "../../types";
-import { getCurrentDate, composeCustomFields } from "../../services/utils";
+import {
+  getCurrentDate,
+  composeCustomFields,
+  agentDicio
+} from "../../services/utils";
 import dbg from "../../dbg";
 import { updateSolidarityTickets } from "../../graphql/mutations";
 
 const log = dbg.extend("updateIndividualTicket");
-
-const AGENT = Number(process.env.AGENT_ID) || 0;
 
 const hasuraSchema = yup
   .object()
@@ -39,12 +41,13 @@ const hasuraSchema = yup
 
 export default async (
   individual: IndividualTicket,
-  volunteer: Volunteer & { ticket_id: number }
+  volunteer: Volunteer & { ticket_id: number },
+  agent: number
 ) => {
   // log("Entering updateIndividualTicket", individual);
   const ticket = {
     status: "pending",
-    assignee_id: AGENT,
+    assignee_id: agentDicio[agent],
     custom_fields: [
       {
         id: 360016631592,
@@ -65,7 +68,7 @@ export default async (
     ],
     comment: {
       body: `Ticket da MSR foi atualizado após ela receber um match da voluntária ${volunteer.name}`,
-      author_id: AGENT,
+      author_id: agentDicio[agent],
       public: false
     }
   };

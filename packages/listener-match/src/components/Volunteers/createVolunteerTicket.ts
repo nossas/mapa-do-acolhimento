@@ -3,14 +3,13 @@ import { IndividualTicket, Volunteer } from "../../types";
 import {
   getCurrentDate,
   getVolunteerType,
-  composeCustomFields
+  composeCustomFields,
+  agentDicio
 } from "../../services/utils";
 import { createTicket } from "../Zendesk";
 import { saveSolidarityTicket } from "../../graphql/mutations";
 import dbg from "../../dbg";
 const log = dbg.extend("createVolunteerTicket");
-
-const AGENT = Number(process.env.AGENT_ID) || 0;
 
 const hasuraSchema = yup
   .object()
@@ -48,19 +47,23 @@ const hasuraSchema = yup
   })
   .required();
 
-export default async (volunteer: Volunteer, individual: IndividualTicket) => {
+export default async (
+  volunteer: Volunteer,
+  individual: IndividualTicket,
+  agent: number
+) => {
   const ticket = {
     external_id: individual.external_id,
     requester_id: volunteer.user_id,
-    submitter_id: AGENT,
-    assignee_id: AGENT,
+    submitter_id: agentDicio[agent],
+    assignee_id: agentDicio[agent],
     status: "pending",
     subject: `[${getVolunteerType(volunteer.organization_id).type}] ${
       volunteer.name
     }`,
     comment: {
       body: `Voluntária recebeu um pedido de acolhimento de ${individual.nome_msr}`,
-      author_id: AGENT,
+      author_id: agentDicio[agent],
       public: false
     },
     custom_fields: [
