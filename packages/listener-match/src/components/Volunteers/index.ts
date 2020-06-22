@@ -26,8 +26,6 @@ const FETCH_AVAILABLE_VOLUNTEERS = gql`
       }
     ) {
       user_id
-      disponibilidade_de_atendimentos
-      atendimentos_em_andamento_calculado_
       email
       name
       organization_id
@@ -85,26 +83,24 @@ export default async () => {
   return volunteersAvailable
     .map(user => {
       const {
-        disponibilidade_de_atendimentos,
-        atendimentos_em_andamento_calculado_,
+        // disponibilidade_de_atendimentos,
+        // atendimentos_em_andamento_calculado_,
         user_id
       } = user;
 
-      let formatAvailability;
-      if (typeof Number(disponibilidade_de_atendimentos) === "number") {
-        formatAvailability = Number(disponibilidade_de_atendimentos);
-      } else if (disponibilidade_de_atendimentos === "5_ou_mais") {
-        formatAvailability = 5;
-      } else {
-        formatAvailability = 1;
-      }
+      // let formatAvailability;
+      // if (typeof Number(disponibilidade_de_atendimentos) === "number") {
+      //   formatAvailability = Number(disponibilidade_de_atendimentos);
+      // } else if (disponibilidade_de_atendimentos === "5_ou_mais") {
+      //   formatAvailability = 5;
+      // } else {
+      //   formatAvailability = 1;
+      // }
 
       const countForwardings = pendingTickets.filter(
         ticket => ticket.volunteers_user_id === user_id
       ).length;
-      const availability =
-        formatAvailability -
-        (countForwardings + atendimentos_em_andamento_calculado_);
+      const availability = 1 - countForwardings;
 
       return {
         ...user,
