@@ -61,6 +61,7 @@ export default async (
     subject: `[${getVolunteerType(volunteer.organization_id).type}] ${
       volunteer.name
     }`,
+    organization_id: volunteer.organization_id,
     comment: {
       body: `Voluntária recebeu um pedido de acolhimento de ${individual.nome_msr}`,
       author_id: agentDicio[agent],
