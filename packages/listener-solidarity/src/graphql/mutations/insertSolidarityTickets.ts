@@ -61,7 +61,7 @@ const schema = yup.object().shape({
   custom_fields: yup.array().of(
     yup.object().shape({
       id: yup.number(),
-      value: yup.string().nullable(),
+      value: yup.string().nullable()
     })
   ),
   description: yup.string().required(),
@@ -85,18 +85,19 @@ const schema = yup.object().shape({
   atrelado_ao_ticket: yup.number().nullable(),
   updated_at: yup.string(),
   tags: yup.mixed(),
+  match_syncronized: yup.boolean().required()
 });
 
-const insertSolidarityTickets = async (ticket) => {
+const insertSolidarityTickets = async ticket => {
   log(`Saving ticket '${ticket.id}' in Hasura...`);
   try {
     const validatedTicket = await schema.validate(ticket, {
-      stripUnknown: true,
+      stripUnknown: true
     });
     // log(validatedTicket);
     const res = await GraphQLAPI.mutate({
       mutation: CREATE_TICKETS_MUTATION,
-      variables: { ticket: validatedTicket },
+      variables: { ticket: validatedTicket }
     });
 
     if (res && res.data && res.data.errors) {
@@ -105,7 +106,7 @@ const insertSolidarityTickets = async (ticket) => {
     }
 
     const {
-      data: { insert_solidarity_tickets_one },
+      data: { insert_solidarity_tickets_one }
     } = res;
 
     // log({ returning: insert_solidarity_tickets_one });

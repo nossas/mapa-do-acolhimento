@@ -8,7 +8,7 @@ import Bottleneck from "bottleneck";
 
 const limiter = new Bottleneck({
   maxConcurrent: 1,
-  minTime: 2000,
+  minTime: 2000
 });
 
 const createTicketLog = dbg.extend("createTicket");
@@ -26,7 +26,7 @@ const dicio = {
   360021812712: "telefone",
   360021879791: "estado",
   360021879811: "cidade",
-  360032229831: "atrelado_ao_ticket",
+  360032229831: "atrelado_ao_ticket"
 };
 
 const saveTicketInHasura = async (ticket: Ticket) => {
@@ -36,7 +36,7 @@ const saveTicketInHasura = async (ticket: Ticket) => {
       const key = dicio[old.id] && dicio[old.id];
       return {
         ...newObj,
-        [key]: old.value,
+        [key]: old.value
       };
     },
     {}
@@ -47,6 +47,7 @@ const saveTicketInHasura = async (ticket: Ticket) => {
     ...custom_fields,
     ticket_id: ticket.id,
     community_id: Number(process.env.COMMUNITY_ID),
+    match_syncronized: false
   });
   if (!inserted) return handleTicketError(ticket);
   return createTicketLog("Ticket integration is done.");
@@ -54,7 +55,7 @@ const saveTicketInHasura = async (ticket: Ticket) => {
 
 const createTicket = (ticket): Promise<boolean | undefined> => {
   createTicketLog(`${new Date()}: CREATE TICKET`);
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     return client.tickets.create({ ticket }, (err, _req, result: any) => {
       if (err) {
         createTicketLog(
@@ -78,10 +79,10 @@ const createTicket = (ticket): Promise<boolean | undefined> => {
 };
 
 export const fetchUserTickets = async ({
-  requester_id,
+  requester_id
 }): Promise<Ticket[] | undefined> => {
   fetchUserTicketsLog(`${new Date()}: LIST USER TICKETS`);
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     return client.tickets.listByUserRequested(
       requester_id,
       (err, _req, result: any) => {
@@ -101,7 +102,7 @@ export const fetchUserTickets = async ({
 
 export default async (tickets: Ticket[]) => {
   log(`${new Date()}: Entering createZendeskTickets`);
-  const createTickets = tickets.map(async (ticket) => {
+  const createTickets = tickets.map(async ticket => {
     const userTickets = await limiter.schedule(() => fetchUserTickets(ticket));
     if (!userTickets) return handleTicketError(ticket);
 
@@ -116,13 +117,13 @@ export default async (tickets: Ticket[]) => {
             ...ticket.custom_fields,
             {
               id: 360014379412,
-              value: "solicitação_repetida",
+              value: "solicitação_repetida"
             },
             {
               id: 360032229831,
               value:
-                typeof relatableTickets === "number" ? relatableTickets : null,
-            },
+                typeof relatableTickets === "number" ? relatableTickets : null
+            }
           ],
           comment: {
             body: `MSR já possui uma solicitação com o mesmo tipo de pedido de acolhimento nos seguintes tickets: ${
@@ -130,8 +131,8 @@ export default async (tickets: Ticket[]) => {
                 ? relatableTickets
                 : relatableTickets.join(", ")
             }`,
-            public: false,
-          },
+            public: false
+          }
         })
       );
     }
