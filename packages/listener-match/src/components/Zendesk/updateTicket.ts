@@ -1,36 +1,79 @@
 import dbg from "../../dbg";
 import client from "./";
 import { UpdateTicket, Ticket } from "../../types";
-
+import * as yup from "yup";
 const log = dbg.extend("updateTicket");
+
+const schema = yup
+  .object()
+  .shape({
+    status: yup.string().required(),
+    assignee_id: yup.number().required(),
+    custom_fields: yup
+      .array()
+      .of(
+        yup
+          .object()
+          .shape({
+            id: yup
+              .mixed()
+              .oneOf([
+                360016631592,
+                360014379412,
+                360016631632,
+                360017432652,
+                360021879791
+              ]),
+            value: yup.string().required()
+          })
+          .required()
+      )
+      .min(3)
+      .required(),
+    comment: yup
+      .object()
+      .shape({
+        body: yup.string().required(),
+        author_id: yup.number().required(),
+        public: yup.boolean().required()
+      })
+      .required()
+  })
+  .required();
 
 export default async (
   ticketId: number,
   ticket: UpdateTicket
 ): Promise<Ticket | undefined> => {
-  log(`${new Date()}: UPDATE TICKET '${ticketId}'`);
-  return new Promise(resolve => {
-    return client.tickets.update(
-      ticketId,
-      { ticket } as any,
-      (err, _req, result: any) => {
-        if (err) {
-          log(
-            `Failed to update ticket for user '${ticket.requester_id}'`.red,
-            err
-          );
-          return resolve(undefined);
+  log(`Updating MSR ticket ${ticketId} in Zendesk`);
+  try {
+    // log({ ticketId, ticket: JSON.stringify(ticket, null, 2) });
+    const validatedTicket = await schema.validate(ticket, {
+      stripUnknown: true
+    });
+    return new Promise(resolve => {
+      return client.tickets.update(
+        ticketId,
+        { ticket: validatedTicket } as any,
+        (err, _req, result: any) => {
+          if (err) {
+            log(`Failed to update ticket '${ticketId}'`.red, err);
+            return resolve(undefined);
+          }
+          // log(
+          //   `Results from zendesk ticket update ${JSON.stringify(
+          //     result,
+          //     null,
+          //     2
+          //   )}`
+          // );
+          log("Zendesk ticket updated successfully!");
+          return resolve(result);
         }
-        log(
-          `Results from zendesk ticket creation ${JSON.stringify(
-            result,
-            null,
-            2
-          )}`
-        );
-        log("Zendesk ticket updated successfully!");
-        return resolve(result);
-      }
-    );
-  });
+      );
+    });
+  } catch (e) {
+    log("failed to update msr ticket: ".red, e);
+    return undefined;
+  }
 };

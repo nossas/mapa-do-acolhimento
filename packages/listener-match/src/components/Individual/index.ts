@@ -1,6 +1,6 @@
 // import dbg from "../../dbg";
 import gql from "graphql-tag";
-import { fetchSolidarityUsers } from "../../graphql/query";
+import { fetchSolidarityUsers } from "../../graphql/queries";
 import { Individual } from "../../types";
 
 const FETCH_INDIVIDUAL = gql`
