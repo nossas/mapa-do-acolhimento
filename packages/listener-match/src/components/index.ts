@@ -1,3 +1,4 @@
+import Bottleneck from "bottleneck";
 import dbg from "../dbg";
 import { SubscriptionResponse, Volunteer } from "../types";
 import {
@@ -20,6 +21,10 @@ import {
 } from "../graphql/mutations";
 
 const log = dbg.extend("match");
+const limiter = new Bottleneck({
+  maxConcurrent: 1,
+  minTime: 1000
+});
 
 let AGENT = 1;
 
@@ -83,16 +88,12 @@ export const handleMatch = () => async (response: SubscriptionResponse) => {
 
       const volunteer = getClosestVolunteer(individual[0], filteredVolunteers);
       if (!volunteer)
-        return await forwardPublicService(
-          ticket_id,
-          individual[0].state,
-          AGENT
+        return await limiter.schedule(() =>
+          forwardPublicService(ticket_id, individual[0].state, AGENT)
         );
 
-      const volunteer_ticket_id = await createVolunteerTicket(
-        volunteer,
-        individualTicket,
-        AGENT
+      const volunteer_ticket_id = await limiter.schedule(() =>
+        createVolunteerTicket(volunteer, individualTicket, AGENT)
       );
       if (!volunteer_ticket_id) return undefined;
       volunteer["ticket_id"] = volunteer_ticket_id;
@@ -102,10 +103,12 @@ export const handleMatch = () => async (response: SubscriptionResponse) => {
         individualTicket["ticket_id"] = atrelado_ao_ticket;
       }
 
-      const updateIndividual = await updateIndividualTicket(
-        individualTicket,
-        volunteer as Volunteer & { ticket_id: number },
-        AGENT
+      const updateIndividual = await limiter.schedule(() =>
+        updateIndividualTicket(
+          individualTicket,
+          volunteer as Volunteer & { ticket_id: number },
+          AGENT
+        )
       );
       if (!updateIndividual) return undefined;
 
