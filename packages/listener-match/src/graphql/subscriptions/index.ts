@@ -1,1 +1,1 @@
-export { default as subscriptionSolidarityTickets } from "./solidarityTickets";
+export { default as subscriptionSolidarityTickets } from "./fetchSolidarityTickets";
