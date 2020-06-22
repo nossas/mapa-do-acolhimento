@@ -38,6 +38,7 @@ const CREATE_MATCH_TICKET_MUTATION = `mutation createMatchTicket(${generateVaria
       created_at
       individuals_user_id
       volunteers_user_id
+      volunteers_ticket_id
       status
     ]}) {
       affected_rows

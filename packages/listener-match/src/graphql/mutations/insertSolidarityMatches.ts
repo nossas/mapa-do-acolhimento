@@ -8,14 +8,13 @@ const log = dbg.extend("insertSolidaritymatches");
 
 const CREATE_MATCH_TICKET_MUTATION = gql`
   mutation createMatchTicket($match: solidarity_matches_insert_input!) {
-    insert_solidarity_matches(
+    insert_solidarity_matches_one(
       object: $match
       on_conflict: {
         constraint: solidarity_matches_individuals_ticket_id_volunteers_ticket__key
         update_columns: [
-          community_id
           created_at
-          updated_at
+          community_id
           individuals_user_id
           volunteers_user_id
           volunteers_ticket_id
@@ -23,24 +22,27 @@ const CREATE_MATCH_TICKET_MUTATION = gql`
         ]
       }
     ) {
-      affected_rows
+      id
     }
   }
 `;
 
-const schema = yup.object().shape({
-  individuals_ticket_id: yup.number().required(),
-  volunteers_ticket_id: yup.number().required(),
-  individuals_user_id: yup.number().required(),
-  volunteers_user_id: yup.number().required(),
-  community_id: yup.number().required(),
-  status: yup.string().required()
-});
+const schema = yup
+  .object()
+  .shape({
+    individuals_ticket_id: yup.number().required(),
+    volunteers_ticket_id: yup.number().required(),
+    individuals_user_id: yup.number().required(),
+    volunteers_user_id: yup.number().required(),
+    community_id: yup.number().required(),
+    status: yup.string().required()
+  })
+  .required();
 
 export default async (
   individual: IndividualTicket,
   volunteer: Volunteer & { ticket_id: number }
-) => {
+): Promise<number | undefined> => {
   log(
     `Saving match ticket for individual '${individual.requester_id}' and volunteer '${volunteer.user_id}' in Hasura...`
   );
@@ -56,7 +58,7 @@ export default async (
     const validatedTicket = await schema.validate(match, {
       stripUnknown: true
     });
-    log(validatedTicket);
+    // log(validatedTicket);
     const res = await GraphQLAPI.mutate({
       mutation: CREATE_MATCH_TICKET_MUTATION,
       variables: { match: validatedTicket }
@@ -71,12 +73,9 @@ export default async (
       data: { insert_solidarity_matches_one }
     } = res;
 
-    log({ returning: insert_solidarity_matches_one });
+    // log({ returning: insert_solidarity_matches_one });
 
-    return (
-      insert_solidarity_matches_one &&
-      insert_solidarity_matches_one.affected_rows
-    );
+    return insert_solidarity_matches_one && insert_solidarity_matches_one.id;
   } catch (err) {
     log("failed on insert solidarity matches: ".red, err);
     return undefined;
