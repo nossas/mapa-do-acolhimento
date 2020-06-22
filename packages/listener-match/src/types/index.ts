@@ -25,7 +25,7 @@ export type Volunteer = {
   whatsapp: string;
   phone: string;
   registration_number: string;
-  id: number;
+  ticket_id?: number;
 };
 
 export type PendingTickets = {
@@ -74,17 +74,4 @@ export type MatchTicket = {
   volunteers_user_id: number;
   community_id: number;
   status: string;
-};
-
-export type CustomFields = {
-  status_acolhimento?: string;
-  data_inscricao_bonde?: string;
-  nome_msr?: string;
-  nome_voluntaria?: null;
-  link_match?: null;
-  data_encaminhamento?: null;
-  status_inscricao?: null;
-  telefone?: null;
-  estado?: null;
-  cidade?: null;
 };

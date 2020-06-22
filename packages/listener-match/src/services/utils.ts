@@ -41,3 +41,38 @@ export const getVolunteerType = (id: number) => {
     };
   throw new Error("Volunteer organization_id not supported in search for type");
 };
+
+export const customFieldsDicio: {
+  360014379412: "status_acolhimento";
+  360016631592: "nome_voluntaria";
+  360016631632: "link_match";
+  360016681971: "nome_msr";
+  360017056851: "data_inscricao_bonde";
+  360017432652: "data_encaminhamento";
+  360021665652: "status_inscricao";
+  360021812712: "telefone";
+  360021879791: "estado";
+  360021879811: "cidade";
+  360032229831: "atrelado_ao_ticket";
+} = {
+  360014379412: "status_acolhimento",
+  360016631592: "nome_voluntaria",
+  360016631632: "link_match",
+  360016681971: "nome_msr",
+  360017056851: "data_inscricao_bonde",
+  360017432652: "data_encaminhamento",
+  360021665652: "status_inscricao",
+  360021812712: "telefone",
+  360021879791: "estado",
+  360021879811: "cidade",
+  360032229831: "atrelado_ao_ticket"
+};
+
+export const composeCustomFields = custom_fields =>
+  custom_fields.reduce((newObj, old) => {
+    const key = customFieldsDicio[old.id] && customFieldsDicio[old.id];
+    return {
+      ...newObj,
+      [key]: old.value
+    };
+  }, {});

@@ -1,17 +1,15 @@
 import * as yup from "yup";
-import { IndividualTicket, Volunteer, CustomFields } from "../../types";
-import { getCurrentDate, getVolunteerType } from "../../services/utils";
+import { IndividualTicket, Volunteer } from "../../types";
+import {
+  getCurrentDate,
+  getVolunteerType,
+  composeCustomFields
+} from "../../services/utils";
 import { createTicket } from "../Zendesk";
 import { saveSolidarityTicket } from "../../graphql/mutations";
 import dbg from "../../dbg";
 const log = dbg.extend("createVolunteerTicket");
 
-const dicio = {
-  360016681971: "nome_msr",
-  360016631632: "link_match",
-  360014379412: "status_acolhimento",
-  360017432652: "data_encaminhamento"
-};
 const AGENT = Number(process.env.AGENT_ID) || 0;
 
 const hasuraSchema = yup
@@ -91,19 +89,9 @@ export default async (volunteer: Volunteer, individual: IndividualTicket) => {
     }
 
     log("Preparing ticket to be saved in Hasura");
-    const custom_fields: CustomFields = zendeskTicket.custom_fields.reduce(
-      (newObj, old) => {
-        const key = dicio[old.id] && dicio[old.id];
-        return {
-          ...newObj,
-          [key]: old.value
-        };
-      },
-      {}
-    );
     const hasuraTicket = {
       ...zendeskTicket,
-      ...custom_fields,
+      ...composeCustomFields(zendeskTicket.custom_fields),
       ticket_id: zendeskTicket.id,
       community_id: Number(process.env.COMMUNITY_ID)
     };
@@ -113,9 +101,10 @@ export default async (volunteer: Volunteer, individual: IndividualTicket) => {
       stripUnknown: true
     });
 
-    const inserted = await saveSolidarityTicket(validatedTicket);
+    const inserted = await saveSolidarityTicket([validatedTicket]);
     if (!inserted) return undefined;
-    return inserted;
+    log("Successfully created volunteer ticket in Hasura");
+    return inserted && inserted[0] && inserted[0].ticket_id;
   } catch (e) {
     log("failed to create ticket: ".red, e);
     return undefined;
