@@ -35,7 +35,8 @@ const hasuraSchema = yup
     data_encaminhamento: yup.string().required(),
     nome_voluntaria: yup.string().required(),
     status_acolhimento: yup.string().required(),
-    ticket_id: yup.number().required()
+    ticket_id: yup.number().required(),
+    match_syncronized: yup.boolean().required()
   })
   .required();
 
@@ -82,7 +83,8 @@ export default async (
     const hasuraTicket = {
       ...zendeskTicket,
       ...composeCustomFields(zendeskTicket.custom_fields),
-      ticket_id: zendeskTicket.id
+      ticket_id: zendeskTicket.id,
+      match_syncronized: true
     };
     // log({ hasuraTicket: JSON.stringify(hasuraTicket, null, 2) });
 
