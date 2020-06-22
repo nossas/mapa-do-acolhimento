@@ -21,6 +21,8 @@ import {
 } from "../graphql/mutations";
 
 const log = dbg.extend("match");
+const syncLog = dbg.extend("syncTickets");
+
 const limiter = new Bottleneck({
   maxConcurrent: 1,
   minTime: 1000
@@ -29,12 +31,11 @@ const limiter = new Bottleneck({
 let AGENT = 1;
 
 const syncTickets = async (ids: number[]) => {
-  const ticket = {
-    match_syncronized: true
-  };
+  syncLog(`Updating sync status from MSR tickets ${ids}`);
+  const ticket = { match_syncronized: true };
   const sync = await updateSolidarityTickets(ticket, ids);
   if (!sync) {
-    log(`Couldn't update sync status from MSR tickets: ${ids}`);
+    syncLog("Couldn't update sync status from MSR tickets:", ids);
     return undefined;
   }
 
@@ -44,14 +45,14 @@ const syncTickets = async (ids: number[]) => {
     AGENT = 1;
   }
 
-  log(`Tickets that passed through match: ${ids}`);
+  log("Tickets that passed through match:", ids);
   log("Match is done");
   return true;
 };
 
 export const handleMatch = () => async (response: SubscriptionResponse) => {
   log(`${new Date()}: \nReceiving data on subscription GraphQL API...`);
-  // log({ response: response.data.solidarity_tickets });
+
   const {
     data: { solidarity_tickets: tickets }
   } = response;
@@ -59,7 +60,7 @@ export const handleMatch = () => async (response: SubscriptionResponse) => {
   if (tickets.length > 0) {
     const volunteers_available = await fetchVolunteersAvailable();
 
-    const matchs = tickets.flatMap(async individualTicket => {
+    const matchs = tickets.map(async individualTicket => {
       const {
         subject,
         status_acolhimento,
@@ -74,6 +75,8 @@ export const handleMatch = () => async (response: SubscriptionResponse) => {
       )
         return undefined;
 
+      log(`Searching closest volunteer to MSR '${requester_id}'`);
+
       const volunteer_type = getRequestedVolunteerType(subject);
       if (!volunteer_type) return ticket_id;
       const volunteer_organization_id = getVolunteerOrganizationId(
@@ -87,10 +90,12 @@ export const handleMatch = () => async (response: SubscriptionResponse) => {
       if (individual.length < 1) return ticket_id;
 
       const volunteer = getClosestVolunteer(individual[0], filteredVolunteers);
-      if (!volunteer)
+      if (!volunteer) {
+        log("Couldn't find any close volunteers for MSR");
         return await limiter.schedule(() =>
           forwardPublicService(ticket_id, individual[0].state, AGENT)
         );
+      }
 
       const volunteer_ticket_id = await limiter.schedule(() =>
         createVolunteerTicket(volunteer, individualTicket, AGENT)
@@ -122,14 +127,16 @@ export const handleMatch = () => async (response: SubscriptionResponse) => {
         : updateIndividual;
     });
 
-    return Promise.all(matchs).then(async m => {
-      const sync_tickets = m.filter(match => !!match);
-      if (sync_tickets.length < 1) {
-        log("No tickets to sync");
-        return undefined;
-      }
-      return await syncTickets(sync_tickets as number[]);
-    });
+    const sync_tickets = (await Promise.all(matchs))
+      .flat(2)
+      .filter(match => !!match);
+
+    if (sync_tickets.length < 1) {
+      log("No tickets to sync");
+      return undefined;
+    }
+
+    return await syncTickets(sync_tickets as number[]);
   } else {
     log("No tickets to sync");
     return undefined;
