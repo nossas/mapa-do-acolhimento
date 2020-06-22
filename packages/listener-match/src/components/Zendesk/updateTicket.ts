@@ -45,9 +45,8 @@ export default async (
   ticketId: number,
   ticket: UpdateTicket
 ): Promise<Ticket | undefined> => {
-  log(`Updating MSR ticket ${ticketId} in Zendesk`);
+  log(`Updating MSR ticket ${ticketId} in Zendesk...`);
   try {
-    // log({ ticketId, ticket: JSON.stringify(ticket, null, 2) });
     const validatedTicket = await schema.validate(ticket, {
       stripUnknown: true
     });

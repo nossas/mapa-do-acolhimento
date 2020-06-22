@@ -37,10 +37,7 @@ export default async (
     ticket_id: number;
   }>
 ): Promise<Array<{ ticket_id: number }> | undefined> => {
-  // log({ tickets });
-  log(
-    `Saving tickets '${tickets.map(t => t.ticket_id).join(", ")}' in Hasura...`
-  );
+  log(`Saving tickets '${tickets.map(t => t.ticket_id)}' in Hasura...`);
   try {
     const res = await GraphQLAPI.mutate({
       mutation: SAVE_TICKETS_MUTATION,
@@ -55,8 +52,6 @@ export default async (
     const {
       data: { insert_solidarity_tickets }
     } = res;
-
-    // log({ returning: JSON.stringify(insert_solidarity_tickets, null, 2) });
 
     return insert_solidarity_tickets && insert_solidarity_tickets.returning;
   } catch (err) {

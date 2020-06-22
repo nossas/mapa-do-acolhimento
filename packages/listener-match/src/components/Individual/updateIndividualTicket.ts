@@ -78,7 +78,7 @@ export default async (
       throw new Error("Zendesk ticket update returned errors");
     }
 
-    log("Preparing ticket to be saved in Hasura");
+    log(`Preparing ticket '${zendeskTicket.id}' to be saved in Hasura`);
     const hasuraTicket = {
       ...zendeskTicket,
       ...composeCustomFields(zendeskTicket.custom_fields),

@@ -67,13 +67,12 @@ export default async (ticket_id: number, state: string, agent: number) => {
       throw new Error("Zendesk ticket update returned errors");
     }
 
-    log("Preparing ticket to be saved in Hasura");
+    log(`Preparing ticket '${zendeskTicket.id}' to be saved in Hasura`);
     const hasuraTicket = {
       ...zendeskTicket,
       ...composeCustomFields(zendeskTicket.custom_fields),
       ticket_id: zendeskTicket.id
     };
-    // log({ hasuraTicket: JSON.stringify(hasuraTicket, null, 2) });
 
     const validatedTicket = await hasuraSchema.validate(hasuraTicket, {
       stripUnknown: true
