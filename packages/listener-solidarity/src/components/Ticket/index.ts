@@ -126,11 +126,7 @@ export default async (tickets: Ticket[]) => {
             }
           ],
           comment: {
-            body: `MSR já possui uma solicitação com o mesmo tipo de pedido de acolhimento nos seguintes tickets: ${
-              typeof relatableTickets === "number"
-                ? relatableTickets
-                : relatableTickets.join(", ")
-            }`,
+            body: `MSR já possui uma solicitação com o mesmo tipo de pedido de acolhimento nos seguintes tickets: ${relatableTickets}`,
             public: false
           }
         })

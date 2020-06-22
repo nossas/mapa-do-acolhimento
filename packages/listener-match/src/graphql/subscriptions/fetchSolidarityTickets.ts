@@ -21,7 +21,6 @@ const SOLIDARITY_USERS_SUBSCRIPTION = gql`
         nome_msr: { _is_null: false }
         status: { _nin: ["closed", "deleted", "solved"] }
         match_syncronized: { _eq: false }
-        ticket_id: { _in: [22626, 22625, 22624] }
       }
       order_by: { data_inscricao_bonde: asc }
     ) {
