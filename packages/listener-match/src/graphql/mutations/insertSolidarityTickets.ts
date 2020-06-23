@@ -36,7 +36,6 @@ export default async (
     ticket_id: number;
   }>
 ): Promise<Array<{ ticket_id: number }> | undefined> => {
-  log(`Saving tickets '${tickets.map(t => t.ticket_id)}' in Hasura...`);
   try {
     const res = await GraphQLAPI.mutate({
       mutation: SAVE_TICKETS_MUTATION,

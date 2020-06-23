@@ -41,7 +41,6 @@ const schema = yup
   .required();
 
 export default async (ticket: Ticket): Promise<Ticket | undefined> => {
-  log(`Creating volunteer ${ticket.requester_id} ticket in Zendesk...`);
   try {
     const validatedTicket = await schema.validate(ticket, {
       stripUnknown: true
@@ -64,7 +63,7 @@ export default async (ticket: Ticket): Promise<Ticket | undefined> => {
           //     2
           //   )}`
           // );
-          log("Zendesk ticket created successfully!");
+          // log("Zendesk ticket created successfully!");
           return resolve(result);
         }
       );

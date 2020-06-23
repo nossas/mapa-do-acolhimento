@@ -27,13 +27,7 @@ let cache = new Array();
 
 const syncTickets = async (ids: number[]) => {
   syncLog(`Updating sync status from MSR tickets ${ids}`);
-
-  const ticket = { match_syncronized: true };
-  const sync = await updateSolidarityTickets(ticket, ids);
-  if (!sync) {
-    syncLog("Couldn't update sync status from MSR tickets:", ids);
-    return undefined;
-  }
+  const sync = await updateSolidarityTickets({ match_syncronized: true }, ids);
 
   if (AGENT < 3) {
     AGENT++;
@@ -41,80 +35,78 @@ const syncTickets = async (ids: number[]) => {
     AGENT = 1;
   }
 
-  log("Tickets that passed through match:", ids);
-  log("Match is done");
-  return true;
+  return sync && sync.map(s => s.ticket_id);
 };
 
 export const handleMatch = () => async (response: SubscriptionResponse) => {
   log(`${new Date()}: \nReceiving data on subscription GraphQL API...`);
-  // log({ response: JSON.stringify(response, null, 2) });
 
   const {
     data: { solidarity_tickets: tickets }
   } = response;
 
-  cache = tickets
-    .map(ticket => {
-      if (!cache.includes(ticket.ticket_id)) return ticket;
-      return undefined;
-    })
-    .filter(Boolean);
+  // only add new items to cache if they werent already in it
+  cache = cache
+    .filter(c => !tickets.map(t => t.ticket_id).includes(c.ticket_id))
+    .concat(tickets);
 
   if (cache.length > 0) {
-    const volunteers_available = await fetchVolunteersAvailable();
+    const volunteersAvailable = await fetchVolunteersAvailable();
 
     const matchs = cache.map(async individualTicket => {
       const {
         subject,
-        status_acolhimento,
-        atrelado_ao_ticket,
-        requester_id,
-        ticket_id
+        status_acolhimento: statusAcolhimento,
+        atrelado_ao_ticket: atreladoAoTicket,
+        requester_id: requesterId,
+        ticket_id: ticketId
       } = individualTicket;
 
       if (
-        status_acolhimento === "solicitaçao_repetida" &&
-        atrelado_ao_ticket === null
-      )
-        return undefined;
+        statusAcolhimento === "solicitaçao_repetida" &&
+        atreladoAoTicket === null
+      ) {
+        log(
+          `Ticket is "solicitação_repetida" but field "atrelado_ao_ticket is null`
+        );
+        return ticketId;
+      }
 
-      log(`Searching closest volunteer to MSR '${requester_id}'`);
+      const newTicketId = ticketId;
+      if (statusAcolhimento === "solicitação_repetida" && atreladoAoTicket) {
+        individualTicket["ticket_id"] = atreladoAoTicket;
+      }
 
-      const volunteer_type = getRequestedVolunteerType(subject);
-      if (!volunteer_type) return ticket_id;
-      const volunteer_organization_id = getVolunteerOrganizationId(
-        volunteer_type
+      const volunteerType = getRequestedVolunteerType(subject);
+      if (!volunteerType) return ticketId;
+
+      const volunteerOrganizationId = getVolunteerOrganizationId(volunteerType);
+      const filteredVolunteers = volunteersAvailable.filter(
+        ({ organization_id }) => organization_id === volunteerOrganizationId
       );
-      const filteredVolunteers = volunteers_available.filter(
-        ({ organization_id }) => organization_id === volunteer_organization_id
-      );
 
-      const individual = await fetchIndividual(requester_id);
-      if (individual.length < 1) return ticket_id;
+      const individual = await fetchIndividual(requesterId);
+      if (individual.length < 1) return ticketId;
 
+      log(`Searching for closest volunteer to MSR '${requesterId}'`);
       const volunteer = getClosestVolunteer(individual[0], filteredVolunteers);
       if (!volunteer) {
-        log("Couldn't find any close volunteers for MSR");
-        return await forwardPublicService(
-          ticket_id,
+        const updateIndividual = await forwardPublicService(
+          ticketId,
           individual[0].state,
           AGENT
         );
+        if (!updateIndividual) return undefined;
+        return ticketId;
       }
 
-      const volunteer_ticket_id = await createVolunteerTicket(
+      const volunteerTicketId = await createVolunteerTicket(
         volunteer,
         individualTicket,
         AGENT
       );
-      if (!volunteer_ticket_id) return undefined;
-      volunteer["ticket_id"] = volunteer_ticket_id;
-
-      const newTicketId = ticket_id;
-      if (status_acolhimento === "solicitação_repetida" && atrelado_ao_ticket) {
-        individualTicket["ticket_id"] = atrelado_ao_ticket;
-      }
+      if (!volunteerTicketId) return undefined;
+      volunteer["ticket_id"] = volunteerTicketId;
 
       const updateIndividual = await updateIndividualTicket(
         individualTicket,
@@ -128,18 +120,29 @@ export const handleMatch = () => async (response: SubscriptionResponse) => {
         volunteer as Volunteer & { ticket_id: number }
       );
       if (!matchTicket) return undefined;
+
       return individualTicket["ticket_id"] !== newTicketId
         ? [newTicketId, updateIndividual]
         : updateIndividual;
     });
 
-    const sync_tickets = (await Promise.all(matchs)).flat(2).filter(Boolean);
-    if (sync_tickets.length < 1) {
+    const resolvedMatchs = (await Promise.all(matchs)).flat(2).filter(Boolean);
+    if (resolvedMatchs.length < 1) {
       log("No tickets to sync");
       return undefined;
     }
 
-    return await syncTickets(sync_tickets as number[]);
+    const isSynced = await syncTickets(resolvedMatchs as number[]);
+    if (!isSynced) {
+      syncLog("Couldn't update sync status from MSR tickets:", resolvedMatchs);
+      return undefined;
+    }
+
+    log("Tickets that passed through match:", isSynced);
+    cache = cache.filter(c => !isSynced.includes(c.ticket_id));
+
+    log("Match is done");
+    return true;
   } else {
     log("No tickets to sync");
     return undefined;

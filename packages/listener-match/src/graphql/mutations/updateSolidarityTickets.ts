@@ -24,7 +24,6 @@ export default async (
   ticket,
   ids: number[]
 ): Promise<Array<{ ticket_id: number }> | undefined> => {
-  log(`Updating tickets '${ids}' in Hasura...`);
   try {
     const res = await GraphQLAPI.mutate({
       mutation: UPDATING_TICKETS_MUTATION,

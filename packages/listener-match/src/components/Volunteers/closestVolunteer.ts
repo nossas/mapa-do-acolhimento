@@ -1,8 +1,8 @@
 import * as turf from "@turf/turf";
 import { Volunteer } from "../../types";
-import dbg from "../../dbg";
+// import dbg from "../../dbg";
 
-const log = dbg.extend("closestVolunteer");
+// const log = dbg.extend("closestVolunteer");
 
 const calcDistance = (pointA: number[], pointB: number[]) => {
   if (
@@ -22,7 +22,6 @@ export default (
   { latitude, longitude }: { latitude: string; longitude: string },
   volunteers: Volunteer[]
 ) => {
-  log("Searching for closest volunteer");
   return volunteers
     .map(volunteer => {
       const pointA = [Number(longitude), Number(latitude)];

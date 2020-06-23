@@ -87,28 +87,36 @@ export default async (
     ]
   };
   try {
+    log(
+      `Creating a ticket to volunteer '${ticket.requester_id}' in Zendesk...`
+    );
     const zendeskTicket = await createTicket(ticket);
     if (!zendeskTicket) {
       throw new Error("Zendesk ticket creation returned errors");
     }
 
-    log(`Preparing ticket '${zendeskTicket.id}' to be saved in Hasura`);
     const hasuraTicket = {
       ...zendeskTicket,
       ...composeCustomFields(zendeskTicket.custom_fields),
       ticket_id: zendeskTicket.id,
       community_id: Number(process.env.COMMUNITY_ID)
     };
-    // log({ hasuraTicket: JSON.stringify(hasuraTicket, null, 2) });
 
     const validatedTicket = await hasuraSchema.validate(hasuraTicket, {
       stripUnknown: true
     });
 
+    log(
+      `Saving new volunteer ticket '${validatedTicket.ticket_id}' in Hasura...`
+    );
     const inserted = await saveSolidarityTicket([validatedTicket]);
-    if (!inserted) return undefined;
-    log("Successfully created volunteer ticket in Hasura");
-    return inserted && inserted[0] && inserted[0].ticket_id;
+    if (!inserted)
+      log(
+        `Something went wrong when saving this Volunteer ticket '${zendeskTicket.id}' in Hasura`
+      );
+
+    // log("Successfully saved volunteer ticket in Hasura");
+    return zendeskTicket.id;
   } catch (e) {
     log("failed to create ticket: ".red, e);
     return undefined;

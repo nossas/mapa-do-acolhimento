@@ -73,12 +73,12 @@ export default async (
     }
   };
   try {
+    log(`Updating MSR ticket '${individual.ticket_id}' in Zendesk...`);
     const zendeskTicket = await updateTicket(individual.ticket_id, ticket);
     if (!zendeskTicket) {
       throw new Error("Zendesk ticket update returned errors");
     }
 
-    log(`Preparing ticket '${zendeskTicket.id}' to be saved in Hasura`);
     const hasuraTicket = {
       ...zendeskTicket,
       ...composeCustomFields(zendeskTicket.custom_fields),
@@ -90,11 +90,18 @@ export default async (
       stripUnknown: true
     });
 
+    log(
+      `Updating individual ticket '${validatedTicket.ticket_id}' in Hasura...`
+    );
     const inserted = await updateSolidarityTickets(validatedTicket, [
       validatedTicket.ticket_id
     ]);
-    if (!inserted) return undefined;
-    return inserted && inserted[0] && inserted[0].ticket_id;
+    if (!inserted)
+      log(
+        `Something went wrong when updating this MSR ticket in Hasura '${zendeskTicket.id}'`
+      );
+    // log("Successfully updated MSR ticket in Hasura");
+    return zendeskTicket.id;
   } catch (e) {
     log("failed to create ticket in zendesk: ".red, e);
     return undefined;
