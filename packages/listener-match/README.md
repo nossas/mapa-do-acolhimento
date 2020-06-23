@@ -9,7 +9,7 @@ This service listens to new entries in the `solidarity_tickets` using GraphQL su
 
 Match MSR with closest available Volunteer or forward to Public Service
 
-### How it does it?
+### How it's done?
 
 The script searchs for the closest volunteer according to the MSR's requested type of service.
 
@@ -32,3 +32,13 @@ In Cluster the service is under "listeners" and has the name "match"
 ### Run
 
 `pnpm --filter listener-match run dev`
+
+### Improvements
+
+- forwardPublicService and updateIndividual do very similar things, they could be unified
+- Implementing a queue would probably be a more sofisticated way to handle the refresh rate and the need for the match to be synchronous
+
+### Reasons Why
+
+- We need to cache the tickets that arrive
+  - This is done because [Hasura refreshes the query every 1s](https://hasura.io/docs/1.0/graphql/manual/subscriptions/index.html#execution)
