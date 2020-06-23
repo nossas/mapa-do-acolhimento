@@ -28,12 +28,12 @@ const hasuraSchema = yup
       )
       .min(3)
       .required(),
+    tags: yup.array().of(yup.string()),
     description: yup.string().required(),
     updated_at: yup.string().required(),
     data_encaminhamento: yup.string().required(),
     status_acolhimento: yup.string().required(),
-    ticket_id: yup.number().required(),
-    match_syncronized: yup.boolean().required()
+    ticket_id: yup.number().required()
   })
   .required();
 
@@ -72,8 +72,7 @@ export default async (ticket_id: number, state: string, agent: number) => {
     const hasuraTicket = {
       ...zendeskTicket,
       ...composeCustomFields(zendeskTicket.custom_fields),
-      ticket_id: zendeskTicket.id,
-      match_syncronized: true
+      ticket_id: zendeskTicket.id
     };
 
     const validatedTicket = await hasuraSchema.validate(hasuraTicket, {

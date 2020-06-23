@@ -1,4 +1,3 @@
-import Bottleneck from "bottleneck";
 import dbg from "../dbg";
 import { SubscriptionResponse, Volunteer } from "../types";
 import {
@@ -23,15 +22,12 @@ import {
 const log = dbg.extend("match");
 const syncLog = dbg.extend("syncTickets");
 
-const limiter = new Bottleneck({
-  maxConcurrent: 1,
-  minTime: 1000
-});
-
 let AGENT = 1;
+let cache = new Array();
 
 const syncTickets = async (ids: number[]) => {
   syncLog(`Updating sync status from MSR tickets ${ids}`);
+
   const ticket = { match_syncronized: true };
   const sync = await updateSolidarityTickets(ticket, ids);
   if (!sync) {
@@ -52,15 +48,23 @@ const syncTickets = async (ids: number[]) => {
 
 export const handleMatch = () => async (response: SubscriptionResponse) => {
   log(`${new Date()}: \nReceiving data on subscription GraphQL API...`);
+  // log({ response: JSON.stringify(response, null, 2) });
 
   const {
     data: { solidarity_tickets: tickets }
   } = response;
 
-  if (tickets.length > 0) {
+  cache = tickets
+    .map(ticket => {
+      if (!cache.includes(ticket.ticket_id)) return ticket;
+      return undefined;
+    })
+    .filter(Boolean);
+
+  if (cache.length > 0) {
     const volunteers_available = await fetchVolunteersAvailable();
 
-    const matchs = tickets.map(async individualTicket => {
+    const matchs = cache.map(async individualTicket => {
       const {
         subject,
         status_acolhimento,
@@ -92,13 +96,17 @@ export const handleMatch = () => async (response: SubscriptionResponse) => {
       const volunteer = getClosestVolunteer(individual[0], filteredVolunteers);
       if (!volunteer) {
         log("Couldn't find any close volunteers for MSR");
-        return await limiter.schedule(() =>
-          forwardPublicService(ticket_id, individual[0].state, AGENT)
+        return await forwardPublicService(
+          ticket_id,
+          individual[0].state,
+          AGENT
         );
       }
 
-      const volunteer_ticket_id = await limiter.schedule(() =>
-        createVolunteerTicket(volunteer, individualTicket, AGENT)
+      const volunteer_ticket_id = await createVolunteerTicket(
+        volunteer,
+        individualTicket,
+        AGENT
       );
       if (!volunteer_ticket_id) return undefined;
       volunteer["ticket_id"] = volunteer_ticket_id;
@@ -108,12 +116,10 @@ export const handleMatch = () => async (response: SubscriptionResponse) => {
         individualTicket["ticket_id"] = atrelado_ao_ticket;
       }
 
-      const updateIndividual = await limiter.schedule(() =>
-        updateIndividualTicket(
-          individualTicket,
-          volunteer as Volunteer & { ticket_id: number },
-          AGENT
-        )
+      const updateIndividual = await updateIndividualTicket(
+        individualTicket,
+        volunteer as Volunteer & { ticket_id: number },
+        AGENT
       );
       if (!updateIndividual) return undefined;
 
@@ -127,10 +133,7 @@ export const handleMatch = () => async (response: SubscriptionResponse) => {
         : updateIndividual;
     });
 
-    const sync_tickets = (await Promise.all(matchs))
-      .flat(2)
-      .filter(match => !!match);
-
+    const sync_tickets = (await Promise.all(matchs)).flat(2).filter(Boolean);
     if (sync_tickets.length < 1) {
       log("No tickets to sync");
       return undefined;

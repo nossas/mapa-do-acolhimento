@@ -26,7 +26,6 @@ const SAVE_TICKETS_MUTATION = gql`
     ) {
       returning {
         ticket_id
-        status_acolhimento
       }
     }
   }
