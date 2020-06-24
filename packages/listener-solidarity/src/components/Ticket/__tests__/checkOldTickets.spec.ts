@@ -1,5 +1,5 @@
 import { checkOldTickets } from "../.";
-import data from "../__mocks__";
+import data from "../__mocks__/tickets";
 
 describe("Testing checkOldTickets", () => {
   // Conditions:
@@ -14,11 +14,11 @@ describe("Testing checkOldTickets", () => {
   // already has a match ticket
 
   const {
-    tickets: { mixed, meets_no_conditions, case_one, case_two },
+    tickets: { mixed, meets_no_conditions, case_one, case_two }
   } = data;
 
   describe("Individual has no match ticket but already subscribed", () => {
-    it('should return "true" if old tickets matched stabilished conditions', async () => {
+    it("should return ticket_id if old tickets matched stabilished conditions", async () => {
       const oldTickets = checkOldTickets(
         "[Psicológico] Igor, Belo Horizonte - MG",
         case_one as any
@@ -28,7 +28,7 @@ describe("Testing checkOldTickets", () => {
   });
 
   describe("Individual has match ticket", () => {
-    it('should return "true" if old tickets matched stabilished conditions', async () => {
+    it("should return ticket_id in array if old tickets matched stabilished conditions", async () => {
       const oldTickets = checkOldTickets(
         "[Psicológico] Viviane, Taubaté - SP",
         case_two as any

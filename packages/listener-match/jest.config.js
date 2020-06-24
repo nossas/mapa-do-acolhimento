@@ -7,6 +7,12 @@ module.exports = {
   testRegex: "(/__tests__/.*|(\\.|/)(test|spec))\\.(ts|js)x?$",
   coverageDirectory: "coverage",
   collectCoverageFrom: ["src/**/*.{ts,tsx,js,jsx}", "!src/**/*.d.ts"],
-  setupFiles: ["<rootDir>/src/setEnvVars.ts"],
-  modulePathIgnorePatterns: ["/dist/"]
+  setupFiles: ["<rootDir>/src/beforeEachTest.ts"],
+  modulePathIgnorePatterns: ["dist/"],
+  preset: "ts-jest",
+  globals: {
+    "ts-jest": {
+      packageJson: "package.json"
+    }
+  }
 };
