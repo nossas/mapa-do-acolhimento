@@ -1,5 +1,9 @@
 {
   "name": "bonde-microservices",
+  "version": "0.4.8",
+  "description": "A monorepo that holds all the services used to maintain the project 'Mapa do Acolhimento'",
+  "author": "Nossas <tech@nosssas.org>",
+  "license": "AGPL-3.0",
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^2.11.0",
     "@typescript-eslint/parser": "^2.11.0",
@@ -14,14 +18,25 @@
     "prettier": "^1.19.1"
   },
   "scripts": {
-    "lint": "eslint ./packages/listener-solidarity **/*.ts --fix",
+    "lint": "eslint packages/**/*.ts --fix",
     "clean": "rm -rf **/*/dist && rm -rf **/*/tsconfig.tsbuildinfo"
   },
   "dependencies": {
-    "ts-jest": "^26.1.0",
     "tsc-watch": "4.2.8",
     "tslib": "^2.0.0",
     "tsutils": "^3.17.1",
     "typescript": "3.9.5"
+  },
+  "homepage": "https://github.com/nossas/mapa-do-acolhimento#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nossas/mapa-do-acolhimento.git"
+  },
+  "bugs": {
+    "url": "https://github.com/nossas/mapa-do-acolhimento/issues"
+  },
+  "engines": {
+    "pnpm": "5.2.1",
+    "node": ">= 12.13 <13"
   }
 }
