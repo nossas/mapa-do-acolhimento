@@ -9,6 +9,7 @@
     "express": "^4.17.1",
     "ramda": "^0.26.1",
     "source-map-support": "^0.5.16",
+    "ts-jest": "^26.1.1",
     "url-join": "^4.0.1",
     "yup": "^0.27.0"
   },
@@ -16,9 +17,10 @@
     "start": "DEBUG=webhooks-solidarity-count* node dist/index.js",
     "dev": "DEBUG=webhooks-solidarity-count* tsc-watch --onSuccess \"node dist/index.js\"",
     "clean": "rm -rf node_modules dist",
-    "build": "tsc -p tsconfig.json",
+    "build": "tsc -p tsconfig.json --sourcemap",
     "test": "DEBUG=webhooks-solidarity-count* jest",
-    "test:watch": "DEBUG=webhooks-solidarity-count* jest --watch"
+    "test:watch": "DEBUG=webhooks-solidarity-count* jest --watch",
+    "coverage": "jest --coverage"
   },
   "devDependencies": {
     "@types/debug": "^4.1.5",

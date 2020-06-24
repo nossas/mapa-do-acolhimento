@@ -14,7 +14,8 @@
     "start": "node dist/index.js",
     "dev": "DEBUG=webhooks-mautic-zendesk* tsc-watch --onSuccess \"node dist/index.js\"",
     "clean": "rm -rf node_modules dist",
-    "build": "tsc"
+    "build": "tsc --sourcemap",
+    "coverage": "jest --coverage"
   },
   "devDependencies": {
     "@types/debug": "^4.1.5",
@@ -22,6 +23,8 @@
     "@types/node": "^14.0.12",
     "@types/source-map-support": "^0.5.1",
     "@types/url-join": "^4.0.0",
-    "@types/yup": "^0.29.2"
+    "@types/yup": "^0.29.2",
+    "jest": "^26.1.0",
+    "ts-jest": "^26.1.1"
   }
 }
