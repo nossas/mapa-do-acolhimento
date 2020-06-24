@@ -15,7 +15,7 @@
     "dev": "DEBUG=webhooks-mautic-zendesk* tsc-watch --onSuccess \"node dist/index.js\"",
     "clean": "rm -rf node_modules dist",
     "build": "tsc --sourcemap",
-    "coverage": "jest --coverage"
+    "coverage": "jest --coverage --passWithNoTests"
   },
   "devDependencies": {
     "@types/debug": "^4.1.5",

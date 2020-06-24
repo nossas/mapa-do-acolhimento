@@ -18,7 +18,7 @@
   "scripts": {
     "start": "DEBUG=listener-match* node -r dotenv-safe/config dist/main.js",
     "dev": "DEBUG=listener-match* tsc-watch --onSuccess \"node -r dotenv-safe/config dist/main.js\"",
-    "test": "DEBUG=listener-match* jest",
+    "test": "jest",
     "test:watch": "DEBUG=listener-match* jest --watch --runInBand --detectOpenHandles",
     "coverage": "jest --coverage",
     "build": "tsc -p tsconfig.json --sourcemap",
