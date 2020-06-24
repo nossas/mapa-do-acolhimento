@@ -34,7 +34,8 @@ export default (
       status_acolhimento != "encaminhamento__negado" &&
       status_acolhimento != "atendimento__interrompido" &&
       status_acolhimento != "encaminhamento__realizado_para_serviço_público" &&
-      status_acolhimento != "atendimento__concluído"
+      status_acolhimento != "atendimento__concluído" &&
+      status_acolhimento != "solicitação_repetida"
     );
   });
 
