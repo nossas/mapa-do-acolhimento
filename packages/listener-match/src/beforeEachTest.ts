@@ -1,1 +1,1 @@
-require("dotenv-safe").config();
+process.env.COMMUNITY_ID = "1";
