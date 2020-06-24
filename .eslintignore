@@ -1,4 +1,3 @@
-node_modules
-packages/cli-jsonb-convert/node_modules
-packages/webhooks-mautic-registry/node_modules
-packages/webhooks-mautic-zendesk/node_modules
+packages/**/node_modules
+packages/**/dist
+packages/**/*.js

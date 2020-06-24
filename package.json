@@ -18,7 +18,7 @@
     "prettier": "^1.19.1"
   },
   "scripts": {
-    "lint": "eslint packages/**/*.ts --fix",
+    "lint": "eslint . --fix",
     "clean": "rm -rf **/*/dist && rm -rf **/*/tsconfig.tsbuildinfo"
   },
   "dependencies": {
