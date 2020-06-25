@@ -1,5 +1,5 @@
 import dbg from "../dbg";
-import { SubscriptionResponse, Volunteer } from "../types";
+import { SubscriptionResponse, Volunteer, IndividualTicket } from "../types";
 import {
   getRequestedVolunteerType,
   getVolunteerOrganizationId
@@ -23,7 +23,7 @@ const log = dbg.extend("match");
 const syncLog = dbg.extend("syncTickets");
 
 let AGENT = 1;
-let cache = [];
+let cache: IndividualTicket[] = [];
 
 const syncTickets = async (ids: number[]) => {
   syncLog(`Updating sync status from MSR tickets ${ids}`);

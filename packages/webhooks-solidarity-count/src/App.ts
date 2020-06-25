@@ -79,17 +79,17 @@ const App = async (ticket_id: string, res: Response) => {
     );
 
     // Caso o CEP possa ser um número e não é vazio
-    if (userWithUserFields.cep !== null) {
+    if (userWithUserFields.cep && userWithUserFields.cep !== null) {
       const coordinates = await getLatLng(userWithUserFields.cep, maps);
 
       userWithUserFields = {
         ...userWithUserFields,
-        cep: parsedZipcode,
         ...coordinates,
+        cep: parsedZipcode,
         user_fields: {
           ...userWithUserFields.user_fields,
-          cep: parsedZipcode,
-          ...coordinates
+          ...coordinates,
+          cep: parsedZipcode
         }
       };
 

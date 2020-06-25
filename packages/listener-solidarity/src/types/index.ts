@@ -162,6 +162,11 @@ export type Ticket = {
   telefone: string | null;
 };
 
+export type PartialTicket = Pick<
+  Ticket,
+  "external_id" | "comment" | "requester_id" | "custom_fields" | "subject"
+>;
+
 export type Fields = Array<{
   uid: string;
   kind: string;

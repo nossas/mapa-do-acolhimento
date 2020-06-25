@@ -61,7 +61,9 @@ class Server {
     if (!tickets) {
       return undefined;
     }
-    const filteredTickets = tickets.data.tickets.filter(i => {
+    const filteredTickets = (tickets as {
+      data: { tickets };
+    }).data.tickets.filter(i => {
       if (instance instanceof AdvogadaCreateUser) {
         return (
           ["open", "new", "pending", "hold"].includes(i.status) &&

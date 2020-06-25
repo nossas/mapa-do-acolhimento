@@ -55,38 +55,41 @@ const CREATE_TICKETS_MUTATION = gql`
 //   };
 // };
 
-const schema = yup.object().shape({
-  external_id: yup.number().required(),
-  created_at: yup.string().required(),
-  custom_fields: yup.array().of(
-    yup.object().shape({
-      id: yup.number(),
-      value: yup.string().nullable()
-    })
-  ),
-  description: yup.string().required(),
-  organization_id: yup.number().required(),
-  subject: yup.string().required(),
-  status: yup.string().required(),
-  ticket_id: yup.number().required(),
-  community_id: yup.number().required(),
-  requester_id: yup.number().required(),
-  status_acolhimento: yup.string().required(),
-  submitter_id: yup.number().required(),
-  data_inscricao_bonde: yup.string().required(),
-  nome_voluntaria: yup.string().nullable(),
-  link_match: yup.string().nullable(),
-  nome_msr: yup.string().nullable(),
-  data_encaminhamento: yup.string().nullable(),
-  status_inscricao: yup.string().nullable(),
-  telefone: yup.string().nullable(),
-  estado: yup.string().nullable(),
-  cidade: yup.string().nullable(),
-  atrelado_ao_ticket: yup.number().nullable(),
-  updated_at: yup.string(),
-  tags: yup.mixed(),
-  match_syncronized: yup.boolean().required()
-});
+const schema = yup
+  .object()
+  .shape({
+    external_id: yup.number().required(),
+    created_at: yup.string().required(),
+    custom_fields: yup.array().of(
+      yup.object().shape({
+        id: yup.number(),
+        value: yup.string().nullable()
+      })
+    ),
+    description: yup.string().required(),
+    organization_id: yup.number().required(),
+    subject: yup.string().required(),
+    status: yup.string().required(),
+    ticket_id: yup.number().required(),
+    community_id: yup.number().required(),
+    requester_id: yup.number().required(),
+    status_acolhimento: yup.string().required(),
+    submitter_id: yup.number().required(),
+    data_inscricao_bonde: yup.string().required(),
+    nome_voluntaria: yup.string().nullable(),
+    link_match: yup.string().nullable(),
+    nome_msr: yup.string().nullable(),
+    data_encaminhamento: yup.string().nullable(),
+    status_inscricao: yup.string().nullable(),
+    telefone: yup.string().nullable(),
+    estado: yup.string().nullable(),
+    cidade: yup.string().nullable(),
+    atrelado_ao_ticket: yup.number().nullable(),
+    updated_at: yup.string(),
+    tags: yup.mixed(),
+    match_syncronized: yup.boolean().required()
+  })
+  .required();
 
 const insertSolidarityTickets = async ticket => {
   log(`Saving ticket '${ticket.id}' in Hasura...`);

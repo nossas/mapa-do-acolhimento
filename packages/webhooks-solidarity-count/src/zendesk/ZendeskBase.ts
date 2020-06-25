@@ -4,7 +4,7 @@ import dbg from "./dbg";
 
 const log = dbg.extend("base");
 
-const get = async (url: string, params?): Promise<unknown> => {
+const get = async (url: string, params?) => {
   const { ZENDESK_API_URL, ZENDESK_API_TOKEN, ZENDESK_API_USER } = process.env;
   const endpoint = urljoin(ZENDESK_API_URL, url);
   try {
@@ -21,7 +21,7 @@ const get = async (url: string, params?): Promise<unknown> => {
   }
 };
 
-const put = async (url: string, data?): Promise<unknown> => {
+const put = async (url: string, data?) => {
   const { ZENDESK_API_URL, ZENDESK_API_TOKEN, ZENDESK_API_USER } = process.env;
   const endpoint = urljoin(ZENDESK_API_URL!, url);
   try {

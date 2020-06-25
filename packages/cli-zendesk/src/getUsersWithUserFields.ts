@@ -7,7 +7,7 @@ const getUsersWithUserFields = (users: User[]): User[] => {
     const { id, ...otherFields } = withUserFields;
     return {
       ...otherFields,
-      user_id: id,
+      user_id: id as number,
       community_id: Number(COMMUNITY_ID)
     };
   });

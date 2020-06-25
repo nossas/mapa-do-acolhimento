@@ -46,47 +46,56 @@ const CREATE_USERS_MUTATION = gql`
   }
 `;
 
-const userSchema = yup.array().of(
-  yup.object().shape({
-    role: yup.string().nullable(),
-    organization_id: yup.number().required(),
-    name: yup.string().required(),
-    email: yup.string().required(),
-    external_id: yup.string().required(),
-    user_id: yup.number().required(),
-    condition: yup.string().required(),
-    city: yup.string().nullable(),
-    community_id: yup.string().required(),
-    data_de_inscricao_no_bonde: yup.string().required(),
-    address: yup.string().required(),
-    latitude: yup.string().required(),
-    longitude: yup.string().required(),
-    phone: yup.string().nullable(),
-    state: yup.string().nullable(),
-    tipo_de_acolhimento: yup.string().nullable(),
-    registration_number: yup.string().nullable(),
-    occupation_area: yup.string().nullable(),
-    disponibilidade_de_atendimentos: yup.string().nullable(),
-    whatsapp: yup.string().nullable(),
-    verified: yup.boolean(),
-    cep: yup.string().nullable(),
-    user_fields: yup.object().shape({
-      condition: yup.string().required(),
-      city: yup.string().nullable(),
-      state: yup.string().nullable(),
-      data_de_inscricao_no_bonde: yup.string().required(),
-      tipo_de_acolhimento: yup.string().nullable(),
-      registration_number: yup.string().nullable(),
-      occupation_area: yup.string().nullable(),
-      disponibilidade_de_atendimentos: yup.string().nullable(),
-      latitude: yup.string().required(),
-      longitude: yup.string().required(),
-      whatsapp: yup.string().nullable(),
-      cep: yup.string().nullable(),
-      address: yup.string().required()
-    })
-  })
-);
+const userSchema = yup
+  .array()
+  .of(
+    yup
+      .object()
+      .shape({
+        role: yup.string().nullable(),
+        organization_id: yup.number().required(),
+        name: yup.string().required(),
+        email: yup.string().required(),
+        external_id: yup.string().required(),
+        user_id: yup.number().required(),
+        condition: yup.string().required(),
+        city: yup.string().nullable(),
+        community_id: yup.string().required(),
+        data_de_inscricao_no_bonde: yup.string().required(),
+        address: yup.string().required(),
+        latitude: yup.string().required(),
+        longitude: yup.string().required(),
+        phone: yup.string().nullable(),
+        state: yup.string().nullable(),
+        tipo_de_acolhimento: yup.string().nullable(),
+        registration_number: yup.string().nullable(),
+        occupation_area: yup.string().nullable(),
+        disponibilidade_de_atendimentos: yup.string().nullable(),
+        whatsapp: yup.string().nullable(),
+        verified: yup.boolean(),
+        cep: yup.string().nullable(),
+        user_fields: yup
+          .object()
+          .shape({
+            condition: yup.string().required(),
+            city: yup.string().nullable(),
+            state: yup.string().nullable(),
+            data_de_inscricao_no_bonde: yup.string().required(),
+            tipo_de_acolhimento: yup.string().nullable(),
+            registration_number: yup.string().nullable(),
+            occupation_area: yup.string().nullable(),
+            disponibilidade_de_atendimentos: yup.string().nullable(),
+            latitude: yup.string().required(),
+            longitude: yup.string().required(),
+            whatsapp: yup.string().nullable(),
+            cep: yup.string().nullable(),
+            address: yup.string().required()
+          })
+          .required()
+      })
+      .required()
+  )
+  .required();
 
 type Users = yup.InferType<typeof userSchema>;
 

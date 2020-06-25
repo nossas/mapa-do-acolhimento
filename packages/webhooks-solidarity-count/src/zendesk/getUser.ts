@@ -7,7 +7,7 @@ interface Response {
   };
 }
 
-const getUser = async (id: number): Promise<Response> =>
+const getUser = async (id: number): Promise<Response | undefined> =>
   await ZendeskBase.get(`users/${id}`);
 
 export default getUser;

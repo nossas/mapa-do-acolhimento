@@ -27,7 +27,7 @@ const ticketsSchema = yup
         status: yup.string(),
         subject: yup.string(),
         submitter_id: yup.number(),
-        tags: yup.mixed(),
+        tags: yup.array().of(yup.string()),
         updated_at: yup.string(),
         status_acolhimento: yup.string().nullable(),
         nome_voluntaria: yup.string().nullable(),
@@ -40,9 +40,8 @@ const ticketsSchema = yup
         estado: yup.string().nullable(),
         cidade: yup.string().nullable(),
         community_id: yup.number(),
-        webhooks_registry_id: yup.number(),
-        external_id: yup.mixed(),
-        atrelado_ao_ticket: yup.mixed()
+        external_id: yup.mixed().oneOf([yup.number().nullable(), "X"]),
+        atrelado_ao_ticket: yup.mixed().oneOf([yup.number().nullable(), "X"])
       })
       .required()
   )

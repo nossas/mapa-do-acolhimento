@@ -14,7 +14,7 @@ interface ResponseTickets {
  */
 const getUserRequestedTickets = async (
   requester_id: number | string
-): Promise<ResponseTickets> =>
+): Promise<ResponseTickets | undefined> =>
   await ZendeskBase.get(`users/${requester_id}/tickets/requested`);
 
 export default getUserRequestedTickets;

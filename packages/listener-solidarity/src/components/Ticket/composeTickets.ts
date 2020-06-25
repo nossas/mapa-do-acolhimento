@@ -1,5 +1,5 @@
 import { capitalize, formatDate } from "../../utils";
-import { User } from "../../types";
+import { User, PartialTicket } from "../../types";
 import dbg from "../../dbg";
 
 const log = dbg.extend("composeTickets");
@@ -8,9 +8,9 @@ interface HasuraUser extends User {
   user_id: number;
 }
 
-export default async users => {
+export default async (users): Promise<PartialTicket[]> => {
   log("Entering tickets creation logic");
-  let tickets = [];
+  let tickets: PartialTicket[] = [];
   const arr = users.map(async (user: HasuraUser) => {
     const {
       user_fields: {
@@ -66,6 +66,9 @@ export default async users => {
       }
     ]);
   });
-
-  return Promise.all(arr).then(() => tickets);
+  try {
+    await Promise.all(arr);
+  } finally {
+    return tickets;
+  }
 };

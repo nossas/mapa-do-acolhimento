@@ -2,7 +2,7 @@ import { checkOldTickets } from "./";
 import client from "../../zendesk";
 import { insertSolidarityTickets } from "../../graphql/mutations";
 import { handleTicketError } from "../../utils";
-import { Ticket, CustomFields } from "../../types";
+import { Ticket, CustomFields, PartialTicket } from "../../types";
 import dbg from "../../dbg";
 import Bottleneck from "bottleneck";
 
@@ -100,7 +100,7 @@ export const fetchUserTickets = async ({
   });
 };
 
-export default async (tickets: Ticket[]) => {
+export default async (tickets: PartialTicket[]) => {
   log(`${new Date()}: Entering createZendeskTickets`);
   const createTickets = tickets.map(async ticket => {
     const userTickets = await limiter.schedule(() => fetchUserTickets(ticket));

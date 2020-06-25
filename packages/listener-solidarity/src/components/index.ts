@@ -4,7 +4,7 @@ import { makeBatchRequests, composeUsers } from "./User";
 import createZendeskTickets, { composeTickets } from "./Ticket";
 import { insertSolidarityUsers, updateFormEntries } from "../graphql/mutations";
 import { getGeolocation, handleUserError, removeDuplicatesBy } from "../utils";
-import { Widget, FormEntry } from "../types";
+import { Widget, FormEntry, User } from "../types";
 import dbg from "../dbg";
 
 const log = dbg.extend("integration");
@@ -17,7 +17,7 @@ const limiter = new Bottleneck({
 let cache = [];
 
 export const handleIntegration = (widgets: Widget[]) => async response => {
-  let syncronizedForms = [];
+  let syncronizedForms: number[] = [];
   log(`${new Date()}: \nReceiving data on subscription GraphQL API...`);
   // log({ response: response.data.form_entries });
 
@@ -74,7 +74,7 @@ export const handleIntegration = (widgets: Widget[]) => async response => {
 
     // Create users tickets if they're not "desabilitada"
     // approved MSRs and not a volunteer
-    const removeDesabilitadedUsers = withoutDuplicates.filter(
+    const removeDesabilitadedUsers = (withoutDuplicates as User[]).filter(
       user => user["condition"] && user["condition"] !== "desabilitada"
     );
 
@@ -85,7 +85,7 @@ export const handleIntegration = (widgets: Widget[]) => async response => {
     }
 
     // Save users in Hasura
-    const inserted = await insertSolidarityUsers(withoutDuplicates);
+    const inserted = await insertSolidarityUsers(withoutDuplicates as never);
     if (!inserted) return handleUserError(withoutDuplicates);
 
     // Batch update syncronized forms

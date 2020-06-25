@@ -1,12 +1,10 @@
 import { extractTypeFromSubject } from "../../utils";
-import { Ticket, status_acolhimento_values } from "../../types";
+import { Ticket } from "../../types";
 import dbg from "../../dbg";
 
 const log = dbg.extend("checkOldTickets");
 
-const getStatusAcolhimento = (
-  ticket: Ticket
-): status_acolhimento_values | undefined => {
+const getStatusAcolhimento = (ticket: Ticket): string | undefined | null => {
   const status = ticket.fields.find(field => field.id === 360014379412);
   return status && status.value;
 };

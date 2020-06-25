@@ -22,7 +22,7 @@ interface User {
   encaminhamentos_realizados_calculado_: number;
   external_id: number;
   iana_time_zone: string;
-  id: number;
+  id?: number;
   last_login_at: string;
   latitude: string;
   locale: string;
