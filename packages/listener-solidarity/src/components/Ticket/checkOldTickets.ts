@@ -11,10 +11,15 @@ const getStatusAcolhimento = (
   return status && status.value;
 };
 
+const getOldestTicket = (tickets: Ticket[]) =>
+  tickets.sort(
+    (a, b) => (new Date(a.created_at) as any) - (new Date(b.created_at) as any)
+  )[0];
+
 export default (
   subject: string,
   tickets: Ticket[]
-): false | number | number[] => {
+): { unansweredTicket: number | number[]; agent: number } | false => {
   log("Checking old tickets");
   const newSubject = extractTypeFromSubject(subject);
 
@@ -42,12 +47,18 @@ export default (
   });
 
   // she has a match ticket
-  if (hasACurrentMatch.length > 0) return hasACurrentMatch.map(t => t.id);
+  if (hasACurrentMatch.length > 0)
+    return {
+      unansweredTicket: hasACurrentMatch.map(t => t.id),
+      agent: getOldestTicket(hasACurrentMatch).assignee_id as number
+    };
 
-  const oldestTicket = hasSameSubject.sort(
-    (a, b) => (new Date(a.created_at) as any) - (new Date(b.created_at) as any)
-  )[0];
-
+  const oldestTicket = getOldestTicket(hasSameSubject);
   const status_acolhimento = getStatusAcolhimento(oldestTicket);
-  return status_acolhimento === "solicitação_recebida" && oldestTicket.id;
+  return status_acolhimento === "solicitação_recebida"
+    ? {
+        unansweredTicket: oldestTicket.id,
+        agent: oldestTicket.assignee_id as number
+      }
+    : false;
 };

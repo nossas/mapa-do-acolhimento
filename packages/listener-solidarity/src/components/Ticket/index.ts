@@ -113,6 +113,7 @@ export default async (tickets: Ticket[]) => {
         createTicket({
           ...ticket,
           status: "pending",
+          assignee_id: relatableTickets.agent,
           custom_fields: [
             ...ticket.custom_fields,
             {
@@ -122,7 +123,9 @@ export default async (tickets: Ticket[]) => {
             {
               id: 360032229831,
               value:
-                typeof relatableTickets === "number" ? relatableTickets : null
+                typeof relatableTickets.unansweredTicket === "number"
+                  ? relatableTickets
+                  : null
             }
           ],
           comment: {

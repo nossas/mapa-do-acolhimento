@@ -115,6 +115,7 @@ export type Ticket = {
   subject: string;
   external_id: string;
   requester_id: number;
+  assignee_id?: number;
   custom_fields: Array<{ id: number; value: any }>;
   fields: Array<{ id: number; value: any }>;
   created_at: string;
