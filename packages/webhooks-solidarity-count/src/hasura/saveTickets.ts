@@ -1,9 +1,50 @@
 import * as yup from "yup";
-import { TicketZendesk, TicketHasuraIn } from "../interfaces/Ticket";
 import dbg from "./dbg";
 import generateRequestVariables from "./generateRequestVariables";
 import HasuraBase from "./HasuraBase";
 import isError, { HasuraResponse } from "./isError";
+
+const ticketsSchema = yup
+  .array()
+  .of(
+    yup.object().shape({
+      id: yup.number().strip(true),
+      ticket_id: yup.number().required(),
+      assignee_id: yup.number().nullable(),
+      created_at: yup.string(),
+      custom_fields: yup.array().of(
+        yup.object().shape({
+          id: yup.number(),
+          value: yup.string().nullable()
+        })
+      ),
+      description: yup.string(),
+      group_id: yup.number().nullable(),
+      organization_id: yup.number().nullable(),
+      raw_subject: yup.string(),
+      requester_id: yup.number(),
+      status: yup.string(),
+      subject: yup.string(),
+      submitter_id: yup.number(),
+      tags: yup.mixed(),
+      updated_at: yup.string(),
+      status_acolhimento: yup.string().nullable(),
+      nome_voluntaria: yup.string().nullable(),
+      link_match: yup.string().nullable(),
+      nome_msr: yup.string().nullable(),
+      data_inscricao_bonde: yup.string().nullable(),
+      data_encaminhamento: yup.string().nullable(),
+      status_inscricao: yup.string().nullable(),
+      telefone: yup.string().nullable(),
+      estado: yup.string().nullable(),
+      cidade: yup.string().nullable(),
+      community_id: yup.number(),
+      webhooks_registry_id: yup.number()
+    })
+  )
+  .required();
+
+type Tickets = yup.InferType<typeof ticketsSchema>;
 
 const generateVariablesIndex = (index: number) => `
 $assignee_id_${index}: bigint
@@ -60,15 +101,17 @@ cidade: $cidade_${index}
 community_id: $community_id_${index}
 `;
 
-const generateVariables = (tickets: TicketZendesk[]) =>
+const generateVariables = (tickets: Tickets) =>
   tickets.map((_, index) => generateVariablesIndex(index)).flat();
 
-const generateObjects = (tickets: TicketZendesk[]) =>
+const generateObjects = (tickets: Tickets) =>
   `[${tickets
     .map((_, index) => `{${generateObjectsIndex(index)}}`)
     .join(",")}]`;
 
-const createQuery = (tickets: any) => `mutation (${generateVariables(tickets)}){
+const createQuery = (tickets: Tickets) => `mutation (${generateVariables(
+  tickets
+)}){
   insert_solidarity_tickets(objects: ${generateObjects(tickets)}, on_conflict: {
     constraint: solidarity_tickets_ticket_id_key
     update_columns: [
@@ -103,52 +146,15 @@ const createQuery = (tickets: any) => `mutation (${generateVariables(tickets)}){
   }
 }`;
 
-const validate = yup.array().of(
-  yup.object().shape({
-    id: yup.number().strip(true),
-    ticket_id: yup.number().required(),
-    assignee_id: yup.number().nullable(),
-    created_at: yup.string(),
-    custom_fields: yup.array().of(
-      yup.object().shape({
-        id: yup.number(),
-        value: yup.string().nullable()
-      })
-    ),
-    description: yup.string(),
-    group_id: yup.number().nullable(),
-    organization_id: yup.number().nullable(),
-    raw_subject: yup.string(),
-    requester_id: yup.number(),
-    status: yup.string(),
-    subject: yup.string(),
-    submitter_id: yup.number(),
-    tags: yup.mixed(),
-    updated_at: yup.string(),
-    status_acolhimento: yup.string().nullable(),
-    nome_voluntaria: yup.string().nullable(),
-    link_match: yup.string().nullable(),
-    nome_msr: yup.string().nullable(),
-    data_inscricao_bonde: yup.string().nullable(),
-    data_encaminhamento: yup.string().nullable(),
-    status_inscricao: yup.string().nullable(),
-    telefone: yup.string().nullable(),
-    estado: yup.string().nullable(),
-    cidade: yup.string().nullable(),
-    community_id: yup.number(),
-    webhooks_registry_id: yup.number()
-  })
-);
-
 const log = dbg.extend("saveTickets");
 
 interface Response {
   affected_rows: number;
 }
 
-const saveTickets = async (tickets: TicketHasuraIn[]) => {
+const saveTickets = async (tickets: Tickets[]) => {
   try {
-    const validatedTickets = await validate.validate(tickets, {
+    const validatedTickets = await ticketsSchema.validate(tickets, {
       stripUnknown: true
     });
     const query = createQuery(validatedTickets);

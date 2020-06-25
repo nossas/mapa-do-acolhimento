@@ -23,7 +23,7 @@ const log = dbg.extend("match");
 const syncLog = dbg.extend("syncTickets");
 
 let AGENT = 1;
-let cache = new Array();
+let cache = [];
 
 const syncTickets = async (ids: number[]) => {
   syncLog(`Updating sync status from MSR tickets ${ids}`);

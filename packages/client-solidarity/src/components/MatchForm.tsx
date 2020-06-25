@@ -39,12 +39,14 @@ const MatchForm = () => {
     state => state.volunteers.volunteers
   );
   const getAvailableVolunteers = useStoreActions(
-    (actions: any) => actions.volunteers.getAvailableVolunteers
+    (actions: { volunteers }) => actions.volunteers.getAvailableVolunteers
   );
   const getTableData = useStoreActions(
-    (actions: any) => actions.table.getTableData
+    (actions: { table }) => actions.table.getTableData
   );
-  const setForm = useStoreActions((actions: any) => actions.match.setForm);
+  const setForm = useStoreActions(
+    (actions: { match }) => actions.match.setForm
+  );
 
   const { search } = useLocation();
 

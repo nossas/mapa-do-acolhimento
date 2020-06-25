@@ -1,8 +1,10 @@
 interface HasuraError {
-  errors: any;
+  errors: unknown;
 }
 
-const isError = (data: HasuraResponse<any, any>): data is HasuraError => {
+const isError = (
+  data: HasuraResponse<string, unknown>
+): data is HasuraError => {
   if ("error" in data) {
     return true;
   }

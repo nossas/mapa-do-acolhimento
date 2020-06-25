@@ -22,7 +22,7 @@ type DataType = {
   data: {
     form_entries: FormEntry[];
   };
-} & { errors: any };
+} & { errors: unknown };
 
 const getFormEntries = async () => {
   const {

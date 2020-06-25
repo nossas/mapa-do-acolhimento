@@ -8,20 +8,20 @@ interface HasuraUser extends User {
   user_id: number;
 }
 
-export default async (users) => {
+export default async users => {
   log("Entering tickets creation logic");
-  let tickets = new Array();
+  let tickets = [];
   const arr = users.map(async (user: HasuraUser) => {
     const {
       user_fields: {
         data_de_inscricao_no_bonde,
         tipo_de_acolhimento,
         city,
-        state,
+        state
       },
       external_id,
       name,
-      user_id,
+      user_id
     } = user;
 
     // if (!tipo_de_acolhimento) {
@@ -36,24 +36,24 @@ export default async (users) => {
       external_id,
       comment: {
         body: "Importado pelo BONDE.",
-        public: false,
+        public: false
       },
       requester_id: user_id,
       custom_fields: [
         { id: 360017056851, value: formatDate(data_de_inscricao_no_bonde) },
         { id: 360014379412, value: "solicitação_recebida" },
-        { id: 360016681971, value: name },
-      ],
+        { id: 360016681971, value: name }
+      ]
     };
 
     if (tipo_de_acolhimento === "psicológico_e_jurídico") {
-      return ["psicológico", "jurídico"].map((i) => {
+      return ["psicológico", "jurídico"].map(i => {
         tickets = [
           ...tickets,
           {
             ...ticket,
-            subject: subject(i),
-          },
+            subject: subject(i)
+          }
         ];
       });
     }
@@ -62,8 +62,8 @@ export default async (users) => {
       ...tickets,
       {
         ...ticket,
-        subject: subject(tipo_de_acolhimento || "Sem tipo de acolhimento"),
-      },
+        subject: subject(tipo_de_acolhimento || "Sem tipo de acolhimento")
+      }
     ]);
   });
 

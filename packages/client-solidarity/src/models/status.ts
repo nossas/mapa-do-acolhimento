@@ -8,7 +8,7 @@ type Status =
   | "rejected"
   | undefined;
 
-const statusModel: { data: Status; setStatus: any } = {
+const statusModel: { data: Status; setStatus: Function } = {
   data: undefined,
   setStatus: action((state, payload) => ({
     data: payload

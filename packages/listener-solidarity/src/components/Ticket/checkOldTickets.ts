@@ -19,7 +19,7 @@ const getOldestTicket = (tickets: Ticket[]) =>
 export default (
   subject: string,
   tickets: Ticket[]
-): { unansweredTicket: number | number[]; agent: number } | false => {
+): { relatedTickets: number | number[]; agent: number } | false => {
   log("Checking old tickets");
   const newSubject = extractTypeFromSubject(subject);
 
@@ -49,7 +49,7 @@ export default (
   // she has a match ticket
   if (hasACurrentMatch.length > 0)
     return {
-      unansweredTicket: hasACurrentMatch.map(t => t.id),
+      relatedTickets: hasACurrentMatch.map(t => t.id),
       agent: getOldestTicket(hasACurrentMatch).assignee_id as number
     };
 
@@ -57,7 +57,7 @@ export default (
   const status_acolhimento = getStatusAcolhimento(oldestTicket);
   return status_acolhimento === "solicitação_recebida"
     ? {
-        unansweredTicket: oldestTicket.id,
+        relatedTickets: oldestTicket.id,
         agent: oldestTicket.assignee_id as number
       }
     : false;

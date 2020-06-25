@@ -18,7 +18,7 @@ interface Foward {
 
 const fowardModel = {
   data: {},
-  fowardTickets: thunk(async (actions: any, payload: Foward) => {
+  fowardTickets: thunk(async (actions, payload: Foward) => {
     const { setError, data } = payload;
     try {
       // console.log(data);

@@ -52,8 +52,8 @@ export default async (
     return new Promise(resolve => {
       return client.tickets.update(
         ticketId,
-        { ticket: validatedTicket } as any,
-        (err, _req, result: any) => {
+        { ticket: validatedTicket } as { ticket },
+        (err, _req, result) => {
           if (err) {
             log(`Failed to update ticket '${ticketId}'`.red, err);
             return resolve(undefined);
@@ -66,7 +66,7 @@ export default async (
           //   )}`
           // );
           // log("Zendesk ticket updated successfully!");
-          return resolve(result);
+          return resolve(result as Ticket);
         }
       );
     });

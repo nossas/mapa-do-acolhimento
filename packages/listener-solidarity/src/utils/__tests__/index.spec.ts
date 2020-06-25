@@ -2,7 +2,7 @@ import {
   extractTypeFromSubject,
   getOrganizationType,
   capitalize,
-  formatDate,
+  formatDate
 } from "../";
 
 describe("Utils", () => {

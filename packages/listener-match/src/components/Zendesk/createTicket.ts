@@ -47,8 +47,8 @@ export default async (ticket: Ticket): Promise<Ticket | undefined> => {
     });
     return new Promise(resolve => {
       return client.tickets.create(
-        { ticket: validatedTicket } as any,
-        (err, _req, result: any) => {
+        { ticket: validatedTicket } as { ticket },
+        (err, _req, result) => {
           if (err) {
             log(
               `Failed to create ticket for user '${ticket.requester_id}'`.red,
@@ -64,7 +64,7 @@ export default async (ticket: Ticket): Promise<Ticket | undefined> => {
           //   )}`
           // );
           // log("Zendesk ticket created successfully!");
-          return resolve(result);
+          return resolve(result as Ticket);
         }
       );
     });

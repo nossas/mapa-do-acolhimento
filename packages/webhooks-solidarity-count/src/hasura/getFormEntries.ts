@@ -13,7 +13,7 @@ const query = `query($advogadaId: Int!, $psicologaId: Int!) {
 }`;
 
 interface Response {
-  fields: any;
+  fields: string;
   created_at: string;
   widget_id: number;
 }

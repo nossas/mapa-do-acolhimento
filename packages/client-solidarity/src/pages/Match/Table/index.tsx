@@ -34,13 +34,17 @@ const Table = () => {
   const individual = useStoreState(state => state.individual.data);
   const error = useStoreState(state => state.error.error);
 
-  const setStatus = useStoreActions((actions: any) => actions.status.setStatus);
-  const setError = useStoreActions((actions: any) => actions.error.setError);
+  const setStatus = useStoreActions(
+    (actions: { status }) => actions.status.setStatus
+  );
+  const setError = useStoreActions(
+    (actions: { error }) => actions.error.setError
+  );
   const fowardTickets = useStoreActions(
-    (actions: any) => actions.foward.fowardTickets
+    (actions: { foward }) => actions.foward.fowardTickets
   );
   const setTableData = useStoreActions(
-    (actions: any) => actions.table.setTable
+    (actions: { table }) => actions.table.setTable
   );
 
   const [ticketId, setTicketId] = useState(0);

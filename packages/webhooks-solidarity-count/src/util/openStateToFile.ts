@@ -6,7 +6,9 @@ import dbg from "./dbg";
 const readFile = promisify(fs.readFile);
 const log = dbg.extend("openStateFile");
 
-const openStateFile = async <T>(filename: string): Promise<T | null> => {
+const openStateFile = async (
+  filename: string
+): Promise<Record<string, string | number> | null> => {
   try {
     const buffer = await readFile(
       path.resolve("src/__tests__/data", `${filename}.json`)

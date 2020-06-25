@@ -120,7 +120,7 @@ abstract class Base {
     };
   };
 
-  protected send = async <T = any>(data?: any) => {
+  protected send = async <T>(data?) => {
     const {
       ZENDESK_API_URL,
       ZENDESK_API_TOKEN,

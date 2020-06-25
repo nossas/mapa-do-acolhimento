@@ -12,9 +12,11 @@ const BtnWarning = styled(Button)`
 
 const Foward = ({ id }: { id: number }) => {
   const setIndividual = useStoreActions(
-    (actions: any) => actions.individual.setIndividual
+    (actions: { individual }) => actions.individual.setIndividual
   );
-  const setStatus = useStoreActions((actions: any) => actions.status.setStatus);
+  const setStatus = useStoreActions(
+    (actions: { status }) => actions.status.setStatus
+  );
   const tableData = useStoreState(state => state.table.data);
   const volunteer = useStoreState(state => state.match.volunteer);
 

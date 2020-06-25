@@ -35,7 +35,7 @@ interface User {
   only_private_comments?: boolean;
   organization_id?: number;
   phone?: string;
-  photo?: any;
+  photo?: unknown;
   registration_number?: string;
   report_csv?: boolean;
   restricted_agent?: boolean;
@@ -47,7 +47,7 @@ interface User {
   signature?: string;
   state?: string;
   suspended?: boolean;
-  tags?: any;
+  tags?: string[];
   ticket_restriction?: string;
   time_zone?: string;
   tipo_de_acolhimento?: string;
@@ -55,7 +55,7 @@ interface User {
   ultima_atualizacao_de_dados?: string;
   updated_at?: string;
   url?: string;
-  user_fields?: any;
+  user_fields?: Record<string, string | number>;
   user_id: number;
   verified?: boolean;
   whatsapp?: string;

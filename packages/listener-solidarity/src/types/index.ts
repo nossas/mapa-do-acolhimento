@@ -1,17 +1,3 @@
-interface Settings {
-  id: number;
-  settings: any;
-  community_id: number;
-}
-
-interface SettingsDataResponse {
-  rede_settings: Settings[];
-}
-
-export interface SettingsResponse {
-  data: SettingsDataResponse;
-}
-
 export interface Widget {
   id: number;
   organization_id: number;
@@ -107,6 +93,43 @@ export type Instance = {
   disponibilidade_de_atendimentos?: string;
 };
 
+export const dicio: {
+  360014379412: "status_acolhimento";
+  360016631592: "nome_voluntaria";
+  360016631632: "link_match";
+  360016681971: "nome_msr";
+  360017056851: "data_inscricao_bonde";
+  360017432652: "data_encaminhamento";
+  360021665652: "status_inscricao";
+  360021812712: "telefone";
+  360021879791: "estado";
+  360021879811: "cidade";
+  360032229831: "atrelado_ao_ticket";
+} = {
+  360014379412: "status_acolhimento",
+  360016631592: "nome_voluntaria",
+  360016631632: "link_match",
+  360016681971: "nome_msr",
+  360017056851: "data_inscricao_bonde",
+  360017432652: "data_encaminhamento",
+  360021665652: "status_inscricao",
+  360021812712: "telefone",
+  360021879791: "estado",
+  360021879811: "cidade",
+  360032229831: "atrelado_ao_ticket"
+};
+
+type status_acolhimento_values =
+  | "atendimento__concluído"
+  | "atendimento__iniciado"
+  | "atendimento__interrompido"
+  | "encaminhamento__aguardando_confirmação"
+  | "encaminhamento__confirmou_disponibilidade"
+  | "encaminhamento__negado"
+  | "encaminhamento__realizado"
+  | "encaminhamento__realizado_para_serviço_público"
+  | "solicitação_recebida";
+
 export type Ticket = {
   comment: {
     body: string;
@@ -116,8 +139,8 @@ export type Ticket = {
   external_id: string;
   requester_id: number;
   assignee_id?: number;
-  custom_fields: Array<{ id: number; value: any }>;
-  fields: Array<{ id: number; value: any }>;
+  custom_fields: Array<{ id: number; value: string }>;
+  fields: Array<{ id: number; value: string }>;
   created_at: string;
   description: string;
   ticket_id: number;

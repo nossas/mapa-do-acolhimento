@@ -4,42 +4,6 @@ import { GoogleMapsResponse, IndividualGeolocation } from "../types";
 
 const log = dbg.extend("getGeocoding");
 
-export const getGoogleGeolocation = async (address: string, email: string) => {
-  try {
-    log(`requesting google with address ${address}...`);
-    const response: { data: GoogleMapsResponse } = await axios.post(
-      "https://maps.googleapis.com/maps/api/geocode/json",
-      undefined,
-      {
-        params: {
-          address,
-          key: process.env.GOOGLE_MAPS_API_KEY,
-        },
-      }
-    );
-
-    log("google maps responded!");
-
-    if (response.data && response.data.error_message) {
-      log(
-        `google maps response failed (email, address): '${email}', ${address}`
-          .red,
-        response.data.error_message
-      );
-      return processGeolocation(email, address, undefined);
-    }
-
-    return processGeolocation(email, address, response.data);
-  } catch (e) {
-    log(
-      `google maps response failed (email, address): '${email}', ${address}`
-        .red,
-      e
-    );
-    return processGeolocation(email, address, undefined);
-  }
-};
-
 const getCityStateAndZipcode = (addressComponents): Array<string> => {
   let state = "";
   let city = "";
@@ -49,7 +13,7 @@ const getCityStateAndZipcode = (addressComponents): Array<string> => {
   addressComponents.forEach(
     ({
       types,
-      short_name: shortName,
+      short_name: shortName
     }: {
       types: string[];
       short_name: string;
@@ -90,12 +54,12 @@ export const processGeolocation = (
       results: [
         {
           geometry: {
-            location: { lat = "", lng = "" },
+            location: { lat = "", lng = "" }
           },
           address_components: addressComponents,
-          formatted_address: address = "",
-        },
-      ],
+          formatted_address: address = ""
+        }
+      ]
     } = data;
 
     const [state, city, zipcode] = getCityStateAndZipcode(addressComponents);
@@ -107,7 +71,7 @@ export const processGeolocation = (
       address,
       state,
       city,
-      cep: zipcode,
+      cep: zipcode
     };
 
     // log(i);
@@ -129,10 +93,46 @@ export const processGeolocation = (
     address: `Endereço não encontrado - ${searchAddress}`,
     state: null,
     city: "ZERO_RESULTS",
-    cep: "ZERO_RESULTS",
+    cep: "ZERO_RESULTS"
   };
 
   return i;
+};
+
+export const getGoogleGeolocation = async (address: string, email: string) => {
+  try {
+    log(`requesting google with address ${address}...`);
+    const response: { data: GoogleMapsResponse } = await axios.post(
+      "https://maps.googleapis.com/maps/api/geocode/json",
+      undefined,
+      {
+        params: {
+          address,
+          key: process.env.GOOGLE_MAPS_API_KEY
+        }
+      }
+    );
+
+    log("google maps responded!");
+
+    if (response.data && response.data.error_message) {
+      log(
+        `google maps response failed (email, address): '${email}', ${address}`
+          .red,
+        response.data.error_message
+      );
+      return processGeolocation(email, address, undefined);
+    }
+
+    return processGeolocation(email, address, response.data);
+  } catch (e) {
+    log(
+      `google maps response failed (email, address): '${email}', ${address}`
+        .red,
+      e
+    );
+    return processGeolocation(email, address, undefined);
+  }
 };
 
 export default async ({
@@ -141,8 +141,8 @@ export default async ({
   cep,
   address,
   neighborhood,
-  email,
-}: any) => {
+  email
+}: Record<string, string>) => {
   const a = address ? `${address},` : "";
   const n = neighborhood ? `${neighborhood},` : "";
   const c = city ? `${city},` : "";

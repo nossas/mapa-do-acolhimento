@@ -46,14 +46,7 @@ const CREATE_USERS_MUTATION = gql`
   }
 `;
 
-// type Response = {
-//   data: {
-//     insert_solidarity_users?: any;
-//     errors?: Array<any>;
-//   };
-// };
-
-const schema = yup.array().of(
+const userSchema = yup.array().of(
   yup.object().shape({
     role: yup.string().nullable(),
     organization_id: yup.number().required(),
@@ -90,22 +83,24 @@ const schema = yup.array().of(
       longitude: yup.string().required(),
       whatsapp: yup.string().nullable(),
       cep: yup.string().nullable(),
-      address: yup.string().required(),
-    }),
+      address: yup.string().required()
+    })
   })
 );
 
-const insertSolidarityUsers = async (users: any) => {
+type Users = yup.InferType<typeof userSchema>;
+
+const insertSolidarityUsers = async (users: Users) => {
   log("Saving users in Hasura...");
-  const ids = users.map((u) => u.external_id);
+  const ids = users.map(u => u.external_id);
   try {
-    const validatedUsers = await schema.validate(users, {
-      stripUnknown: true,
+    const validatedUsers = await userSchema.validate(users, {
+      stripUnknown: true
     });
     // log(validatedUsers);
     const res = await GraphQLAPI.mutate({
       mutation: CREATE_USERS_MUTATION,
-      variables: { users: validatedUsers },
+      variables: { users: validatedUsers }
     });
 
     if (res && res.data && res.data.errors) {
@@ -115,8 +110,8 @@ const insertSolidarityUsers = async (users: any) => {
 
     const {
       data: {
-        insert_solidarity_users: { returning },
-      },
+        insert_solidarity_users: { returning }
+      }
     } = res;
 
     return returning;

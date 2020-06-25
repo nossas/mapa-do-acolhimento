@@ -1,4 +1,5 @@
 import { checkOldTickets } from "../.";
+import { Ticket } from "../../../types";
 import data from "../__mocks__/tickets";
 
 describe("Testing checkOldTickets", () => {
@@ -21,7 +22,7 @@ describe("Testing checkOldTickets", () => {
     it("should return ticket_id if old tickets matched stabilished conditions", async () => {
       const oldTickets = checkOldTickets(
         "[Psicológico] Igor, Belo Horizonte - MG",
-        case_one as any
+        case_one as Ticket[]
       );
       expect(oldTickets).toStrictEqual(16866);
     });
@@ -31,7 +32,7 @@ describe("Testing checkOldTickets", () => {
     it("should return ticket_id in array if old tickets matched stabilished conditions", async () => {
       const oldTickets = checkOldTickets(
         "[Psicológico] Viviane, Taubaté - SP",
-        case_two as any
+        case_two as Ticket[]
       );
       expect(oldTickets).toStrictEqual([19895]);
     });
@@ -40,14 +41,14 @@ describe("Testing checkOldTickets", () => {
   it('should return "false" because no old tickets match subject', () => {
     const oldTickets = checkOldTickets(
       "[Jurídico] Teste, São Paulo - SP",
-      mixed as any
+      mixed as Ticket[]
     );
     expect(oldTickets).toStrictEqual(false);
   });
   it("should return 'false' if old tickets are 'closed' or 'solved'", () => {
     const oldTickets = checkOldTickets(
       "[Jurídico] Camila, Cuiabá - MT",
-      mixed as any
+      mixed as Ticket[]
     );
     expect(oldTickets).toStrictEqual(false);
   });
@@ -58,7 +59,7 @@ describe("Testing checkOldTickets", () => {
   it('should return "false" if there were no old tickets that matched stabilished conditions', () => {
     const oldTickets = checkOldTickets(
       "[Psicológico] Viviane, Taubaté - SP",
-      meets_no_conditions as any
+      meets_no_conditions as Ticket[]
     );
     expect(oldTickets).toStrictEqual(false);
   });

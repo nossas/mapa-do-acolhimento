@@ -61,7 +61,7 @@ class Server {
     if (!tickets) {
       return undefined;
     }
-    const filteredTickets = tickets.data.tickets.filter((i: any) => {
+    const filteredTickets = tickets.data.tickets.filter(i => {
       if (instance instanceof AdvogadaCreateUser) {
         return (
           ["open", "new", "pending", "hold"].includes(i.status) &&
@@ -77,7 +77,7 @@ class Server {
     if (filteredTickets.length === 0) {
       if (instance instanceof AdvogadaCreateUser) {
         const advogadaCreateTicket = new AdvogadaCreateTicket(res);
-        return advogadaCreateTicket.start<any>({
+        return advogadaCreateTicket.start({
           requester_id: id,
           organization_id,
           description: "-",
@@ -109,7 +109,7 @@ class Server {
         });
       }
       const psicólogaCreateTicket = new PsicologaCreateTicket(res);
-      return psicólogaCreateTicket.start<any>({
+      return psicólogaCreateTicket.start({
         requester_id: id,
         organization_id,
         description: "-",
@@ -145,7 +145,7 @@ class Server {
         filteredTickets[0].id,
         res
       );
-      return advogadaUpdateTicket.start<any>({
+      return advogadaUpdateTicket.start({
         requester_id: id,
         organization_id,
         description: "-",
@@ -179,7 +179,7 @@ class Server {
       filteredTickets[0].id,
       res
     );
-    return psicólogaUpdateTicket.start<any>({
+    return psicólogaUpdateTicket.start({
       requester_id: id,
       organization_id,
       description: "-",
@@ -210,7 +210,13 @@ class Server {
     });
   };
 
-  checkNames = ({ primeiro_nome, sobrenome_completo }: any) => {
+  checkNames = ({
+    primeiro_nome,
+    sobrenome_completo
+  }: {
+    primeiro_nome;
+    sobrenome_completo;
+  }) => {
     let aux = "";
     if (typeof primeiro_nome === "string" && primeiro_nome.length > 0) {
       aux += primeiro_nome;
@@ -230,7 +236,7 @@ class Server {
     return null;
   };
 
-  checkCep = (cep: any) => {
+  checkCep = (cep: string) => {
     if (typeof cep === "string" && cep.length > 0) {
       return cep;
     }
@@ -330,12 +336,12 @@ class Server {
           this.dbg(`Success, updated user "${userId}"!`);
         }
 
-        const resultTicket = await this.createTicket(
+        const resultTicket = (await this.createTicket(
           instance,
           createdUser,
           dateSubmitted,
           res
-        );
+        )) as { data: { ticket: { id: number } } };
         if (resultTicket) {
           this.dbg(`Success updated ticket "${resultTicket.data.ticket.id}".`);
 

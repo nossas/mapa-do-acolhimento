@@ -25,19 +25,19 @@ const FORM_ENTRIES_SUBSCRIPTION = gql`
   }
 `;
 
-const error = (err: any) => {
+const error = err => {
   log("Receiving error on subscription GraphQL API: ", err);
 };
 
-export default async (widgets: Widget[]): Promise<any> => {
+export default async (widgets: Widget[]): Promise<unknown> => {
   try {
     const observable = GraphQLAPI.subscribe({
       query: FORM_ENTRIES_SUBSCRIPTION,
       variables: {
-        widgets: widgets.map((w: any) => w.id),
-        community_id: Number(process.env.COMMUNITY_ID),
+        widgets: widgets.map(w => w.id),
+        community_id: Number(process.env.COMMUNITY_ID)
       },
-      fetchPolicy: "network-only",
+      fetchPolicy: "network-only"
     }).subscribe({ next: handleIntegration(widgets), error });
 
     return observable;

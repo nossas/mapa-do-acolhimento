@@ -14,8 +14,8 @@ export default {
         fields: [
           { id: 360017056851, value: "2020-01-27" },
           { id: 360014379412, value: "solicitação_recebida" },
-          { id: 360016681971, value: "Teste" },
-        ],
+          { id: 360016681971, value: "Teste" }
+        ]
       },
       {
         id: 20073,
@@ -32,9 +32,9 @@ export default {
           { id: 360017056851, value: "2020-02-06" },
           { id: 360014379412, value: "solicitação_repetida" },
           { id: 360032229831, value: "16866" },
-          { id: 360016681971, value: "Teste" },
-        ],
-      },
+          { id: 360016681971, value: "Teste" }
+        ]
+      }
     ],
     case_two: [
       {
@@ -56,9 +56,9 @@ export default {
           { id: 360032229831, value: null },
           { id: 360021812712, value: null },
           { id: 360021879791, value: null },
-          { id: 360016681971, value: "Camila" },
-        ],
-      },
+          { id: 360016681971, value: "Camila" }
+        ]
+      }
     ],
     mixed: [
       {
@@ -68,45 +68,45 @@ export default {
         fields: [
           {
             id: 360021879811,
-            value: null,
+            value: null
           },
           {
             id: 360016631592,
-            value: null,
+            value: null
           },
           {
             id: 360017432652,
-            value: null,
+            value: null
           },
           {
             id: 360016631632,
-            value: null,
+            value: null
           },
           {
             id: 360017056851,
-            value: "2020-05-27",
+            value: "2020-05-27"
           },
           {
             id: 360021665652,
-            value: null,
+            value: null
           },
           {
             id: 360014379412,
-            value: "solicitação_recebida",
+            value: "solicitação_recebida"
           },
           {
             id: 360021812712,
-            value: null,
+            value: null
           },
           {
             id: 360021879791,
-            value: null,
+            value: null
           },
           {
             id: 360016681971,
-            value: "Camila",
-          },
-        ],
+            value: "Camila"
+          }
+        ]
       },
       {
         id: 19894,
@@ -115,46 +115,46 @@ export default {
         fields: [
           {
             id: 360021879811,
-            value: null,
+            value: null
           },
           {
             id: 360016631592,
-            value: null,
+            value: null
           },
           {
             id: 360017432652,
-            value: "2020-06-04",
+            value: "2020-06-04"
           },
           {
             id: 360016631632,
-            value: null,
+            value: null
           },
           {
             id: 360017056851,
-            value: "2020-05-08",
+            value: "2020-05-08"
           },
           {
             id: 360021665652,
-            value: null,
+            value: null
           },
           {
             id: 360014379412,
-            value: "encaminhamento__realizado",
+            value: "encaminhamento__realizado"
           },
           {
             id: 360021812712,
-            value: null,
+            value: null
           },
           {
             id: 360021879791,
-            value: null,
+            value: null
           },
           {
             id: 360016681971,
-            value: "Igor",
-          },
-        ],
-      },
+            value: "Igor"
+          }
+        ]
+      }
     ],
     meets_no_conditions: [
       {
@@ -164,47 +164,47 @@ export default {
         fields: [
           {
             id: 360021879811,
-            value: null,
+            value: null
           },
           {
             id: 360016631592,
-            value: null,
+            value: null
           },
           {
             id: 360017432652,
-            value: null,
+            value: null
           },
           {
             id: 360016631632,
-            value: null,
+            value: null
           },
           {
             id: 360017056851,
-            value: "2020-05-27",
+            value: "2020-05-27"
           },
           {
             id: 360021665652,
-            value: null,
+            value: null
           },
           {
             id: 360014379412,
-            value: "encaminhamento__negado",
+            value: "encaminhamento__negado"
           },
           {
             id: 360021812712,
-            value: null,
+            value: null
           },
           {
             id: 360021879791,
-            value: null,
+            value: null
           },
           {
             id: 360016681971,
-            value: "Viviane",
-          },
-        ],
-      },
-    ],
+            value: "Viviane"
+          }
+        ]
+      }
+    ]
   },
   users: {
     volunteers: [
@@ -227,8 +227,8 @@ export default {
           registration_number: "21312312",
           occupation_area: null,
           disponibilidade_de_atendimentos: "5_ou_mais",
-          data_de_inscricao_no_bonde: "2020-05-29T00:27:23.780153",
-        },
+          data_de_inscricao_no_bonde: "2020-05-29T00:27:23.780153"
+        }
       },
       {
         name: "Maoela Coelho",
@@ -249,9 +249,9 @@ export default {
           registration_number: "21312312",
           occupation_area: null,
           disponibilidade_de_atendimentos: "2",
-          data_de_inscricao_no_bonde: "2020-05-29T00:28:29.55569",
-        },
-      },
+          data_de_inscricao_no_bonde: "2020-05-29T00:28:29.55569"
+        }
+      }
     ],
     individuals: [
       {
@@ -275,7 +275,7 @@ export default {
           disponibilidade_de_atendimentos: "",
           data_de_inscricao_no_bonde: "2020-05-08T12:37:01.553574",
           latitude: "-19.9166813",
-          longitude: "-43.9344931",
+          longitude: "-43.9344931"
         },
         tipo_de_acolhimento: "psicológico",
         condition: "inscrita",
@@ -291,7 +291,7 @@ export default {
         latitude: "-19.9166813",
         longitude: "-43.9344931",
         community_id: 40,
-        user_id: 398426996571,
+        user_id: 398426996571
       },
       {
         name: "Viviane",
@@ -314,7 +314,7 @@ export default {
           disponibilidade_de_atendimentos: "",
           data_de_inscricao_no_bonde: "2020-05-27T13:14:24.678628",
           latitude: "-23.0225753",
-          longitude: "-45.5486715",
+          longitude: "-45.5486715"
         },
         tipo_de_acolhimento: "psicológico_e_jurídico",
         condition: "inscrita",
@@ -330,7 +330,7 @@ export default {
         latitude: "-23.0225753",
         longitude: "-45.5486715",
         community_id: 40,
-        user_id: 398420465072,
+        user_id: 398420465072
       },
       {
         name: "Camila",
@@ -354,7 +354,7 @@ export default {
           disponibilidade_de_atendimentos: "",
           data_de_inscricao_no_bonde: "2020-05-27T13:15:47.93393",
           latitude: "-15.60086",
-          longitude: "-56.0968227",
+          longitude: "-56.0968227"
         },
         tipo_de_acolhimento: "psicológico",
         condition: "inscrita",
@@ -371,102 +371,102 @@ export default {
         latitude: "-15.60086",
         longitude: "-56.0968227",
         community_id: 40,
-        user_id: 398420465092,
-      },
-    ],
+        user_id: 398420465092
+      }
+    ]
   },
   results: [
     {
       comment: {
         body: "Importado pelo BONDE.",
-        public: false,
+        public: false
       },
       external_id: "2000302",
       requester_id: 398426996571,
       custom_fields: [
         {
           id: 360017056851,
-          value: "2020-05-08",
+          value: "2020-05-08"
         },
         {
           id: 360014379412,
-          value: "solicitação_recebida",
+          value: "solicitação_recebida"
         },
         {
           id: 360016681971,
-          value: "Igor",
-        },
+          value: "Igor"
+        }
       ],
-      subject: "[Psicológico] Igor, Belo Horizonte - MG",
+      subject: "[Psicológico] Igor, Belo Horizonte - MG"
     },
     {
       comment: {
         body: "Importado pelo BONDE.",
-        public: false,
+        public: false
       },
       external_id: "2000364",
       requester_id: 398420465072,
       custom_fields: [
         {
           id: 360017056851,
-          value: "2020-05-27",
+          value: "2020-05-27"
         },
         {
           id: 360014379412,
-          value: "solicitação_recebida",
+          value: "solicitação_recebida"
         },
         {
           id: 360016681971,
-          value: "Viviane",
-        },
+          value: "Viviane"
+        }
       ],
-      subject: "[Psicológico] Viviane, Taubaté - SP",
+      subject: "[Psicológico] Viviane, Taubaté - SP"
     },
     {
       comment: {
         body: "Importado pelo BONDE.",
-        public: false,
+        public: false
       },
       requester_id: 398420465072,
       custom_fields: [
         {
           id: 360017056851,
-          value: "2020-05-27",
+          value: "2020-05-27"
         },
         {
           id: 360014379412,
-          value: "solicitação_recebida",
+          value: "solicitação_recebida"
         },
         {
           id: 360016681971,
-          value: "Viviane",
-        },
+          value: "Viviane"
+        }
       ],
       external_id: "2000364",
-      subject: "[Jurídico] Viviane, Taubaté - SP",
+      subject: "[Jurídico] Viviane, Taubaté - SP"
     },
     {
       comment: {
         body: "Importado pelo BONDE.",
-        public: false,
+        public: false
       },
       requester_id: 398420465092,
       custom_fields: [
         {
           id: 360017056851,
-          value: "2020-05-27",
+          value: "2020-05-27"
         },
         {
           id: 360014379412,
-          value: "solicitação_recebida",
+          value: "solicitação_recebida"
         },
         {
           id: 360016681971,
-          value: "Camila",
-        },
+          value: "Camila"
+        }
       ],
       external_id: "2000365",
-      subject: "[Psicológico] Camila, Cuiabá - MT",
-    },
-  ],
+      subject: "[Psicológico] Camila, Cuiabá - MT"
+    }
+  ]
 };

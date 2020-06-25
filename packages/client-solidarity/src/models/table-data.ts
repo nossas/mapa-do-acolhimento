@@ -11,7 +11,7 @@ const tableModel = {
   })),
   getTableData: thunk(
     async (
-      actions: any,
+      actions: { setTable; setError },
       payload: { endpoint: string; volunteer_organization_id?: number }
     ) => {
       actions.setTable("pending");

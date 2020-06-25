@@ -20,10 +20,10 @@ const Map = () => {
   const tableData = useStoreState(state => state.table.data);
 
   const setTableData = useStoreActions(
-    (actions: any) => actions.table.setTable
+    (actions: { table }) => actions.table.setTable
   );
   const setPopupUser = useStoreActions(
-    (actions: any) => actions.map.setPopupUser
+    (actions: { map }) => actions.map.setPopupUser
   );
 
   const [viewport, setViewport] = useState<Viewport>({
