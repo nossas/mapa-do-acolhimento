@@ -6,7 +6,6 @@ pipeline:
       - pnpm i
       - pnpm run lint
       - pnpm m run test
-      - pnpm m run coverage
     when:
       event: [push, tag]
 

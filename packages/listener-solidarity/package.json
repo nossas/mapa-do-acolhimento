@@ -17,9 +17,8 @@
   "scripts": {
     "start": "DEBUG=listener-solidarity* node -r dotenv-safe/config dist/main.js",
     "dev": "DEBUG=listener-solidarity* tsc-watch --onSuccess \"node -r dotenv-safe/config dist/main.js\"",
-    "test": "jest",
+    "test": "jest --coverage",
     "test:watch": "DEBUG=listener-solidarity* jest --watch --runInBand --detectOpenHandles",
-    "coverage": "jest --coverage",
     "build": "tsc -p tsconfig.json --sourcemap",
     "build:watch": "tsc -w -p tsconfig.json",
     "clean": "rimraf coverage dist tmp"

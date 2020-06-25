@@ -9,7 +9,7 @@ const saveTicketsInChunks = async (users: Ticket[]) => {
   const splitedTickets = R.splitEvery(1000, users) as Ticket[][];
   let contador = 0;
   for await (const ticketsChunk of splitedTickets) {
-    await saveTickets(ticketsChunk);
+    await saveTickets(ticketsChunk as never);
     contador += ticketsChunk.length;
     log(`[${contador}/${users.length}]`);
   }
