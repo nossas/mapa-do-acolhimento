@@ -63,7 +63,7 @@ export const handleMatch = () => async (response: SubscriptionResponse) => {
       } = individualTicket;
 
       if (
-        statusAcolhimento === "solicitaçao_repetida" &&
+        statusAcolhimento === "solicitação_repetida" &&
         atreladoAoTicket === null
       ) {
         log(
