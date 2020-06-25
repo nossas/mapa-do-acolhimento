@@ -182,11 +182,10 @@ const App = async (ticket_id: string, res: Response) => {
     return res.status(200).json("Ok!");
   }
 
-  log(
-    `Internal server error relative to organization parse, ticket '${ticket_id}'.`
-  );
   log("Finished sync");
-  return res.status(500).json("Failed to parse this organization_id");
+  return res
+    .status(202)
+    .json(`Failed to parse the organization_id for this ticket '${ticket_id}`);
 };
 
 export default App;
