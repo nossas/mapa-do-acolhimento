@@ -1,17 +1,13 @@
-import { extractTypeFromSubject } from "../../utils";
+import { extractTypeFromSubject, getStatusAcolhimento } from "../../utils";
 import { Ticket } from "../../types";
 import dbg from "../../dbg";
 
 const log = dbg.extend("checkOldTickets");
 
-const getStatusAcolhimento = (ticket: Ticket): string | undefined | null => {
-  const status = ticket.fields.find(field => field.id === 360014379412);
-  return status && status.value;
-};
-
 const getOldestTicket = (tickets: Ticket[]) =>
   tickets.sort(
-    (a, b) => (new Date(a.created_at) as any) - (new Date(b.created_at) as any)
+    (a, b) =>
+      new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
   )[0];
 
 export default (

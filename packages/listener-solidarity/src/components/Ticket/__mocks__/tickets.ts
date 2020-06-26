@@ -1,106 +1,131 @@
 export default {
   tickets: {
-    case_one: [
-      {
-        id: 16866,
-        external_id: "1273183",
-        created_at: "2020-01-29T20:47:52Z",
-        subject: "[Psicológico] Teste, Curitiba - PR",
-        description: "Importado pelo BONDE.",
-        status: "new",
-        requester_id: 393261194131,
-        submitter_id: 393261194131,
-        organization_id: 360273031591,
-        fields: [
-          { id: 360017056851, value: "2020-01-27" },
-          { id: 360014379412, value: "solicitação_recebida" },
-          { id: 360016681971, value: "Teste" }
-        ]
-      },
-      {
-        id: 20073,
-        external_id: "1274029",
-        created_at: "2020-06-10T15:31:25Z",
-        subject: "[Psicológico] Teste, Curitiba - PR",
-        description:
-          "MSR já possui uma solicitação com o mesmo tipo de pedido de acolhimento nos seguintes tickets: 16866",
-        status: "pending",
-        requester_id: 393261194131,
-        submitter_id: 393261194131,
-        organization_id: 360273031591,
-        fields: [
-          { id: 360017056851, value: "2020-02-06" },
-          { id: 360014379412, value: "solicitação_repetida" },
-          { id: 360032229831, value: "16866" },
-          { id: 360016681971, value: "Teste" }
-        ]
-      }
-    ],
-    case_two: [
-      {
-        id: 19895,
-        created_at: "2020-06-04T18:41:25Z",
-        subject: "[Psicológico] Camila, Cuiabá - MT",
-        description: "Importado pelo BONDE.",
-        status: "pending",
-        requester_id: 398420465092,
-        organization_id: 360273031591,
-        fields: [
-          { id: 360021879811, value: null },
-          { id: 360016631592, value: null },
-          { id: 360017432652, value: null },
-          { id: 360016631632, value: null },
-          { id: 360017056851, value: "2020-05-27" },
-          { id: 360021665652, value: null },
-          { id: 360014379412, value: "atendimento__iniciado" },
-          { id: 360032229831, value: null },
-          { id: 360021812712, value: null },
-          { id: 360021879791, value: null },
-          { id: 360016681971, value: "Camila" }
-        ]
-      }
-    ],
-    mixed: [
+    no_match: {
+      solicitação_recebida: [
+        {
+          id: 16866,
+          assignee_id: 123123,
+          created_at: "2020-01-27T20:47:52Z",
+          subject: "[Psicológico] Teste, Curitiba - PR",
+          status: "new",
+          custom_fields: [
+            { id: 360017056851, value: "2020-01-27" },
+            { id: 360014379412, value: "solicitação_recebida" },
+            { id: 360016681971, value: "Teste" }
+          ]
+        }
+      ],
+      atendimento__interrompido: [
+        {
+          id: 19892,
+          subject: "[Psicológico] Viviane, Taubaté - SP",
+          status: "new",
+          assignee_id: 123123,
+          created_at: "2020-02-26T20:47:52Z",
+          custom_fields: [
+            {
+              id: 360017056851,
+              value: "2020-02-26"
+            },
+            {
+              id: 360014379412,
+              value: "atendimento__interrompido"
+            },
+            {
+              id: 360016681971,
+              value: "Viviane"
+            }
+          ]
+        }
+      ],
+      encaminhamento__negado: [
+        {
+          id: 19893,
+          assignee_id: 123123,
+          created_at: "2019-09-05T20:47:52Z",
+          subject: "[Psicológico] Viviane, Taubaté - SP",
+          status: "new",
+          custom_fields: [
+            {
+              id: 360017056851,
+              value: "2019-09-05"
+            },
+            {
+              id: 360014379412,
+              value: "encaminhamento__negado"
+            },
+            {
+              id: 360016681971,
+              value: "Viviane"
+            }
+          ]
+        }
+      ],
+      second_ticket: [
+        {
+          id: 16867,
+          subject: "[Psicológico] Teste, Santos - SP",
+          description: "Importado pelo BONDE.",
+          status: "pending",
+          assignee_id: 123123,
+          created_at: "2020-01-27T20:47:52Z",
+          custom_fields: [
+            { id: 360017056851, value: "2020-01-27" },
+            {
+              id: 360014379412,
+              value: "encaminhamento__realizado_para_serviço_público"
+            },
+            { id: 360016681971, value: "Teste" }
+          ]
+        },
+        {
+          id: 16868,
+          external_id: "1273183",
+          subject: "[Jurídico] Teste, Recife - PE",
+          description: "Importado pelo BONDE.",
+          status: "pending",
+          assignee_id: 123123,
+          created_at: "2019-12-29T20:47:52Z",
+          custom_fields: [
+            { id: 360017056851, value: "2019-12-29" },
+            { id: 360014379412, value: "atendimento__concluído" },
+            { id: 360016681971, value: "Teste" }
+          ]
+        }
+      ]
+    },
+    has_match: {
+      atendimento__iniciado: [
+        {
+          id: 19895,
+          subject: "[Psicológico] Camila, Cuiabá - MT",
+          description: "Importado pelo BONDE.",
+          status: "pending",
+          assignee_id: 123123,
+          created_at: "2020-01-29T20:47:52Z",
+          custom_fields: [
+            { id: 360017056851, value: "2020-01-29" },
+            { id: 360014379412, value: "atendimento__iniciado" },
+            { id: 360016681971, value: "Camila" }
+          ]
+        }
+      ]
+    },
+    no_fit: [
       {
         id: 19855,
         subject: "[Jurídico] Camila, Cuiabá - MT",
         status: "closed",
-        fields: [
-          {
-            id: 360021879811,
-            value: null
-          },
-          {
-            id: 360016631592,
-            value: null
-          },
-          {
-            id: 360017432652,
-            value: null
-          },
-          {
-            id: 360016631632,
-            value: null
-          },
+        assignee_id: 123123,
+        created_at: "2020-05-27T20:47:52Z",
+        custom_fields: [
           {
             id: 360017056851,
             value: "2020-05-27"
           },
           {
-            id: 360021665652,
-            value: null
-          },
-          {
             id: 360014379412,
-            value: "solicitação_recebida"
-          },
-          {
-            id: 360021812712,
-            value: null
-          },
-          {
-            id: 360021879791,
-            value: null
+            value: "atendimento__concluído"
           },
           {
             id: 360016681971,
@@ -111,96 +136,21 @@ export default {
       {
         id: 19894,
         subject: "[Psicológico] Igor, Belo Horizonte - MG",
-        status: "pending",
-        fields: [
+        status: "new",
+        assignee_id: 123123,
+        created_at: "2020-06-04T20:47:52Z",
+        custom_fields: [
           {
-            id: 360021879811,
-            value: null
-          },
-          {
-            id: 360016631592,
-            value: null
-          },
-          {
-            id: 360017432652,
+            id: 360017056851,
             value: "2020-06-04"
           },
           {
-            id: 360016631632,
-            value: null
-          },
-          {
-            id: 360017056851,
-            value: "2020-05-08"
-          },
-          {
-            id: 360021665652,
-            value: null
-          },
-          {
             id: 360014379412,
-            value: "encaminhamento__realizado"
-          },
-          {
-            id: 360021812712,
-            value: null
-          },
-          {
-            id: 360021879791,
-            value: null
+            value: "solicitação_recebida"
           },
           {
             id: 360016681971,
             value: "Igor"
-          }
-        ]
-      }
-    ],
-    meets_no_conditions: [
-      {
-        id: 19892,
-        subject: "[Psicológico] Viviane, Taubaté - SP",
-        status: "new",
-        fields: [
-          {
-            id: 360021879811,
-            value: null
-          },
-          {
-            id: 360016631592,
-            value: null
-          },
-          {
-            id: 360017432652,
-            value: null
-          },
-          {
-            id: 360016631632,
-            value: null
-          },
-          {
-            id: 360017056851,
-            value: "2020-05-27"
-          },
-          {
-            id: 360021665652,
-            value: null
-          },
-          {
-            id: 360014379412,
-            value: "encaminhamento__negado"
-          },
-          {
-            id: 360021812712,
-            value: null
-          },
-          {
-            id: 360021879791,
-            value: null
-          },
-          {
-            id: 360016681971,
-            value: "Viviane"
           }
         ]
       }

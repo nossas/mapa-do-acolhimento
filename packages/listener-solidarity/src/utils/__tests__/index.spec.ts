@@ -2,7 +2,8 @@ import {
   extractTypeFromSubject,
   getOrganizationType,
   capitalize,
-  formatDate
+  formatDate,
+  getStatusAcolhimento
 } from "../";
 
 describe("Utils", () => {
@@ -53,5 +54,28 @@ describe("Utils", () => {
       expect(formatDate("2019-03-23T23:22:48.813946")).toEqual("2019-03-23");
       expect(formatDate("2018-03-10T11:28:01.48789")).toEqual("2018-03-10");
     });
+  });
+
+  it("should return the value of the field 'status_acolhimento'", () => {
+    // reference: https://develop.zendesk.com/hc/en-us/community/posts/360001644768-Format-to-pass-Date-field-type
+    expect(
+      getStatusAcolhimento({
+        custom_fields: [
+          { id: 360014379412, value: "encaminhamento__realizado" }
+        ]
+      } as never)
+    ).toEqual("encaminhamento__realizado");
+    expect(
+      getStatusAcolhimento({
+        custom_fields: [{ id: 360014379412, value: "solicitação_recebida" }]
+      } as never)
+    ).toEqual("solicitação_recebida");
+    expect(
+      getStatusAcolhimento({
+        custom_fields: [
+          { id: 360014379412, value: "atendimento__interrompido" }
+        ]
+      } as never)
+    ).toEqual("atendimento__interrompido");
   });
 });

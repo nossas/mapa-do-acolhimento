@@ -1,3 +1,5 @@
+import { Ticket } from "../types";
+
 export const organizationsIds = {
   MSR: 360273031591,
   THERAPIST: 360282119532,
@@ -88,6 +90,13 @@ export const removeDuplicatesBy = (keyFn, array: Array<unknown>) => {
     if (isNew) mySet.add(key);
     return isNew;
   });
+};
+
+export const getStatusAcolhimento = (
+  ticket: Ticket
+): string | undefined | null => {
+  const status = ticket.custom_fields.find(field => field.id === 360014379412);
+  return status && status.value;
 };
 
 export { default as getGeolocation } from "./geocoding";

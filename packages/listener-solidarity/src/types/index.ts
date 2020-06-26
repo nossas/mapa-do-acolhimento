@@ -119,17 +119,6 @@ export const dicio: {
   360032229831: "atrelado_ao_ticket"
 };
 
-type status_acolhimento_values =
-  | "atendimento__concluído"
-  | "atendimento__iniciado"
-  | "atendimento__interrompido"
-  | "encaminhamento__aguardando_confirmação"
-  | "encaminhamento__confirmou_disponibilidade"
-  | "encaminhamento__negado"
-  | "encaminhamento__realizado"
-  | "encaminhamento__realizado_para_serviço_público"
-  | "solicitação_recebida";
-
 export type Ticket = {
   comment: {
     body: string;

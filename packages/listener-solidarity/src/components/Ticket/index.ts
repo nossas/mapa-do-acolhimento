@@ -123,7 +123,7 @@ export default async (tickets: PartialTicket[]) => {
             {
               id: 360032229831,
               value:
-                typeof relatableTickets.unansweredTicket === "number"
+                typeof relatableTickets.relatedTickets === "number"
                   ? relatableTickets
                   : null
             }
