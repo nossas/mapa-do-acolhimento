@@ -44,7 +44,6 @@ export default async (
   volunteer: Volunteer & { ticket_id: number },
   agent: number
 ) => {
-  // log("Entering updateIndividualTicket", individual);
   const ticket = {
     status: "pending",
     assignee_id: agentDicio[agent],
@@ -84,7 +83,6 @@ export default async (
       ...composeCustomFields(zendeskTicket.custom_fields),
       ticket_id: zendeskTicket.id
     };
-    // log({ hasuraTicket: JSON.stringify(hasuraTicket, null, 2) });
 
     const validatedTicket = await hasuraSchema.validate(hasuraTicket, {
       stripUnknown: true
@@ -100,7 +98,7 @@ export default async (
       log(
         `Something went wrong when updating this MSR ticket in Hasura '${zendeskTicket.id}'`
       );
-    // log("Successfully updated MSR ticket in Hasura");
+
     return zendeskTicket.id;
   } catch (e) {
     log("failed to create ticket in zendesk: ".red, e);

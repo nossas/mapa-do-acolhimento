@@ -60,7 +60,7 @@ export default async () => {
   const volunteersAvailable: Volunteer[] = await fetchSolidarityUsers({
     query: FETCH_AVAILABLE_VOLUNTEERS,
     variables: {
-      individual_id: zendeskOrganizations()["individual"]
+      individual_id: zendeskOrganizations["individual"]
     }
   });
 

@@ -8,11 +8,11 @@ import { getMainDefinition } from "apollo-utilities";
 import fetch from "cross-fetch";
 import ws from "ws";
 
-if (!process.env.JWT_TOKEN && !process.env.HASURA_SECRET) {
-  throw new Error(
-    "Please specify the `JWT_TOKEN` or `HASURA_SECRET` environment variable."
-  );
-}
+// if (!process.env.JWT_TOKEN && !process.env.HASURA_SECRET) {
+//   throw new Error(
+//     "Please specify the `JWT_TOKEN` or `HASURA_SECRET` environment variable."
+//   );
+// }
 
 const authHeaders = process.env.JWT_TOKEN
   ? { authorization: `Bearer ${process.env.JWT_TOKEN}` }

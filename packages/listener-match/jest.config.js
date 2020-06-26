@@ -8,6 +8,7 @@ module.exports = {
   coverageDirectory: "coverage",
   collectCoverageFrom: ["src/**/*.{ts,tsx,js,jsx}", "!src/**/*.d.ts"],
   setupFiles: ["<rootDir>/src/beforeEachTest.ts"],
+  setupFilesAfterEnv: ["jest-extended"],
   modulePathIgnorePatterns: ["dist/"],
   preset: "ts-jest",
   globals: {

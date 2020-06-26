@@ -14,7 +14,10 @@ const hasuraSchema = yup
   .object()
   .shape({
     status: yup.string().required(),
-    assignee_id: yup.number().required(),
+    assignee_id: yup
+      .number()
+      .oneOf(Object.values(agentDicio))
+      .required(),
     custom_fields: yup
       .array()
       .of(
@@ -90,7 +93,6 @@ export default async (ticket_id: number, state: string, agent: number) => {
       log(
         `Something went wrong when updating this MSR ticket in Hasura '${zendeskTicket.id}'`
       );
-    // log("Successfully updated MSR ticket in Hasura");
 
     return zendeskTicket.id;
   } catch (e) {

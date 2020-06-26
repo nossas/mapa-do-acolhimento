@@ -1,22 +1,5 @@
-import * as turf from "@turf/turf";
 import { Volunteer } from "../../types";
-// import dbg from "../../dbg";
-
-// const log = dbg.extend("closestVolunteer");
-
-const calcDistance = (pointA: number[], pointB: number[]) => {
-  if (
-    Number.isNaN(pointA[0]) ||
-    Number.isNaN(pointA[1]) ||
-    Number.isNaN(pointB[0]) ||
-    Number.isNaN(pointB[1])
-  )
-    return undefined;
-  const a = turf.point(pointA);
-  const b = turf.point(pointB);
-
-  return Number(turf.distance(a, b));
-};
+import { calcDistance } from "../../services/utils";
 
 export default (
   { latitude, longitude }: { latitude: string; longitude: string },
