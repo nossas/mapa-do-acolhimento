@@ -26,7 +26,6 @@ const syncTickets = async (ids: number[]) => {
 
 export const handleMatch = () => async (response: SubscriptionResponse) => {
   log(`${new Date()}: \nReceiving data on subscription GraphQL API...`);
-  log({ response: JSON.stringify(response, null, 2) });
 
   const {
     data: { solidarity_tickets: tickets }

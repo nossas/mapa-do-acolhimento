@@ -8,7 +8,7 @@ export default async (
   users: User[]
 ): Promise<ZendeskUserCreationResponse[] | undefined> => {
   log(`${new Date()}: \nEntering createZendeskUser`);
-
+  // ADD YUP VALIDATION
   return new Promise(resolve => {
     return client.users.createOrUpdateMany({ users }, (err, _req, result) => {
       if (err) {

@@ -55,6 +55,7 @@ const saveTicketInHasura = async (ticket: Ticket) => {
 
 const createTicket = (ticket): Promise<boolean | undefined> => {
   createTicketLog(`${new Date()}: CREATE TICKET`);
+  // ADD YUP VALIDATION
   return new Promise(resolve => {
     return client.tickets.create({ ticket }, (err, _req, result) => {
       if (err) {
@@ -124,12 +125,12 @@ export default async (tickets: PartialTicket[]) => {
               id: 360032229831,
               value:
                 typeof relatableTickets.relatedTickets === "number"
-                  ? relatableTickets
+                  ? relatableTickets.relatedTickets
                   : null
             }
           ],
           comment: {
-            body: `MSR já possui uma solicitação com o mesmo tipo de pedido de acolhimento nos seguintes tickets: ${relatableTickets}`,
+            body: `MSR já possui uma solicitação com o mesmo tipo de pedido de acolhimento nos seguintes tickets: ${relatableTickets.relatedTickets}`,
             public: false
           }
         })
