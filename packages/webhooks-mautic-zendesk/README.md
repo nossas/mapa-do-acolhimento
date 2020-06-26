@@ -1,6 +1,16 @@
-### WEBHOOKS_ZENDESK
+# Webhooks Mautic Zendesk
 
-Esse pacote faz a sincronização completa do formulário respondido no mautic para o zendesk, criando ou atualizando os usuários e tickets no zendesk.
+This service syncs the info provided by the volunteer in the Mautic form, right after she fills the initial BONDE form at (https://queroacolher.mapadoacolhimento.org). It updates the user and creates a subscription ticket for her in Zendesk.
+
+There are some questions in the Mautic form that provide us further information about how the Volunteer works, how they qualify. This service rates them between these categories:
+  - reprovada_registro_inválido
+  - reprovada_diretrizes_do_mapa
+  - reprovada_estudo_de_caso
+  - aprovada
+
+The webhook is setup in Hasura - the webhook calls the label `http://mautic-zendesk` every time the table `webhooks_registry` is filled. 
+
+_Obs: This name "mautic-zendesk" is related with the name of the service in the Cluster, so watch out when changing the service name, make sure it's also changed in Hasura._
 
 As seguintes variáveis de ambiente devem ser configuradas:
 

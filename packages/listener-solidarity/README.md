@@ -52,3 +52,7 @@ To make the script track new widgets here's the steps you need to follow:
 
 - Update LAWYER_WIDGET_IDS and THERAPIST_WIDGET_IDS envs in Cluster
 - Add new form mapping to /form_entries_mapping file
+
+## Improvements
+  - Add yup validation when creating ticket in Zendesk
+  - Add yup validation when creating user in Zendesk
