@@ -46,7 +46,11 @@ export const handleIntegration = (widgets: Widget[]) => async response => {
     }
 
     if (
-      userBatches.find(r => r.error && r.error.match(/error/i)) ||
+      userBatches.find(
+        r =>
+          r.error &&
+          (r.error.match(/error/i) || r.error.match(/permissiondenied/i))
+      ) ||
       userBatches.length < 1 ||
       usersToRegister.length < 1
     ) {
@@ -54,7 +58,7 @@ export const handleIntegration = (widgets: Widget[]) => async response => {
         "Zendesk user creation results with error:".red,
         userBatches.filter(u => !!u.error)
       );
-      return handleUserError(userBatches);
+      return handleUserError(usersToRegister);
     }
 
     log("Preparing zendesk users to be saved in Hasura");
