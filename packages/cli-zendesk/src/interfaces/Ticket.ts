@@ -99,7 +99,13 @@ export const handleCustomFields = (ticket: Ticket) => {
     ...ticket,
     ...custom_fields,
     ticket_id: ticket.id,
-    community_id: Number(process.env.COMMUNITY_ID)
+    community_id: Number(process.env.COMMUNITY_ID),
+    atrelado_ao_ticket:
+      typeof ticket.atrelado_ao_ticket === "number"
+        ? ticket.atrelado_ao_ticket
+        : null,
+    external_id:
+      typeof ticket.external_id === "number" ? ticket.external_id : null
   } as Ticket;
 
   return finalTicket;

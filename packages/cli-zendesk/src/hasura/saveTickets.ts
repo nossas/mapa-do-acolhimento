@@ -10,7 +10,6 @@ const ticketsSchema = yup
       .object()
       .shape({
         id: yup.number().strip(true),
-        ticket_id: yup.number().required(),
         assignee_id: yup.number().nullable(),
         created_at: yup.string(),
         custom_fields: yup.array().of(
@@ -19,8 +18,9 @@ const ticketsSchema = yup
             value: yup.string().nullable()
           })
         ),
-        description: yup.string(),
+        description: yup.string().nullable(),
         group_id: yup.number().nullable(),
+        ticket_id: yup.number().required(),
         organization_id: yup.number().nullable(),
         raw_subject: yup.string(),
         requester_id: yup.number(),
@@ -40,8 +40,8 @@ const ticketsSchema = yup
         estado: yup.string().nullable(),
         cidade: yup.string().nullable(),
         community_id: yup.number(),
-        external_id: yup.mixed().oneOf([yup.number().nullable(), "X"]),
-        atrelado_ao_ticket: yup.mixed().oneOf([yup.number().nullable(), "X"])
+        external_id: yup.number().nullable(),
+        atrelado_ao_ticket: yup.number().nullable()
       })
       .required()
   )
