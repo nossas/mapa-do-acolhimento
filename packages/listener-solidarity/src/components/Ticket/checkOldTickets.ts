@@ -1,23 +1,29 @@
 import { extractTypeFromSubject } from "../../utils";
-import { Ticket } from "../../types";
+import { Ticket, status_acolhimento_values } from "../../types";
 import dbg from "../../dbg";
 
 const log = dbg.extend("checkOldTickets");
 
-const getStatusAcolhimento = (ticket: Ticket): string | boolean => {
-  const status = ticket.fields.find((field) => field.id === 360014379412);
+const getStatusAcolhimento = (
+  ticket: Ticket
+): status_acolhimento_values | undefined => {
+  const status = ticket.fields.find(field => field.id === 360014379412);
   return status && status.value;
 };
+
+const getOldestTicket = (tickets: Ticket[]) =>
+  tickets.sort(
+    (a, b) => (new Date(a.created_at) as any) - (new Date(b.created_at) as any)
+  )[0];
 
 export default (
   subject: string,
   tickets: Ticket[]
-): false | number | number[] => {
+): { unansweredTicket: number | number[]; agent: number } | false => {
   log("Checking old tickets");
   const newSubject = extractTypeFromSubject(subject);
 
-  // same type, new/open/pending
-  const hasSameSubject = tickets.filter((oldTicket) => {
+  const hasSameSubject = tickets.filter(oldTicket => {
     const oldSubject = extractTypeFromSubject(oldTicket.subject);
     return (
       oldSubject === newSubject &&
@@ -26,43 +32,33 @@ export default (
     );
   });
 
-  // log({ hasSameSubject: JSON.stringify(hasSameSubject, null, 2) });
-
   if (hasSameSubject.length < 1) return false;
 
-  // "atendimento__concluído"
-  // "atendimento__iniciado"
-  // "atendimento__interrompido"
-  // "encaminhamento__aguardando_confirmação"
-  // "encaminhamento__confirmou_disponibilidade"
-  // "encaminhamento__negado"
-  // "encaminhamento__realizado"
-  // "encaminhamento__realizado_para_serviço_público"
-  // "solicitação_recebida";
-
-  // search for match tickets
-  const isACurrentMatch = hasSameSubject.filter((oldTicket) => {
+  const hasACurrentMatch = hasSameSubject.filter(oldTicket => {
     const status_acolhimento = getStatusAcolhimento(oldTicket);
     return (
-      status_acolhimento !== "atendimento__concluído" &&
-      status_acolhimento !== "atendimento__interrompido" &&
-      status_acolhimento !== "encaminhamento__negado" &&
-      status_acolhimento !== "solicitação_recebida" &&
-      status_acolhimento !== "solicitação_repetida"
+      status_acolhimento != "solicitação_recebida" &&
+      status_acolhimento != "encaminhamento__negado" &&
+      status_acolhimento != "atendimento__interrompido" &&
+      status_acolhimento != "encaminhamento__realizado_para_serviço_público" &&
+      status_acolhimento != "atendimento__concluído" &&
+      status_acolhimento != "solicitação_repetida"
     );
   });
 
-  // log({ isACurrentMatch });
-
   // she has a match ticket
-  if (isACurrentMatch.length > 0) return isACurrentMatch.map((t) => t.id);
+  if (hasACurrentMatch.length > 0)
+    return {
+      unansweredTicket: hasACurrentMatch.map(t => t.id),
+      agent: getOldestTicket(hasACurrentMatch).assignee_id as number
+    };
 
-  const oldestTicket = hasSameSubject.sort(
-    (a, b) => (new Date(a.created_at) as any) - (new Date(b.created_at) as any)
-  )[0];
-
-  // log({ oldestTicket });
-
+  const oldestTicket = getOldestTicket(hasSameSubject);
   const status_acolhimento = getStatusAcolhimento(oldestTicket);
-  return status_acolhimento === "solicitação_recebida" && oldestTicket.id;
+  return status_acolhimento === "solicitação_recebida"
+    ? {
+        unansweredTicket: oldestTicket.id,
+        agent: oldestTicket.assignee_id as number
+      }
+    : false;
 };

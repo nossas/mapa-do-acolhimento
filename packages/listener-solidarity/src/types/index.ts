@@ -115,6 +115,7 @@ export type Ticket = {
   subject: string;
   external_id: string;
   requester_id: number;
+  assignee_id?: number;
   custom_fields: Array<{ id: number; value: any }>;
   fields: Array<{ id: number; value: any }>;
   created_at: string;
@@ -174,3 +175,15 @@ export type CustomFields = {
   estado?: null;
   cidade?: null;
 };
+
+export type status_acolhimento_values =
+  | "atendimento__concluído"
+  | "atendimento__iniciado"
+  | "atendimento__interrompido"
+  | "encaminhamento__aguardando_confirmação"
+  | "encaminhamento__confirmou_disponibilidade"
+  | "encaminhamento__negado"
+  | "encaminhamento__realizado"
+  | "encaminhamento__realizado_para_serviço_público"
+  | "solicitação_recebida"
+  | "solicitação_repetida";

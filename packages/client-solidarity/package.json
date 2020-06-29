@@ -69,7 +69,6 @@
     "@types/cors": "^2.8.6",
     "@types/express": "^4.17.6",
     "@types/history": "^4.7.3",
-    "@types/jest": "^24.0.23",
     "@types/morgan": "^1.7.37",
     "@types/node": "14.0.1",
     "@types/node-zendesk": "^1.4.0",

@@ -148,7 +148,7 @@ const validate = yup.array().of(
 );
 
 const saveTickets = async (tickets: Ticket[]) => {
-  const { HASURA_API_URL, X_HASURA_ADMIN_SECRET } = process.env;
+  const { HASURA_API_URL = "", X_HASURA_ADMIN_SECRET } = process.env;
   const validatedTickets = await validate.validate(tickets, {
     stripUnknown: true
   });

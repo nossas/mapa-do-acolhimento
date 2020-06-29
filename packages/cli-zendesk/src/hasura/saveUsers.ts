@@ -1,7 +1,7 @@
-import axios from 'axios'
-import User from '../interfaces/User'
-import dbg from './dbg'
-import { stringifyVariables } from '../stringify'
+import axios from "axios";
+import User from "../interfaces/User";
+import dbg from "./dbg";
+import { stringifyVariables } from "../stringify";
 
 const generateVariablesIndex = (index: number) => `
 $active_${index}: Boolean
@@ -65,7 +65,7 @@ $user_id_${index}: bigint
 $verified_${index}: Boolean
 $whatsapp_${index}: String
 $permanently_deleted_${index}: Boolean
-`
+`;
 
 const generateObjectsIndex = (index: number) => `
 active: $active_${index}
@@ -129,13 +129,15 @@ user_id: $user_id_${index}
 verified: $verified_${index}
 whatsapp: $whatsapp_${index}
 permanently_deleted: $permanently_deleted_${index}
-`
+`;
 
-const generateVariables = (tickets: User[]) => tickets.map(
-  (_, index) => generateVariablesIndex(index),
-).flat()
+const generateVariables = (tickets: User[]) =>
+  tickets.map((_, index) => generateVariablesIndex(index)).flat();
 
-const generateObjects = (tickets: User[]) => `[${tickets.map((_, index) => `{${generateObjectsIndex(index)}}`).join(',')}]`
+const generateObjects = (tickets: User[]) =>
+  `[${tickets
+    .map((_, index) => `{${generateObjectsIndex(index)}}`)
+    .join(",")}]`;
 
 const createQuery = (users: User[]) => `mutation (${generateVariables(users)}) {
   insert_solidarity_users (objects: ${generateObjects(users)}, on_conflict: {
@@ -206,24 +208,28 @@ const createQuery = (users: User[]) => `mutation (${generateVariables(users)}) {
     affected_rows
   }
 }
-`
+`;
 
 const saveUsers = async (users: User[]) => {
-  const { HASURA_API_URL, X_HASURA_ADMIN_SECRET } = process.env
-  const query = createQuery(users)
-  const variables = stringifyVariables(users)
-  const response = await axios.post(HASURA_API_URL, {
-    query,
-    variables,
-  }, {
-    headers: {
-      'x-hasura-admin-secret': X_HASURA_ADMIN_SECRET,
+  const { HASURA_API_URL = "", X_HASURA_ADMIN_SECRET } = process.env;
+  const query = createQuery(users);
+  const variables = stringifyVariables(users);
+  const response = await axios.post(
+    HASURA_API_URL,
+    {
+      query,
+      variables
     },
-  })
+    {
+      headers: {
+        "x-hasura-admin-secret": X_HASURA_ADMIN_SECRET
+      }
+    }
+  );
 
-  response.data.errors && dbg(response.data.errors[0])
+  response.data.errors && dbg(response.data.errors[0]);
 
-  return response
-}
+  return response;
+};
 
-export default saveUsers
+export default saveUsers;

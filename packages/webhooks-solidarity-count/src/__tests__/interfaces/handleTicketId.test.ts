@@ -7,6 +7,9 @@ describe("handleTicketId tests", () => {
     id: 150
   };
   test("it removes id", () => {
-    const answer = handleTicketId(dummy);
+    expect(handleTicketId(dummy)).toStrictEqual({
+      ...dummy,
+      ticket_id: 150
+    });
   });
 });
