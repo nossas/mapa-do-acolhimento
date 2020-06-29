@@ -1,16 +1,16 @@
-import { getClosestVolunteer, createVolunteerTicket } from "./Volunteers";
+import { getClosestVolunteer, createVolunteerTicket } from "../Volunteers";
 import {
   fetchIndividual,
   forwardPublicService,
   updateIndividualTicket
-} from "./Individual";
-import { createMatchTicket } from "../graphql/mutations";
-import { Volunteer, IndividualTicket } from "../types";
+} from "../Individual";
+import { createMatchTicket } from "../../graphql/mutations";
+import { Volunteer, IndividualTicket } from "../../types";
 import {
   getRequestedVolunteerType,
   getVolunteerOrganizationId
-} from "../services/utils";
-import dbg from "../dbg";
+} from "../../utils";
+import dbg from "../../dbg";
 
 const log = dbg.extend("handleTicket");
 
@@ -57,8 +57,10 @@ export default async (
   const volunteer = getClosestVolunteer(individual[0], filteredVolunteers);
   if (!volunteer) {
     const updateIndividual = await forwardPublicService(
-      ticketId,
-      individual[0].state,
+      {
+        ticket_id: ticketId,
+        state: individual[0].state
+      },
       AGENT
     );
     if (!updateIndividual) return undefined;

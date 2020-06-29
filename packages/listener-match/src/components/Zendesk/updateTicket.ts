@@ -1,9 +1,10 @@
 import dbg from "../../dbg";
 import client from "./";
 import { UpdateTicket, Ticket } from "../../types";
-import { agentDicio } from "../../services/utils";
+import { agentSelectionDicio } from "../../utils";
 import * as yup from "yup";
-const log = dbg.extend("updateTicket");
+
+const log = dbg.extend("zendesk").extend("updateTicket");
 
 const schema = yup
   .object()
@@ -11,7 +12,7 @@ const schema = yup
     status: yup.string().required(),
     assignee_id: yup
       .number()
-      .oneOf(Object.values(agentDicio))
+      .oneOf(Object.values(agentSelectionDicio))
       .required(),
     custom_fields: yup
       .array()
@@ -41,7 +42,7 @@ const schema = yup
         body: yup.string().required(),
         author_id: yup
           .number()
-          .oneOf(Object.values(agentDicio))
+          .oneOf(Object.values(agentSelectionDicio))
           .required(),
         public: yup.boolean().required()
       })

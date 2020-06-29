@@ -6,7 +6,7 @@ import {
   getCurrentDate,
   getVolunteerType,
   zendeskOrganizations
-} from "../src/services/utils";
+} from "../src/utils";
 import { IndividualTicket } from "../src/types";
 
 describe("Utils", () => {
@@ -110,11 +110,11 @@ describe("Utils", () => {
   });
 
   it("returns the correct volunteer type", () => {
-    expect(getVolunteerType(zendeskOrganizations["lawyer"])).toStrictEqual(
+    expect(getVolunteerType(zendeskOrganizations["lawyer"]).type).toStrictEqual(
       "Advogada"
     );
-    expect(getVolunteerType(zendeskOrganizations["therapist"])).toStrictEqual(
-      "Psicóloga"
-    );
+    expect(
+      getVolunteerType(zendeskOrganizations["therapist"]).type
+    ).toStrictEqual("Psicóloga");
   });
 });

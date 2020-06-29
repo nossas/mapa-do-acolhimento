@@ -1,12 +1,7 @@
 import * as yup from "yup";
-import { updateTicket } from "../Zendesk";
-import {
-  getCurrentDate,
-  composeCustomFields,
-  agentDicio
-} from "../../services/utils";
+import { updateTicket } from "../Services";
+import { getCurrentDate, agentSelectionDicio } from "../../utils";
 import dbg from "../../dbg";
-import { updateSolidarityTickets } from "../../graphql/mutations";
 
 const log = dbg.extend("updateIndividualTicket");
 
@@ -16,7 +11,7 @@ const hasuraSchema = yup
     status: yup.string().required(),
     assignee_id: yup
       .number()
-      .oneOf(Object.values(agentDicio))
+      .oneOf(Object.values(agentSelectionDicio))
       .required(),
     custom_fields: yup
       .array()
@@ -40,11 +35,15 @@ const hasuraSchema = yup
   })
   .required();
 
-export default async (ticket_id: number, state: string, agent: number) => {
+export default async (
+  { ticket_id, state }: { ticket_id: number; state: string },
+  agent: number
+) => {
   log("Couldn't find any close volunteers for MSR");
   const ticket = {
+    ticket_id,
     status: "pending",
-    assignee_id: agentDicio[agent],
+    assignee_id: agentSelectionDicio[agent],
     custom_fields: [
       {
         id: 360021879791,
@@ -61,42 +60,9 @@ export default async (ticket_id: number, state: string, agent: number) => {
     ],
     comment: {
       body: `Ticket da MSR foi atualizado após ela ser encaminhada para um serviço público`,
-      author_id: agentDicio[agent],
+      author_id: agentSelectionDicio[agent],
       public: false
     }
   };
-  try {
-    log(`Updating MSR ticket '${ticket_id}' in Zendesk...`);
-    const zendeskTicket = await updateTicket(ticket_id, ticket);
-    if (!zendeskTicket) {
-      throw new Error("Zendesk ticket update returned errors");
-    }
-
-    log(`Preparing ticket '${zendeskTicket.id}' to be saved in Hasura`);
-    const hasuraTicket = {
-      ...zendeskTicket,
-      ...composeCustomFields(zendeskTicket.custom_fields),
-      ticket_id: zendeskTicket.id
-    };
-
-    const validatedTicket = await hasuraSchema.validate(hasuraTicket, {
-      stripUnknown: true
-    });
-
-    log(
-      `Updating individual ticket '${validatedTicket.ticket_id}' in Hasura...`
-    );
-    const inserted = await updateSolidarityTickets(validatedTicket, [
-      validatedTicket.ticket_id
-    ]);
-    if (!inserted)
-      log(
-        `Something went wrong when updating this MSR ticket in Hasura '${zendeskTicket.id}'`
-      );
-
-    return zendeskTicket.id;
-  } catch (e) {
-    log("failed to create ticket in zendesk: ".red, e);
-    return undefined;
-  }
+  return await updateTicket(ticket, hasuraSchema);
 };
