@@ -6,7 +6,7 @@ import {
   getCurrentDate,
   getVolunteerType,
   zendeskOrganizations
-} from "../src/services/utils";
+} from "../src/utils";
 import { IndividualTicket } from "../src/types";
 
 describe("Utils", () => {

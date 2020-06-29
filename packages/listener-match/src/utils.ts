@@ -1,5 +1,5 @@
 import * as turf from "@turf/turf";
-import { IndividualTicket } from "../types";
+import { IndividualTicket } from "./types";
 
 export const getRequestedVolunteerType = (subject: string) => {
   const str = typeof subject === "string" ? subject.toLowerCase() : "";

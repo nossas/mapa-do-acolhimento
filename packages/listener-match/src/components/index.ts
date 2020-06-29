@@ -1,7 +1,7 @@
-import handleTicket from "./handleTicket";
+import handleTicket from "./Services/handleTicket";
 import { fetchVolunteersAvailable } from "./Volunteers";
 import { updateSolidarityTickets } from "../graphql/mutations";
-import { filterCache } from "../services/utils";
+import { filterCache } from "../utils";
 import { SubscriptionResponse, IndividualTicket } from "../types";
 import dbg from "../dbg";
 
@@ -64,4 +64,4 @@ export const handleMatch = () => async (response: SubscriptionResponse) => {
 };
 
 export default handleMatch;
-export { default as handleTicket } from "./handleTicket";
+export { default as handleTicket } from "./Services/handleTicket";

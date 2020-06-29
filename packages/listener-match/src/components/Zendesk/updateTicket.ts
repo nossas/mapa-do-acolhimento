@@ -1,9 +1,10 @@
 import dbg from "../../dbg";
 import client from "./";
 import { UpdateTicket, Ticket } from "../../types";
-import { agentSelectionDicio } from "../../services/utils";
+import { agentSelectionDicio } from "../../utils";
 import * as yup from "yup";
-const log = dbg.extend("updateTicket");
+
+const log = dbg.extend("zendesk").extend("updateTicket");
 
 const schema = yup
   .object()

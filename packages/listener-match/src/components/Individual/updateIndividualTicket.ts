@@ -1,14 +1,8 @@
 import * as yup from "yup";
-import { updateTicket } from "../Zendesk";
+import updateTicket from "../Services/updateTicket";
 import { IndividualTicket, Volunteer } from "../../types";
-import {
-  getCurrentDate,
-  composeCustomFields,
-  agentSelectionDicio,
-  agentDicio
-} from "../../services/utils";
+import { getCurrentDate, agentSelectionDicio, agentDicio } from "../../utils";
 import dbg from "../../dbg";
-import { updateSolidarityTickets } from "../../graphql/mutations";
 import individualComment from "./email";
 
 const log = dbg.extend("updateIndividualTicket");
@@ -46,7 +40,9 @@ export default async (
   volunteer: Volunteer & { ticket_id: number },
   agent: number
 ) => {
+  log("Entering updateIndividualTicket");
   const ticket = {
+    ticket_id: individual.ticket_id,
     status: "pending",
     assignee_id: agentSelectionDicio[agent],
     custom_fields: [
@@ -77,37 +73,5 @@ export default async (
       public: true
     }
   };
-  try {
-    log(`Updating MSR ticket '${individual.ticket_id}' in Zendesk...`);
-    const zendeskTicket = await updateTicket(individual.ticket_id, ticket);
-    if (!zendeskTicket) {
-      throw new Error("Zendesk ticket update returned errors");
-    }
-
-    const hasuraTicket = {
-      ...zendeskTicket,
-      ...composeCustomFields(zendeskTicket.custom_fields),
-      ticket_id: zendeskTicket.id
-    };
-
-    const validatedTicket = await hasuraSchema.validate(hasuraTicket, {
-      stripUnknown: true
-    });
-
-    log(
-      `Updating individual ticket '${validatedTicket.ticket_id}' in Hasura...`
-    );
-    const inserted = await updateSolidarityTickets(validatedTicket, [
-      validatedTicket.ticket_id
-    ]);
-    if (!inserted)
-      log(
-        `Something went wrong when updating this MSR ticket in Hasura '${zendeskTicket.id}'`
-      );
-
-    return zendeskTicket.id;
-  } catch (e) {
-    log("failed to create ticket in zendesk: ".red, e);
-    return undefined;
-  }
+  return await updateTicket(ticket, hasuraSchema);
 };

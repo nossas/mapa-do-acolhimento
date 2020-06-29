@@ -6,7 +6,7 @@ import {
   getVolunteerType,
   composeCustomFields,
   agentSelectionDicio
-} from "../../services/utils";
+} from "../../utils";
 import { IndividualTicket, Volunteer } from "../../types";
 import dbg from "../../dbg";
 

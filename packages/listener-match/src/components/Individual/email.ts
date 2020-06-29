@@ -1,4 +1,4 @@
-import { getVolunteerType } from "../../services/utils";
+import { getVolunteerType } from "../../utils";
 import { Volunteer } from "../../types";
 
 type Props = {

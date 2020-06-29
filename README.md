@@ -1,6 +1,6 @@
 <h1 align="center">Welcome to Mapa do Acolhimento 👋</h1>
 <p align="center">
-  <img alt="Version" src="https://img.shields.io/badge/version-0.4.8-blue.svg?cacheSeconds=2592000" />
+  <img alt="Version" src="https://img.shields.io/badge/version-1.1.1-blue.svg?cacheSeconds=2592000" />
   <a href="https://ci.bonde.org/nossas/mapa-do-acolhimento">
     <img
       alt="Build Status"
@@ -11,7 +11,7 @@
   <a href="https://codecov.io/gh/nossas/mapa-do-acolhimento">
     <img src="https://codecov.io/gh/nossas/mapa-do-acolhimento/branch/main/graph/badge.svg" />
   </a>
-  <a href="https://github.com/nossas/mapa-do-acolhimento/blob/master/LICENSE" target="_blank">
+  <a href="https://github.com/nossas/mapa-do-acolhimento/blob/main/LICENSE" target="_blank">
     <img alt="License: AGPL--3.0" src="https://img.shields.io/github/license/nossas/Mapa do Acolhimento" />
   </a>
   </br>
@@ -85,7 +85,7 @@ Following some tips from [Javascript Testing Best Practices](https://github.com/
 
 ## 🤝 Contributing
 
-Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/nossas/mapa-do-acolhimento/issues). You can also take a look at the [contributing guide](https://github.com/nossas/mapa-do-acolhimento/blob/master/CONTRIBUTING.md).
+Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/nossas/mapa-do-acolhimento/issues). You can also take a look at the [contributing guide](https://github.com/nossas/mapa-do-acolhimento/blob/main/CONTRIBUTING.md).
 
 ## Show your support
 
@@ -94,7 +94,7 @@ Give a ⭐️ if this project helped you!
 ## 📝 License
 
 Copyright © 2020 [Nossas <tech@nosssas.org>](https://github.com/nossas).<br />
-This project is [AGPL--3.0](https://github.com/nossas/mapa-do-acolhimento/blob/master/LICENSE) licensed.
+This project is [AGPL--3.0](https://github.com/nossas/mapa-do-acolhimento/blob/main/LICENSE) licensed.
 
 ---
 

@@ -3,7 +3,7 @@ import {
   fetchSolidarityUsers,
   fetchSolidarityMatches
 } from "../../graphql/queries";
-import { zendeskOrganizations } from "../../services/utils";
+import { zendeskOrganizations } from "../../utils";
 import { Volunteer, PendingTickets } from "../../types";
 import dbg from "../../dbg";
 

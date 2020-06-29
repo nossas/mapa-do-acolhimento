@@ -1,5 +1,5 @@
 import { Volunteer } from "../../types";
-import { calcDistance } from "../../services/utils";
+import { calcDistance } from "../../utils";
 
 export default (
   { latitude, longitude }: { latitude: string; longitude: string },
