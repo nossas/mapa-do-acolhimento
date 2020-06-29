@@ -4,10 +4,12 @@ import { IndividualTicket, Volunteer } from "../../types";
 import {
   getCurrentDate,
   composeCustomFields,
+  agentSelectionDicio,
   agentDicio
 } from "../../services/utils";
 import dbg from "../../dbg";
 import { updateSolidarityTickets } from "../../graphql/mutations";
+import individualComment from "./email";
 
 const log = dbg.extend("updateIndividualTicket");
 
@@ -46,7 +48,7 @@ export default async (
 ) => {
   const ticket = {
     status: "pending",
-    assignee_id: agentDicio[agent],
+    assignee_id: agentSelectionDicio[agent],
     custom_fields: [
       {
         id: 360016631592,
@@ -66,9 +68,13 @@ export default async (
       }
     ],
     comment: {
-      body: `Ticket da MSR foi atualizado após ela receber um match da voluntária ${volunteer.name}`,
-      author_id: agentDicio[agent],
-      public: false
+      body: individualComment({
+        volunteer,
+        individual_name: individual.nome_msr,
+        assignee_name: agentDicio[agentSelectionDicio[agent]]
+      }),
+      author_id: agentSelectionDicio[agent],
+      public: true
     }
   };
   try {

@@ -3,7 +3,7 @@ import { updateTicket } from "../Zendesk";
 import {
   getCurrentDate,
   composeCustomFields,
-  agentDicio
+  agentSelectionDicio
 } from "../../services/utils";
 import dbg from "../../dbg";
 import { updateSolidarityTickets } from "../../graphql/mutations";
@@ -16,7 +16,7 @@ const hasuraSchema = yup
     status: yup.string().required(),
     assignee_id: yup
       .number()
-      .oneOf(Object.values(agentDicio))
+      .oneOf(Object.values(agentSelectionDicio))
       .required(),
     custom_fields: yup
       .array()
@@ -44,7 +44,7 @@ export default async (ticket_id: number, state: string, agent: number) => {
   log("Couldn't find any close volunteers for MSR");
   const ticket = {
     status: "pending",
-    assignee_id: agentDicio[agent],
+    assignee_id: agentSelectionDicio[agent],
     custom_fields: [
       {
         id: 360021879791,
@@ -61,7 +61,7 @@ export default async (ticket_id: number, state: string, agent: number) => {
     ],
     comment: {
       body: `Ticket da MSR foi atualizado após ela ser encaminhada para um serviço público`,
-      author_id: agentDicio[agent],
+      author_id: agentSelectionDicio[agent],
       public: false
     }
   };

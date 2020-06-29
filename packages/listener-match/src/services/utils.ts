@@ -29,8 +29,16 @@ const LAWYER = zendeskOrganizations["lawyer"];
 const THERAPIST = zendeskOrganizations["therapist"];
 
 export const getVolunteerType = (id: number) => {
-  if (id === LAWYER) return "Advogada";
-  if (id === THERAPIST) return "Psicóloga";
+  if (id === LAWYER)
+    return {
+      type: "Advogada",
+      registry_type: "OAB"
+    };
+  if (id === THERAPIST)
+    return {
+      type: "Psicóloga",
+      registry_type: "CRP"
+    };
   throw new Error("Volunteer organization_id not supported in search for type");
 };
 
@@ -69,10 +77,16 @@ export const composeCustomFields = custom_fields =>
     };
   }, {});
 
-export const agentDicio = {
+export const agentSelectionDicio = {
   1: 377510044432,
   2: 377511446392,
   3: 377577169651
+};
+
+export const agentDicio = {
+  377510044432: "Larissa",
+  377577169651: "Ana",
+  377511446392: "Gabriela"
 };
 
 export const calcDistance = (pointA: number[], pointB: number[]) => {

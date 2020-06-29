@@ -60,6 +60,22 @@ pnpm --filter <package-name> <command>
 pnpm m <command>
 ```
 
+## Tests
+
+Following some tips from [Javascript Testing Best Practices](https://github.com/goldbergyoni/javascript-testing-best-practices), we like our tests to follow these three questions:
+
+(1) What is being tested? For example, the ProductsService.addNewProduct method
+
+(2) Under what circumstances and scenario? For example, no price is passed to the method
+
+(3) What is the expected result? For example, the new product is not approved
+
+## Boilerplate for future projects
+
+- Server: [Node Typescript Boilerplate](https://github.com/jsynowiec/node-typescript-boilerplate)
+- React: [Create React App](https://github.com/facebook/create-react-app)
+
+
 ## Author
 
 👤 **Nossas <tech@nosssas.org>**

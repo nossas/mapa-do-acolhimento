@@ -1,6 +1,6 @@
 import dbg from "../../dbg";
 import client from "./";
-import { agentDicio } from "../../services/utils";
+import { agentSelectionDicio } from "../../services/utils";
 import { Ticket } from "../../types";
 import * as yup from "yup";
 
@@ -11,7 +11,7 @@ const schema = yup
   .shape({
     assignee_id: yup
       .number()
-      .oneOf(Object.values(agentDicio))
+      .oneOf(Object.values(agentSelectionDicio))
       .required(),
     requester_id: yup.number().required(),
     submitter_id: yup.number().required(),
@@ -23,7 +23,7 @@ const schema = yup
         body: yup.string().required(),
         author_id: yup
           .number()
-          .oneOf(Object.values(agentDicio))
+          .oneOf(Object.values(agentSelectionDicio))
           .required(),
         public: yup.boolean().required()
       })

@@ -5,7 +5,7 @@ import {
   getCurrentDate,
   getVolunteerType,
   composeCustomFields,
-  agentDicio
+  agentSelectionDicio
 } from "../../services/utils";
 import { IndividualTicket, Volunteer } from "../../types";
 import dbg from "../../dbg";
@@ -56,16 +56,16 @@ export default async (
   const ticket = {
     external_id: individual.external_id,
     requester_id: volunteer.user_id,
-    submitter_id: agentDicio[agent],
-    assignee_id: agentDicio[agent],
+    submitter_id: agentSelectionDicio[agent],
+    assignee_id: agentSelectionDicio[agent],
     status: "pending",
-    subject: `[${getVolunteerType(volunteer.organization_id)}] ${
+    subject: `[${getVolunteerType(volunteer.organization_id).type}] ${
       volunteer.name
     }`,
     organization_id: volunteer.organization_id,
     comment: {
       body: `Voluntária recebeu um pedido de acolhimento de ${individual.nome_msr}`,
-      author_id: agentDicio[agent],
+      author_id: agentSelectionDicio[agent],
       public: false
     },
     custom_fields: [
