@@ -6,7 +6,7 @@ type Props = {
   onClose: () => void;
   volunteerName: string;
   individualName: string;
-  onSubmit: any;
+  onSubmit: Function;
   children;
 };
 

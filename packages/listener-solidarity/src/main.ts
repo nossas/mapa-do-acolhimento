@@ -14,7 +14,7 @@ throng({
       log("Fetching solidarity users...");
       log(
         "Call subscriptions to form_entries...",
-        widgets.map((w: any) => w.id)
+        widgets.map(w => w.id)
       );
       await subscriptionFormEntries(widgets);
     } catch (err) {

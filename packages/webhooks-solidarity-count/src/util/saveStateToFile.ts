@@ -7,7 +7,10 @@ const writeFile = promisify(fs.writeFile);
 
 const log = dbg.extend("saveStateToFile");
 
-const saveStateToFile = async (filename: string, state: any) => {
+const saveStateToFile = async (
+  filename: string,
+  state: null | Record<string, string | number>
+) => {
   try {
     await writeFile(
       path.resolve("src/__tests__/data", `${filename}.json`),

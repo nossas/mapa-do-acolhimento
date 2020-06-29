@@ -1,14 +1,15 @@
 import * as yup from "yup";
-import { IndividualTicket, Volunteer } from "../../types";
+import { createTicket } from "../Zendesk";
+import { saveSolidarityTicket } from "../../graphql/mutations";
 import {
   getCurrentDate,
   getVolunteerType,
   composeCustomFields,
   agentDicio
 } from "../../services/utils";
-import { createTicket } from "../Zendesk";
-import { saveSolidarityTicket } from "../../graphql/mutations";
+import { IndividualTicket, Volunteer } from "../../types";
 import dbg from "../../dbg";
+
 const log = dbg.extend("createVolunteerTicket");
 
 const hasuraSchema = yup
@@ -58,7 +59,7 @@ export default async (
     submitter_id: agentDicio[agent],
     assignee_id: agentDicio[agent],
     status: "pending",
-    subject: `[${getVolunteerType(volunteer.organization_id).type}] ${
+    subject: `[${getVolunteerType(volunteer.organization_id)}] ${
       volunteer.name
     }`,
     organization_id: volunteer.organization_id,

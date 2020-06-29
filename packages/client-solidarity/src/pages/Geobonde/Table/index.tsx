@@ -16,7 +16,7 @@ const Table: React.FC = () => {
   const tableData = useStoreState(state => state.table.data);
   const searchForm = useStoreState(state => state.geobonde.form);
   const getTableData = useStoreActions(
-    (actions: any) => actions.table.getTableData
+    (actions: { table }) => actions.table.getTableData
   );
 
   useEffect(() => {
@@ -95,7 +95,7 @@ const Table: React.FC = () => {
   );
 
   const filteredTableData = useMemo(() => {
-    let data: Array<any> = [];
+    let data: Array<Record<string, unknown>> = [];
     if (typeof tableData !== "string") {
       data = filterByCategory(
         filterByDistance(filterByUserCondition(tableData))

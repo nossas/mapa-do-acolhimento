@@ -38,7 +38,7 @@ const TextLoading = ({ fetching }: { fetching: string }) => {
 const App = () => (
   <BondeSessionProvider
     fetchData
-    environment={(process.env.REACT_APP_ENVIRONMENT || "development") as any}
+    environment={(process.env.REACT_APP_ENVIRONMENT || "development") as string}
     loading={TextLoading}
   >
     <StoreProvider store={store}>

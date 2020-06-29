@@ -83,7 +83,9 @@ const Form: React.FC = () => {
       individual: true
     }
   });
-  const setForm = useStoreActions((actions: any) => actions.geobonde.setForm);
+  const setForm = useStoreActions(
+    (actions: { geobonde }) => actions.geobonde.setForm
+  );
   const tableData = useStoreState(state => state.table.data);
   React.useEffect(() => {
     register({ name: "geolocation" });
@@ -94,7 +96,7 @@ const Form: React.FC = () => {
     return setValue(field, value);
   };
 
-  const onSubmit = (data, e: any) => {
+  const onSubmit = (data, e) => {
     e.preventDefault();
 
     if (typeof data.geolocation === "undefined")
@@ -114,7 +116,7 @@ const Form: React.FC = () => {
           name="address"
           label="Endereço"
           placeholder="Digite o endereço"
-          onChangeLocation={(e: any) => handleChange("geolocation", e)}
+          onChangeLocation={e => handleChange("geolocation", e)}
           value={getValues().geolocation}
         />
         <Text color="#ffffff">

@@ -22,7 +22,7 @@ interface StyledDivProps {
 }
 
 interface Size {
-  node?: any;
+  node?: unknown;
   width: number;
   height: number;
 }

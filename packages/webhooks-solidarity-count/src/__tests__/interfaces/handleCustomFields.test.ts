@@ -1,15 +1,15 @@
 import openStateFile from "../../util/openStateToFile";
 import handleCustomFields from "../../interfaces/Ticket/handleCustomFields";
-import { TicketZendesk } from "../../interfaces/Ticket";
+// import { TicketZendesk } from "../../interfaces/Ticket";
 
 describe("handleUserFields tests", () => {
   test("it correctly converts user fields keeping object properties", async done => {
-    const ticketWithoutCustomFields = await openStateFile<TicketZendesk>(
+    const ticketWithoutCustomFields = await openStateFile(
       "ticketWithoutCustomFields"
     );
     expect(ticketWithoutCustomFields).toBeTruthy();
 
-    const ticketWithCustomFields = await openStateFile<TicketZendesk>(
+    const ticketWithCustomFields = await openStateFile(
       "ticketWithCustomFields"
     );
     expect(ticketWithCustomFields).toBeTruthy();

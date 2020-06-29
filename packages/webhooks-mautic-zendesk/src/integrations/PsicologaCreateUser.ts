@@ -31,7 +31,7 @@ class PsicologaCreateUser extends Base {
 
   private verificaDiretrizesAtendimento = async (
     condition: [CONDITION],
-    data: Record<any, any>
+    data: Record<string, unknown>
   ) => {
     let newData = data;
     const verificaCamposDiretrizesAtendimento = yup
@@ -182,7 +182,7 @@ class PsicologaCreateUser extends Base {
     };
   };
 
-  start = async (data: any, { createdAt, name, cep }: InputFromMautic) => {
+  start = async (data, { createdAt, name, cep }: InputFromMautic) => {
     let newData = {
       ...data,
       cep

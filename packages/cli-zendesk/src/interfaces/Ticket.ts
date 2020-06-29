@@ -69,7 +69,6 @@ export interface Ticket {
   estado: string | null;
   cidade: string | null;
   community_id: number;
-  webhooks_registry_id: number | null;
   atrelado_ao_ticket: number | null;
   external_id: number | null;
 }

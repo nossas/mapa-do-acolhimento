@@ -8,7 +8,8 @@ describe("handleTicketId tests", () => {
   };
   test("it removes id", () => {
     expect(handleTicketId(dummy)).toStrictEqual({
-      ...dummy,
+      a: 10,
+      b: "etc",
       ticket_id: 150
     });
   });

@@ -2,7 +2,7 @@ import { checkOldTickets } from "./";
 import client from "../../zendesk";
 import { insertSolidarityTickets } from "../../graphql/mutations";
 import { handleTicketError } from "../../utils";
-import { Ticket, CustomFields } from "../../types";
+import { Ticket, CustomFields, PartialTicket } from "../../types";
 import dbg from "../../dbg";
 import Bottleneck from "bottleneck";
 
@@ -55,8 +55,9 @@ const saveTicketInHasura = async (ticket: Ticket) => {
 
 const createTicket = (ticket): Promise<boolean | undefined> => {
   createTicketLog(`${new Date()}: CREATE TICKET`);
+  // ADD YUP VALIDATION
   return new Promise(resolve => {
-    return client.tickets.create({ ticket }, (err, _req, result: any) => {
+    return client.tickets.create({ ticket }, (err, _req, result) => {
       if (err) {
         createTicketLog(
           `Failed to create ticket for user '${ticket.requester_id}'`.red,
@@ -72,7 +73,7 @@ const createTicket = (ticket): Promise<boolean | undefined> => {
       //   )}`
       // );
       createTicketLog("Zendesk ticket created successfully!");
-      saveTicketInHasura(result);
+      saveTicketInHasura(result as Ticket);
       return resolve(true);
     });
   });
@@ -85,7 +86,7 @@ export const fetchUserTickets = async ({
   return new Promise(resolve => {
     return client.tickets.listByUserRequested(
       requester_id,
-      (err, _req, result: any) => {
+      (err, _req, result) => {
         if (err) {
           fetchUserTicketsLog(
             `Failed to fetch tickets from user '${requester_id}'`.red,
@@ -94,13 +95,13 @@ export const fetchUserTickets = async ({
           return resolve(undefined);
         }
         // fetchUserTicketsLog(JSON.stringify(result, null, 2));
-        return resolve(result);
+        return resolve(result as Ticket[]);
       }
     );
   });
 };
 
-export default async (tickets: Ticket[]) => {
+export default async (tickets: PartialTicket[]) => {
   log(`${new Date()}: Entering createZendeskTickets`);
   const createTickets = tickets.map(async ticket => {
     const userTickets = await limiter.schedule(() => fetchUserTickets(ticket));
@@ -123,13 +124,13 @@ export default async (tickets: Ticket[]) => {
             {
               id: 360032229831,
               value:
-                typeof relatableTickets.unansweredTicket === "number"
-                  ? relatableTickets
+                typeof relatableTickets.relatedTickets === "number"
+                  ? relatableTickets.relatedTickets
                   : null
             }
           ],
           comment: {
-            body: `MSR já possui uma solicitação com o mesmo tipo de pedido de acolhimento nos seguintes tickets: ${relatableTickets}`,
+            body: `MSR já possui uma solicitação com o mesmo tipo de pedido de acolhimento nos seguintes tickets: ${relatableTickets.relatedTickets}`,
             public: false
           }
         })

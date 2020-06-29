@@ -1,17 +1,17 @@
-import debug from 'debug'
+import debug from "debug";
 
-const dbg = debug('filterService')
+const dbg = debug("filterService");
 
 interface Payload {
   event: {
     data: {
       new: {
-        service_name: string
-        data: object
-        created_at: string
-      }
-    }
-  }
+        service_name: string;
+        data: object;
+        created_at: string;
+      };
+    };
+  };
 }
 
 export enum FILTER_SERVICE_STATUS {
@@ -22,23 +22,29 @@ export enum FILTER_SERVICE_STATUS {
 
 export const filterService = (payload: Payload) => {
   try {
-    const { event: { data: { new: { service_name: serviceName, data } } } } = payload
-    dbg(`received service "${serviceName}"`)
-    if (serviceName !== 'mautic-form') {
-      dbg(`${serviceName} not desired service`)
+    const {
+      event: {
+        data: {
+          new: { service_name: serviceName, data }
+        }
+      }
+    } = payload;
+    dbg(`received service "${serviceName}"`);
+    if (serviceName !== "mautic-form") {
+      dbg(`${serviceName} not desired service`);
       return {
         status: FILTER_SERVICE_STATUS.NOT_DESIRED_SERVICE,
-        serviceName,
-      }
+        serviceName
+      };
     }
     return {
       status: FILTER_SERVICE_STATUS.SUCCESS,
-      data,
-    }
+      data
+    };
   } catch (e) {
-    dbg(e)
+    dbg(e);
     return {
-      status: FILTER_SERVICE_STATUS.INVALID_REQUEST,
-    }
+      status: FILTER_SERVICE_STATUS.INVALID_REQUEST
+    };
   }
-}
+};

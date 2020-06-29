@@ -77,11 +77,11 @@ const main = async (req, res, _next) => {
     content,
     errMsg,
     isVolunteer = false
-  }): Promise<any> => {
+  }): Promise<unknown> => {
     return client.tickets.update(
       ticketId,
       content,
-      async (err, _req, result: any) => {
+      async (err, _req, result) => {
         if (err) {
           return handleError({
             error: err,
@@ -139,7 +139,7 @@ const main = async (req, res, _next) => {
         volunteer_organization_id,
         individual_ticket_id
       }),
-      async (err, _req, result: any) => {
+      async (err, _req, result) => {
         if (err) {
           return handleError({
             error: err,
@@ -147,7 +147,7 @@ const main = async (req, res, _next) => {
           });
         }
 
-        const { id: volunteer_ticket_id } = result;
+        const { id: volunteer_ticket_id } = result as { id: number };
 
         // Atualiza o ticket da voluntária com o comentário público e os anexos
         await updateTicket({
@@ -193,14 +193,14 @@ const main = async (req, res, _next) => {
       {
         filename: "Guia_do_Acolhimento.pdf"
       },
-      (err, _req, result: any) => {
+      (err, _req, results) => {
         if (err) {
           return handleError({
             error: err,
             message: "The volunteer guide couldn't be uplodaded"
           });
         }
-        const guia = result.upload.token;
+        const guia = (results as { upload: { token: string } }).upload.token;
 
         // Upload diretrizes
         const file = getVolunteerFile(volunteer_organization_id);
@@ -209,14 +209,15 @@ const main = async (req, res, _next) => {
           {
             filename: file.filename
           },
-          (error, _req, results: any) => {
+          (error, _req, results) => {
             if (error) {
               return handleError({
                 error: err,
                 message: "The volunteer directive couldn't be uplodaded"
               });
             }
-            const diretriz = results.upload.token;
+            const diretriz = (results as { upload: { token: string } }).upload
+              .token;
 
             // Update ticket with both files
             const tokens = [guia, diretriz];

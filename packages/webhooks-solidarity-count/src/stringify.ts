@@ -1,4 +1,4 @@
-export const stringify = (obj: any): any => {
+export const stringify = obj => {
   let result = "";
   if (obj instanceof Array) {
     result += "[";

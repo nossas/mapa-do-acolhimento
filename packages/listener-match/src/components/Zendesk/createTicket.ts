@@ -1,5 +1,6 @@
 import dbg from "../../dbg";
 import client from "./";
+import { agentDicio } from "../../services/utils";
 import { Ticket } from "../../types";
 import * as yup from "yup";
 
@@ -8,7 +9,10 @@ const log = dbg.extend("createTicket");
 const schema = yup
   .object()
   .shape({
-    assignee_id: yup.number().required(),
+    assignee_id: yup
+      .number()
+      .oneOf(Object.values(agentDicio))
+      .required(),
     requester_id: yup.number().required(),
     submitter_id: yup.number().required(),
     status: yup.string().required(),
@@ -17,7 +21,10 @@ const schema = yup
       .object()
       .shape({
         body: yup.string().required(),
-        author_id: yup.number().required(),
+        author_id: yup
+          .number()
+          .oneOf(Object.values(agentDicio))
+          .required(),
         public: yup.boolean().required()
       })
       .required(),
@@ -29,8 +36,9 @@ const schema = yup
           .object()
           .shape({
             id: yup
-              .mixed()
-              .oneOf([360016681971, 360016631632, 360014379412, 360017432652]),
+              .number()
+              .oneOf([360016681971, 360016631632, 360014379412, 360017432652])
+              .required(),
             value: yup.string().required()
           })
           .required()
@@ -47,8 +55,8 @@ export default async (ticket: Ticket): Promise<Ticket | undefined> => {
     });
     return new Promise(resolve => {
       return client.tickets.create(
-        { ticket: validatedTicket } as any,
-        (err, _req, result: any) => {
+        { ticket: validatedTicket } as { ticket },
+        (err, _req, result) => {
           if (err) {
             log(
               `Failed to create ticket for user '${ticket.requester_id}'`.red,
@@ -64,7 +72,7 @@ export default async (ticket: Ticket): Promise<Ticket | undefined> => {
           //   )}`
           // );
           // log("Zendesk ticket created successfully!");
-          return resolve(result);
+          return resolve(result as Ticket);
         }
       );
     });

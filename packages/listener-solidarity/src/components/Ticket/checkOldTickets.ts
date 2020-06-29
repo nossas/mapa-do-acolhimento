@@ -1,25 +1,19 @@
-import { extractTypeFromSubject } from "../../utils";
-import { Ticket, status_acolhimento_values } from "../../types";
+import { extractTypeFromSubject, getStatusAcolhimento } from "../../utils";
+import { Ticket } from "../../types";
 import dbg from "../../dbg";
 
 const log = dbg.extend("checkOldTickets");
 
-const getStatusAcolhimento = (
-  ticket: Ticket
-): status_acolhimento_values | undefined => {
-  const status = ticket.fields.find(field => field.id === 360014379412);
-  return status && status.value;
-};
-
 const getOldestTicket = (tickets: Ticket[]) =>
   tickets.sort(
-    (a, b) => (new Date(a.created_at) as any) - (new Date(b.created_at) as any)
+    (a, b) =>
+      new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
   )[0];
 
 export default (
   subject: string,
   tickets: Ticket[]
-): { unansweredTicket: number | number[]; agent: number } | false => {
+): { relatedTickets: number | number[]; agent: number } | false => {
   log("Checking old tickets");
   const newSubject = extractTypeFromSubject(subject);
 
@@ -49,7 +43,7 @@ export default (
   // she has a match ticket
   if (hasACurrentMatch.length > 0)
     return {
-      unansweredTicket: hasACurrentMatch.map(t => t.id),
+      relatedTickets: hasACurrentMatch.map(t => t.id),
       agent: getOldestTicket(hasACurrentMatch).assignee_id as number
     };
 
@@ -57,7 +51,7 @@ export default (
   const status_acolhimento = getStatusAcolhimento(oldestTicket);
   return status_acolhimento === "solicitação_recebida"
     ? {
-        unansweredTicket: oldestTicket.id,
+        relatedTickets: oldestTicket.id,
         agent: oldestTicket.assignee_id as number
       }
     : false;

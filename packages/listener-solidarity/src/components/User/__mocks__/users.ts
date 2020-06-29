@@ -6,7 +6,7 @@ export const geolocation = {
   address: faker.address.streetAddress(true),
   state: faker.address.state(true),
   city: faker.address.city(),
-  cep: faker.address.zipCode(),
+  cep: faker.address.zipCode()
 };
 
 export default {
@@ -19,7 +19,7 @@ export default {
         cached_community_id: 40,
         widget_id: 17633,
         created_at: "2020-05-29T00:25:28.593533",
-        __typename: "form_entries",
+        __typename: "form_entries"
       },
       {
         id: 2000374,
@@ -28,7 +28,7 @@ export default {
         cached_community_id: 40,
         widget_id: 17633,
         created_at: "2020-05-29T00:27:23.780153",
-        __typename: "form_entries",
+        __typename: "form_entries"
       },
       {
         id: 2000375,
@@ -37,8 +37,8 @@ export default {
         cached_community_id: 40,
         widget_id: 17633,
         created_at: "2020-05-29T00:28:29.55569",
-        __typename: "form_entries",
-      },
+        __typename: "form_entries"
+      }
     ],
     results: [
       {
@@ -62,8 +62,8 @@ export default {
           registration_number: "21312312",
           occupation_area: null,
           disponibilidade_de_atendimentos: "4",
-          data_de_inscricao_no_bonde: "2020-05-29T00:25:28.593533",
-        },
+          data_de_inscricao_no_bonde: "2020-05-29T00:25:28.593533"
+        }
       },
       {
         name: "Meire Leite",
@@ -85,9 +85,9 @@ export default {
           whatsapp: "12988805543",
           registration_number: "21312312",
           occupation_area: null,
-          disponibilidade_de_atendimentos: "5_ou_mais",
-          data_de_inscricao_no_bonde: "2020-05-29T00:27:23.780153",
-        },
+          disponibilidade_de_atendimentos: "5",
+          data_de_inscricao_no_bonde: "2020-05-29T00:27:23.780153"
+        }
       },
       {
         name: "Maoela Coelho",
@@ -110,10 +110,10 @@ export default {
           registration_number: "21312312",
           occupation_area: null,
           disponibilidade_de_atendimentos: "2",
-          data_de_inscricao_no_bonde: "2020-05-29T00:28:29.55569",
-        },
-      },
-    ],
+          data_de_inscricao_no_bonde: "2020-05-29T00:28:29.55569"
+        }
+      }
+    ]
   },
   "17628": {
     cache: [
@@ -124,8 +124,8 @@ export default {
         cached_community_id: 40,
         widget_id: 17628,
         created_at: "2020-05-29T00:16:24.283085",
-        __typename: "form_entries",
-      },
+        __typename: "form_entries"
+      }
     ],
     results: [
       {
@@ -148,11 +148,11 @@ export default {
           registration_number: "123123",
           state: geolocation.state,
           tipo_de_acolhimento: null,
-          whatsapp: "12988801144",
+          whatsapp: "12988801144"
         },
-        verified: true,
-      },
-    ],
+        verified: true
+      }
+    ]
   },
   "16850": {
     cache: [
@@ -163,7 +163,7 @@ export default {
         cached_community_id: 40,
         widget_id: 16850,
         created_at: "2020-05-08T12:37:01.553574",
-        __typename: "form_entries",
+        __typename: "form_entries"
       },
       {
         id: 2000364,
@@ -172,7 +172,7 @@ export default {
         cached_community_id: 40,
         widget_id: 16850,
         created_at: "2020-05-27T13:14:24.678628",
-        __typename: "form_entries",
+        __typename: "form_entries"
       },
       {
         id: 2000365,
@@ -181,7 +181,7 @@ export default {
         cached_community_id: 40,
         widget_id: 16850,
         created_at: "2020-05-27T13:15:47.93393",
-        __typename: "form_entries",
+        __typename: "form_entries"
       },
       {
         id: 423413,
@@ -190,8 +190,8 @@ export default {
         cached_community_id: 40,
         widget_id: 16850,
         created_at: "2018-07-11T17:05:15.218893",
-        __typename: "form_entries",
-      },
+        __typename: "form_entries"
+      }
     ],
     results: [
       {
@@ -214,9 +214,9 @@ export default {
           whatsapp: null,
           registration_number: null,
           occupation_area: null,
-          disponibilidade_de_atendimentos: "",
-          data_de_inscricao_no_bonde: "2020-05-08T12:37:01.553574",
-        },
+          disponibilidade_de_atendimentos: null,
+          data_de_inscricao_no_bonde: "2020-05-08T12:37:01.553574"
+        }
       },
       {
         name: "Viviane",
@@ -238,9 +238,9 @@ export default {
           whatsapp: null,
           registration_number: null,
           occupation_area: null,
-          disponibilidade_de_atendimentos: "",
-          data_de_inscricao_no_bonde: "2020-05-27T13:14:24.678628",
-        },
+          disponibilidade_de_atendimentos: null,
+          data_de_inscricao_no_bonde: "2020-05-27T13:14:24.678628"
+        }
       },
       {
         name: "Camila",
@@ -262,9 +262,9 @@ export default {
           whatsapp: null,
           registration_number: null,
           occupation_area: null,
-          disponibilidade_de_atendimentos: "",
-          data_de_inscricao_no_bonde: "2020-05-27T13:15:47.93393",
-        },
+          disponibilidade_de_atendimentos: null,
+          data_de_inscricao_no_bonde: "2020-05-27T13:15:47.93393"
+        }
       },
       {
         name: "Patricia Teste",
@@ -286,11 +286,11 @@ export default {
           whatsapp: null,
           registration_number: null,
           occupation_area: null,
-          disponibilidade_de_atendimentos: "",
-          data_de_inscricao_no_bonde: "2018-07-11T17:05:15.218893",
-        },
-      },
-    ],
+          disponibilidade_de_atendimentos: null,
+          data_de_inscricao_no_bonde: "2018-07-11T17:05:15.218893"
+        }
+      }
+    ]
   },
   "2760": {
     cache: [
@@ -301,8 +301,8 @@ export default {
         cached_community_id: 40,
         widget_id: 2760,
         created_at: "2016-06-06T22:18:29.35002",
-        __typename: "form_entries",
-      },
+        __typename: "form_entries"
+      }
     ],
     results: [
       {
@@ -326,10 +326,10 @@ export default {
           registration_number: "tese",
           occupation_area: "nao tenho",
           disponibilidade_de_atendimentos: "2",
-          data_de_inscricao_no_bonde: "2016-06-06T22:18:29.35002",
-        },
-      },
-    ],
+          data_de_inscricao_no_bonde: "2016-06-06T22:18:29.35002"
+        }
+      }
+    ]
   },
   "3297": {
     cache: [
@@ -340,12 +340,12 @@ export default {
         cached_community_id: 40,
         widget_id: 3297,
         created_at: "2016-07-28T23:24:46.472049",
-        __typename: "form_entries",
-      },
+        __typename: "form_entries"
+      }
     ],
     results: [
       {
-        name: "Teste Teste",
+        name: "Teste",
         role: "end-user",
         organization_id: 360273031591,
         email: "teste@gmail.com",
@@ -364,11 +364,11 @@ export default {
           whatsapp: null,
           registration_number: null,
           occupation_area: null,
-          disponibilidade_de_atendimentos: "",
-          data_de_inscricao_no_bonde: "2016-07-28T23:24:46.472049",
-        },
-      },
-    ],
+          disponibilidade_de_atendimentos: null,
+          data_de_inscricao_no_bonde: "2016-07-28T23:24:46.472049"
+        }
+      }
+    ]
   },
   "16835": {
     cache: [
@@ -379,7 +379,7 @@ export default {
         cached_community_id: 40,
         widget_id: 16835,
         created_at: "2018-07-09T14:25:11.741693",
-        __typename: "form_entries",
+        __typename: "form_entries"
       },
       {
         id: 455167,
@@ -388,8 +388,8 @@ export default {
         cached_community_id: 40,
         widget_id: 16835,
         created_at: "2018-08-08T12:39:01.286056",
-        __typename: "form_entries",
-      },
+        __typename: "form_entries"
+      }
     ],
     results: [
       {
@@ -413,8 +413,8 @@ export default {
           registration_number: "123123",
           occupation_area: "Saúde Mental",
           disponibilidade_de_atendimentos: "5",
-          data_de_inscricao_no_bonde: "2018-07-09T14:25:11.741693",
-        },
+          data_de_inscricao_no_bonde: "2018-07-09T14:25:11.741693"
+        }
       },
       {
         name: "Camilla Teste",
@@ -437,10 +437,10 @@ export default {
           registration_number: "123123",
           occupation_area: "Psicologia Clínica ",
           disponibilidade_de_atendimentos: "1",
-          data_de_inscricao_no_bonde: "2018-08-08T12:39:01.286056",
-        },
-      },
-    ],
+          data_de_inscricao_no_bonde: "2018-08-08T12:39:01.286056"
+        }
+      }
+    ]
   },
   "8190": {
     cache: [
@@ -451,7 +451,7 @@ export default {
         cached_community_id: 40,
         widget_id: 8190,
         created_at: "2017-06-20T00:47:07.442283",
-        __typename: "form_entries",
+        __typename: "form_entries"
       },
       {
         id: 405430,
@@ -460,8 +460,8 @@ export default {
         cached_community_id: 40,
         widget_id: 8190,
         created_at: "2018-04-08T16:25:23.955426",
-        __typename: "form_entries",
-      },
+        __typename: "form_entries"
+      }
     ],
     results: [
       {
@@ -485,8 +485,8 @@ export default {
           registration_number: "123123",
           occupation_area: "Indicações",
           disponibilidade_de_atendimentos: "2",
-          data_de_inscricao_no_bonde: "2017-06-20T00:47:07.442283",
-        },
+          data_de_inscricao_no_bonde: "2017-06-20T00:47:07.442283"
+        }
       },
       {
         name: "Heloisa  Teste",
@@ -508,11 +508,11 @@ export default {
           whatsapp: null,
           registration_number: "123123 RJ",
           occupation_area: "família, cível, inventário",
-          disponibilidade_de_atendimentos: "10",
-          data_de_inscricao_no_bonde: "2018-04-08T16:25:23.955426",
-        },
-      },
-    ],
+          disponibilidade_de_atendimentos: "5_ou_mais",
+          data_de_inscricao_no_bonde: "2018-04-08T16:25:23.955426"
+        }
+      }
+    ]
   },
   "16838": {
     cache: [
@@ -523,7 +523,7 @@ export default {
         cached_community_id: 40,
         widget_id: 16838,
         created_at: "2018-08-08T13:00:16.991663",
-        __typename: "form_entries",
+        __typename: "form_entries"
       },
       {
         id: 420225,
@@ -532,8 +532,8 @@ export default {
         cached_community_id: 40,
         widget_id: 16838,
         created_at: "2018-07-09T21:25:55.801691",
-        __typename: "form_entries",
-      },
+        __typename: "form_entries"
+      }
     ],
     results: [
       {
@@ -557,8 +557,8 @@ export default {
           registration_number: "158157",
           occupation_area: "Direito de família, civil e trabalhista",
           disponibilidade_de_atendimentos: "3",
-          data_de_inscricao_no_bonde: "2018-08-08T13:00:16.991663",
-        },
+          data_de_inscricao_no_bonde: "2018-08-08T13:00:16.991663"
+        }
       },
       {
         name: "Ana Carolina Teste",
@@ -581,9 +581,9 @@ export default {
           registration_number: "123123",
           occupation_area: "Família e Consumidor",
           disponibilidade_de_atendimentos: "1",
-          data_de_inscricao_no_bonde: "2018-07-09T21:25:55.801691",
-        },
-      },
-    ],
-  },
+          data_de_inscricao_no_bonde: "2018-07-09T21:25:55.801691"
+        }
+      }
+    ]
+  }
 };

@@ -1,8 +1,10 @@
-# WEBHOOKS_COUNT
+# Webhooks Solidarity Count
 
-Esse pacote faz a sincronização completa do do ticket em tempo real, fazendo a contagem dos tickets e atualizando os usuários no zendesk, realizando o match entre voluntárias e MSRs sempre que ouver uma mudança de status em um ticket e deixando o banco de dados sempre em sincronização com os tickets modificados.
+Esse pacote faz a sincronização completa do ticket em tempo real, fazendo a re-contagem dos tickets e atualizando os usuários no zendesk, deixando o banco de dados sempre sincronizado com os tickets modificados.
 
 Esse webhook é disparado quando qualquer ticket do Zendesk é atualizado. Ele foi configurado no Zendesk na área das APIs.
+
+If the service gets inactivated by Zendesk, go to "Extensões" and there you can re-activate it.
 
 As seguintes variáveis de ambiente devem ser configuradas:
 

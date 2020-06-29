@@ -1,3 +1,3 @@
-import debug from 'debug'
+import debug from "debug";
 
-export default debug('cli-zendesk')
+export default debug("cli-zendesk");

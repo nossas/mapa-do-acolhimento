@@ -1,7 +1,9 @@
+import { Ticket } from "../types";
+
 export const organizationsIds = {
   MSR: 360273031591,
   THERAPIST: 360282119532,
-  LAWYER: 360269610652,
+  LAWYER: 360269610652
 };
 
 export const setType = (type: string | null) => {
@@ -46,10 +48,10 @@ export const getOrganizationType = (
   return "MSR";
 };
 
-export const handleUserError = (entries) => {
+export const handleUserError = entries => {
   console.log(
     `Integration failed in these form entries ${entries.map(
-      (e) => e.external_id
+      e => e.external_id
     )}`
   );
   return undefined;
@@ -80,14 +82,21 @@ export const extractTypeFromSubject = (subject: string) =>
     .split(" ")[0]
     .toLowerCase();
 
-export const removeDuplicatesBy = (keyFn, array: Array<any>) => {
+export const removeDuplicatesBy = (keyFn, array: Array<unknown>) => {
   const mySet = new Set();
-  return array.filter((x) => {
+  return array.filter(x => {
     const key = keyFn(x),
       isNew = !mySet.has(key);
     if (isNew) mySet.add(key);
     return isNew;
   });
+};
+
+export const getStatusAcolhimento = (
+  ticket: Ticket
+): string | undefined | null => {
+  const status = ticket.custom_fields.find(field => field.id === 360014379412);
+  return status && status.value;
 };
 
 export { default as getGeolocation } from "./geocoding";

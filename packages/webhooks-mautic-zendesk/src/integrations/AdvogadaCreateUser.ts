@@ -31,7 +31,7 @@ class AdvogadaCreateUser extends Base {
 
   private verificaDiretrizesAtendimento = async (
     condition: [CONDITION],
-    data: any
+    data
   ) => {
     let newData = data;
     const verificaCamposDiretrizesAtendimento = yup
@@ -81,7 +81,7 @@ class AdvogadaCreateUser extends Base {
     return newData;
   };
 
-  private verificaEstudoDeCaso = async (condition: [CONDITION], data: any) => {
+  private verificaEstudoDeCaso = async (condition: [CONDITION], data) => {
     let newData = data;
     const verificaCamposEstudoDeCaso = yup
       .object()
@@ -133,7 +133,7 @@ class AdvogadaCreateUser extends Base {
   /**
    * TODO: adicionar tag cep_incorreto
    */
-  private verificaLocalização = async (_condition: [CONDITION], data: any) => {
+  private verificaLocalização = async (_condition: [CONDITION], data) => {
     let newData = data;
     const verificaCep = yup
       .object()
@@ -176,7 +176,7 @@ class AdvogadaCreateUser extends Base {
     };
   };
 
-  start = async (data: any, { createdAt, name, cep }: InputFromMautic) => {
+  start = async (data, { createdAt, name, cep }: InputFromMautic) => {
     let newData = {
       ...data,
       cep

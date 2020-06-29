@@ -1,3 +1,6 @@
+import * as turf from "@turf/turf";
+import { IndividualTicket } from "../types";
+
 export const getRequestedVolunteerType = (subject: string) => {
   const str = typeof subject === "string" ? subject.toLowerCase() : "";
   const removeSpecialCaracters = str.replace(/[^\w\s]/gi, "");
@@ -6,11 +9,12 @@ export const getRequestedVolunteerType = (subject: string) => {
   return undefined;
 };
 
-export const zendeskOrganizations = () =>
-  JSON.parse(process.env.ZENDESK_ORGANIZATIONS || "{}");
+export const zendeskOrganizations = JSON.parse(
+  process.env.ZENDESK_ORGANIZATIONS || "{}"
+);
 
 export const getVolunteerOrganizationId = (type: string) =>
-  zendeskOrganizations()[type];
+  zendeskOrganizations[type];
 
 export const getCurrentDate = () => {
   const today = new Date();
@@ -21,24 +25,12 @@ export const getCurrentDate = () => {
   return `${yyyy}-${mm}-${dd}`;
 };
 
-const LAWYER = zendeskOrganizations()["lawyer"];
-const THERAPIST = zendeskOrganizations()["therapist"];
+const LAWYER = zendeskOrganizations["lawyer"];
+const THERAPIST = zendeskOrganizations["therapist"];
 
 export const getVolunteerType = (id: number) => {
-  if (id === LAWYER)
-    return {
-      type: "Advogada",
-      registry_type: "OAB",
-      path: "diretrizes_atendimento_advogada.pdf",
-      filename: "Diretrizes_de_Atendimento___Advogadas_Voluntarias.pdf"
-    };
-  if (id === THERAPIST)
-    return {
-      type: "Psicóloga",
-      registry_type: "CRP",
-      path: "diretrizes_atendimento_psicologa.pdf",
-      filename: "Diretrizes_de_Atendimento___Psicologas_Voluntarias.pdf"
-    };
+  if (id === LAWYER) return "Advogada";
+  if (id === THERAPIST) return "Psicóloga";
   throw new Error("Volunteer organization_id not supported in search for type");
 };
 
@@ -82,3 +74,25 @@ export const agentDicio = {
   2: 377511446392,
   3: 377577169651
 };
+
+export const calcDistance = (pointA: number[], pointB: number[]) => {
+  if (
+    typeof pointA[0] !== "number" ||
+    typeof pointA[1] !== "number" ||
+    typeof pointB[0] !== "number" ||
+    typeof pointB[1] !== "number"
+  )
+    return undefined;
+  const a = turf.point(pointA);
+  const b = turf.point(pointB);
+
+  return Number(turf.distance(a, b));
+};
+
+export const filterCache = (
+  cache: IndividualTicket[],
+  tickets: IndividualTicket[]
+) =>
+  cache
+    .filter(c => !tickets.map(t => t.ticket_id).includes(c.ticket_id))
+    .concat(tickets);

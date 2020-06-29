@@ -1,6 +1,6 @@
 # CLI-Zendesk
 
-Este pacote é um programa em linha de comando que quando executado realiza a integração de todos os tickets do zendesk para o banco de dados através de requisições em graphql.
+Este pacote é um programa em linha de comando que quando executado realiza a integração de todos os tickets e usuários do zendesk para o banco de dados através de requisições em graphql.
 
 Options:
 
@@ -17,6 +17,8 @@ Options:
   `pnpm run dev:user`
 - E para buscas os tickets:
   `pnpm run dev:ticket`
+
+To make the script run in staging or production, upgrade the service in Cluster.
 
 As variáveis de ambiente que precisam ser configuradas estão descritas a seguir:
 

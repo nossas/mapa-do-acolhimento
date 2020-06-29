@@ -1,4 +1,14 @@
 pipeline:
+  unit-tests:
+    image: node:12-alpine
+    commands:
+      - yarn global add pnpm@5.2.1
+      - pnpm i
+      - pnpm run lint
+      - pnpm m run test
+    when:
+      event: [push, tag]
+
   build:
     image: node:12-alpine
     environment:
@@ -34,6 +44,23 @@ pipeline:
     secrets: [stag_google_client, stag_zendesk_token, stag_zendesk_user]
     when:
       event: [tag]
+
+  codecov:
+    image: plugins/codecov
+    secrets: [codecov_token]
+    group: build
+    paths:
+      # - packages/cli-mautic/coverage
+      - packages/cli-zendesk/coverage
+      # - packages/client-solidarity/coverage
+      - packages/listener-match/coverage
+      - packages/listener-solidarity/coverage
+      - packages/webhooks-mautic-registry/coverage
+      - packages/webhooks-mautic-zendesk/coverage
+      - packages/webhooks-solidarity-count/coverage
+    when:
+      status: success
+      event: [push, tag]
 
   publish-stag-solidarity:
     image: plugins/docker

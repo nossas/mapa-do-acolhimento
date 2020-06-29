@@ -6,7 +6,7 @@ declare module "bonde-styleguide/dist/../../../components/content/IconColorful/I
 declare module "*.svg";
 
 interface Window {
-  MyNamespace: any;
+  MyNamespace: unknown;
 }
 
 declare let window: Window;

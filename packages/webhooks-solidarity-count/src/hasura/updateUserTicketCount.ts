@@ -46,7 +46,7 @@ interface Response {
   affected_rows: number;
 }
 
-const updateUserTicketCount = async (users: User[]) => {
+const updateUserTicketCount = async users => {
   try {
     const query = createQuery(users);
     const variables = generateRequestVariables(users);

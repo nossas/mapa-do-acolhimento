@@ -1,7 +1,6 @@
-import { Requesters, Requester } from './interfaces/Requester'
+import { Requesters, Requester } from "./interfaces/Requester";
 
-const convertRequestersToArray = (
-  requesters: Requesters,
-) => Object.values(requesters) as Requester[]
+const convertRequestersToArray = (requesters: Requesters) =>
+  Object.values(requesters) as Requester[];
 
-export default convertRequestersToArray
+export default convertRequestersToArray;

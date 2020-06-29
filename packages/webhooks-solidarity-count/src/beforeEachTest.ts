@@ -1,3 +1,1 @@
-import dotenv from "dotenv";
-
-dotenv.config();
+process.env.COMMUNITY_ID = "1";

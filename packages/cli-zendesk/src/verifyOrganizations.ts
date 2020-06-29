@@ -15,6 +15,7 @@ const verifyOrganization = async (ticket: Ticket) => {
         MSR: yup.number().required(),
         PSICÓLOGA: yup.number().required()
       })
+      .required()
       .validate(JSON.parse(ZENDESK_ORGANIZATIONS));
 
     const { organization_id } = ticket;

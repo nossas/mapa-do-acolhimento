@@ -1,33 +1,29 @@
 {
   "name": "listener-solidarity",
-  "version": "1.0.0",
-  "private": true,
   "description": "Listener dos widgets dos formulários da comunidade do Mapa do Acolhimento",
-  "engines": {
-    "node": ">= 12.13 <13"
-  },
   "devDependencies": {
     "@types/debug": "^4.1.5",
+    "@types/faker": "^4.1.12",
     "@types/jest": "~25.1.0",
     "@types/node": "~12.12.27",
+    "@types/node-zendesk": "^1.4.0",
+    "@types/throng": "^4.0.2",
     "@types/url-join": "^4.0.0",
     "@types/ws": "^7.2.4",
     "jest": "26.0.1",
-    "rimraf": "~3.0.2"
+    "rimraf": "~3.0.2",
+    "ts-jest": "^26.1.1"
   },
   "scripts": {
     "start": "DEBUG=listener-solidarity* node -r dotenv-safe/config dist/main.js",
     "dev": "DEBUG=listener-solidarity* tsc-watch --onSuccess \"node -r dotenv-safe/config dist/main.js\"",
-    "test": "DEBUG=listener-solidarity* jest --coverage",
+    "test": "jest --coverage",
     "test:watch": "DEBUG=listener-solidarity* jest --watch --runInBand --detectOpenHandles",
-    "build": "tsc -p tsconfig.json",
+    "build": "tsc -p tsconfig.json --sourcemap",
     "build:watch": "tsc -w -p tsconfig.json",
     "clean": "rimraf coverage dist tmp"
   },
   "dependencies": {
-    "@types/faker": "^4.1.12",
-    "@types/node-zendesk": "1.4.0",
-    "@types/throng": "^4.0.2",
     "apollo-cache-inmemory": "^1.6.5",
     "apollo-client": "^2.6.8",
     "apollo-link": "^1.2.13",
@@ -46,8 +42,6 @@
     "node-zendesk": "1.4.0",
     "subscriptions-transport-ws": "^0.9.16",
     "throng": "^4.0.0",
-    "url-join": "^4.0.1",
-    "winston": "^3.2.1",
     "ws": "^7.2.1",
     "yup": "^0.29.1"
   }

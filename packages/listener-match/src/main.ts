@@ -21,5 +21,5 @@ throng({
       log("Cleanup here");
       process.exit();
     });
-  },
+  }
 });

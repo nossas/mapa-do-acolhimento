@@ -1,6 +1,7 @@
 import dbg from "../../dbg";
 import client from "./";
 import { UpdateTicket, Ticket } from "../../types";
+import { agentDicio } from "../../services/utils";
 import * as yup from "yup";
 const log = dbg.extend("updateTicket");
 
@@ -8,7 +9,10 @@ const schema = yup
   .object()
   .shape({
     status: yup.string().required(),
-    assignee_id: yup.number().required(),
+    assignee_id: yup
+      .number()
+      .oneOf(Object.values(agentDicio))
+      .required(),
     custom_fields: yup
       .array()
       .of(
@@ -16,14 +20,15 @@ const schema = yup
           .object()
           .shape({
             id: yup
-              .mixed()
+              .number()
               .oneOf([
                 360016631592,
                 360014379412,
                 360016631632,
                 360017432652,
                 360021879791
-              ]),
+              ])
+              .required(),
             value: yup.string().required()
           })
           .required()
@@ -34,7 +39,10 @@ const schema = yup
       .object()
       .shape({
         body: yup.string().required(),
-        author_id: yup.number().required(),
+        author_id: yup
+          .number()
+          .oneOf(Object.values(agentDicio))
+          .required(),
         public: yup.boolean().required()
       })
       .required()
@@ -52,8 +60,8 @@ export default async (
     return new Promise(resolve => {
       return client.tickets.update(
         ticketId,
-        { ticket: validatedTicket } as any,
-        (err, _req, result: any) => {
+        { ticket: validatedTicket } as { ticket },
+        (err, _req, result) => {
           if (err) {
             log(`Failed to update ticket '${ticketId}'`.red, err);
             return resolve(undefined);
@@ -66,7 +74,7 @@ export default async (
           //   )}`
           // );
           // log("Zendesk ticket updated successfully!");
-          return resolve(result);
+          return resolve(result as Ticket);
         }
       );
     });

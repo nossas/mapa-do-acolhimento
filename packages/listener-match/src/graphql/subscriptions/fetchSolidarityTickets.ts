@@ -35,11 +35,11 @@ const SOLIDARITY_USERS_SUBSCRIPTION = gql`
   }
 `;
 
-const error = (err: any) => {
+const error = err => {
   log("Receiving error on subscription GraphQL API: ", err);
 };
 
-export default async (): Promise<any> => {
+export default async (): Promise<unknown> => {
   try {
     const observable = GraphQLAPI.subscribe({
       query: SOLIDARITY_USERS_SUBSCRIPTION,
