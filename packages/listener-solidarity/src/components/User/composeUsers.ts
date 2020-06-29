@@ -17,6 +17,57 @@ const limiter = new Bottleneck({
   minTime: 1000
 });
 
+const createUser = (): User => ({
+  name: "",
+  role: "end-user",
+  organization_id: 0,
+  email: "",
+  external_id: "",
+  phone: "",
+  verified: true,
+  user_fields: {
+    tipo_de_acolhimento: null,
+    condition: "desabilitada",
+    state: "",
+    city: "",
+    cep: "",
+    address: "",
+    whatsapp: null,
+    registration_number: null,
+    occupation_area: null,
+    disponibilidade_de_atendimentos: null,
+    data_de_inscricao_no_bonde: "",
+    latitude: null,
+    longitude: null
+  }
+});
+
+const addAvailability = (availability: string) => {
+  const formattedAvailability = availability.replace(/\D/g, "");
+  if (formattedAvailability === "") {
+    return "1";
+  }
+
+  return Number(formattedAvailability) > 5
+    ? "5_ou_mais"
+    : Number(formattedAvailability).toString();
+};
+
+const changeCondition = (
+  created_at: string,
+  widget_id: number,
+  terms?: string
+) => {
+  if (terms && terms.match(/sim/gi)) return "inscrita";
+  // Some MSR forms didn't have the `accept_terms` field
+  if (created_at < "2019-06-10 18:08:55.49997" && widget_id === 16850)
+    return "inscrita";
+  if (widget_id === 3297) {
+    return "inscrita";
+  }
+  return "desabilitada";
+};
+
 export default async (
   cache: FormEntry[],
   widgets: Widget[],
@@ -43,30 +94,7 @@ export default async (
 
     // log({ instance });
 
-    const register: User = {
-      name: "",
-      role: "end-user",
-      organization_id: 0,
-      email: "",
-      external_id: "",
-      phone: "",
-      verified: true,
-      user_fields: {
-        tipo_de_acolhimento: null,
-        condition: "desabilitada",
-        state: "",
-        city: "",
-        cep: "",
-        address: "",
-        whatsapp: null,
-        registration_number: null,
-        occupation_area: null,
-        disponibilidade_de_atendimentos: null,
-        data_de_inscricao_no_bonde: "",
-        latitude: null,
-        longitude: null
-      }
-    };
+    const register = createUser();
 
     register["email"] = instance.email;
     if (instance.phone) register["phone"] = instance.phone;
@@ -89,18 +117,9 @@ export default async (
     }
 
     if (![16850, 3297].includes(widget.id)) {
-      const availability = (
-        instance["disponibilidade_de_atendimentos"] || ""
-      ).replace(/\D/g, "");
-
-      if (availability === "") {
-        register["user_fields"]["disponibilidade_de_atendimentos"] = "1";
-      } else {
-        register["user_fields"]["disponibilidade_de_atendimentos"] =
-          Number(availability) > 5
-            ? "5_ou_mais"
-            : Number(availability).toString();
-      }
+      register["user_fields"][
+        "disponibilidade_de_atendimentos"
+      ] = addAvailability(instance["disponibilidade_de_atendimentos"] || "");
     }
 
     register["user_fields"]["data_de_inscricao_no_bonde"] =
@@ -115,18 +134,11 @@ export default async (
       register["user_fields"][g] = geocoding[g];
     });
 
-    const terms = instance["accept_terms"];
-    if (terms && terms.match(/sim/gi))
-      register["user_fields"]["condition"] = "inscrita";
-    // Some MSR forms didn't have the `accept_terms` field
-    if (
-      formEntry.created_at < "2019-06-10 18:08:55.49997" &&
-      widget.id === 16850
-    )
-      register["user_fields"]["condition"] = "inscrita";
-    if (widget.id === 3297) {
-      register["user_fields"]["condition"] = "inscrita";
-    }
+    register["user_fields"]["condition"] = changeCondition(
+      formEntry.created_at,
+      widget.id,
+      instance["accept_terms"]
+    );
 
     register["user_fields"]["tipo_de_acolhimento"] = setType(
       instance.tipo_de_acolhimento
