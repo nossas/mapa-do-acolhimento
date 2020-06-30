@@ -42,3 +42,5 @@ In Cluster the service is under "listeners" and has the name "match"
 
 - We need to cache the tickets that arrive
   - This is done because [Hasura refreshes the query every 1s](https://hasura.io/docs/1.0/graphql/manual/subscriptions/index.html#execution)
+- We also dont await for update / insert Hasura tickets response because of time
+  - If the script takes too long to run, the subscription will refetch and a volunteer could have two tickets created for the same MSR
