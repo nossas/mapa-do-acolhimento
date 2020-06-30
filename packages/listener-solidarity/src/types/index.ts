@@ -1,3 +1,16 @@
+export type FormEntry = {
+  fields: string;
+  id: number;
+  widget_id: number;
+  cached_community_id: number;
+  created_at: string;
+};
+
+export type FormEntriesResponse = {
+  data: {
+    form_entries: Array<FormEntry & { __typename: string }>;
+  };
+};
 export interface Widget {
   id: number;
   organization_id: number;
@@ -164,14 +177,6 @@ export type Fields = Array<{
   required: "true" | "false";
   value: string;
 }>;
-
-export type FormEntry = {
-  fields: string;
-  id: number;
-  widget_id: number;
-  cached_community_id: number;
-  created_at: string;
-};
 
 export type ZendeskUserCreationResponse = {
   id: number;

@@ -110,11 +110,7 @@ export default async (
     log(
       `Saving new volunteer ticket '${validatedTicket.ticket_id}' in Hasura...`
     );
-    const inserted = await saveSolidarityTicket([validatedTicket]);
-    if (!inserted)
-      log(
-        `Something went wrong when saving this Volunteer ticket '${zendeskTicket.id}' in Hasura`
-      );
+    saveSolidarityTicket([validatedTicket]);
 
     // log("Successfully saved volunteer ticket in Hasura");
     return zendeskTicket.id;

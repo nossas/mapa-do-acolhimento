@@ -30,13 +30,8 @@ export default async (ticket: UpdateTicket & { ticket_id: number }, schema) => {
     log(
       `Updating individual ticket '${validatedTicket.ticket_id}' in Hasura...`
     );
-    const inserted = await updateSolidarityTickets(validatedTicket, [
-      validatedTicket.ticket_id
-    ]);
-    if (!inserted)
-      log(
-        `Something went wrong when updating this MSR ticket in Hasura '${zendeskTicket.id}'`
-      );
+
+    updateSolidarityTickets(validatedTicket, [validatedTicket.ticket_id]);
 
     return zendeskTicket.id;
   } catch (e) {

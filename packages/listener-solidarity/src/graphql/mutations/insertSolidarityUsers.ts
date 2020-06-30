@@ -99,7 +99,9 @@ const userSchema = yup
 
 type Users = yup.InferType<typeof userSchema>;
 
-const insertSolidarityUsers = async (users: Users) => {
+const insertSolidarityUsers = async (
+  users: Users
+): Promise<{ external_id: number }[] | undefined> => {
   log("Saving users in Hasura...");
   const ids = users.map(u => u.external_id);
   try {

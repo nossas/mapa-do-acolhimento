@@ -36,7 +36,7 @@ export const handleMatch = () => async (response: SubscriptionResponse) => {
   if (cache.length > 0) {
     const volunteersAvailable = await fetchVolunteersAvailable();
 
-    const matchs = cache.map(async individualTicket =>
+    const matchs = cache.map(individualTicket =>
       handleTicket(individualTicket, volunteersAvailable, AGENT)
     );
 
