@@ -4,7 +4,7 @@ import { makeBatchRequests, composeUsers } from "./User";
 import createZendeskTickets, { composeTickets } from "./Ticket";
 import { insertSolidarityUsers, updateFormEntries } from "../graphql/mutations";
 import { getGeolocation, handleUserError, removeDuplicatesBy } from "../utils";
-import { Widget, FormEntry, User } from "../types";
+import { Widget, FormEntry, User, FormEntriesResponse } from "../types";
 import dbg from "../dbg";
 
 const log = dbg.extend("integration");
@@ -14,21 +14,21 @@ const limiter = new Bottleneck({
   minTime: 1000
 });
 
-let cache = [];
+let cache: FormEntry[] = [];
 
-export const handleIntegration = (widgets: Widget[]) => async response => {
+export const handleIntegration = (widgets: Widget[]) => async (
+  response: FormEntriesResponse
+) => {
   let syncronizedForms: number[] = [];
   log(`${new Date()}: \nReceiving data on subscription GraphQL API...`);
-  // log({ response: response.data.form_entries });
 
   const {
     data: { form_entries: entries }
   } = response;
 
-  cache = entries.map((entry: FormEntry) => {
-    if (!cache.includes(entry.id as never)) return entry;
-    return;
-  });
+  cache = cache
+    .filter(c => !entries.map(e => e.id).includes(c.id))
+    .concat(entries);
 
   if (cache.length > 0) {
     const usersToRegister = await composeUsers(cache, widgets, getGeolocation);

@@ -8,10 +8,9 @@ interface HasuraUser extends User {
   user_id: number;
 }
 
-export default async (users): Promise<PartialTicket[]> => {
+export default (users): PartialTicket[] => {
   log("Entering tickets creation logic");
-  let tickets: PartialTicket[] = [];
-  const arr = users.map(async (user: HasuraUser) => {
+  const tickets: PartialTicket[] = users.map((user: HasuraUser) => {
     const {
       user_fields: {
         data_de_inscricao_no_bonde,
@@ -47,28 +46,16 @@ export default async (users): Promise<PartialTicket[]> => {
     };
 
     if (tipo_de_acolhimento === "psicológico_e_jurídico") {
-      return ["psicológico", "jurídico"].map(i => {
-        tickets = [
-          ...tickets,
-          {
-            ...ticket,
-            subject: subject(i)
-          }
-        ];
-      });
+      return ["psicológico", "jurídico"].map(i => ({
+        ...ticket,
+        subject: subject(i)
+      }));
     }
 
-    return (tickets = [
-      ...tickets,
-      {
-        ...ticket,
-        subject: subject(tipo_de_acolhimento || "Sem tipo de acolhimento")
-      }
-    ]);
+    return {
+      ...ticket,
+      subject: subject(tipo_de_acolhimento || "Sem tipo de acolhimento")
+    };
   });
-  try {
-    await Promise.all(arr);
-  } finally {
-    return tickets;
-  }
+  return tickets.flat(2);
 };
