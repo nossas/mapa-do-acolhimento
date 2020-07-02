@@ -99,13 +99,20 @@ class BondeCreatedDate {
     }
 
     try {
-      const [
-        { value: name },
-        { value: lastname },
-        // _,
-        // __,
-        { value: cep }
-      ] = JSON.parse(filteredFormEntries[0].fields);
+      const dicio = {
+        "field-1533735738039-59": "name",
+        "field-1533735745400-14": "lastname",
+        "field-1533735803691-45": "cep"
+      };
+      const fields = JSON.parse(filteredFormEntries[0].fields);
+      const userDetails = fields.reduce((newObj, old) => {
+        const key = dicio[old.uid] && dicio[old.uid];
+        return {
+          ...newObj,
+          [key]: old.value
+        };
+      }, {});
+      const { name, lastname, cep } = userDetails;
       const aux = {
         createdAt: filteredFormEntries[0].created_at,
         name:

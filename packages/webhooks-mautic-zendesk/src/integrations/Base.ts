@@ -47,7 +47,7 @@ abstract class Base {
         undefined,
         {
           params: {
-            address: cep,
+            address: `${cep},BR`,
             key: GOOGLE_MAPS_API_KEY
           }
         }
