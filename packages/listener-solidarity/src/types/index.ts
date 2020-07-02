@@ -13,7 +13,6 @@ export type FormEntriesResponse = {
 };
 export interface Widget {
   id: number;
-  organization_id: number;
   metadata: {
     form_mapping: Array<{ uid: string; name: string }>;
   };
@@ -30,6 +29,7 @@ export type User = {
   user_id?: number;
   verified: boolean;
   user_fields: {
+    color: string | null;
     condition: "inscrita" | "desabilitada";
     state: string;
     city: string;

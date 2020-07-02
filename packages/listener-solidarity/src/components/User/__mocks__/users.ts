@@ -50,6 +50,7 @@ export default {
         phone: "12988805543",
         verified: true,
         user_fields: {
+          color: null,
           address: geolocation.address,
           cep: geolocation.cep,
           city: geolocation.city,
@@ -74,6 +75,7 @@ export default {
         phone: "12988805543",
         verified: true,
         user_fields: {
+          color: null,
           address: geolocation.address,
           cep: geolocation.cep,
           city: geolocation.city,
@@ -98,6 +100,7 @@ export default {
         phone: "12988805543",
         verified: true,
         user_fields: {
+          color: null,
           address: geolocation.address,
           cep: geolocation.cep,
           city: geolocation.city,
@@ -136,6 +139,7 @@ export default {
         phone: "12988801144",
         role: "end-user",
         user_fields: {
+          color: null,
           address: geolocation.address,
           cep: geolocation.cep,
           city: geolocation.city,
@@ -203,6 +207,7 @@ export default {
         phone: "",
         verified: true,
         user_fields: {
+          color: null,
           address: geolocation.address,
           cep: geolocation.cep,
           city: geolocation.city,
@@ -227,6 +232,7 @@ export default {
         phone: "",
         verified: true,
         user_fields: {
+          color: null,
           address: geolocation.address,
           cep: geolocation.cep,
           city: geolocation.city,
@@ -251,6 +257,7 @@ export default {
         phone: "",
         verified: true,
         user_fields: {
+          color: null,
           address: geolocation.address,
           cep: geolocation.cep,
           city: geolocation.city,
@@ -275,6 +282,7 @@ export default {
         phone: "",
         verified: true,
         user_fields: {
+          color: null,
           address: geolocation.address,
           cep: geolocation.cep,
           city: geolocation.city,
@@ -314,6 +322,7 @@ export default {
         phone: "2100000000",
         verified: true,
         user_fields: {
+          color: null,
           address: geolocation.address,
           cep: geolocation.cep,
           city: geolocation.city,
@@ -353,6 +362,7 @@ export default {
         phone: "",
         verified: true,
         user_fields: {
+          color: null,
           address: geolocation.address,
           cep: geolocation.cep,
           city: geolocation.city,
@@ -401,6 +411,7 @@ export default {
         phone: "11 999988999",
         verified: true,
         user_fields: {
+          color: null,
           address: geolocation.address,
           cep: geolocation.cep,
           city: geolocation.city,
@@ -425,6 +436,7 @@ export default {
         phone: "11 999988999",
         verified: true,
         user_fields: {
+          color: null,
           address: geolocation.address,
           cep: geolocation.cep,
           city: geolocation.city,
@@ -473,6 +485,7 @@ export default {
         phone: "42988889999",
         verified: true,
         user_fields: {
+          color: null,
           address: geolocation.address,
           cep: geolocation.cep,
           city: geolocation.city,
@@ -497,6 +510,7 @@ export default {
         phone: "(021)988889999",
         verified: true,
         user_fields: {
+          color: null,
           address: geolocation.address,
           cep: geolocation.cep,
           city: geolocation.city,
@@ -545,6 +559,7 @@ export default {
         phone: "35988889999",
         verified: true,
         user_fields: {
+          color: null,
           address: geolocation.address,
           cep: geolocation.cep,
           city: geolocation.city,
@@ -569,6 +584,7 @@ export default {
         phone: "(47) 988889999",
         verified: true,
         user_fields: {
+          color: null,
           address: geolocation.address,
           cep: geolocation.cep,
           city: geolocation.city,
