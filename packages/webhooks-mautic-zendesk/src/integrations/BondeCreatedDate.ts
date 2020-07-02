@@ -101,8 +101,23 @@ class BondeCreatedDate {
     try {
       const dicio = {
         "field-1533735738039-59": "name",
+        "field-1464961964463-91": "name",
+        "field-1497368661426-82": "name",
+        "field-1530889190780-12": "name",
+        "field-1530889762581-19": "name",
+        "field-1533733461113-5": "name",
+        "field-1464961980231-76": "lastname",
         "field-1533735745400-14": "lastname",
-        "field-1533735803691-45": "cep"
+        "field-1497368672826-91": "lastname",
+        "field-1530889199847-58": "lastname",
+        "field-1530889778477-47": "lastname",
+        "field-1533733485653-99": "lastname",
+        "field-1533735803691-45": "cep",
+        "field-1464962010023-34": "cep",
+        "field-1497369214092-68": "cep",
+        "field-1530889290557-13": "cep",
+        "field-1530889888615-19": "cep",
+        "field-1533733650118-7": "cep"
       };
       const fields = JSON.parse(filteredFormEntries[0].fields);
       const userDetails = fields.reduce((newObj, old) => {
