@@ -2,8 +2,8 @@ import axios from "axios";
 import * as yup from "yup";
 import debug from "debug";
 
-const query = `query($advogadaId: Int!, $psicologaId: Int!) {
-  form_entries(where: {widget_id: {_in: [$advogadaId, $psicologaId]}}) {
+const query = `query($widgets: [Int!]!) {
+  form_entries(where: {widget_id: {_in: $widgets}}) {
     fields
     created_at
     widget_id
@@ -41,14 +41,12 @@ class BondeCreatedDate {
     const { HASURA_API_URL, X_HASURA_ADMIN_SECRET, WIDGET_IDS } = process.env;
     let widget_ids;
     try {
-      widget_ids = JSON.parse(WIDGET_IDS);
+      widget_ids = WIDGET_IDS.split(",").map(Number);
       if (
         !yup
-          .object()
-          .shape({
-            ADVOGADA: yup.number().required(),
-            PSICÓLOGA: yup.number().required()
-          })
+          .array()
+          .of(yup.string())
+          .min(6)
           .isValid(widget_ids)
       ) {
         throw new Error("Invalid WIDGET_IDS env var");
@@ -62,8 +60,7 @@ class BondeCreatedDate {
         {
           query,
           variables: {
-            advogadaId: widget_ids.ADVOGADA,
-            psicologaId: widget_ids["PSICÓLOGA"]
+            widgets: widget_ids
           }
         },
         {
