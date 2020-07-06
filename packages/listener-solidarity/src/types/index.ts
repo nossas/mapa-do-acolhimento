@@ -104,6 +104,7 @@ export type Instance = {
   registration_number?: string;
   occupation_area?: string;
   disponibilidade_de_atendimentos?: string;
+  cor?: string;
 };
 
 export const dicio: {
