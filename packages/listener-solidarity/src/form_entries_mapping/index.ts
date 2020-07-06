@@ -227,7 +227,7 @@ export default [
           uid: "field-1531256284908-34"
         },
         {
-          name: "color",
+          name: "cor",
           uid: "field-1593720108045-57"
         },
         {
@@ -270,7 +270,7 @@ export default [
           uid: "field-1531256284908-34"
         },
         {
-          name: "color",
+          name: "cor",
           uid: "field-1593717495650-80"
         },
         {

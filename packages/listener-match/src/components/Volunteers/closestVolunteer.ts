@@ -12,7 +12,6 @@ export default (
       const distance = calcDistance(pointA, pointB);
       return {
         ...volunteer,
-        name: volunteer.name.split(" ")[0],
         distance
       };
     })

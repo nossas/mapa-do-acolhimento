@@ -29,7 +29,7 @@ export type User = {
   user_id?: number;
   verified: boolean;
   user_fields: {
-    color: string | null;
+    cor: string | null;
     condition: "inscrita" | "desabilitada";
     state: string;
     city: string;
