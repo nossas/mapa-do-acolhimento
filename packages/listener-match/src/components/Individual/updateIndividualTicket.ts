@@ -1,3 +1,4 @@
+import Bottleneck from "bottleneck";
 import * as yup from "yup";
 import updateTicket from "../Services/updateTicket";
 import { IndividualTicket, Volunteer } from "../../types";
@@ -6,6 +7,11 @@ import dbg from "../../dbg";
 import individualComment from "./email";
 
 const log = dbg.extend("updateIndividualTicket");
+
+const limiter = new Bottleneck({
+  maxConcurrent: 1,
+  minTime: 500
+});
 
 const hasuraSchema = yup
   .object()
@@ -73,5 +79,6 @@ export default async (
       public: true
     }
   };
-  return await updateTicket(ticket, hasuraSchema);
+
+  return await limiter.schedule(() => updateTicket(ticket, hasuraSchema));
 };

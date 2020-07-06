@@ -1,9 +1,15 @@
+import Bottleneck from "bottleneck";
 import * as yup from "yup";
 import { updateTicket } from "../Services";
 import { getCurrentDate, agentSelectionDicio } from "../../utils";
 import dbg from "../../dbg";
 
 const log = dbg.extend("updateIndividualTicket");
+
+const limiter = new Bottleneck({
+  maxConcurrent: 1,
+  minTime: 500
+});
 
 const hasuraSchema = yup
   .object()
@@ -64,5 +70,5 @@ export default async (
       public: false
     }
   };
-  return await updateTicket(ticket, hasuraSchema);
+  return await limiter.schedule(() => updateTicket(ticket, hasuraSchema));
 };
