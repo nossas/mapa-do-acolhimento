@@ -117,6 +117,10 @@ export default async (
       if (instance[key]) register["user_fields"][key] = instance[key];
     }
 
+    register["user_fields"]["cor"] = instance.cor
+      ? instance.cor.toLowerCase().replace(/\s/g, "")
+      : null;
+
     if (![16850, 3297].includes(widget.id)) {
       register["user_fields"][
         "disponibilidade_de_atendimentos"
