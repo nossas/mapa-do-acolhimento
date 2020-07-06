@@ -23,7 +23,7 @@ Boa notícia!
 
 Conseguimos localizar uma ${type.toLowerCase()} disponível próxima a você. Estamos te enviando os dados abaixo para que entre em contato em até 30 dias. É muito importante atentar-se a esse prazo pois, após esse período, a sua vaga pode expirar. Não se preocupe, caso você não consiga, poderá retornar à fila de atendimento se cadastrando novamente pelo site.
 
-${type}: ${name}
+${type}: ${name.split(" ")[0]}
 
 Telefone: ${whatsapp || phone}
 

@@ -36,6 +36,7 @@ const CREATE_USERS_MUTATION = gql`
           user_fields
           community_id
           user_id
+          cor
         ]
       }
     ) {
@@ -74,6 +75,7 @@ const userSchema = yup
         whatsapp: yup.string().nullable(),
         verified: yup.boolean(),
         cep: yup.string().nullable(),
+        cor: yup.string().nullable(),
         user_fields: yup
           .object()
           .shape({
@@ -89,7 +91,8 @@ const userSchema = yup
             longitude: yup.string().required(),
             whatsapp: yup.string().nullable(),
             cep: yup.string().nullable(),
-            address: yup.string().required()
+            address: yup.string().required(),
+            cor: yup.string().nullable()
           })
           .required()
       })

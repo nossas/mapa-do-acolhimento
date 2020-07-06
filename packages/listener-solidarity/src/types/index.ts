@@ -13,7 +13,6 @@ export type FormEntriesResponse = {
 };
 export interface Widget {
   id: number;
-  organization_id: number;
   metadata: {
     form_mapping: Array<{ uid: string; name: string }>;
   };
@@ -30,6 +29,7 @@ export type User = {
   user_id?: number;
   verified: boolean;
   user_fields: {
+    cor: string | null;
     condition: "inscrita" | "desabilitada";
     state: string;
     city: string;
@@ -78,8 +78,8 @@ export type IndividualGeolocation = {
   address: string;
   state: string | null;
   city: string;
-  latitude: string;
-  longitude: string;
+  latitude: string | null;
+  longitude: string | null;
 };
 
 // Fields that come from BONDE widget
@@ -162,6 +162,8 @@ export type Ticket = {
   nome_voluntaria: string | null;
   status_inscricao: string | null;
   telefone: string | null;
+  atrelado_ao_ticket: string | null;
+  match_syncronized: boolean;
 };
 
 export type PartialTicket = Pick<

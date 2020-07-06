@@ -49,8 +49,8 @@ describe("geolocation tests", () => {
 
   const email = faker.internet.email();
   const invalidOutput = {
-    latitude: "ZERO_RESULTS",
-    longitude: "ZERO_RESULTS",
+    latitude: null,
+    longitude: null,
     address: `Endereço não encontrado - ${validOutput.address}`,
     state: null,
     city: "ZERO_RESULTS",

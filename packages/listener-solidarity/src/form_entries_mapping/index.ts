@@ -44,8 +44,7 @@ export default [
           uid: "field-1464962127079-77"
         }
       ]
-    },
-    organization_id: 360269610652
+    }
   },
   {
     id: 3297,
@@ -72,8 +71,7 @@ export default [
           uid: "field-1468597036505-17"
         }
       ]
-    },
-    organization_id: 360269610652
+    }
   },
   {
     id: 8190,
@@ -112,8 +110,7 @@ export default [
           uid: "field-1497369326335-47"
         }
       ]
-    },
-    organization_id: 360269610652
+    }
   },
   {
     id: 16835,
@@ -164,8 +161,7 @@ export default [
           uid: "field-1530889382200-77"
         }
       ]
-    },
-    organization_id: 360269610652
+    }
   },
   {
     id: 16838,
@@ -216,8 +212,7 @@ export default [
           uid: "field-1530890050032-24"
         }
       ]
-    },
-    organization_id: 360269610652
+    }
   },
   {
     id: 16850,
@@ -232,6 +227,14 @@ export default [
           uid: "field-1531256284908-34"
         },
         {
+          name: "cor",
+          uid: "field-1593720108045-57"
+        },
+        {
+          name: "whatsapp",
+          uid: "field-1593720184872-74"
+        },
+        {
           name: "state",
           uid: "field-1531256429599-79"
         },
@@ -252,8 +255,7 @@ export default [
           uid: "field-1546881946816-20"
         }
       ]
-    },
-    organization_id: 360269610652
+    }
   },
   {
     id: 62625,
@@ -268,6 +270,14 @@ export default [
           uid: "field-1531256284908-34"
         },
         {
+          name: "cor",
+          uid: "field-1593717495650-80"
+        },
+        {
+          name: "whatsapp",
+          uid: "field-1593717629660-4"
+        },
+        {
           name: "state",
           uid: "field-1531256429599-79"
         },
@@ -288,8 +298,7 @@ export default [
           uid: "field-1546881946816-20"
         }
       ]
-    },
-    organization_id: 360269610652
+    }
   },
   {
     id: 17628,
@@ -328,8 +337,7 @@ export default [
           uid: "field-1533734495315-40"
         }
       ]
-    },
-    organization_id: 360269610652
+    }
   },
   {
     id: 17633,
@@ -368,7 +376,6 @@ export default [
           uid: "field-1533735888966-20"
         }
       ]
-    },
-    organization_id: 360269610652
+    }
   }
 ];

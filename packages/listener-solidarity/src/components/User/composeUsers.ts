@@ -32,6 +32,7 @@ const createUser = (): User => ({
     city: "",
     cep: "",
     address: "",
+    cor: null,
     whatsapp: null,
     registration_number: null,
     occupation_area: null,

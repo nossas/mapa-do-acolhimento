@@ -2,8 +2,8 @@ import axios from "axios";
 import * as yup from "yup";
 import debug from "debug";
 
-const query = `query($advogadaId: Int!, $psicologaId: Int!) {
-  form_entries(where: {widget_id: {_in: [$advogadaId, $psicologaId]}}) {
+const query = `query($widgets: [Int!]!) {
+  form_entries(where: {widget_id: {_in: $widgets}}) {
     fields
     created_at
     widget_id
@@ -41,14 +41,12 @@ class BondeCreatedDate {
     const { HASURA_API_URL, X_HASURA_ADMIN_SECRET, WIDGET_IDS } = process.env;
     let widget_ids;
     try {
-      widget_ids = JSON.parse(WIDGET_IDS);
+      widget_ids = WIDGET_IDS.split(",").map(Number);
       if (
         !yup
-          .object()
-          .shape({
-            ADVOGADA: yup.number().required(),
-            PSICÓLOGA: yup.number().required()
-          })
+          .array()
+          .of(yup.string())
+          .min(6)
           .isValid(widget_ids)
       ) {
         throw new Error("Invalid WIDGET_IDS env var");
@@ -62,8 +60,7 @@ class BondeCreatedDate {
         {
           query,
           variables: {
-            advogadaId: widget_ids.ADVOGADA,
-            psicologaId: widget_ids["PSICÓLOGA"]
+            widgets: widget_ids
           }
         },
         {
@@ -101,8 +98,23 @@ class BondeCreatedDate {
     try {
       const dicio = {
         "field-1533735738039-59": "name",
+        "field-1464961964463-91": "name",
+        "field-1497368661426-82": "name",
+        "field-1530889190780-12": "name",
+        "field-1530889762581-19": "name",
+        "field-1533733461113-5": "name",
+        "field-1464961980231-76": "lastname",
         "field-1533735745400-14": "lastname",
-        "field-1533735803691-45": "cep"
+        "field-1497368672826-91": "lastname",
+        "field-1530889199847-58": "lastname",
+        "field-1530889778477-47": "lastname",
+        "field-1533733485653-99": "lastname",
+        "field-1533735803691-45": "cep",
+        "field-1464962010023-34": "cep",
+        "field-1497369214092-68": "cep",
+        "field-1530889290557-13": "cep",
+        "field-1530889888615-19": "cep",
+        "field-1533733650118-7": "cep"
       };
       const fields = JSON.parse(filteredFormEntries[0].fields);
       const userDetails = fields.reduce((newObj, old) => {
