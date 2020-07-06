@@ -88,8 +88,8 @@ export const processGeolocation = (
   }
 
   const i: IndividualGeolocation = {
-    latitude: "ZERO_RESULTS",
-    longitude: "ZERO_RESULTS",
+    latitude: null,
+    longitude: null,
     address: `Endereço não encontrado - ${searchAddress}`,
     state: null,
     city: "ZERO_RESULTS",
