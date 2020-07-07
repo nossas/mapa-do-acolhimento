@@ -4,7 +4,7 @@ import {
   fetchSolidarityMatches
 } from "../../graphql/queries";
 import { zendeskOrganizations } from "../../utils";
-import { Volunteer, PendingTickets } from "../../types";
+import { Volunteer, MatchTickets } from "../../types";
 import dbg from "../../dbg";
 
 const log = dbg.extend("fetchVolunteersAvailable");
@@ -55,6 +55,19 @@ const PENDING_MATCH_TICKETS = gql`
   }
 `;
 
+const ATTENDING_MATCH_TICKETS = gql`
+  query {
+    solidarity_matches(
+      order_by: { created_at: desc }
+      where: { status: { _eq: "atendimento__iniciado" } }
+    ) {
+      volunteers_user_id
+      volunteers_ticket_id
+      id
+    }
+  }
+`;
+
 export default async () => {
   log("Fetching available volunteers");
   const volunteersAvailable: Volunteer[] = await fetchSolidarityUsers({
@@ -72,11 +85,15 @@ export default async () => {
   // format last_month timestamp
   const timestamp = new Date(last_month).toISOString();
 
-  const pendingTickets: PendingTickets[] = await fetchSolidarityMatches({
+  const pendingTickets: MatchTickets[] = await fetchSolidarityMatches({
     query: PENDING_MATCH_TICKETS,
     variables: {
       last_month: timestamp
     }
+  });
+
+  const attendingTickets: MatchTickets[] = await fetchSolidarityMatches({
+    query: ATTENDING_MATCH_TICKETS
   });
 
   // only approved volunteers are available?
@@ -100,7 +117,11 @@ export default async () => {
       const countForwardings = pendingTickets.filter(
         ticket => ticket.volunteers_user_id === user_id
       ).length;
-      const availability = 1 - countForwardings;
+      const countBusy = attendingTickets.filter(
+        ticket => ticket.volunteers_user_id === user_id
+      ).length;
+
+      const availability = 1 - (countForwardings + countBusy);
 
       return {
         ...user,
