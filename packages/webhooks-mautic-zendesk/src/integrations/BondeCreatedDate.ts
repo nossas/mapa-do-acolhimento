@@ -16,11 +16,11 @@ interface FormEntry {
   widget_id: number;
 }
 
-interface DataType {
-  data: {
-    form_entries: FormEntry[];
-  };
-}
+// interface DataType {
+//   data: {
+//     form_entries: FormEntry[];
+//   };
+// }
 
 class BondeCreatedDate {
   email: string;
@@ -55,7 +55,7 @@ class BondeCreatedDate {
       return this.dbg(e);
     }
     try {
-      const data = await axios.post<DataType>(
+      const data = await axios.post(
         HASURA_API_URL!,
         {
           query,
@@ -69,7 +69,7 @@ class BondeCreatedDate {
           }
         }
       );
-      return data.data.data.form_entries;
+      return data && data.data && data.data.form_entries;
     } catch (e) {
       return this.dbg(e);
     }

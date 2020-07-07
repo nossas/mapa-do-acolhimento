@@ -3,7 +3,13 @@ import dbg from "../../dbg";
 
 const log = dbg.extend("fetchSolidarityMatches");
 
-const fetchSolidarityMatches = async ({ query, variables }) => {
+const fetchSolidarityMatches = async ({
+  query,
+  variables
+}: {
+  query;
+  variables?;
+}) => {
   try {
     const res = await GraphQLAPI.query({
       query,

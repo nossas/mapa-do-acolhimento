@@ -28,7 +28,7 @@ export type Volunteer = {
   ticket_id?: number;
 };
 
-export type PendingTickets = {
+export type MatchTickets = {
   volunteers_user_id: number;
   volunteers_ticket_id: number;
   id: number;
