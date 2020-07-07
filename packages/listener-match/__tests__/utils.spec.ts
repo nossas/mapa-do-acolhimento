@@ -2,7 +2,7 @@ import {
   getRequestedVolunteerType,
   getVolunteerOrganizationId,
   calcDistance,
-  filterCache,
+  getDifference,
   getCurrentDate,
   getVolunteerType,
   zendeskOrganizations
@@ -44,7 +44,7 @@ describe("Utils", () => {
   });
 
   let cache: IndividualTicket[] = [];
-  it("only add new items to cache if they werent in it", () => {
+  it("return elements that weren't stored", () => {
     const tickets_one = [
       {
         subject: "[Psicológico] Teste, Taubaté - SP",
@@ -77,8 +77,8 @@ describe("Utils", () => {
         __typename: "solidarity_tickets"
       }
     ];
-    cache = filterCache(cache, tickets_one);
-    expect(cache.sort()).toIncludeSameMembers(tickets_one.sort());
+    cache = getDifference(cache, tickets_one);
+    expect(cache).toIncludeSameMembers(tickets_one);
     const tickets_two = [
       {
         subject: "[Psicológico] Teste, Taubaté - SP",
@@ -101,8 +101,7 @@ describe("Utils", () => {
         __typename: "solidarity_tickets"
       }
     ];
-    cache = filterCache(cache, tickets_two);
-    expect(cache.sort()).toIncludeSameMembers(tickets_one.sort());
+    expect(getDifference(cache, tickets_two)).toStrictEqual([tickets_one[2]]);
   });
 
   it("returns the current date", () => {
