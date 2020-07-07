@@ -103,10 +103,12 @@ export const calcDistance = (pointA: number[], pointB: number[]) => {
   return Number(turf.distance(a, b));
 };
 
-export const filterCache = (
+export const getDifference = (
   cache: IndividualTicket[],
   tickets: IndividualTicket[]
 ) =>
   cache
     .filter(c => !tickets.map(t => t.ticket_id).includes(c.ticket_id))
-    .concat(tickets);
+    .concat(
+      tickets.filter(t => !cache.map(c => c.ticket_id).includes(t.ticket_id))
+    );

@@ -1,15 +1,31 @@
 import handleTicket from "./Services/handleTicket";
 import { fetchVolunteersAvailable } from "./Volunteers";
 import { updateSolidarityTickets } from "../graphql/mutations";
-import { filterCache } from "../utils";
+import { getDifference } from "../utils";
 import { SubscriptionResponse, IndividualTicket } from "../types";
 import dbg from "../dbg";
 
 const log = dbg.extend("match");
-const syncLog = dbg.extend("syncTickets");
+const syncLog = dbg.extend("match").extend("syncTickets");
 
 let AGENT = 1;
-let cache: IndividualTicket[] = [];
+const data: IndividualTicket[] = [];
+
+const Queue = (record?: IndividualTicket[]) => {
+  const add = () => data.unshift(...record);
+  const remove = () => data.pop();
+  const last = () =>
+    typeof data[data.length - 1] != "undefined"
+      ? data[data.length - 1]
+      : (({ ticket_id: undefined } as unknown) as IndividualTicket);
+  const size = () => data.length;
+  return {
+    add,
+    remove,
+    last,
+    size
+  };
+};
 
 const syncTickets = async (ids: number[]) => {
   syncLog(`Updating sync status from MSR tickets ${ids}`);
@@ -24,39 +40,60 @@ const syncTickets = async (ids: number[]) => {
   return sync && sync.map(s => s.ticket_id);
 };
 
-export const handleMatch = () => async (response: SubscriptionResponse) => {
-  log(`${new Date()}: \nReceiving data on subscription GraphQL API...`);
+const createMatch = async (ticket: IndividualTicket) => {
+  const volunteersAvailable = await fetchVolunteersAvailable();
 
-  const {
-    data: { solidarity_tickets: tickets }
-  } = response;
+  const matching = await handleTicket(ticket, volunteersAvailable, AGENT);
 
-  cache = filterCache(cache, tickets);
+  const resolvedMatchs =
+    typeof matching === "number" || typeof matching === "undefined"
+      ? matching
+      : matching.flat(2);
 
-  if (cache.length > 0) {
-    const volunteersAvailable = await fetchVolunteersAvailable();
+  if (!resolvedMatchs) {
+    log("No tickets to sync");
+    return undefined;
+  }
 
-    const matchs = cache.map(individualTicket =>
-      handleTicket(individualTicket, volunteersAvailable, AGENT)
-    );
+  const isSynced = await syncTickets(resolvedMatchs as number[]);
+  if (!isSynced) {
+    syncLog("Couldn't update sync status from MSR tickets:", resolvedMatchs);
+    return undefined;
+  }
 
-    const resolvedMatchs = (await Promise.all(matchs)).flat(2).filter(Boolean);
-    if (resolvedMatchs.length < 1) {
-      log("No tickets to sync");
-      return undefined;
-    }
+  log("Tickets that passed through match:", isSynced);
+  log("Match is done");
+  return true;
+};
 
-    const isSynced = await syncTickets(resolvedMatchs as number[]);
-    if (!isSynced) {
-      syncLog("Couldn't update sync status from MSR tickets:", resolvedMatchs);
-      return undefined;
-    }
+export const handleMatch = (oldTicket?: number) => async ({
+  data: { solidarity_tickets: tickets }
+}: SubscriptionResponse) => {
+  let oldLast: IndividualTicket | { ticket_id?: number };
+  if (tickets)
+    log(`${new Date()}: \nReceiving data on subscription GraphQL API...`);
 
-    log("Tickets that passed through match:", isSynced);
-    cache = cache.filter(c => !isSynced.includes(c.ticket_id));
+  if (oldTicket) {
+    // coming from recursion
+    Queue().remove();
+    oldLast = { ticket_id: oldTicket };
+  } else if (Queue().size() < 1 && tickets.length > 0) {
+    // first time
+    Queue(tickets).add();
+    oldLast = { ticket_id: undefined };
+  } else {
+    // enters here when subscription calls handleMatch again
+    oldLast = Queue().last();
+    const difference = getDifference(data, tickets);
+    if (difference.length > 0) Queue(difference).add();
+  }
 
-    log("Match is done");
-    return true;
+  if (Queue().size() > 0 && oldLast.ticket_id != Queue().last().ticket_id) {
+    await createMatch(Queue().last());
+    const response = {
+      data: { solidarity_tickets: [] }
+    };
+    return handleMatch(Queue().last().ticket_id)(response);
   } else {
     log("No tickets to sync");
     return undefined;
