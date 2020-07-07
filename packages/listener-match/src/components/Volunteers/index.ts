@@ -35,6 +35,7 @@ const FETCH_AVAILABLE_VOLUNTEERS = gql`
       phone
       registration_number
       id
+      atendimentos_em_andamento_calculado_
     }
   }
 `;
@@ -47,19 +48,6 @@ const PENDING_MATCH_TICKETS = gql`
         created_at: { _gte: $last_month }
         status: { _eq: "encaminhamento__realizado" }
       }
-    ) {
-      volunteers_user_id
-      volunteers_ticket_id
-      id
-    }
-  }
-`;
-
-const ATTENDING_MATCH_TICKETS = gql`
-  query {
-    solidarity_matches(
-      order_by: { created_at: desc }
-      where: { status: { _eq: "atendimento__iniciado" } }
     ) {
       volunteers_user_id
       volunteers_ticket_id
@@ -92,16 +80,12 @@ export default async () => {
     }
   });
 
-  const attendingTickets: MatchTickets[] = await fetchSolidarityMatches({
-    query: ATTENDING_MATCH_TICKETS
-  });
-
   // only approved volunteers are available?
   return volunteersAvailable
     .map(user => {
       const {
         // disponibilidade_de_atendimentos,
-        // atendimentos_em_andamento_calculado_,
+        atendimentos_em_andamento_calculado_,
         user_id
       } = user;
 
@@ -117,11 +101,9 @@ export default async () => {
       const countForwardings = pendingTickets.filter(
         ticket => ticket.volunteers_user_id === user_id
       ).length;
-      const countBusy = attendingTickets.filter(
-        ticket => ticket.volunteers_user_id === user_id
-      ).length;
 
-      const availability = 1 - (countForwardings + countBusy);
+      const availability =
+        1 - (countForwardings + atendimentos_em_andamento_calculado_);
 
       return {
         ...user,
