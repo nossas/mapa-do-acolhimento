@@ -66,27 +66,33 @@ const createMatch = async (ticket: IndividualTicket) => {
   return true;
 };
 
-export const handleMatch = (oldTicket?: number) => async ({
-  data: { solidarity_tickets: tickets }
-}: SubscriptionResponse) => {
-  let oldLast: IndividualTicket | { ticket_id?: number };
-  if (tickets)
-    log(`${new Date()}: \nReceiving data on subscription GraphQL API...`);
-
-  if (oldTicket) {
+const setRecursionLogic = (
+  tickets: IndividualTicket[],
+  lastTicketSynced?: number
+): IndividualTicket | { ticket_id?: number } => {
+  if (lastTicketSynced) {
     // coming from recursion
     Queue().remove();
-    oldLast = { ticket_id: oldTicket };
+    return { ticket_id: lastTicketSynced };
   } else if (Queue().size() < 1 && tickets.length > 0) {
     // first time
     Queue(tickets).add();
-    oldLast = { ticket_id: undefined };
+    return { ticket_id: undefined };
   } else {
     // enters here when subscription calls handleMatch again
-    oldLast = Queue().last();
     const difference = getDifference(data, tickets);
     if (difference.length > 0) Queue(difference).add();
+    return Queue().last();
   }
+};
+
+export const handleMatch = (lastTicketSynced?: number) => async ({
+  data: { solidarity_tickets: tickets }
+}: SubscriptionResponse) => {
+  if (tickets.length > 0)
+    log(`${new Date()}: \nReceiving data on subscription GraphQL API...`);
+
+  const oldLast = setRecursionLogic(tickets, lastTicketSynced);
 
   if (Queue().size() > 0 && oldLast.ticket_id != Queue().last().ticket_id) {
     await createMatch(Queue().last());
