@@ -11,21 +11,15 @@ const syncLog = dbg.extend("match").extend("syncTickets");
 let AGENT = 1;
 const data: IndividualTicket[] = [];
 
-const Queue = (record?: IndividualTicket[]) => {
-  const add = () => data.unshift(...record);
-  const remove = () => data.pop();
-  const last = () =>
-    typeof data[data.length - 1] != "undefined"
-      ? data[data.length - 1]
-      : (({ ticket_id: undefined } as unknown) as IndividualTicket);
-  const size = () => data.length;
-  return {
-    add,
-    remove,
-    last,
-    size
-  };
-};
+export const Queue = (data: IndividualTicket[]) => ({
+  add: (record?: IndividualTicket[]) => data.push(...record),
+  remove: () => data.shift(),
+  first: () =>
+    typeof data[0] != "undefined"
+      ? data[0]
+      : (({ ticket_id: undefined } as unknown) as IndividualTicket),
+  size: () => data.length
+});
 
 const syncTickets = async (ids: number[]) => {
   syncLog(`Updating sync status from MSR tickets ${ids}`);
@@ -66,23 +60,23 @@ const createMatch = async (ticket: IndividualTicket) => {
   return true;
 };
 
-const setRecursionLogic = (
+export const setRecursionLogic = (
   tickets: IndividualTicket[],
   lastTicketSynced?: number
 ): IndividualTicket | { ticket_id?: number } => {
   if (lastTicketSynced) {
     // coming from recursion
-    Queue().remove();
+    Queue(data).remove();
     return { ticket_id: lastTicketSynced };
-  } else if (Queue().size() < 1 && tickets.length > 0) {
+  } else if (Queue(data).size() < 1 && tickets.length > 0) {
     // first time
-    Queue(tickets).add();
+    Queue(data).add(tickets);
     return { ticket_id: undefined };
   } else {
     // enters here when subscription calls handleMatch again
     const difference = getDifference(data, tickets);
-    if (difference.length > 0) Queue(difference).add();
-    return Queue().last();
+    if (difference.length > 0) Queue(data).add(difference);
+    return Queue(data).first();
   }
 };
 
@@ -92,14 +86,17 @@ export const handleMatch = (lastTicketSynced?: number) => async ({
   if (tickets.length > 0)
     log(`${new Date()}: \nReceiving data on subscription GraphQL API...`);
 
-  const oldLast = setRecursionLogic(tickets, lastTicketSynced);
+  const oldFirst = setRecursionLogic(tickets, lastTicketSynced);
 
-  if (Queue().size() > 0 && oldLast.ticket_id != Queue().last().ticket_id) {
-    await createMatch(Queue().last());
+  if (
+    Queue(data).size() > 0 &&
+    oldFirst.ticket_id != Queue(data).first().ticket_id
+  ) {
+    await createMatch(Queue(data).first());
     const response = {
       data: { solidarity_tickets: [] }
     };
-    return handleMatch(Queue().last().ticket_id)(response);
+    return handleMatch(Queue(data).first().ticket_id)(response);
   } else {
     log("No tickets to sync");
     return undefined;
