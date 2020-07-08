@@ -7,6 +7,7 @@ export type IndividualTicket = {
   status_acolhimento: string;
   external_id: number;
 };
+
 export type SubscriptionResponse = {
   data: {
     solidarity_tickets: Array<IndividualTicket & { __typename: string }>;
