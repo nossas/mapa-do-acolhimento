@@ -64,8 +64,14 @@ const userSchema = yup
         community_id: yup.string().required(),
         data_de_inscricao_no_bonde: yup.string().required(),
         address: yup.string().required(),
-        latitude: yup.string().required(),
-        longitude: yup.string().required(),
+        latitude: yup
+          .string()
+          .nullable()
+          .defined(),
+        longitude: yup
+          .string()
+          .nullable()
+          .defined(),
         phone: yup.string().nullable(),
         state: yup.string().nullable(),
         tipo_de_acolhimento: yup.string().nullable(),
@@ -87,8 +93,14 @@ const userSchema = yup
             registration_number: yup.string().nullable(),
             occupation_area: yup.string().nullable(),
             disponibilidade_de_atendimentos: yup.string().nullable(),
-            latitude: yup.string().required(),
-            longitude: yup.string().required(),
+            latitude: yup
+              .string()
+              .nullable()
+              .defined(),
+            longitude: yup
+              .string()
+              .nullable()
+              .defined(),
             whatsapp: yup.string().nullable(),
             cep: yup.string().nullable(),
             address: yup.string().required(),

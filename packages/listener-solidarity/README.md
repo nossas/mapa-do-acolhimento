@@ -19,6 +19,7 @@ These are the widgets separared by user types:
 - MSR
   - 3297
   - 16850
+  - 62625
 
 ## User
 
