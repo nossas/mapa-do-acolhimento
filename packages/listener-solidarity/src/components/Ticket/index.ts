@@ -45,6 +45,10 @@ const saveTicketInHasura = async (ticket: Ticket, widget_id: number) => {
   const inserted = await insertSolidarityTickets({
     ...ticket,
     ...custom_fields,
+    atrelado_ao_ticket:
+      custom_fields.atrelado_ao_ticket === null
+        ? null
+        : Number(custom_fields.atrelado_ao_ticket),
     ticket_id: ticket.id,
     community_id: Number(process.env.COMMUNITY_ID),
     match_syncronized: widget_id === 62625 ? false : true

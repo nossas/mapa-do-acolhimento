@@ -69,8 +69,8 @@ export interface Ticket {
   estado: string | null;
   cidade: string | null;
   community_id: number;
-  atrelado_ao_ticket: number | null;
-  external_id: number | null;
+  atrelado_ao_ticket: string | number | null; // when saving in hasura, it needs to be number or null
+  external_id: string | number | null; // when saving in hasura, it needs to be number or null
 }
 
 export const handleCustomFields = (ticket: Ticket) => {
@@ -85,27 +85,20 @@ export const handleCustomFields = (ticket: Ticket) => {
     {} as CustomFields
   );
 
-  // newTicket.custom_fields.forEach(i => {
-  //   if (dicio[i.id]) {
-  //     if (i.id === 360014379412) {
-  //       newTicket[dicio[i.id]] = i.value as status_acolhimento_values;
-  //     } else {
-  //       newTicket[dicio[i.id]] = i.value;
-  //     }
-  //   }
-  // });
-
   const finalTicket = {
     ...ticket,
     ...custom_fields,
     ticket_id: ticket.id,
     community_id: Number(process.env.COMMUNITY_ID),
     atrelado_ao_ticket:
-      typeof ticket.atrelado_ao_ticket === "number"
-        ? ticket.atrelado_ao_ticket
+      custom_fields["atrelado_ao_ticket"] !== "X" &&
+      custom_fields["atrelado_ao_ticket"] !== null
+        ? Number(custom_fields["atrelado_ao_ticket"])
         : null,
     external_id:
-      typeof ticket.external_id === "number" ? ticket.external_id : null
+      ticket.external_id !== "X" && ticket.external_id !== null
+        ? Number(ticket.external_id)
+        : null
   } as Ticket;
 
   return finalTicket;

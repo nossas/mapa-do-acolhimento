@@ -199,6 +199,7 @@ export type CustomFields = {
   telefone?: null;
   estado?: null;
   cidade?: null;
+  atrelado_ao_ticket?: string | null;
 };
 
 export type status_acolhimento_values =
