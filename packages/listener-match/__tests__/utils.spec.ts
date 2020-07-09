@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   getRequestedVolunteerType,
   getVolunteerOrganizationId,
@@ -7,7 +8,6 @@ import {
   getVolunteerType,
   zendeskOrganizations
 } from "../src/utils";
-import { IndividualTicket } from "../src/types";
 
 describe("Utils", () => {
   it('should return "therapist" if support type is "psicológico"', () => {
@@ -44,124 +44,61 @@ describe("Utils", () => {
   });
 
   describe("getDifference should return elements that weren't in cache", () => {
-    const tickets_one = [
+    const tickets_one: any = [
       {
-        subject: "[Psicológico] Teste, Taubaté - SP",
-        ticket_id: 22625,
-        atrelado_ao_ticket: null,
-        requester_id: 399466521691,
-        nome_msr: "Teste",
-        status_acolhimento: "solicitação_recebida",
-        external_id: 2000362,
-        __typename: "solidarity_tickets"
+        ticket_id: 22625
       },
       {
-        subject: "[Jurídico] Teste, Taubaté - SP",
-        ticket_id: 22626,
-        atrelado_ao_ticket: null,
-        requester_id: 399466521691,
-        nome_msr: "Teste",
-        status_acolhimento: "solicitação_recebida",
-        external_id: 2000362,
-        __typename: "solidarity_tickets"
+        ticket_id: 22626
       },
       {
-        subject: "[Jurídico] Teste Teste 2, São Paulo - SP",
-        ticket_id: 22628,
-        atrelado_ao_ticket: 22626,
-        requester_id: 399466521691,
-        nome_msr: "Teste Teste 2",
-        status_acolhimento: "solicitação_recebida",
-        external_id: 2000362,
-        __typename: "solidarity_tickets"
+        ticket_id: 22628
       }
     ];
-    const tickets_two = [
+    const tickets_two: any = [
       {
-        subject: "[Psicológico] Teste, Taubaté - SP",
-        ticket_id: 22625,
-        atrelado_ao_ticket: null,
-        requester_id: 399466521691,
-        nome_msr: "Teste",
-        status_acolhimento: "solicitação_recebida",
-        external_id: 2000362,
-        __typename: "solidarity_tickets"
+        ticket_id: 22625
       },
       {
-        subject: "[Jurídico] Teste, Taubaté - SP",
-        ticket_id: 22626,
-        atrelado_ao_ticket: null,
-        requester_id: 399466521691,
-        nome_msr: "Teste",
-        status_acolhimento: "solicitação_recebida",
-        external_id: 2000362,
-        __typename: "solidarity_tickets"
+        ticket_id: 22626
       }
     ];
-    const tickets_three = [
+    const tickets_three: any = [
       {
-        subject: "[Psicológico] Teste, Taubaté - SP",
-        ticket_id: 22630,
-        atrelado_ao_ticket: null,
-        requester_id: 399466521691,
-        nome_msr: "Teste",
-        status_acolhimento: "solicitação_recebida",
-        external_id: 2000362,
-        __typename: "solidarity_tickets"
+        ticket_id: 22630
       }
     ];
-    const tickets_four = [
+    const tickets_four: any = [
       {
-        subject: "[Psicológico] Teste, Taubaté - SP",
-        ticket_id: 22630,
-        atrelado_ao_ticket: null,
-        requester_id: 399466521691,
-        nome_msr: "Teste",
-        status_acolhimento: "solicitação_recebida",
-        external_id: 2000362,
-        __typename: "solidarity_tickets"
+        ticket_id: 22630
       },
       {
-        subject: "[Jurídico] Teste, Cuiabá - MT",
-        ticket_id: 22631,
-        atrelado_ao_ticket: null,
-        requester_id: 399466521691,
-        nome_msr: "Teste",
-        status_acolhimento: "solicitação_recebida",
-        external_id: 2000362,
-        __typename: "solidarity_tickets"
+        ticket_id: 22631
       },
       {
-        subject: "[Psicológico] Teste, Belo Horizonte - BH",
-        ticket_id: 22632,
-        atrelado_ao_ticket: null,
-        requester_id: 399466521691,
-        nome_msr: "Teste",
-        status_acolhimento: "solicitação_recebida",
-        external_id: 2000362,
-        __typename: "solidarity_tickets"
+        ticket_id: 22632
       }
     ];
     it("should return all tickets, because cache is empty and add them to cache", () => {
-      let cache: IndividualTicket[] = [];
+      let cache: any = [];
       expect(getDifference(cache, tickets_one)).toStrictEqual(tickets_one);
       cache = getDifference(cache, tickets_one);
       expect(cache).toStrictEqual(tickets_one);
     });
     it("should return an empty array, and cache stays the same", () => {
-      let cache: IndividualTicket[] = tickets_one;
+      let cache = tickets_one;
       expect(getDifference(cache, tickets_two)).toStrictEqual([]);
       cache = [...cache, ...getDifference(cache, tickets_two)];
       expect(cache).toStrictEqual(tickets_one);
     });
     it("should return the different ticket and add it to cache", () => {
-      let cache: IndividualTicket[] = [...tickets_one];
+      let cache = [...tickets_one];
       expect(getDifference(cache, tickets_three)).toStrictEqual(tickets_three);
       cache = [...cache, ...getDifference(cache, tickets_three)];
       expect(cache).toStrictEqual([...tickets_one, ...tickets_three]);
     });
     it("should return the different ticket and add it to cache", () => {
-      let cache: IndividualTicket[] = tickets_one;
+      let cache = tickets_one;
       expect(getDifference(cache, tickets_four)).toStrictEqual(tickets_four);
       cache = [...cache, ...getDifference(cache, tickets_four)];
       expect(cache).toStrictEqual([...tickets_one, ...tickets_four]);

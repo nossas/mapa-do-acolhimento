@@ -1,4 +1,3 @@
-import Bottleneck from "bottleneck";
 import * as yup from "yup";
 import { createTicket } from "../Zendesk";
 import { saveSolidarityTicket } from "../../graphql/mutations";
@@ -12,11 +11,6 @@ import { IndividualTicket, Volunteer } from "../../types";
 import dbg from "../../dbg";
 
 const log = dbg.extend("createVolunteerTicket");
-
-const limiter = new Bottleneck({
-  maxConcurrent: 1,
-  minTime: 500
-});
 
 const hasuraSchema = yup
   .object()
@@ -98,7 +92,7 @@ export default async (
       `Creating a ticket to volunteer '${ticket.requester_id}' in Zendesk...`
     );
 
-    const zendeskTicket = await limiter.schedule(() => createTicket(ticket));
+    const zendeskTicket = await createTicket(ticket);
     if (!zendeskTicket) {
       throw new Error("Zendesk ticket creation returned errors");
     }
