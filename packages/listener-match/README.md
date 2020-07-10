@@ -35,6 +35,8 @@ In Cluster the service is under "listeners" and has the name "match"
 
 ### Improvements
 
+- Add integration testing
+- Add E2E testing
 - Implementing a queue would probably be a more sofisticated way to handle the refresh rate and the need for the match to be synchronous
   - A queue was implemented, but I'd like to use an [Immutable Data Structure to structure the queue](https://xiaoyunyang.github.io/post/when-to-use-immutable-data-structures/)
 

@@ -1,7 +1,8 @@
 import { Queue } from "../src/components";
+import { IndividualTicket } from "../src/types";
 
 describe("Test queue operations", () => {
-  const data = [];
+  let data: IndividualTicket[] = [];
   const tickets = [
     {
       subject: "[Psicológico] Viviane, Taubaté - SP",
@@ -26,17 +27,17 @@ describe("Test queue operations", () => {
   ];
 
   it("should add data to the beginning of the array", () => {
-    Queue(data).add(tickets);
+    data = Queue.add(data, tickets);
     expect(data).toStrictEqual(tickets);
   });
   it("should remove the first item from the array", () => {
-    Queue(data).remove();
+    data = Queue.remove(data, tickets[0].ticket_id);
     expect(data).toStrictEqual([tickets[1]]);
   });
   it("should return the first item from the array", () => {
-    expect(Queue(data).first()).toStrictEqual(tickets[1]);
+    expect(Queue.first(data)).toStrictEqual(tickets[1]);
   });
   it("should return the size of the array", () => {
-    expect(Queue(data).size()).toStrictEqual(1);
+    expect(Queue.size(data)).toStrictEqual(1);
   });
 });
