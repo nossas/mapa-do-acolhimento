@@ -14,6 +14,19 @@ import dbg from "../../dbg";
 
 const log = dbg.extend("handleTicket");
 
+const setReferences = (ticket: IndividualTicket) => {
+  if (
+    ticket.status_acolhimento === "solicitação_repetida" &&
+    ticket.atrelado_ao_ticket
+  ) {
+    return {
+      ...ticket,
+      ticket_id: ticket.atrelado_ao_ticket
+    };
+  }
+  return ticket;
+};
+
 export default async (
   individualTicket: IndividualTicket,
   volunteersAvailable: Volunteer[],
@@ -37,10 +50,7 @@ export default async (
     return ticketId;
   }
 
-  const newTicketId = ticketId;
-  if (statusAcolhimento === "solicitação_repetida" && atreladoAoTicket) {
-    individualTicket["ticket_id"] = atreladoAoTicket;
-  }
+  const localIndividualTicket = setReferences(individualTicket);
 
   const volunteerType = getRequestedVolunteerType(subject);
   if (!volunteerType) return ticketId;
@@ -69,26 +79,26 @@ export default async (
 
   const volunteerTicketId = await createVolunteerTicket(
     volunteer,
-    individualTicket,
+    localIndividualTicket,
     AGENT
   );
   if (!volunteerTicketId) return undefined;
   volunteer["ticket_id"] = volunteerTicketId;
 
   const updateIndividual = await updateIndividualTicket(
-    individualTicket,
+    localIndividualTicket,
     volunteer as Volunteer & { ticket_id: number },
     AGENT
   );
   if (!updateIndividual) return undefined;
 
   const matchTicket = await createMatchTicket(
-    individualTicket,
+    localIndividualTicket,
     volunteer as Volunteer & { ticket_id: number }
   );
   if (!matchTicket) return undefined;
 
-  return individualTicket["ticket_id"] !== newTicketId
-    ? [newTicketId, updateIndividual]
+  return localIndividualTicket["ticket_id"] !== individualTicket["ticket_id"]
+    ? [individualTicket["ticket_id"], updateIndividual]
     : updateIndividual;
 };
