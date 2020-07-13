@@ -9,17 +9,21 @@ const log = dbg.extend("match");
 const syncLog = dbg.extend("match").extend("syncTickets");
 
 let AGENT = 1;
-const data: IndividualTicket[] = [];
+let data: IndividualTicket[] = [];
 
-export const Queue = (data: IndividualTicket[]) => ({
-  add: (record?: IndividualTicket[]) => data.push(...record),
-  remove: () => data.shift(),
-  first: () =>
+export const Queue = {
+  add: (data: IndividualTicket[], record: IndividualTicket[]) => [
+    ...data,
+    ...record
+  ],
+  remove: (data: IndividualTicket[], ticket_id: number) =>
+    data.filter(t => t.ticket_id !== ticket_id),
+  first: (data: IndividualTicket[]) =>
     typeof data[0] != "undefined"
       ? data[0]
       : (({ ticket_id: undefined } as unknown) as IndividualTicket),
-  size: () => data.length
-});
+  size: (data: IndividualTicket[]) => data.length
+};
 
 const syncTickets = async (ids: number[]) => {
   syncLog(`Updating sync status from MSR tickets ${ids}`);
@@ -66,17 +70,17 @@ export const setRecursionLogic = (
 ): IndividualTicket | { ticket_id?: number } => {
   if (lastTicketSynced) {
     // coming from recursion
-    Queue(data).remove();
+    data = Queue.remove(data, lastTicketSynced);
     return { ticket_id: lastTicketSynced };
-  } else if (Queue(data).size() < 1 && tickets.length > 0) {
+  } else if (Queue.size(data) < 1 && tickets.length > 0) {
     // first time
-    Queue(data).add(tickets);
+    data = Queue.add(data, tickets);
     return { ticket_id: undefined };
   } else {
     // enters here when subscription calls handleMatch again
     const difference = getDifference(data, tickets);
-    if (difference.length > 0) Queue(data).add(difference);
-    return Queue(data).first();
+    if (difference.length > 0) data = Queue.add(data, difference);
+    return Queue.first(data);
   }
 };
 
@@ -89,14 +93,14 @@ export const handleMatch = (lastTicketSynced?: number) => async ({
   const oldFirst = setRecursionLogic(tickets, lastTicketSynced);
 
   if (
-    Queue(data).size() > 0 &&
-    oldFirst.ticket_id != Queue(data).first().ticket_id
+    Queue.size(data) > 0 &&
+    oldFirst.ticket_id != Queue.first(data).ticket_id
   ) {
-    await createMatch(Queue(data).first());
+    await createMatch(Queue.first(data));
     const response = {
       data: { solidarity_tickets: [] }
     };
-    return handleMatch(Queue(data).first().ticket_id)(response);
+    return handleMatch(Queue.first(data).ticket_id)(response);
   } else {
     log("No tickets to sync");
     return undefined;

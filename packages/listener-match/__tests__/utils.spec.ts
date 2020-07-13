@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   getRequestedVolunteerType,
   getVolunteerOrganizationId,
@@ -7,7 +8,6 @@ import {
   getVolunteerType,
   zendeskOrganizations
 } from "../src/utils";
-import { IndividualTicket } from "../src/types";
 
 describe("Utils", () => {
   it('should return "therapist" if support type is "psicológico"', () => {
@@ -43,65 +43,66 @@ describe("Utils", () => {
     );
   });
 
-  let cache: IndividualTicket[] = [];
-  it("return elements that weren't stored", () => {
-    const tickets_one = [
+  describe("getDifference should return elements that weren't in cache", () => {
+    const tickets_one: any = [
       {
-        subject: "[Psicológico] Teste, Taubaté - SP",
-        ticket_id: 22625,
-        atrelado_ao_ticket: null,
-        requester_id: 399466521691,
-        nome_msr: "Teste",
-        status_acolhimento: "solicitação_recebida",
-        external_id: 2000362,
-        __typename: "solidarity_tickets"
+        ticket_id: 22625
       },
       {
-        subject: "[Jurídico] Teste, Taubaté - SP",
-        ticket_id: 22626,
-        atrelado_ao_ticket: null,
-        requester_id: 399466521691,
-        nome_msr: "Teste",
-        status_acolhimento: "solicitação_recebida",
-        external_id: 2000362,
-        __typename: "solidarity_tickets"
+        ticket_id: 22626
       },
       {
-        subject: "[Jurídico] Teste Teste 2, São Paulo - SP",
-        ticket_id: 22628,
-        atrelado_ao_ticket: 22626,
-        requester_id: 399466521691,
-        nome_msr: "Teste Teste 2",
-        status_acolhimento: "solicitação_recebida",
-        external_id: 2000362,
-        __typename: "solidarity_tickets"
+        ticket_id: 22628
       }
     ];
-    cache = getDifference(cache, tickets_one);
-    expect(cache).toIncludeSameMembers(tickets_one);
-    const tickets_two = [
+    const tickets_two: any = [
       {
-        subject: "[Psicológico] Teste, Taubaté - SP",
-        ticket_id: 22625,
-        atrelado_ao_ticket: null,
-        requester_id: 399466521691,
-        nome_msr: "Teste",
-        status_acolhimento: "solicitação_recebida",
-        external_id: 2000362,
-        __typename: "solidarity_tickets"
+        ticket_id: 22625
       },
       {
-        subject: "[Jurídico] Teste, Taubaté - SP",
-        ticket_id: 22626,
-        atrelado_ao_ticket: null,
-        requester_id: 399466521691,
-        nome_msr: "Teste",
-        status_acolhimento: "solicitação_recebida",
-        external_id: 2000362,
-        __typename: "solidarity_tickets"
+        ticket_id: 22626
       }
     ];
-    expect(getDifference(cache, tickets_two)).toStrictEqual([tickets_one[2]]);
+    const tickets_three: any = [
+      {
+        ticket_id: 22630
+      }
+    ];
+    const tickets_four: any = [
+      {
+        ticket_id: 22630
+      },
+      {
+        ticket_id: 22631
+      },
+      {
+        ticket_id: 22632
+      }
+    ];
+    it("should return all tickets, because cache is empty and add them to cache", () => {
+      let cache: any = [];
+      expect(getDifference(cache, tickets_one)).toStrictEqual(tickets_one);
+      cache = getDifference(cache, tickets_one);
+      expect(cache).toStrictEqual(tickets_one);
+    });
+    it("should return an empty array, and cache stays the same", () => {
+      let cache = tickets_one;
+      expect(getDifference(cache, tickets_two)).toStrictEqual([]);
+      cache = [...cache, ...getDifference(cache, tickets_two)];
+      expect(cache).toStrictEqual(tickets_one);
+    });
+    it("should return the different ticket and add it to cache", () => {
+      let cache = [...tickets_one];
+      expect(getDifference(cache, tickets_three)).toStrictEqual(tickets_three);
+      cache = [...cache, ...getDifference(cache, tickets_three)];
+      expect(cache).toStrictEqual([...tickets_one, ...tickets_three]);
+    });
+    it("should return the different ticket and add it to cache", () => {
+      let cache = tickets_one;
+      expect(getDifference(cache, tickets_four)).toStrictEqual(tickets_four);
+      cache = [...cache, ...getDifference(cache, tickets_four)];
+      expect(cache).toStrictEqual([...tickets_one, ...tickets_four]);
+    });
   });
 
   it("returns the current date", () => {
