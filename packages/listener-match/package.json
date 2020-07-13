@@ -43,6 +43,7 @@
     "graphql-tag": "^2.10.3",
     "node-zendesk": "1.4.0",
     "subscriptions-transport-ws": "^0.9.16",
+    "throng": "^4.0.0",
     "ws": "^7.3.0",
     "yup": "^0.29.1"
   }
