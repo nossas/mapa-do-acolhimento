@@ -1,9 +1,13 @@
-import { Ticket } from "../types";
+import { Ticket, ZendeskOrganizations } from "../types";
+
+const zendeskOrganizations: ZendeskOrganizations = JSON.parse(
+  process.env.ZENDESK_ORGANIZATIONS || "{}"
+);
 
 export const organizationsIds = {
-  MSR: 360273031591,
-  THERAPIST: 360282119532,
-  LAWYER: 360269610652
+  MSR: zendeskOrganizations["individual"],
+  THERAPIST: zendeskOrganizations["therapist"],
+  LAWYER: zendeskOrganizations["lawyer"]
 };
 
 export const setType = (type: string | null) => {
