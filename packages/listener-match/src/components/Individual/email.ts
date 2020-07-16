@@ -25,7 +25,7 @@ Conseguimos localizar uma ${type.toLowerCase()} disponível próxima a você. Es
 
 ${type}: ${name.split(" ")[0]}
 
-Telefone: ${whatsapp || phone}
+Telefone: ${phone || whatsapp}
 
 ${registry_type}: ${registration_number}
 
