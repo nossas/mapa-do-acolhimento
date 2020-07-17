@@ -1,6 +1,7 @@
+import { getGeolocation } from "bonde-core-tools";
 import * as yup from "yup";
 import { Response } from "express";
-import Base, { GMAPS_ERRORS } from "./Base";
+import Base from "./Base";
 
 export enum CONDITION {
   UNSET = "unset",
@@ -147,31 +148,19 @@ class AdvogadaCreateUser extends Base {
       return {};
       // this.setCondition(condition, CONDITION.REPROVADA_REGISTRO_INVÁLIDO)
     }
-    const {
-      error,
-      lat: latitude,
-      lng: longitude,
-      address,
-      city,
-      state,
-      tagInvalidCep
-    } = await this.getAddress(newData.cep);
+    const { latitude, longitude, ...rest } = await getGeolocation({
+      cep: newData.cep,
+      email: newData.email
+    });
 
-    let tags: string[] | undefined;
-    if (error === GMAPS_ERRORS.INVALID_INPUT) {
-      tags = ["cep-incorreto"];
-      // this.setCondition(condition, CONDITION.REPROVADA_REGISTRO_INVÁLIDO)
-    } else {
-      tags = tagInvalidCep ? ["cep-incorreto"] : undefined;
-    }
+    const tags: string[] | undefined =
+      latitude === null || longitude === null ? ["cep-incorreto"] : undefined;
 
     return {
       ...newData,
+      ...rest,
       latitude,
       longitude,
-      address,
-      city,
-      state,
       tags
     };
   };
@@ -242,8 +231,8 @@ class AdvogadaCreateUser extends Base {
               registration_number: yup.string().nullable(),
               occupation_area: yup.string().nullable(),
               ultima_atualizacao_de_dados: yup.date().nullable(),
-              latitude: yup.number().nullable(),
-              longitude: yup.number().nullable(),
+              latitude: yup.string().nullable(),
+              longitude: yup.string().nullable(),
               address: yup.string().nullable(),
               city: yup.string().nullable(),
               state: yup
