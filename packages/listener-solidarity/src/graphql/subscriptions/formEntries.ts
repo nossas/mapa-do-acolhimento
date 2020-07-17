@@ -2,9 +2,9 @@ import gql from "graphql-tag";
 import { client as GraphQLAPI } from "..";
 import { handleIntegration } from "../../components";
 import { Widget } from "../../types";
-import dbg from "../../dbg";
+import logger from "../../logger";
 
-const log = dbg.extend("subscriptionFormEntries");
+const log = logger.child({ module: "subscriptionFormEntries" });
 
 const FORM_ENTRIES_SUBSCRIPTION = gql`
   subscription pipeline_form_entries($widgets: [Int!], $community_id: Int!) {
@@ -26,7 +26,7 @@ const FORM_ENTRIES_SUBSCRIPTION = gql`
 `;
 
 const error = err => {
-  log("Receiving error on subscription GraphQL API: ", err);
+  log.error("Receiving error on subscription GraphQL API: %o", err);
 };
 
 export default async (widgets: Widget[]): Promise<unknown> => {
@@ -42,7 +42,7 @@ export default async (widgets: Widget[]): Promise<unknown> => {
 
     return observable;
   } catch (err) {
-    log("failed on subscription: ".red, err);
+    log.error("failed on subscription: %o", err);
     return undefined;
   }
 };

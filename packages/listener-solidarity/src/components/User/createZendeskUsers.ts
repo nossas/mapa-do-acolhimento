@@ -1,18 +1,18 @@
 import client from "../../zendesk";
 import { User, ZendeskUserCreationResponse } from "../../types";
-import dbg from "../../dbg";
+import logger from "../../logger";
 
-const log = dbg.extend("createZendeskUsers");
+const log = logger.child({ module: "createZendeskUsers" });
 
 export default async (
   users: User[]
 ): Promise<ZendeskUserCreationResponse[] | undefined> => {
-  log(`${new Date()}: \nEntering createZendeskUser`);
+  log.info(`${new Date()}: \nEntering createZendeskUser`);
   // ADD YUP VALIDATION
   return new Promise(resolve => {
     return client.users.createOrUpdateMany({ users }, (err, _req, result) => {
       if (err) {
-        log(err);
+        log.error(err);
         return resolve(undefined);
       }
       return client.jobstatuses.watch(
@@ -21,7 +21,7 @@ export default async (
         0,
         (err, _req, result) => {
           if (err) {
-            log(err);
+            log.error(err);
             return resolve(undefined);
           }
           const results = result as { job_status: { status: string; results } };

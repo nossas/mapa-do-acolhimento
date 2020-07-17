@@ -1,4 +1,5 @@
 import { Ticket, ZendeskOrganizations } from "../types";
+import log from "../logger";
 
 const zendeskOrganizations: ZendeskOrganizations = JSON.parse(
   process.env.ZENDESK_ORGANIZATIONS || "{}"
@@ -53,16 +54,15 @@ export const getOrganizationType = (
 };
 
 export const handleUserError = entries => {
-  console.log(
-    `Integration failed in these form entries ${entries.map(
-      e => e.external_id
-    )}`
+  log.error(
+    "Integration failed in these form entries %s",
+    entries.map(e => e.external_id)
   );
   return undefined;
 };
 
 export const handleTicketError = ({ requester_id }) => {
-  console.log(`Ticket integration failed for this user ${requester_id}`);
+  log.error(`Ticket integration failed for this user ${requester_id}`);
   return undefined;
 };
 
@@ -102,5 +102,3 @@ export const getStatusAcolhimento = (
   const status = ticket.custom_fields.find(field => field.id === 360014379412);
   return status && status.value;
 };
-
-export { default as getGeolocation } from "./geocoding";

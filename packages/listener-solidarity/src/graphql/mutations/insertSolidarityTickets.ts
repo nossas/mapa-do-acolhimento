@@ -1,9 +1,9 @@
 import gql from "graphql-tag";
 import * as yup from "yup";
 import { client as GraphQLAPI } from "../";
-import dbg from "../../dbg";
+import logger from "../../logger";
 
-const log = dbg.extend("insertSolidarityTickets");
+const log = logger.child({ module: "insertSolidarityTickets" });
 
 const CREATE_TICKETS_MUTATION = gql`
   mutation createSolidarityTicket($ticket: solidarity_tickets_insert_input!) {
@@ -92,7 +92,7 @@ const schema = yup
   .required();
 
 const insertSolidarityTickets = async ticket => {
-  log(`Saving ticket '${ticket.id}' in Hasura...`);
+  log.info(`Saving ticket '${ticket.id}' in Hasura...`);
   try {
     const validatedTicket = await schema.validate(ticket, {
       stripUnknown: true
@@ -104,7 +104,7 @@ const insertSolidarityTickets = async ticket => {
     });
 
     if (res && res.data && res.data.errors) {
-      log("failed on insert solidarity tickets: ".red, res.data.errors);
+      log.error("failed on insert solidarity tickets: %o", res.data.errors);
       return undefined;
     }
 
@@ -118,7 +118,7 @@ const insertSolidarityTickets = async ticket => {
       insert_solidarity_tickets_one && insert_solidarity_tickets_one.ticket_id
     );
   } catch (err) {
-    log("failed on insert solidarity tickets: ".red, err);
+    log.error("failed on insert solidarity tickets: %o", err);
     return undefined;
   }
 };

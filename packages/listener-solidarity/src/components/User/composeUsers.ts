@@ -8,10 +8,9 @@ import {
   Fields,
   IndividualGeolocation
 } from "../../types";
-import dbg from "../../dbg";
+import logger from "../../logger";
 
-const log = dbg.extend("composeUser");
-
+const log = logger.child({ module: "composeUser" });
 const limiter = new Bottleneck({
   maxConcurrent: 1,
   minTime: 1000
@@ -74,7 +73,7 @@ export default async (
   widgets: Widget[],
   getGeolocation
 ): Promise<User[]> => {
-  log("Composing users...");
+  log.info("Composing users...");
   const users = cache.map(async (formEntry: FormEntry) => {
     const fields: Fields = JSON.parse(formEntry.fields);
     const widget = widgets.find((w: Widget) => w.id === formEntry.widget_id);
@@ -135,6 +134,7 @@ export default async (
     const geocoding = (await limiter.schedule(() =>
       getGeolocation(instance)
     )) as IndividualGeolocation;
+    // log.debug({ geocoding });
     Object.keys(geocoding).map(g => {
       register["user_fields"][g] = geocoding[g];
     });
@@ -149,7 +149,7 @@ export default async (
       instance.tipo_de_acolhimento
     );
 
-    // log({ register });
+    // log.debug({ register });
 
     return register;
   });
