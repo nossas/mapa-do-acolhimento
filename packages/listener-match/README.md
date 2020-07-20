@@ -53,6 +53,7 @@ In Cluster the service is under "listeners" and has the name "match"
   - `ZENDESK_ORGANIZATIONS` are the organization_id's from the types of Zendesk users
   - `COMMUNITY_ID` is the community id from Mapa do Acolhimento in BONDE
 - When running the `dev` script, the service will start listening to the subscription detailed in the file `fetchSolidarityTickets`. If any tickets that fits through those filters arrives at the database, Hasura will send them to us. 
+- In order to get tickets in your database, execute the package `cli-zendesk`
 
 
 ### Tips for testing locally

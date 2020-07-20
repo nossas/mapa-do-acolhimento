@@ -1,3 +1,9 @@
+export type ZendeskOrganizations = {
+  therapist: number;
+  individual: number;
+  lawyer: number;
+};
+
 export type FormEntry = {
   fields: string;
   id: number;
