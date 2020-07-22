@@ -1,8 +1,8 @@
 import { extractTypeFromSubject, getStatusAcolhimento } from "../../utils";
 import { Ticket } from "../../types";
-import dbg from "../../dbg";
+import logger from "../../logger";
 
-const log = dbg.extend("checkOldTickets");
+const log = logger.child({ module: "checkOldTickets" });
 
 const getOldestTicket = (tickets: Ticket[]) =>
   tickets.sort(
@@ -14,7 +14,7 @@ export default (
   subject: string,
   tickets: Ticket[]
 ): { relatedTickets: number | number[]; agent: number } | false => {
-  log("Checking old tickets");
+  log.info("Checking old tickets");
   const newSubject = extractTypeFromSubject(subject);
 
   const hasSameSubject = tickets.filter(oldTicket => {

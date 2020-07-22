@@ -1,8 +1,8 @@
 import gql from "graphql-tag";
 import { client as GraphQLAPI } from "../";
-import dbg from "../../dbg";
+import logger from "../../logger";
 
-const log = dbg.extend("updateFormEntries");
+const log = logger.child({ module: "updateFormEntries" });
 
 const FORM_ENTRIES_MUTATION = gql`
   mutation update_form_entries($forms: [Int!]) {
@@ -30,7 +30,7 @@ const FORM_ENTRIES_MUTATION = gql`
 // };
 
 const updateFormEntries = async (forms: number[]) => {
-  log("Updating form_entries syncronized on GraphQL API...");
+  log.info("Updating form_entries syncronized on GraphQL API...");
   try {
     const res = await GraphQLAPI.mutate({
       mutation: FORM_ENTRIES_MUTATION,
@@ -38,7 +38,7 @@ const updateFormEntries = async (forms: number[]) => {
     });
 
     if (res && res.data && res.data.errors) {
-      log(`failed on update form entries: ${forms}`.red, res.data.errors);
+      log.error(`failed on update form entries: ${forms} %o`, res.data.errors);
       return undefined;
     }
 
@@ -50,7 +50,7 @@ const updateFormEntries = async (forms: number[]) => {
 
     return formEntries;
   } catch (err) {
-    log(`failed on update form entries: ${forms}`.red, err);
+    log.error(`failed on update form entries: ${forms} %o`, err);
     return undefined;
   }
 };

@@ -1,15 +1,16 @@
 import { capitalize, formatDate } from "../../utils";
 import { User, PartialTicket } from "../../types";
-import dbg from "../../dbg";
+import logger from "../../logger";
 
-const log = dbg.extend("composeTickets");
+const log = logger.child({ module: "composeTickets" });
+
 interface HasuraUser extends User {
   community_id: number;
   user_id: number;
 }
 
 export default (users): PartialTicket[] => {
-  log("Entering tickets creation logic");
+  log.info("Entering tickets creation logic");
   const tickets: PartialTicket[] = users.map((user: HasuraUser) => {
     const {
       user_fields: {

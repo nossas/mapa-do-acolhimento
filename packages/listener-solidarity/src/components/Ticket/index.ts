@@ -3,17 +3,17 @@ import client from "../../zendesk";
 import { insertSolidarityTickets } from "../../graphql/mutations";
 import { handleTicketError } from "../../utils";
 import { Ticket, CustomFields, PartialTicket, FormEntry } from "../../types";
-import dbg from "../../dbg";
 import Bottleneck from "bottleneck";
+import logger from "../../logger";
 
 const limiter = new Bottleneck({
   maxConcurrent: 1,
   minTime: 2000
 });
 
-const createTicketLog = dbg.extend("createTicket");
-const fetchUserTicketsLog = dbg.extend("fetchUserTickets");
-const log = dbg.extend("createZendeskTickets");
+const createTicketLog = logger.child({ module: "createTicket" });
+const fetchUserTicketsLog = logger.child({ module: "fetchUserTickets" });
+const log = logger.child({ module: "createZendeskTickets" });
 
 const dicio = {
   360014379412: "status_acolhimento",
@@ -30,7 +30,7 @@ const dicio = {
 };
 
 const saveTicketInHasura = async (ticket: Ticket, widget_id: number) => {
-  createTicketLog("Preparing ticket to be saved in Hasura");
+  createTicketLog.info("Preparing ticket to be saved in Hasura");
   const custom_fields: CustomFields = ticket.custom_fields.reduce(
     (newObj, old) => {
       const key = dicio[old.id] && dicio[old.id];
@@ -54,20 +54,20 @@ const saveTicketInHasura = async (ticket: Ticket, widget_id: number) => {
     match_syncronized: widget_id === 62625 ? false : true
   });
   if (!inserted) return handleTicketError(ticket);
-  return createTicketLog("Ticket integration is done.");
+  return createTicketLog.info("Ticket integration is done.");
 };
 
 const createTicket = (
   ticket,
   widget_id: number
 ): Promise<boolean | undefined> => {
-  createTicketLog(`${new Date()}: CREATE TICKET`);
+  createTicketLog.info(`${new Date()}: CREATE TICKET`);
   // ADD YUP VALIDATION
   return new Promise(resolve => {
     return client.tickets.create({ ticket }, (err, _req, result) => {
       if (err) {
-        createTicketLog(
-          `Failed to create ticket for user '${ticket.requester_id}'`.red,
+        createTicketLog.error(
+          `Failed to create ticket for user '${ticket.requester_id}' %o`,
           err
         );
         return resolve(undefined);
@@ -79,7 +79,7 @@ const createTicket = (
       //     2
       //   )}`
       // );
-      createTicketLog("Zendesk ticket created successfully!");
+      createTicketLog.info("Zendesk ticket created successfully!");
       saveTicketInHasura(result as Ticket, widget_id);
       return resolve(true);
     });
@@ -89,14 +89,14 @@ const createTicket = (
 export const fetchUserTickets = async ({
   requester_id
 }): Promise<Ticket[] | undefined> => {
-  fetchUserTicketsLog(`${new Date()}: LIST USER TICKETS`);
+  fetchUserTicketsLog.info(`${new Date()}: LIST USER TICKETS`);
   return new Promise(resolve => {
     return client.tickets.listByUserRequested(
       requester_id,
       (err, _req, result) => {
         if (err) {
-          fetchUserTicketsLog(
-            `Failed to fetch tickets from user '${requester_id}'`.red,
+          fetchUserTicketsLog.error(
+            `Failed to fetch tickets from user '${requester_id}' %o`,
             err
           );
           return resolve(undefined);
@@ -109,10 +109,10 @@ export const fetchUserTickets = async ({
 };
 
 export default async (tickets: PartialTicket[], entries: FormEntry[]) => {
-  log(`${new Date()}: Entering createZendeskTickets`);
+  log.info(`${new Date()}: Entering createZendeskTickets`);
   const createTickets = tickets.map(async ticket => {
     const userTickets = await limiter.schedule(() => fetchUserTickets(ticket));
-    if (!userTickets) return handleTicketError(ticket);
+    if (!userTickets) return undefined;
 
     const relatableTickets = checkOldTickets(ticket.subject, userTickets);
     const entry = entries.find(

@@ -1,14 +1,14 @@
 import Bottleneck from "bottleneck";
+import { getGeolocation } from "bonde-core-tools";
 
 import { makeBatchRequests, composeUsers } from "./User";
 import createZendeskTickets, { composeTickets } from "./Ticket";
 import { insertSolidarityUsers, updateFormEntries } from "../graphql/mutations";
-import { getGeolocation, handleUserError, removeDuplicatesBy } from "../utils";
+import { handleUserError, removeDuplicatesBy } from "../utils";
 import { Widget, FormEntry, User, FormEntriesResponse } from "../types";
-import dbg from "../dbg";
+import logger from "../logger";
 
-const log = dbg.extend("integration");
-
+const log = logger.child({ module: "integration" });
 const limiter = new Bottleneck({
   maxConcurrent: 1,
   minTime: 1000
@@ -20,7 +20,7 @@ export const handleIntegration = (widgets: Widget[]) => async (
   response: FormEntriesResponse
 ) => {
   let syncronizedForms: number[] = [];
-  log(`${new Date()}: \nReceiving data on subscription GraphQL API...`);
+  log.info(`${new Date()}: Receiving data on subscription GraphQL API...`);
 
   const {
     data: { form_entries: entries }
@@ -38,9 +38,9 @@ export const handleIntegration = (widgets: Widget[]) => async (
     // Create users in Zendesk
     const userBatches = await makeBatchRequests(usersToRegister);
     if (!userBatches) {
-      log(
-        `Zendesk user creation failed on these form entries:
-        ${cache}`.red
+      log.error(
+        "Zendesk user creation failed on these form entries: %o",
+        cache
       );
       return undefined;
     }
@@ -54,14 +54,14 @@ export const handleIntegration = (widgets: Widget[]) => async (
       userBatches.length < 1 ||
       usersToRegister.length < 1
     ) {
-      log(
-        "Zendesk user creation results with error:".red,
+      log.error(
+        "Zendesk user creation results with error: %o",
         userBatches.filter(u => !!u.error)
       );
       return handleUserError(usersToRegister);
     }
 
-    log("Preparing zendesk users to be saved in Hasura");
+    log.info("Preparing zendesk users to be saved in Hasura");
     const hasuraUsers = userBatches
       .filter(r => !(r.error && r.error.match(/PermissionDenied/i)))
       .map(r => {
@@ -99,17 +99,17 @@ export const handleIntegration = (widgets: Widget[]) => async (
     ];
     const updateEntries = await updateFormEntries(syncronizedForms);
     if (!updateEntries) {
-      log(
-        `Couldn't update form entries with already syncronized forms: ${syncronizedForms}`
-          .red
+      log.error(
+        "Couldn't update form entries with already syncronized forms: %o",
+        syncronizedForms
       );
       return undefined;
     }
-    log({ syncronizedForms });
-    log("User integration is done.");
+    log.info({ syncronizedForms });
+    log.info("User integration is done.");
     return (cache = []);
   } else {
-    log("No items for integration.");
+    log.info("No items for integration.");
   }
 };
 

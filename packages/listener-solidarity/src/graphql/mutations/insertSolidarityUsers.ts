@@ -1,9 +1,9 @@
 import gql from "graphql-tag";
 import * as yup from "yup";
 import { client as GraphQLAPI } from "../";
-import dbg from "../../dbg";
+import logger from "../../logger";
 
-const log = dbg.extend("insertSolidarityUsers");
+const log = logger.child({ module: "insertSolidarityUsers" });
 
 const CREATE_USERS_MUTATION = gql`
   mutation insert_solidarity_users($users: [solidarity_users_insert_input!]!) {
@@ -117,7 +117,7 @@ type Users = yup.InferType<typeof userSchema>;
 const insertSolidarityUsers = async (
   users: Users
 ): Promise<{ external_id: number }[] | undefined> => {
-  log("Saving users in Hasura...");
+  log.info("Saving users in Hasura...");
   const ids = users.map(u => u.external_id);
   try {
     const validatedUsers = await userSchema.validate(users, {
@@ -130,7 +130,10 @@ const insertSolidarityUsers = async (
     });
 
     if (res && res.data && res.data.errors) {
-      log(`failed on insert solidarity users: ${ids}`.red, res.data.errors);
+      log.error(
+        `failed on insert solidarity users: ${ids} %o`,
+        res.data.errors
+      );
       return undefined;
     }
 
@@ -142,7 +145,7 @@ const insertSolidarityUsers = async (
 
     return returning;
   } catch (err) {
-    log(`failed on insert solidarity users: ${ids}`.red, err);
+    log.error(`failed on insert solidarity users: ${ids} %o`, err);
     return undefined;
   }
 };
