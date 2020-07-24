@@ -7,6 +7,6 @@ packages:
   # - "packages/client-solidarity"
   - "packages/listener-solidarity"
   - "packages/listener-match"
+  - "packages/components"
   # - "packages/cli-mautic"
-  # - "packages/webhooks-solidarity-match"
-  # - "packages/webhook-mail"
+
