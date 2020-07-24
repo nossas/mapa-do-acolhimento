@@ -20,7 +20,7 @@
     "dev:ticket": "DEBUG=cli-zendesk* tsc-watch --onSuccess \"node --inspect dist/index.js -m ticket\"",
     "dev:help": "DEBUG=cli-zendesk* tsc-watch --onSuccess \"node --inspect dist/index.js --help\"",
     "clean": "rm -rf node_modules dist",
-    "build": "tsc --sourcemap",
+    "build": "tsc -p tsconfig.json",
     "test": "jest --coverage --passWithNoTests"
   },
   "devDependencies": {

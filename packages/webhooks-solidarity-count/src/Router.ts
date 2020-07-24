@@ -34,7 +34,7 @@ const getTicketIdFromRequest = async (req: Express.Request) => {
   return id;
 };
 
-const Router = () =>
+const Router = (): Express.Express =>
   Express()
     .use(Express.json())
     .use(JSONErrorHandler)
