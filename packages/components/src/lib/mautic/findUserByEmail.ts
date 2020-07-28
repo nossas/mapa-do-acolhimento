@@ -1,8 +1,9 @@
 import axios from "axios";
 import { getToken } from "../../utils";
+import { ContactSearchRes } from "../../types";
 import log from "../../logger";
 
-export default async (email: string) => {
+export default async (email: string): Promise<ContactSearchRes | undefined> => {
   const {
     MAUTIC_API_URL,
     MAUTIC_USERNAME = "",
