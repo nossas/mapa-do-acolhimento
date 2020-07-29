@@ -7,7 +7,6 @@ export type Contact = {
   city: string;
   state1: string;
   address: string;
-  cep: string | null;
   phone: string | null;
   whatsapp: string | null;
   tipo_de_acolhimento: string | null;
