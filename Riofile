@@ -1,0 +1,12 @@
+services:
+  webhook-count:
+    app: mapa-do-acolhimento
+    version: v0
+    build:
+      repo: https://github.com/nossas/mapa-do-acolhimento
+      branch: feature/rio-setup
+      context: .
+    command:
+      - pnpm m run start --filter webhook-solidarity-count
+    ports:
+      - 8080:80/http,web
