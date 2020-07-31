@@ -3,6 +3,9 @@ import { getToken } from "../../utils";
 import { ContactSearchRes } from "../../types";
 import log from "../../logger";
 
+/**
+ * Tries to find a Mautic contact based on the email passed in the param
+ */
 export default async (email: string): Promise<ContactSearchRes | undefined> => {
   const {
     MAUTIC_API_URL,

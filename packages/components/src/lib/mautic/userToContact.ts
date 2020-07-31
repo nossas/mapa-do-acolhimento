@@ -21,6 +21,10 @@ const schema = yup
   })
   .required();
 
+/*
+ * Creates a new Mutic contact object based on the User data passed
+ * from the param.
+ */
 export const newContact = async (user: User): Promise<Contact | undefined> => {
   const contact = {
     ...user,
@@ -42,6 +46,11 @@ export const newContact = async (user: User): Promise<Contact | undefined> => {
   }
 };
 
+/**
+ * Searchs Mautic to find if contact already exists.
+ * We'll update it if it does, if not, we'll create
+ * a new one.
+ */
 export default async (
   user: User
 ): Promise<{ contact: FullContact } | undefined> => {
