@@ -94,8 +94,7 @@ export const handleIntegration = (widgets: Widget[]) => async (
     if (!inserted) handleUserError(withoutDuplicates);
 
     // Save users in Mautic
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    await userToContact(withoutDuplicates as any);
+    await userToContact(withoutDuplicates);
 
     // Batch update syncronized forms
     syncronizedForms = [
