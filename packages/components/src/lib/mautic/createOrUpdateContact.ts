@@ -1,7 +1,9 @@
 import axios from "axios";
 import { getToken } from "../../utils";
 import { Contact, FullContact } from "../../types";
-import log from "../../logger";
+import logger from "./childLogger";
+
+const log = logger.child({ module: "createOrUpdateContact" });
 
 /**
  * Creates or updates a Mautic Contact based on the params id and body

@@ -1,7 +1,9 @@
 import axios from "axios";
 import { getToken } from "../../utils";
 import { ContactSearchRes } from "../../types";
-import log from "../../logger";
+import logger from "./childLogger";
+
+const log = logger.child({ module: "findUserByEmail" });
 
 /**
  * Tries to find a Mautic contact based on the email passed in the param

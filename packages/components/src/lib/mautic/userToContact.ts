@@ -1,7 +1,9 @@
 import * as yup from "yup";
 import { User, FullContact, Contact } from "../../types";
 import { findUserByEmail, createOrUpdateContact } from "../mautic";
-import log from "../../logger";
+import logger from "./childLogger";
+
+const log = logger.child({ module: "userToContact" });
 
 const schema = yup
   .object()
@@ -12,7 +14,7 @@ const schema = yup
     data_de_inscricao_no_bond: yup.string().defined(),
     f_condition: yup.string().required(),
     city: yup.string().required(),
-    state1: yup.string().required(),
+    state1: yup.string().defined(),
     address: yup.string().required(),
     phone: yup.string().defined(),
     whatsapp: yup.string().defined(),
@@ -32,7 +34,7 @@ export const newContact = async (user: User): Promise<Contact | undefined> => {
     firstname: user.name,
     data_de_inscricao_no_bond: user.user_fields.data_de_inscricao_no_bonde,
     f_condition: user.user_fields.condition,
-    state1: user.user_fields.state.toLowerCase()
+    state1: user.user_fields.state ? user.user_fields.state.toLowerCase() : null
   };
   try {
     const validatedContact = await schema.validate(contact, {
