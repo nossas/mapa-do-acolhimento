@@ -223,6 +223,7 @@ importers:
       bonde-core-tools: 0.1.6-alpha.3_f280a79c7b9d3eb7560fc7c341d769d6
       bottleneck: 2.19.5
       colors: 1.4.0
+      components: 'link:../components'
       cross-fetch: 3.0.5
       debug: 4.1.1
       dotenv-safe: 8.2.0
@@ -268,6 +269,7 @@ importers:
       bonde-core-tools: ^0.1.6-alpha.3
       bottleneck: ^2.19.5
       colors: ^1.4.0
+      components: 'workspace:^0.0.3'
       cross-fetch: ^3.0.4
       debug: ^4.1.1
       dotenv-safe: ^8.2.0

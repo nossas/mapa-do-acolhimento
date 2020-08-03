@@ -1,6 +1,6 @@
 import Bottleneck from "bottleneck";
 import { getGeolocation } from "bonde-core-tools";
-
+import { userToContact } from "components/dist";
 import { makeBatchRequests, composeUsers } from "./User";
 import createZendeskTickets, { composeTickets } from "./Ticket";
 import { insertSolidarityUsers, updateFormEntries } from "../graphql/mutations";
@@ -58,12 +58,13 @@ export const handleIntegration = (widgets: Widget[]) => async (
         "Zendesk user creation results with error: %o",
         userBatches.filter(u => !!u.error)
       );
-      return handleUserError(usersToRegister);
+      handleUserError(usersToRegister);
+      return undefined;
     }
 
     log.info("Preparing zendesk users to be saved in Hasura");
     const hasuraUsers = userBatches
-      .filter(r => !(r.error && r.error.match(/PermissionDenied/i)))
+      .filter(r => !(r.error && r.error.match(/permissiondenied/i)))
       .map(r => {
         const user = usersToRegister.find(u => u.external_id === r.external_id);
         return {
@@ -90,12 +91,18 @@ export const handleIntegration = (widgets: Widget[]) => async (
 
     // Save users in Hasura
     const inserted = await insertSolidarityUsers(withoutDuplicates as never);
-    if (!inserted) return handleUserError(withoutDuplicates);
+    if (!inserted) handleUserError(withoutDuplicates);
+
+    // Save users in Mautic
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await userToContact(withoutDuplicates as any);
 
     // Batch update syncronized forms
     syncronizedForms = [
       ...syncronizedForms,
-      ...inserted.filter(i => !!i.external_id).map(i => i.external_id)
+      ...(withoutDuplicates as User[])
+        .filter(i => !!i.external_id)
+        .map(i => Number(i.external_id))
     ];
     const updateEntries = await updateFormEntries(syncronizedForms);
     if (!updateEntries) {
