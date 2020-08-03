@@ -52,18 +52,28 @@ export const newContact = async (user: User): Promise<Contact | undefined> => {
  * a new one.
  */
 export default async (
-  user: User
-): Promise<{ contact: FullContact } | undefined> => {
-  const findUser = await findUserByEmail(user.email);
-  let mauticId = 0;
-  if (findUser && findUser.total > 0) {
-    log.info("Found a user with this email");
-    mauticId = Number(Object.keys(findUser.contacts)[0]);
-  }
+  users: User[]
+): Promise<Array<{ contact: FullContact } | undefined>> => {
+  const contacts = users.map(async user => {
+    const findUser = await findUserByEmail(user.email);
+    let mauticId = 0;
+    if (findUser && findUser.total > 0) {
+      log.info("Found a user with this email");
+      mauticId = Number(Object.keys(findUser.contacts)[0]);
+    }
 
-  const contact = await newContact(user);
+    const contact = await newContact(user);
 
-  if (!contact) return undefined;
+    if (!contact) {
+      log.error(`Failed to create new contact with email ${user.email}`);
+      return undefined;
+    }
 
-  return await createOrUpdateContact(mauticId, contact);
+    const create = await createOrUpdateContact(mauticId, contact);
+    if (!create) {
+      log.error(`Failed to create or update contact in Mautic ${user.email}`);
+    }
+    return create;
+  });
+  return await Promise.all(contacts);
 };
