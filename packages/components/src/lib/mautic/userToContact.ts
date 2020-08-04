@@ -11,7 +11,7 @@ const schema = yup
     firstname: yup.string().required(),
     email: yup.string().required(),
     user_id: yup.number().required(),
-    data_de_inscricao_no_bond: yup.string().defined(),
+    data_de_inscricao_no_bond1: yup.string().defined(),
     f_condition: yup.string().required(),
     city: yup.string().required(),
     state1: yup.string().defined(),
@@ -19,7 +19,8 @@ const schema = yup
     phone: yup.string().defined(),
     whatsapp: yup.string().defined(),
     tipo_de_acolhimento: yup.string().defined(),
-    cor: yup.string().defined()
+    cor: yup.string().defined(),
+    organization_id: yup.number().required()
   })
   .required();
 
@@ -32,7 +33,7 @@ export const newContact = async (user: User): Promise<Contact | undefined> => {
     ...user,
     ...user.user_fields,
     firstname: user.name,
-    data_de_inscricao_no_bond: user.user_fields.data_de_inscricao_no_bonde,
+    data_de_inscricao_no_bond1: user.user_fields.data_de_inscricao_no_bonde,
     f_condition: user.user_fields.condition,
     state1: user.user_fields.state ? user.user_fields.state.toLowerCase() : null
   };

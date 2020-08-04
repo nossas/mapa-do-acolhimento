@@ -2,7 +2,7 @@ export type Contact = {
   firstname: string;
   email: string;
   user_id: number;
-  data_de_inscricao_no_bond: string;
+  data_de_inscricao_no_bond1: string;
   f_condition: string;
   city: string;
   state1: string;
@@ -10,6 +10,7 @@ export type Contact = {
   phone: string | null;
   whatsapp: string | null;
   tipo_de_acolhimento: string | null;
+  organization_id: number;
 };
 
 export interface ContactSearchRes {

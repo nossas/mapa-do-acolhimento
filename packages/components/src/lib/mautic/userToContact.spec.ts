@@ -43,7 +43,7 @@ describe("Check if user is correctly transformed into Mautic contact", () => {
       firstname: "Joana Lima",
       email: "joana@email.com",
       user_id: 123123,
-      data_de_inscricao_no_bond: "2020-05-29T00:25:28.593533",
+      data_de_inscricao_no_bond1: "2020-05-29T00:25:28.593533",
       f_condition: "desabilitada" as StatusMulher,
       city: geolocation.city,
       state1: geolocation.state,
@@ -51,7 +51,8 @@ describe("Check if user is correctly transformed into Mautic contact", () => {
       phone: "12988805543",
       whatsapp: "12988805543",
       tipo_de_acolhimento: null,
-      cor: null
+      cor: null,
+      organization_id: 360269610652
     };
     const contact = await newContact(user);
 
