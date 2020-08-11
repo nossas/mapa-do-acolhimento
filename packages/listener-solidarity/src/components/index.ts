@@ -1,6 +1,6 @@
 import Bottleneck from "bottleneck";
 import { getGeolocation } from "bonde-core-tools";
-import { userToContact } from "components/dist";
+// import { userToContact } from "components/dist";
 import { makeBatchRequests, composeUsers } from "./User";
 import createZendeskTickets, { composeTickets } from "./Ticket";
 import { insertSolidarityUsers, updateFormEntries } from "../graphql/mutations";
@@ -93,8 +93,8 @@ export const handleIntegration = (widgets: Widget[]) => async (
     const inserted = await insertSolidarityUsers(withoutDuplicates as never);
     if (!inserted) handleUserError(withoutDuplicates);
 
-    // Save users in Mautic
-    await userToContact(withoutDuplicates);
+    // // Save users in Mautic
+    // await userToContact(withoutDuplicates);
 
     // Batch update syncronized forms
     syncronizedForms = [
