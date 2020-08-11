@@ -2,7 +2,7 @@ import { checkOldTickets } from "./";
 import client from "../../zendesk";
 import { insertSolidarityTickets } from "../../graphql/mutations";
 import { handleTicketError } from "../../utils";
-import { Ticket, CustomFields, PartialTicket, FormEntry } from "../../types";
+import { Ticket, CustomFields, PartialTicket } from "../../types";
 import Bottleneck from "bottleneck";
 import logger from "../../logger";
 
@@ -29,7 +29,7 @@ const dicio = {
   360032229831: "atrelado_ao_ticket"
 };
 
-const saveTicketInHasura = async (ticket: Ticket, widget_id: number) => {
+const saveTicketInHasura = async (ticket: Ticket) => {
   createTicketLog.info("Preparing ticket to be saved in Hasura");
   const custom_fields: CustomFields = ticket.custom_fields.reduce(
     (newObj, old) => {
@@ -51,16 +51,13 @@ const saveTicketInHasura = async (ticket: Ticket, widget_id: number) => {
         : Number(custom_fields.atrelado_ao_ticket),
     ticket_id: ticket.id,
     community_id: Number(process.env.COMMUNITY_ID),
-    match_syncronized: widget_id === 62625 ? false : true
+    match_syncronized: false
   });
   if (!inserted) return handleTicketError(ticket);
   return createTicketLog.info("Ticket integration is done.");
 };
 
-const createTicket = (
-  ticket,
-  widget_id: number
-): Promise<boolean | undefined> => {
+const createTicket = (ticket): Promise<boolean | undefined> => {
   createTicketLog.info(`${new Date()}: CREATE TICKET`);
   // ADD YUP VALIDATION
   return new Promise(resolve => {
@@ -80,7 +77,7 @@ const createTicket = (
       //   )}`
       // );
       createTicketLog.info("Zendesk ticket created successfully!");
-      saveTicketInHasura(result as Ticket, widget_id);
+      saveTicketInHasura(result as Ticket);
       return resolve(true);
     });
   });
@@ -108,49 +105,43 @@ export const fetchUserTickets = async ({
   });
 };
 
-export default async (tickets: PartialTicket[], entries: FormEntry[]) => {
+export default async (tickets: PartialTicket[]) => {
   log.info(`${new Date()}: Entering createZendeskTickets`);
   const createTickets = tickets.map(async ticket => {
     const userTickets = await limiter.schedule(() => fetchUserTickets(ticket));
     if (!userTickets) return undefined;
 
     const relatableTickets = checkOldTickets(ticket.subject, userTickets);
-    const entry = entries.find(
-      e => e.id === Number(ticket.external_id)
-    ) as FormEntry;
 
     if (relatableTickets) {
       return await limiter.schedule(() =>
-        createTicket(
-          {
-            ...ticket,
-            status: "pending",
-            assignee_id: relatableTickets.agent,
-            custom_fields: [
-              ...ticket.custom_fields,
-              {
-                id: 360014379412,
-                value: "solicitação_repetida"
-              },
-              {
-                id: 360032229831,
-                value:
-                  typeof relatableTickets.relatedTickets === "number"
-                    ? relatableTickets.relatedTickets
-                    : null
-              }
-            ],
-            comment: {
-              body: `MSR já possui uma solicitação com o mesmo tipo de pedido de acolhimento nos seguintes tickets: ${relatableTickets.relatedTickets}`,
-              public: false
+        createTicket({
+          ...ticket,
+          status: "pending",
+          assignee_id: relatableTickets.agent,
+          custom_fields: [
+            ...ticket.custom_fields,
+            {
+              id: 360014379412,
+              value: "solicitação_repetida"
+            },
+            {
+              id: 360032229831,
+              value:
+                typeof relatableTickets.relatedTickets === "number"
+                  ? relatableTickets.relatedTickets
+                  : null
             }
-          },
-          entry.widget_id
-        )
+          ],
+          comment: {
+            body: `MSR já possui uma solicitação com o mesmo tipo de pedido de acolhimento nos seguintes tickets: ${relatableTickets.relatedTickets}`,
+            public: false
+          }
+        })
       );
     }
 
-    return await limiter.schedule(() => createTicket(ticket, entry.widget_id));
+    return await limiter.schedule(() => createTicket(ticket));
   });
   return Promise.all(createTickets);
 };

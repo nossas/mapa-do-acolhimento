@@ -86,7 +86,7 @@ export const handleIntegration = (widgets: Widget[]) => async (
     if (removeDesabilitadedUsers.length > 0) {
       const tickets = await composeTickets(removeDesabilitadedUsers);
       // log(JSON.stringify(tickets, null, 2));
-      await limiter.schedule(() => createZendeskTickets(tickets, entries));
+      await limiter.schedule(() => createZendeskTickets(tickets));
     }
 
     // Save users in Hasura
