@@ -1,4 +1,5 @@
 import { Response } from "express";
+import { userToContact } from "components/dist";
 import handleUserFields from "./interfaces/User/handleUserFields";
 import getTicket from "./zendesk/getTicket";
 import dbg from "./dbg";
@@ -107,6 +108,9 @@ const App = async (ticket_id: string, res: Response) => {
       log(`User '${ticket.requester_id}' lat/lng/address updated in Zendesk.`);
     }
 
+    // Save users in Mautic
+    await userToContact([userWithUserFields]);
+
     // Salva a usuária no Hasura
     const saveUserResponse = await saveUsers([userWithUserFields]);
     if (!saveUserResponse) {
@@ -162,7 +166,7 @@ const App = async (ticket_id: string, res: Response) => {
       }
     ]);
 
-    if (saveUsersHasuraResponse !== true) {
+    if (!saveUsersHasuraResponse) {
       log(`Failed to update user count '${ticket.requester_id}' in Hasura.`);
       return res.status(500).json("Failed to update user count in Hasura.");
     }

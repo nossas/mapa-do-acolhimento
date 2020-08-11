@@ -1,5 +1,6 @@
 import Express, { Response } from "express";
 import debug, { Debugger } from "debug";
+import { userToContact } from "components/dist";
 import AdvogadaCreateUser from "./integrations/AdvogadaCreateUser";
 import PsicologaCreateUser from "./integrations/PsicologaCreateUser";
 import ListTicketsFromUser from "./integrations/ListTicket";
@@ -332,6 +333,10 @@ class Server {
           },
           tags
         } = user;
+
+        // Save users in Mautic
+        await userToContact([{ ...createdUser, user_id: userId }]);
+
         if (responseCreatedAt === responseUpdatedAt) {
           this.dbg(`Success, created user "${userId}"!`);
         } else {

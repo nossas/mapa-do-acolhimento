@@ -3,6 +3,7 @@
   "dependencies": {
     "@googlemaps/google-maps-services-js": "^2.3.1",
     "axios": "^0.19.0",
+    "components": "workspace:^0.0.3",
     "debug": "^4.1.1",
     "dotenv": "^8.2.0",
     "elastic-apm-node": "^3.2.0",
@@ -17,7 +18,8 @@
     "start": "DEBUG=webhooks-solidarity-count* node dist/index.js",
     "dev": "DEBUG=webhooks-solidarity-count* tsc-watch --onSuccess \"node dist/index.js\"",
     "clean": "rm -rf node_modules dist",
-    "build": "tsc -p tsconfig.json --sourcemap",
+    "build": "tsc -p tsconfig.json",
+    "build:watch": "tsc -p tsconfig.json -w",
     "test": "jest --coverage",
     "test:watch": "DEBUG=webhooks-solidarity-count* jest --watch"
   },

@@ -58,7 +58,6 @@ export const handleUserError = entries => {
     "Integration failed in these form entries %s",
     entries.map(e => e.external_id)
   );
-  return undefined;
 };
 
 export const handleTicketError = ({ requester_id }) => {
