@@ -1,6 +1,6 @@
 FROM node:12-alpine
 
-RUN yarn global add pnpm@5.2.1
+RUN yarn global add pnpm
 
 WORKDIR /usr/src/app
 
