@@ -8,7 +8,10 @@ const countTickets = (tickets: Array<TicketZendesk & customFields>) => {
   };
 
   tickets
-    .filter(i => i.status === "pending")
+    .filter(
+      i =>
+        i.status !== "deleted" && i.status !== "solved" && i.status !== "closed"
+    )
     .map(i => {
       switch (i.status_acolhimento) {
         case "atendimento__iniciado":
