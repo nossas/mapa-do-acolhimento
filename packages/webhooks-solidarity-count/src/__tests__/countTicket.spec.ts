@@ -1,7 +1,7 @@
 import countTickets from "../countTickets";
 
 describe("check if countTickets calculate fields correctly", () => {
-  it("should calculate the 'calculado' fields correctly, v01", async () => {
+  it("should calculate the 'calculado' fields correctly, v01", () => {
     const data = [
       {
         status_acolhimento: "encaminhamento__realizado",
@@ -34,11 +34,11 @@ describe("check if countTickets calculate fields correctly", () => {
       encaminhamentos_realizados_calculado_: 3
     };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const count = await countTickets(data as any);
+    const count = countTickets(data as any);
     expect(count).toStrictEqual(expectedResult);
   });
 
-  it("should calculate the 'calculado' fields correctly, v02", async () => {
+  it("should calculate the 'calculado' fields correctly, v02", () => {
     const data = [
       {
         status_acolhimento: "atendimento__iniciado",
@@ -81,11 +81,11 @@ describe("check if countTickets calculate fields correctly", () => {
     };
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const count = await countTickets(data as any);
+    const count = countTickets(data as any);
     expect(count).toStrictEqual(expectedResult);
   });
 
-  it("should calculate the 'calculado' fields correctly, v03", async () => {
+  it("should calculate the 'calculado' fields correctly, v03", () => {
     const data = [
       {
         status_acolhimento: "atendimento__iniciado",
@@ -119,7 +119,7 @@ describe("check if countTickets calculate fields correctly", () => {
       encaminhamentos_realizados_calculado_: 1
     };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const count = await countTickets(data as any);
+    const count = countTickets(data as any);
     expect(count).toStrictEqual(expectedResult);
   });
 });
