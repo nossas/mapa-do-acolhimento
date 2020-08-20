@@ -1,30 +1,25 @@
+import verifyOrganization from "./verifyOrganizations";
 import { Requesters } from "./interfaces/Requester";
 import { Ticket } from "./interfaces/Ticket";
 // import updateTicketRelation from "./updateTicketRelation";
 
-const countTickets = async (tickets: Ticket[]) => {
+/*
+  Initiates a requester entry if none was already initiated, then adds to their calculated fields accordingly. 
+  Each ticket has a requester, but the fields "calculado" are in the user fields. That's why we need to initiate the requesters object, and add to the "calculado" field according to the requester_id.
+*/
+const countTickets = async (tickets: Ticket[]): Promise<Requesters> => {
   const requesters: Requesters = {};
   const promises = tickets
-    .filter(i => i.status === "pending")
+    .filter(
+      i =>
+        i.status !== "deleted" && i.status !== "solved" && i.status !== "closed"
+    )
     .map(async i => {
-      let type: "voluntaria" | "msr" | null = null;
-      if (!i.link_match) {
-        return;
-      }
+      const organization_id = await verifyOrganization(i);
 
-      if (i.nome_msr) {
-        type = "msr";
-      } else if (i.nome_voluntaria) {
-        type = "voluntaria";
-      } else if (i.nome_msr && i.nome_voluntaria) {
-        type = null;
-      } else {
-        type = null;
-      }
-
-      if (type === "msr") {
+      if (organization_id !== null) {
         // Cria um pivô e inicializa o valor
-        let requester_pivot = requesters[i.requester_id];
+        let requester = requesters[i.requester_id];
         if (!requesters[i.requester_id]) {
           requesters[i.requester_id] = {
             id: i.requester_id,
@@ -32,20 +27,19 @@ const countTickets = async (tickets: Ticket[]) => {
             atendimentos_concludos_calculado_: 0,
             encaminhamentos_realizados_calculado_: 0
           };
-          requester_pivot = requesters[i.requester_id];
+          requester = requesters[i.requester_id];
         }
-
         // Atualiza os atendimentos em andamento:
         switch (i.status_acolhimento) {
           case "atendimento__iniciado":
-            requester_pivot.atendimentos_em_andamento_calculado_ += 1;
+            requester.atendimentos_em_andamento_calculado_ += 1;
             break;
           case "atendimento__concluído":
-            requester_pivot.atendimentos_concludos_calculado_ += 1;
+            requester.atendimentos_concludos_calculado_ += 1;
             break;
           case "encaminhamento__realizado":
           case "encaminhamento__realizado_para_serviço_público":
-            requester_pivot.encaminhamentos_realizados_calculado_ += 1;
+            requester.encaminhamentos_realizados_calculado_ += 1;
             break;
           default:
             return;

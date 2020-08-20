@@ -16,12 +16,13 @@ const FETCH_AVAILABLE_VOLUNTEERS = gql`
         condition: { _eq: "disponivel" }
         longitude: { _is_null: false }
         latitude: { _is_null: false }
+        name: { _is_null: false }
+        registration_number: { _is_null: false }
+        atendimentos_em_andamento_calculado_: { _eq: 0 }
         _or: [{ phone: { _is_null: false } }, { whatsapp: { _is_null: false } }]
         _and: [
           { organization_id: { _neq: $individual_id } }
           { organization_id: { _is_null: false } }
-          { name: { _is_null: false } }
-          { registration_number: { _is_null: false } }
         ]
       }
     ) {
@@ -35,7 +36,6 @@ const FETCH_AVAILABLE_VOLUNTEERS = gql`
       phone
       registration_number
       id
-      atendimentos_em_andamento_calculado_
     }
   }
 `;
@@ -85,7 +85,6 @@ export default async () => {
     .map(user => {
       const {
         // disponibilidade_de_atendimentos,
-        atendimentos_em_andamento_calculado_,
         user_id
       } = user;
 
@@ -102,8 +101,7 @@ export default async () => {
         ticket => ticket.volunteers_user_id === user_id
       ).length;
 
-      const availability =
-        1 - (countForwardings + atendimentos_em_andamento_calculado_);
+      const availability = 1 - countForwardings;
 
       return {
         ...user,

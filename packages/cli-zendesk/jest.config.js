@@ -13,5 +13,6 @@ module.exports = {
     "ts-jest": {
       packageJson: "package.json"
     }
-  }
+  },
+  setupFiles: ["<rootDir>/src/beforeEachTest.ts"],
 };
