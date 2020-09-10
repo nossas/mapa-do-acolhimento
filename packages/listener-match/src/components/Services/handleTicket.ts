@@ -68,13 +68,15 @@ export default async (
   if (!volunteer) {
     const updateIndividual = await forwardPublicService(
       {
-        ticket_id: ticketId,
+        ticket_id: localIndividualTicket["ticket_id"],
         state: individual[0].state
       },
       AGENT
     );
     if (!updateIndividual) return undefined;
-    return ticketId;
+    return localIndividualTicket["ticket_id"] !== individualTicket["ticket_id"]
+      ? [individualTicket["ticket_id"], updateIndividual]
+      : updateIndividual;
   }
 
   const volunteerTicketId = await createVolunteerTicket(
