@@ -11,7 +11,7 @@ import {
 
 describe("Utils", () => {
   it('should return "therapist" if support type is "psicológico"', () => {
-    const subject = "[Psicológico] Teste, Rio de Janeiro  - RJ";
+    const subject = "[Psicológico] Lilian, Paranapanema - SP";
     expect(getRequestedVolunteerType(subject)).toStrictEqual("therapist");
   });
   it('should return "lawyer" if support type is "jurídico"', () => {
