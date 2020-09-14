@@ -53,15 +53,20 @@ export default async (
   const localIndividualTicket = setReferences(individualTicket);
 
   const volunteerType = getRequestedVolunteerType(subject);
-  if (!volunteerType) return ticketId;
-
+  if (!volunteerType) {
+    log(`Ticket subject is not valid '${subject}'`);
+    return ticketId;
+  }
   const volunteerOrganizationId = getVolunteerOrganizationId(volunteerType);
   const filteredVolunteers = volunteersAvailable.filter(
     ({ organization_id }) => organization_id === volunteerOrganizationId
   );
 
   const individual = await fetchIndividual(requesterId);
-  if (individual.length < 1) return ticketId;
+  if (typeof individual === "undefined" || individual.length < 1) {
+    log(`No individual was found with this requester_id '${requesterId}'`);
+    return ticketId;
+  }
 
   log(`Searching for closest volunteer to MSR '${requesterId}'`);
   const volunteer = getClosestVolunteer(individual[0], filteredVolunteers);
@@ -73,7 +78,12 @@ export default async (
       },
       AGENT
     );
-    if (!updateIndividual) return undefined;
+    if (!updateIndividual) {
+      log(
+        `No ticket ID returned after individual ticket '${localIndividualTicket.ticket_id}' tried to be updated`
+      );
+      return undefined;
+    }
     return localIndividualTicket["ticket_id"] !== individualTicket["ticket_id"]
       ? [individualTicket["ticket_id"], updateIndividual]
       : updateIndividual;
@@ -84,7 +94,12 @@ export default async (
     localIndividualTicket,
     AGENT
   );
-  if (!volunteerTicketId) return undefined;
+  if (!volunteerTicketId) {
+    log(
+      `No ticket ID returned after volunteer '${volunteer.user_id}' ticket tried to be created`
+    );
+    return undefined;
+  }
   volunteer["ticket_id"] = volunteerTicketId;
 
   const updateIndividual = await updateIndividualTicket(
@@ -92,13 +107,21 @@ export default async (
     volunteer as Volunteer & { ticket_id: number },
     AGENT
   );
-  if (!updateIndividual) return undefined;
+  if (!updateIndividual) {
+    log(
+      `No ticket ID returned after individual ticket '${localIndividualTicket.ticket_id}' tried to be updated`
+    );
+    return undefined;
+  }
 
   const matchTicket = await createMatchTicket(
     localIndividualTicket,
     volunteer as Volunteer & { ticket_id: number }
   );
-  if (!matchTicket) return undefined;
+  if (!matchTicket) {
+    log("No match ticket response was generated");
+    return undefined;
+  }
 
   return localIndividualTicket["ticket_id"] !== individualTicket["ticket_id"]
     ? [individualTicket["ticket_id"], updateIndividual]
