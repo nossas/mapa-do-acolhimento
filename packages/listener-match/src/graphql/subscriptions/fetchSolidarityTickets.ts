@@ -9,7 +9,12 @@ const SOLIDARITY_USERS_SUBSCRIPTION = gql`
   subscription pipeline_solidarity_tickets($organization_id: bigint) {
     solidarity_tickets(
       where: {
-        organization_id: { _eq: $organization_id }
+        individual: {
+          organization_id: { _eq: $organization_id }
+          latitude: { _is_null: false }
+          longitude: { _is_null: false }
+          state: { _is_null: false }
+        }
         _or: [
           { status_acolhimento: { _eq: "solicitação_repetida" } }
           { status_acolhimento: { _eq: "solicitação_recebida" } }
@@ -24,6 +29,11 @@ const SOLIDARITY_USERS_SUBSCRIPTION = gql`
       }
       order_by: { data_inscricao_bonde: asc }
     ) {
+      individual {
+        latitude
+        longitude
+        state
+      }
       subject
       ticket_id
       atrelado_ao_ticket

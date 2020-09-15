@@ -12,7 +12,12 @@ describe("Test queue operations", () => {
       nome_msr: "Viviane",
       status_acolhimento: "solicitação_recebida",
       external_id: 2000362,
-      __typename: "solidarity_tickets"
+      __typename: "solidarity_tickets",
+      individual: {
+        latitude: "0",
+        longitude: "0",
+        state: "SP"
+      }
     },
     {
       subject: "[Jurídico] Viviane, Taubaté - SP",
@@ -22,7 +27,12 @@ describe("Test queue operations", () => {
       nome_msr: "Viviane",
       status_acolhimento: "solicitação_recebida",
       external_id: 2000362,
-      __typename: "solidarity_tickets"
+      __typename: "solidarity_tickets",
+      individual: {
+        latitude: "0",
+        longitude: "0",
+        state: "SP"
+      }
     }
   ];
 

@@ -1,9 +1,5 @@
 import { getClosestVolunteer, createVolunteerTicket } from "../Volunteers";
-import {
-  fetchIndividual,
-  forwardPublicService,
-  updateIndividualTicket
-} from "../Individual";
+import { forwardPublicService, updateIndividualTicket } from "../Individual";
 import { createMatchTicket } from "../../graphql/mutations";
 import { Volunteer, IndividualTicket } from "../../types";
 import {
@@ -37,7 +33,8 @@ export default async (
     status_acolhimento: statusAcolhimento,
     atrelado_ao_ticket: atreladoAoTicket,
     requester_id: requesterId,
-    ticket_id: ticketId
+    ticket_id: ticketId,
+    individual
   } = individualTicket;
 
   if (
@@ -62,19 +59,13 @@ export default async (
     ({ organization_id }) => organization_id === volunteerOrganizationId
   );
 
-  const individual = await fetchIndividual(requesterId);
-  if (typeof individual === "undefined" || individual.length < 1) {
-    log(`No individual was found with this requester_id '${requesterId}'`);
-    return ticketId;
-  }
-
   log(`Searching for closest volunteer to MSR '${requesterId}'`);
-  const volunteer = getClosestVolunteer(individual[0], filteredVolunteers);
+  const volunteer = getClosestVolunteer(individual, filteredVolunteers);
   if (!volunteer) {
     const updateIndividual = await forwardPublicService(
       {
         ticket_id: localIndividualTicket["ticket_id"],
-        state: individual[0].state
+        state: individual.state
       },
       AGENT
     );
