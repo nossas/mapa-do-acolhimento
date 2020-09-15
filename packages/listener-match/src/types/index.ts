@@ -6,6 +6,7 @@ export type IndividualTicket = {
   nome_msr: string;
   status_acolhimento: string;
   external_id: number;
+  individual: Individual;
 };
 
 export type SubscriptionResponse = {
@@ -29,18 +30,17 @@ export type Volunteer = {
   ticket_id?: number;
 };
 
-export type MatchTickets = {
-  volunteers_user_id: number;
-  volunteers_ticket_id: number;
-  id: number;
-};
-
 export type Individual = {
   latitude: string;
   longitude: string;
   state: string;
 };
 
+export type MatchTickets = {
+  volunteers_user_id: number;
+  volunteers_ticket_id: number;
+  id: number;
+};
 export type Ticket = {
   id?: number;
   requester_id: number;

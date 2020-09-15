@@ -10,7 +10,12 @@ describe("Handle Ticket", () => {
       nome_msr: "teste nova msr",
       status_acolhimento: "solicitação_repetida",
       external_id: 2000362,
-      __typename: "solidarity_tickets"
+      __typename: "solidarity_tickets",
+      individual: {
+        latitude: "0",
+        longitude: "0",
+        state: "SP"
+      }
     };
     expect(await handleTicket(ticket, [] as never, 1)).toStrictEqual(22964);
   });
@@ -23,9 +28,14 @@ describe("Handle Ticket", () => {
       requester_id: 0,
       nome_msr: "teste nova msr",
       status_acolhimento: "solicitação_repetida",
-      external_id: 0
+      external_id: 0,
+      individual: {
+        latitude: "0",
+        longitude: "0",
+        state: "SP"
+      }
     };
-    expect(await handleTicket(ticket, [] as never, 1)).toStrictEqual(22970);
+    expect(await handleTicket(ticket, [] as never, 1)).toStrictEqual(undefined);
   });
 
   it("should return early if ticket subject doesn't have a subject with a type", async () => {
@@ -37,7 +47,12 @@ describe("Handle Ticket", () => {
       nome_msr: "teste nova msr",
       status_acolhimento: "solicitação_recebida",
       external_id: 2000362,
-      __typename: "solidarity_tickets"
+      __typename: "solidarity_tickets",
+      individual: {
+        latitude: "0",
+        longitude: "0",
+        state: "SP"
+      }
     };
     expect(await handleTicket(ticket, [] as never, 1)).toStrictEqual(22964);
   });
@@ -50,8 +65,13 @@ describe("Handle Ticket", () => {
       requester_id: 0,
       nome_msr: "Viviane",
       status_acolhimento: "solicitação_recebida",
-      external_id: 0
+      external_id: 0,
+      individual: {
+        latitude: "0",
+        longitude: "0",
+        state: "SC"
+      }
     };
-    expect(await handleTicket(ticket, [] as never, 1)).toStrictEqual(27072);
+    expect(await handleTicket(ticket, [] as never, 1)).toStrictEqual(undefined);
   });
 });
