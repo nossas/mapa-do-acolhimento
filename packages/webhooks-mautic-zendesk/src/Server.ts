@@ -12,6 +12,7 @@ import { FILTER_SERVICE_STATUS, filterService } from "./filterService";
 import { FILTER_FORM_NAME_STATUS, filterFormName } from "./filterFormName";
 import BondeCreatedDate from "./integrations/BondeCreatedDate";
 import addTagsToTicket from "./zendesk/addTagsToTicket";
+import { checkNames, checkCep } from "./utils";
 
 // interface DataType {
 //   data: {
@@ -213,40 +214,6 @@ class Server {
     });
   };
 
-  checkNames = ({
-    primeiro_nome,
-    sobrenome_completo
-  }: {
-    primeiro_nome;
-    sobrenome_completo;
-  }) => {
-    let aux = "";
-    if (typeof primeiro_nome === "string" && primeiro_nome.length > 0) {
-      aux += primeiro_nome;
-    }
-
-    if (
-      typeof sobrenome_completo === "string" &&
-      sobrenome_completo.length > 0
-    ) {
-      aux += ` ${sobrenome_completo}`;
-    }
-
-    if (aux.length > 0) {
-      return aux;
-    }
-
-    return null;
-  };
-
-  checkCep = (cep: string) => {
-    if (typeof cep === "string" && cep.length > 0) {
-      return cep;
-    }
-
-    return null;
-  };
-
   start = () => {
     const { PORT } = process.env;
     this.server
@@ -298,8 +265,8 @@ class Server {
         }
         const bondeCreatedDate = new BondeCreatedDate(
           results.email,
-          this.checkNames(results),
-          this.checkCep(results.cep)
+          checkNames(results),
+          checkCep(results.cep)
         );
         const bondeCreatedAt = await bondeCreatedDate.start();
 
