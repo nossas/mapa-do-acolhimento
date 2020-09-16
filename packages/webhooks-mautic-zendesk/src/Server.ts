@@ -319,7 +319,7 @@ class Server {
         if (resultTicket) {
           this.dbg(`Success updated ticket "${resultTicket.data.ticket.id}".`);
 
-          if (tags) {
+          if (tags.length > 0) {
             const response = await addTagsToTicket(
               resultTicket.data.ticket.id,
               tags

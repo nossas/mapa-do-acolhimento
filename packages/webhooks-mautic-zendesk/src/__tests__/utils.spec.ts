@@ -143,44 +143,28 @@ describe("User condition status verification", () => {
 describe("Checks geolocation process logic", () => {
   describe("verificaLocalização", () => {
     describe("cep falsy", () => {
-      it("should change condition to reprovada_registro_invalido", async () => {
-        const condition: [CONDITION] = [CONDITION.UNSET];
-        await verificaLocalização(condition, {});
-        await verificaLocalização(condition, { cep: null });
-        await verificaLocalização(condition, { cep: undefined });
-        expect(condition).toStrictEqual([
-          CONDITION.REPROVADA_REGISTRO_INVÁLIDO
-        ]);
+      it("should add to the tags array the value 'cep-incorreto'", async () => {
+        const data1 = await verificaLocalização({});
+        const data2 = await verificaLocalização({ cep: null });
+        const data3 = await verificaLocalização({ cep: undefined });
+        expect(data1).toHaveProperty("tags", ["cep-incorreto"]);
+        expect(data2).toHaveProperty("tags", ["cep-incorreto"]);
+        expect(data3).toHaveProperty("tags", ["cep-incorreto"]);
       });
     });
     describe("GM returns ZERO_RESULTS", () => {
-      it("should change condition to reprovada_registro_invalido", async () => {
-        const condition: [CONDITION] = [CONDITION.UNSET];
-        await verificaLocalização(condition, { cep: "42709-200" });
-        expect(condition).toStrictEqual([
-          CONDITION.REPROVADA_REGISTRO_INVÁLIDO
-        ]);
-      });
       it("variable 'tags' has value '[cep-incorreto]'", async () => {
-        const condition: [CONDITION] = [CONDITION.UNSET];
-        const data = await verificaLocalização(condition, { cep: "42250579" });
+        const data = await verificaLocalização({ cep: "42250579" });
         expect(data).toHaveProperty("tags", ["cep-incorreto"]);
       });
     });
     describe("GM returns a valid response", () => {
-      it("should not change condition", async () => {
-        const condition: [CONDITION] = [CONDITION.UNSET];
-        await verificaLocalização(condition, { cep: "04121-000" });
-        expect(condition).toStrictEqual([CONDITION.UNSET]);
-      });
-      it("variable 'tags' is undefined", async () => {
-        const condition: [CONDITION] = [CONDITION.UNSET];
-        const data = await verificaLocalização(condition, { cep: "66093-672" });
-        expect(data).toHaveProperty("tags", undefined);
+      it("'tags' array is empty", async () => {
+        const data = await verificaLocalização({ cep: "66093-672" });
+        expect(data).toHaveProperty("tags", []);
       });
       it("latitude and longitude is not null", async () => {
-        const condition: [CONDITION] = [CONDITION.UNSET];
-        const data = await verificaLocalização(condition, { cep: "66093-672" });
+        const data = await verificaLocalização({ cep: "66093-672" });
         expect(data.latitude).not.toBe(null);
         expect(data.longitude).not.toBe(null);
       });

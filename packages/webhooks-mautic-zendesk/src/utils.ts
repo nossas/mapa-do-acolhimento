@@ -9,11 +9,19 @@ export const setCondition = (condition: [CONDITION], value: CONDITION) => {
   }
 };
 
+export const setTags = (tags: Array<string | never>, value: string) => {
+  const newTags = tags;
+  if (!newTags[0]) {
+    newTags[0] = value;
+  }
+};
+
 /**
  * TODO: adicionar tag cep_incorreto
  */
-export const verificaLocalização = async (condition: [CONDITION], data) => {
+export const verificaLocalização = async data => {
   let newData = data;
+  const tags: Array<string | never> = [];
   const verificaCep = yup
     .object()
     .shape({
@@ -23,7 +31,7 @@ export const verificaLocalização = async (condition: [CONDITION], data) => {
   try {
     newData = await verificaCep.validate(newData);
   } catch (e) {
-    setCondition(condition, CONDITION.REPROVADA_REGISTRO_INVÁLIDO);
+    setTags(tags, "cep-incorreto");
   }
   const { latitude, longitude, ...rest } = await getGeolocation({
     cep: newData.cep,
@@ -31,11 +39,8 @@ export const verificaLocalização = async (condition: [CONDITION], data) => {
   });
 
   if (latitude === null || longitude === null) {
-    setCondition(condition, CONDITION.REPROVADA_REGISTRO_INVÁLIDO);
+    setTags(tags, "cep-incorreto");
   }
-
-  const tags: string[] | undefined =
-    latitude === null || longitude === null ? ["cep-incorreto"] : undefined;
 
   return {
     ...newData,

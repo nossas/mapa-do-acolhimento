@@ -30,7 +30,7 @@ class AdvogadaCreateUser extends Base {
     const condition: [CONDITION] = [CONDITION.UNSET];
     newData = await verificaDiretrizesAtendimento(condition, newData);
     newData = await verificaEstudoDeCaso(condition, newData);
-    const validatedResult = await verificaLocalização(condition, newData);
+    const validatedResult = await verificaLocalização(newData);
 
     const { tags } = validatedResult;
 
