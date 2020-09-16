@@ -17,7 +17,7 @@ export const verificaLocalização = async (condition: [CONDITION], data) => {
   const verificaCep = yup
     .object()
     .shape({
-      cep: yup.string().nullable()
+      cep: yup.string().required()
     })
     .required();
   try {
@@ -180,8 +180,8 @@ export const checkNames = ({
 };
 
 export const checkCep = (cep: string) => {
-  if (typeof cep === "string" && cep.length > 0) {
-    return cep;
+  if (cep.length > 0) {
+    return cep.toString();
   }
 
   return null;
@@ -190,13 +190,15 @@ export const checkCep = (cep: string) => {
 export const filterByEmail = (
   formEntries: FormEntry[],
   email: string
-): {
-  name: string | null;
-  lastname: string | null;
-  cep: string | null;
-  created_at: string;
-  widget_id: number;
-} => {
+):
+  | {
+      name: string | null;
+      lastname: string | null;
+      cep: string | null;
+      created_at: string;
+      widget_id: number;
+    }
+  | undefined => {
   const dicio = {
     "field-1533735738039-59": "name",
     "field-1464961964463-91": "name",
