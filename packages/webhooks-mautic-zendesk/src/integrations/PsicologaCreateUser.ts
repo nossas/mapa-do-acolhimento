@@ -1,5 +1,6 @@
 import * as yup from "yup";
 import { Response } from "express";
+import { getGeolocation } from "bonde-core-tools";
 import Base from "./Base";
 import { CONDITION } from "../types";
 import {
@@ -30,7 +31,7 @@ class PsicologaCreateUser extends Base {
     const condition: [CONDITION] = [CONDITION.UNSET];
     newData = await verificaDiretrizesAtendimento(condition, newData);
     newData = await verificaEstudoDeCaso(condition, newData);
-    const validatedResult = await verificaLocalização(newData);
+    const validatedResult = await verificaLocalização(newData, getGeolocation);
 
     const { tags } = validatedResult;
 

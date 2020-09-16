@@ -1,4 +1,3 @@
-import { getGeolocation } from "bonde-core-tools";
 import * as yup from "yup";
 import { CONDITION, FormEntry } from "./types";
 
@@ -19,7 +18,7 @@ export const setTags = (tags: Array<string | never>, value: string) => {
 /**
  * TODO: adicionar tag cep_incorreto
  */
-export const verificaLocalização = async data => {
+export const verificaLocalização = async (data, getGeolocation) => {
   let newData = data;
   const tags: Array<string | never> = [];
   const verificaCep = yup
