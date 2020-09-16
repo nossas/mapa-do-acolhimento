@@ -10,6 +10,7 @@ import PsicologaCreateTicket from "./integrations/PsicologaCreateTicket";
 import PsicologaUpdateTicket from "./integrations/PsicologaUpdateTicket";
 import { FILTER_SERVICE_STATUS, filterService } from "./filterService";
 import { FILTER_FORM_NAME_STATUS, filterFormName } from "./filterFormName";
+import getFormEntries from "./getFormEntries";
 import BondeCreatedDate from "./integrations/BondeCreatedDate";
 import addTagsToTicket from "./zendesk/addTagsToTicket";
 import { checkNames, checkCep } from "./utils";
@@ -263,12 +264,18 @@ class Server {
             .status(400)
             .json("Invalid request, failed to parse results");
         }
+
+        const formEntries = await getFormEntries();
+        if (!formEntries) {
+          return this.dbg("getFormEntries error");
+        }
+
         const bondeCreatedDate = new BondeCreatedDate(
           results.email,
           checkNames(results),
           checkCep(results.cep)
         );
-        const bondeCreatedAt = await bondeCreatedDate.start();
+        const bondeCreatedAt = await bondeCreatedDate.start(formEntries);
 
         if (!bondeCreatedAt) {
           return this.dbg(bondeCreatedAt);

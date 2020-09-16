@@ -1,23 +1,24 @@
-import axios from "axios";
-import * as yup from "yup";
 import debug from "debug";
 import { FormEntry } from "../types";
 import { filterByEmail } from "../utils";
+import * as yup from "yup";
 
-const query = `query($widgets: [Int!]!) {
-  form_entries(where: {widget_id: {_in: $widgets}}) {
-    fields
-    created_at
-    widget_id
-  }
-}`;
-
-interface DataType {
-  data: {
-    form_entries: FormEntry[];
-  };
-}
-
+const verificaFormEntries = yup
+  .array()
+  .of(
+    yup
+      .object()
+      .shape({
+        fields: yup.string().required(),
+        created_at: yup.string().required(),
+        widget_id: yup.number().required()
+      })
+      .required()
+  )
+  .required();
+/*
+  In this class we fetch the date the volunteer first subscribed in the project and decide wether to use the data that came from the Mautic form response or the data that the volunteer first inputed in the form_entry
+*/
 class BondeCreatedDate {
   email: string;
 
@@ -33,56 +34,18 @@ class BondeCreatedDate {
     this.cep = cep;
   }
 
-  getFormEntries = async () => {
-    const { HASURA_API_URL, X_HASURA_ADMIN_SECRET, WIDGET_IDS } = process.env;
-    let widget_ids;
+  start = async (formEntries: FormEntry[]) => {
     try {
-      widget_ids = WIDGET_IDS.split(",").map(Number);
-      if (
-        !yup
-          .array()
-          .of(yup.string())
-          .min(6)
-          .isValid(widget_ids)
-      ) {
-        throw new Error("Invalid WIDGET_IDS env var");
-      }
-    } catch (e) {
-      return this.dbg(e);
-    }
-    try {
-      const data = await axios.post<DataType>(
-        HASURA_API_URL!,
+      const validatedFormEntries = await verificaFormEntries.validate(
+        formEntries,
         {
-          query,
-          variables: {
-            widgets: widget_ids
-          }
-        },
-        {
-          headers: {
-            "x-hasura-admin-secret": X_HASURA_ADMIN_SECRET
-          }
+          stripUnknown: true
         }
       );
-      return data.data.data.form_entries;
-    } catch (e) {
-      return this.dbg(e);
-    }
-  };
-
-  start = async () => {
-    const formEntries = await this.getFormEntries();
-    if (!formEntries) {
-      return this.dbg("getFormEntries error");
-    }
-
-    const filteredFormEntry = filterByEmail(formEntries, this.email);
-    if (!filteredFormEntry) {
-      return this.dbg("filteredFormEntries error");
-    }
-
-    try {
+      const filteredFormEntry = filterByEmail(validatedFormEntries, this.email);
+      if (!filteredFormEntry) {
+        throw new Error(`formEntries not found for email ${this.email}`);
+      }
       const { name, lastname, cep, created_at: createdAt } = filteredFormEntry;
       const aux = {
         createdAt,
@@ -96,10 +59,10 @@ class BondeCreatedDate {
             : this.cep
       };
       return aux;
-    } catch {
-      this.dbg(`formEntries not found for email ${this.email}`);
+    } catch (e) {
+      this.dbg(e);
       return {
-        createdAt: new Date().toString(),
+        createdAt: new Date().toISOString(),
         name: this.name || "sem nome",
         cep: this.cep ?? undefined
       };
