@@ -169,11 +169,11 @@ export const checkNames = ({
   sobrenome_completo: Array<string> | string;
 }) => {
   let aux = "";
-  if (typeof primeiro_nome === "string" && primeiro_nome.length > 0) {
+  if (primeiro_nome.length > 0) {
     aux += `${primeiro_nome}`;
   }
 
-  if (typeof sobrenome_completo === "string" && sobrenome_completo.length > 0) {
+  if (sobrenome_completo.length > 0) {
     aux += ` ${sobrenome_completo}`;
   }
 
@@ -184,8 +184,8 @@ export const checkNames = ({
   return null;
 };
 
-export const checkCep = (cep: string) => {
-  if (cep.length > 0) {
+export const checkCep = (cep?: string) => {
+  if (cep && cep.length > 0) {
     return cep.toString();
   }
 
@@ -230,7 +230,7 @@ export const filterByEmail = (
       return {
         ...i,
         ...parsedFields.reduce((newObj, old) => {
-          const key = dicio[old.uid] && dicio[old.uid];
+          const key = (dicio[old.uid] && dicio[old.uid]) || old.kind;
           return {
             ...newObj,
             [key]: old.value
@@ -238,7 +238,8 @@ export const filterByEmail = (
         }, {})
       };
     } catch (e) {
-      return false;
+      console.log(e);
+      return undefined;
     }
   });
   return getFieldsValue.find(f => f.email === email);
