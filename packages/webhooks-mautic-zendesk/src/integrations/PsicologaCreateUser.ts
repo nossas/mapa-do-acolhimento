@@ -49,7 +49,16 @@ class PsicologaCreateUser extends Base {
         .from("atualmente_quantas_mulher", "atendimentos_em_andamento")
         .from("quanto_atendimentos_pelo", "atendimentos_concluidos")
         .transform(obj => {
-          const { email, phone, ...userFields } = obj;
+          const {
+            email,
+            phone,
+            latitude,
+            longitude,
+            address,
+            state,
+            city,
+            ...userFields
+          } = obj;
           let { disponibilidade_de_atendimentos } = obj;
           if (disponibilidade_de_atendimentos === "6") {
             disponibilidade_de_atendimentos = "5_ou_mais";
@@ -61,6 +70,12 @@ class PsicologaCreateUser extends Base {
             organization_id: this.organizations[this.organization],
             user_fields: {
               ...removeFalsyValues(userFields),
+              cep,
+              address,
+              state,
+              city,
+              latitude,
+              longitude,
               data_de_inscricao_no_bonde: createdAt,
               ultima_atualizacao_de_dados: new Date().toString(),
               condition: condition[0] === "unset" ? "aprovada" : condition[0],
