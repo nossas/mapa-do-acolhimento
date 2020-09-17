@@ -10,8 +10,10 @@ import PsicologaCreateTicket from "./integrations/PsicologaCreateTicket";
 import PsicologaUpdateTicket from "./integrations/PsicologaUpdateTicket";
 import { FILTER_SERVICE_STATUS, filterService } from "./filterService";
 import { FILTER_FORM_NAME_STATUS, filterFormName } from "./filterFormName";
+import getFormEntries from "./getFormEntries";
 import BondeCreatedDate from "./integrations/BondeCreatedDate";
 import addTagsToTicket from "./zendesk/addTagsToTicket";
+import { checkNames, checkCep } from "./utils";
 
 // interface DataType {
 //   data: {
@@ -213,40 +215,6 @@ class Server {
     });
   };
 
-  checkNames = ({
-    primeiro_nome,
-    sobrenome_completo
-  }: {
-    primeiro_nome;
-    sobrenome_completo;
-  }) => {
-    let aux = "";
-    if (typeof primeiro_nome === "string" && primeiro_nome.length > 0) {
-      aux += primeiro_nome;
-    }
-
-    if (
-      typeof sobrenome_completo === "string" &&
-      sobrenome_completo.length > 0
-    ) {
-      aux += ` ${sobrenome_completo}`;
-    }
-
-    if (aux.length > 0) {
-      return aux;
-    }
-
-    return null;
-  };
-
-  checkCep = (cep: string) => {
-    if (typeof cep === "string" && cep.length > 0) {
-      return cep;
-    }
-
-    return null;
-  };
-
   start = () => {
     const { PORT } = process.env;
     this.server
@@ -296,12 +264,18 @@ class Server {
             .status(400)
             .json("Invalid request, failed to parse results");
         }
+
+        const formEntries = await getFormEntries();
+        if (!formEntries) {
+          return this.dbg("getFormEntries error");
+        }
+
         const bondeCreatedDate = new BondeCreatedDate(
           results.email,
-          this.checkNames(results),
-          this.checkCep(results.cep)
+          checkNames(results),
+          checkCep(results.cep)
         );
-        const bondeCreatedAt = await bondeCreatedDate.start();
+        const bondeCreatedAt = await bondeCreatedDate.start(formEntries);
 
         if (!bondeCreatedAt) {
           return this.dbg(bondeCreatedAt);
@@ -316,7 +290,7 @@ class Server {
         }
 
         if (!user.response) {
-          this.dbg("Failed to create user");
+          this.dbg(`Failed to create user ${results.email}`);
           return res.status(500).json("Failed to create user");
         }
 
@@ -352,7 +326,7 @@ class Server {
         if (resultTicket) {
           this.dbg(`Success updated ticket "${resultTicket.data.ticket.id}".`);
 
-          if (tags) {
+          if (tags.length > 0) {
             const response = await addTagsToTicket(
               resultTicket.data.ticket.id,
               tags
