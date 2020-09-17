@@ -290,7 +290,7 @@ class Server {
         }
 
         if (!user.response) {
-          this.dbg("Failed to create user");
+          this.dbg(`Failed to create user ${results.email}`);
           return res.status(500).json("Failed to create user");
         }
 

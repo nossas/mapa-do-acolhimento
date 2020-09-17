@@ -164,15 +164,15 @@ export const checkNames = ({
   primeiro_nome,
   sobrenome_completo
 }: {
-  primeiro_nome: Array<string> | string;
-  sobrenome_completo: Array<string> | string;
+  primeiro_nome?: Array<string> | string;
+  sobrenome_completo?: Array<string> | string;
 }) => {
   let aux = "";
-  if (primeiro_nome.length > 0) {
+  if (primeiro_nome && primeiro_nome.length > 0) {
     aux += `${primeiro_nome}`;
   }
 
-  if (sobrenome_completo.length > 0) {
+  if (sobrenome_completo && sobrenome_completo.length > 0) {
     aux += ` ${sobrenome_completo}`;
   }
 

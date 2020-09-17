@@ -222,8 +222,8 @@ describe("checkNames", () => {
     it("should return null", () => {
       expect(
         checkNames({
-          primeiro_nome: "",
-          sobrenome_completo: ""
+          primeiro_nome: undefined,
+          sobrenome_completo: undefined
         })
       ).toStrictEqual(null);
     });
