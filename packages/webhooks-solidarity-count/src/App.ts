@@ -1,5 +1,6 @@
 import { Response } from "express";
 import { userToContact } from "components/dist";
+import { getGeolocation } from "bonde-core-tools";
 import handleUserFields from "./interfaces/User/handleUserFields";
 import getTicket from "./zendesk/getTicket";
 import dbg from "./dbg";
@@ -14,25 +15,10 @@ import getUser from "./zendesk/getUser";
 import saveUsers from "./hasura/saveUsers";
 import handleCustomFields from "./interfaces/Ticket/handleCustomFields";
 import setCommunity from "./util/setCommunity";
-import getLatLng from "./util/getLatLng";
 import parseZipcode from "./util/parseZipcode";
 import handleTicketId from "./interfaces/Ticket/handleTicketId";
-import { Client } from "@googlemaps/google-maps-services-js";
 
 const log = dbg.extend("app");
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const maps = (cep: string): Promise<any> => {
-  const client = new Client({});
-
-  return client.geocode({
-    params: {
-      address: `${cep},BR`,
-      key: process.env.GOOGLE_MAPS_API_KEY
-    },
-    timeout: 1000 // milliseconds
-  });
-};
 
 /**
  * @param ticket_id ID do ticket
@@ -81,7 +67,10 @@ const App = async (ticket_id: string, res: Response) => {
 
     // Caso o CEP possa ser um número e não é vazio
     if (userWithUserFields.cep && userWithUserFields.cep !== null) {
-      const coordinates = await getLatLng(userWithUserFields.cep, maps);
+      const coordinates = await getGeolocation({
+        cep: userWithUserFields.cep,
+        email: userWithUserFields.email
+      });
 
       userWithUserFields = {
         ...userWithUserFields,

@@ -17,7 +17,7 @@ interface User {
   default_group_id?: number;
   details?: string;
   disponibilidade_de_atendimentos?: string;
-  email?: string;
+  email: string;
   encaminhamentos?: number;
   encaminhamentos_realizados_calculado_?: number;
   external_id?: number;
@@ -45,7 +45,7 @@ interface User {
   shared_agent?: boolean;
   shared_phone_number?: string;
   signature?: string;
-  state?: string;
+  state: string | null;
   suspended?: boolean;
   tags?: string[];
   ticket_restriction?: string;
