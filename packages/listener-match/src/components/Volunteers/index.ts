@@ -1,17 +1,15 @@
 import gql from "graphql-tag";
-import {
-  fetchSolidarityUsers,
-  fetchSolidarityMatches
-} from "../../graphql/queries";
-import { zendeskOrganizations } from "../../utils";
-import { Volunteer, MatchTickets } from "../../types";
+import { client as GraphQLAPI } from "../../graphql";
 import dbg from "../../dbg";
 
 const log = dbg.extend("fetchVolunteersAvailable");
 
-const FETCH_AVAILABLE_VOLUNTEERS = gql`
-  query fetch_available_volunteers($individual_id: bigint!) {
-    solidarity_users(
+const VOLUNTEERS_FOR_MATCH = gql`
+  query VolunteersForMatch(
+    $recipientOrganizationId: bigint_comparison_exp!
+    $lastMonth: timestamp_comparison_exp!
+  ) {
+    volunteers: solidarity_users(
       where: {
         condition: { _eq: "disponivel" }
         longitude: { _is_null: false }
@@ -19,9 +17,11 @@ const FETCH_AVAILABLE_VOLUNTEERS = gql`
         name: { _is_null: false }
         registration_number: { _is_null: false }
         atendimentos_em_andamento_calculado_: { _eq: 0 }
+        state: { _neq: "int" }
+        city: { _neq: "Internacional" }
         _or: [{ phone: { _is_null: false } }, { whatsapp: { _is_null: false } }]
         _and: [
-          { organization_id: { _neq: $individual_id } }
+          { organization_id: $recipientOrganizationId }
           { organization_id: { _is_null: false } }
         ]
       }
@@ -37,15 +37,10 @@ const FETCH_AVAILABLE_VOLUNTEERS = gql`
       registration_number
       id
     }
-  }
-`;
-
-const PENDING_MATCH_TICKETS = gql`
-  query($last_month: timestamp!) {
-    solidarity_matches(
+    pendingTickets: solidarity_matches(
       order_by: { created_at: desc }
       where: {
-        created_at: { _gte: $last_month }
+        created_at: $lastMonth
         status: { _eq: "encaminhamento__realizado" }
       }
     ) {
@@ -56,60 +51,49 @@ const PENDING_MATCH_TICKETS = gql`
   }
 `;
 
-export default async () => {
+export default async (volunteerOrganizationId: number) => {
   log("Fetching available volunteers");
-  const volunteersAvailable: Volunteer[] = await fetchSolidarityUsers({
-    query: FETCH_AVAILABLE_VOLUNTEERS,
-    variables: {
-      individual_id: zendeskOrganizations["individual"]
-    }
-  });
-
-  // log(volunteersAvailable);
-
   const today = new Date();
   // get last month and format
   const last_month = new Date().setDate(today.getDate() - 30);
   // format last_month timestamp
   const timestamp = new Date(last_month).toISOString();
 
-  const pendingTickets: MatchTickets[] = await fetchSolidarityMatches({
-    query: PENDING_MATCH_TICKETS,
-    variables: {
-      last_month: timestamp
+  try {
+    const res = await GraphQLAPI.query({
+      query: VOLUNTEERS_FOR_MATCH,
+      variables: {
+        recipientOrganizationId: { _eq: volunteerOrganizationId },
+        lastMonth: { _gte: timestamp }
+      }
+    });
+
+    if (res && res.data && res.data.errors) {
+      log("failed to fetch available volunteers: ".red, res.data.errors);
+      return undefined;
     }
-  });
 
-  // only approved volunteers are available?
-  return volunteersAvailable
-    .map(user => {
-      const {
-        // disponibilidade_de_atendimentos,
-        user_id
-      } = user;
+    return res.data.volunteers
+      .map(user => {
+        const { user_id } = user;
 
-      // let formatAvailability;
-      // if (typeof Number(disponibilidade_de_atendimentos) === "number") {
-      //   formatAvailability = Number(disponibilidade_de_atendimentos);
-      // } else if (disponibilidade_de_atendimentos === "5_ou_mais") {
-      //   formatAvailability = 5;
-      // } else {
-      //   formatAvailability = 1;
-      // }
+        const countForwardings = res.data.pendingTickets.filter(
+          ticket => ticket.volunteers_user_id === user_id
+        ).length;
 
-      const countForwardings = pendingTickets.filter(
-        ticket => ticket.volunteers_user_id === user_id
-      ).length;
+        const availability = 1 - (countForwardings || 0);
 
-      const availability = 1 - countForwardings;
-
-      return {
-        ...user,
-        pending: countForwardings,
-        availability
-      };
-    })
-    .filter(user => user.availability > 0);
+        return {
+          ...user,
+          pending: countForwardings,
+          availability
+        };
+      })
+      .filter(user => user.availability > 0);
+  } catch (err) {
+    log("failed to fetch available volunteers: ".red, err);
+    return undefined;
+  }
 };
 
 export { default as fetchVolunteersAvailable } from ".";
