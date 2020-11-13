@@ -5,7 +5,7 @@ import Base from "./Base";
 import { CONDITION } from "../types";
 import {
   verificaEstudoDeCaso,
-  verificaLocalização,
+  verifyLocation,
   verificaDiretrizesAtendimento,
   removeFalsyValues
 } from "../utils";
@@ -31,10 +31,7 @@ class AdvogadaCreateUser extends Base {
     const condition: [CONDITION] = [CONDITION.UNSET];
     newData = await verificaDiretrizesAtendimento(condition, newData);
     newData = await verificaEstudoDeCaso(condition, newData);
-    const userWithGeolocation = await verificaLocalização(
-      newData,
-      getGeolocation
-    );
+    const userWithGeolocation = await verifyLocation(newData, getGeolocation);
 
     try {
       const zendeskValidation = yup

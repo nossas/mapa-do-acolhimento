@@ -1,7 +1,7 @@
 import {
   verificaDiretrizesAtendimento,
   verificaEstudoDeCaso,
-  verificaLocalização,
+  verifyLocation,
   checkNames,
   filterByEmail
 } from "../utils";
@@ -147,15 +147,15 @@ describe("Checks geolocation process logic", () => {
     latitude: "-30.0314405",
     longitude: "-51.21005779999999"
   });
-  describe("verificaLocalização", () => {
+  describe("verifyLocation", () => {
     // describe("cep falsy", () => {
     //   it("should add to the tags array the value 'cep-incorreto'", async () => {
-    //     const data1 = await verificaLocalização({}, mockGetGeolocationReject);
-    //     const data2 = await verificaLocalização(
+    //     const data1 = await verifyLocation({}, mockGetGeolocationReject);
+    //     const data2 = await verifyLocation(
     //       { cep: null },
     //       mockGetGeolocationReject
     //     );
-    //     const data3 = await verificaLocalização(
+    //     const data3 = await verifyLocation(
     //       { cep: undefined },
     //       mockGetGeolocationReject
     //     );
@@ -166,7 +166,7 @@ describe("Checks geolocation process logic", () => {
     // });
     // describe("GM returns ZERO_RESULTS", () => {
     // it("variable 'tags' has value '[cep-incorreto]'", async () => {
-    //   const data = await verificaLocalização(
+    //   const data = await verifyLocation(
     //     { cep: "42250579" },
     //     mockGetGeolocationReject
     //   );
@@ -175,7 +175,7 @@ describe("Checks geolocation process logic", () => {
     // });
     describe("GM returns a valid response", () => {
       it("latitude and longitude is not null", async () => {
-        const data = await verificaLocalização(
+        const data = await verifyLocation(
           { cep: "66093-672" },
           mockGetGeolocationResolve
         );

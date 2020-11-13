@@ -11,7 +11,7 @@ export const setCondition = (condition: [CONDITION], value: CONDITION) => {
 /**
  * TODO: adicionar tag cep_incorreto
  */
-export const verificaLocalização = async (data, getGeolocation) => {
+export const verifyLocation = async (data, getGeolocation) => {
   const geolocationData = await getGeolocation({
     cep: data.cep,
     email: data.email
