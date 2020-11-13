@@ -31,9 +31,10 @@ class AdvogadaCreateUser extends Base {
     const condition: [CONDITION] = [CONDITION.UNSET];
     newData = await verificaDiretrizesAtendimento(condition, newData);
     newData = await verificaEstudoDeCaso(condition, newData);
-    const validatedResult = await verificaLocalização(newData, getGeolocation);
-
-    const { tags } = validatedResult;
+    const userWithGeolocation = await verificaLocalização(
+      newData,
+      getGeolocation
+    );
 
     try {
       const zendeskValidation = yup
@@ -118,9 +119,12 @@ class AdvogadaCreateUser extends Base {
         })
         .required();
 
-      const zendeskData = await zendeskValidation.validate(validatedResult, {
-        stripUnknown: true
-      });
+      const zendeskData = await zendeskValidation.validate(
+        userWithGeolocation,
+        {
+          stripUnknown: true
+        }
+      );
 
       const dataToBeSent = {
         user: {
@@ -128,7 +132,6 @@ class AdvogadaCreateUser extends Base {
         }
       };
       return {
-        tags,
         response: await this.send(dataToBeSent)
       };
     } catch (e) {

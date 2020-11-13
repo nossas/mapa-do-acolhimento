@@ -12,7 +12,6 @@ import { FILTER_SERVICE_STATUS, filterService } from "./filterService";
 import { FILTER_FORM_NAME_STATUS, filterFormName } from "./filterFormName";
 import getFormEntries from "./getFormEntries";
 import BondeCreatedDate from "./integrations/BondeCreatedDate";
-import addTagsToTicket from "./zendesk/addTagsToTicket";
 import { checkNames, checkCep } from "./utils";
 
 // interface DataType {
@@ -304,8 +303,7 @@ class Server {
                 id: userId
               }
             }
-          },
-          tags
+          }
         } = user;
 
         // Save users in Mautic
@@ -325,18 +323,6 @@ class Server {
         )) as { data: { ticket: { id: number } } };
         if (resultTicket) {
           this.dbg(`Success updated ticket "${resultTicket.data.ticket.id}".`);
-
-          if (tags.length > 0) {
-            const response = await addTagsToTicket(
-              resultTicket.data.ticket.id,
-              tags
-            );
-            if (response && response.status === 200) {
-              this.dbg(
-                `Success add tag "${tags}" to ticket "${resultTicket.data.ticket.id}".`
-              );
-            }
-          }
 
           return res.status(200).json("Success finish integration");
         }

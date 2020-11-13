@@ -8,45 +8,18 @@ export const setCondition = (condition: [CONDITION], value: CONDITION) => {
   }
 };
 
-export const setTags = (tags: Array<string | never>, value: string) => {
-  const newTags = tags;
-  if (!newTags[0]) {
-    newTags[0] = value;
-  }
-};
-
 /**
  * TODO: adicionar tag cep_incorreto
  */
 export const verificaLocalização = async (data, getGeolocation) => {
-  let newData = data;
-  const tags: Array<string | never> = [];
-  const verificaCep = yup
-    .object()
-    .shape({
-      cep: yup.string().required()
-    })
-    .required();
-  try {
-    newData = await verificaCep.validate(newData);
-  } catch (e) {
-    setTags(tags, "cep-incorreto");
-  }
-  const { latitude, longitude, ...rest } = await getGeolocation({
-    cep: newData.cep,
-    email: newData.email
+  const geolocationData = await getGeolocation({
+    cep: data.cep,
+    email: data.email
   });
 
-  if (latitude === null || longitude === null) {
-    setTags(tags, "cep-incorreto");
-  }
-
   return {
-    ...newData,
-    ...rest,
-    latitude,
-    longitude,
-    tags
+    ...data,
+    ...geolocationData
   };
 };
 

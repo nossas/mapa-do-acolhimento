@@ -143,48 +143,37 @@ describe("User condition status verification", () => {
 });
 
 describe("Checks geolocation process logic", () => {
-  const mockGetGeolocationReject = jest.fn().mockResolvedValue({
-    latitude: null,
-    longitude: null
-  });
   const mockGetGeolocationResolve = jest.fn().mockResolvedValue({
     latitude: "-30.0314405",
     longitude: "-51.21005779999999"
   });
   describe("verificaLocalização", () => {
-    describe("cep falsy", () => {
-      it("should add to the tags array the value 'cep-incorreto'", async () => {
-        const data1 = await verificaLocalização({}, mockGetGeolocationReject);
-        const data2 = await verificaLocalização(
-          { cep: null },
-          mockGetGeolocationReject
-        );
-        const data3 = await verificaLocalização(
-          { cep: undefined },
-          mockGetGeolocationReject
-        );
-        expect(data1).toHaveProperty("tags", ["cep-incorreto"]);
-        expect(data2).toHaveProperty("tags", ["cep-incorreto"]);
-        expect(data3).toHaveProperty("tags", ["cep-incorreto"]);
-      });
-    });
-    describe("GM returns ZERO_RESULTS", () => {
-      it("variable 'tags' has value '[cep-incorreto]'", async () => {
-        const data = await verificaLocalização(
-          { cep: "42250579" },
-          mockGetGeolocationReject
-        );
-        expect(data).toHaveProperty("tags", ["cep-incorreto"]);
-      });
-    });
+    // describe("cep falsy", () => {
+    //   it("should add to the tags array the value 'cep-incorreto'", async () => {
+    //     const data1 = await verificaLocalização({}, mockGetGeolocationReject);
+    //     const data2 = await verificaLocalização(
+    //       { cep: null },
+    //       mockGetGeolocationReject
+    //     );
+    //     const data3 = await verificaLocalização(
+    //       { cep: undefined },
+    //       mockGetGeolocationReject
+    //     );
+    //     expect(data1).toHaveProperty("tags", ["cep-incorreto"]);
+    //     expect(data2).toHaveProperty("tags", ["cep-incorreto"]);
+    //     expect(data3).toHaveProperty("tags", ["cep-incorreto"]);
+    //   });
+    // });
+    // describe("GM returns ZERO_RESULTS", () => {
+    // it("variable 'tags' has value '[cep-incorreto]'", async () => {
+    //   const data = await verificaLocalização(
+    //     { cep: "42250579" },
+    //     mockGetGeolocationReject
+    //   );
+    //   expect(data).toHaveProperty("tags", ["cep-incorreto"]);
+    // });
+    // });
     describe("GM returns a valid response", () => {
-      it("'tags' array is empty", async () => {
-        const data = await verificaLocalização(
-          { cep: "66093-672" },
-          mockGetGeolocationResolve
-        );
-        expect(data).toHaveProperty("tags", []);
-      });
       it("latitude and longitude is not null", async () => {
         const data = await verificaLocalização(
           { cep: "66093-672" },
