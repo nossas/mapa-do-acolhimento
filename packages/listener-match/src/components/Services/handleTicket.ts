@@ -2,10 +2,6 @@ import { getClosestVolunteer, createVolunteerTicket } from "../Volunteers";
 import { forwardPublicService, updateIndividualTicket } from "../Individual";
 import { createMatchTicket } from "../../graphql/mutations";
 import { Volunteer, IndividualTicket } from "../../types";
-import {
-  getRequestedVolunteerType,
-  getVolunteerOrganizationId
-} from "../../utils";
 import dbg from "../../dbg";
 
 const log = dbg.extend("handleTicket");
@@ -29,7 +25,6 @@ export default async (
   AGENT: number
 ) => {
   const {
-    subject,
     status_acolhimento: statusAcolhimento,
     atrelado_ao_ticket: atreladoAoTicket,
     requester_id: requesterId,
@@ -49,18 +44,9 @@ export default async (
 
   const localIndividualTicket = setReferences(individualTicket);
 
-  const volunteerType = getRequestedVolunteerType(subject);
-  if (!volunteerType) {
-    log(`Ticket subject is not valid '${subject}'`);
-    return ticketId;
-  }
-  const volunteerOrganizationId = getVolunteerOrganizationId(volunteerType);
-  const filteredVolunteers = volunteersAvailable.filter(
-    ({ organization_id }) => organization_id === volunteerOrganizationId
-  );
-
   log(`Searching for closest volunteer to MSR '${requesterId}'`);
-  const volunteer = getClosestVolunteer(individual, filteredVolunteers);
+  const volunteer = getClosestVolunteer(individual, volunteersAvailable);
+
   if (!volunteer) {
     const updateIndividual = await forwardPublicService(
       {

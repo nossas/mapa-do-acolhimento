@@ -1,7 +1,7 @@
 import handleTicket from "./Services/handleTicket";
 import { fetchVolunteersAvailable } from "./Volunteers";
 import { updateSolidarityTickets } from "../graphql/mutations";
-import { getDifference } from "../utils";
+import { getDifference, getVolunteerOrganizationId } from "../utils";
 import { SubscriptionResponse, IndividualTicket } from "../types";
 import dbg from "../dbg";
 
@@ -39,9 +39,20 @@ const syncTickets = async (ids: number[]) => {
 };
 
 const createMatch = async (ticket: IndividualTicket) => {
-  const volunteersAvailable = await fetchVolunteersAvailable();
+  const volunteerOrganizationId = getVolunteerOrganizationId(ticket.subject);
 
-  const matching = await handleTicket(ticket, volunteersAvailable, AGENT);
+  let matching;
+
+  if (!volunteerOrganizationId) {
+    log(`Ticket subject is not valid '${ticket.subject}'`);
+    matching = ticket.ticket_id;
+  } else {
+    const volunteersAvailable = await fetchVolunteersAvailable(
+      volunteerOrganizationId
+    );
+
+    matching = await handleTicket(ticket, volunteersAvailable, AGENT);
+  }
 
   const resolvedMatchs =
     typeof matching === "number" || typeof matching === "undefined"
