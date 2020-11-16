@@ -1,4 +1,4 @@
-import { handleTicket, createMatch } from "../src/components";
+import { proccessMatch, createMatch } from "../src/components";
 
 describe("Handle Ticket", () => {
   it("should return early if 'solicitação_repetida' and field 'atrelado_ao_ticket' is null", async () => {
@@ -17,7 +17,7 @@ describe("Handle Ticket", () => {
         state: "SP"
       }
     };
-    expect(await handleTicket(ticket, [] as never, 1)).toStrictEqual(22964);
+    expect(await proccessMatch(ticket, 1, undefined)).toStrictEqual(22964);
   });
 
   it("should pass if 'solicitação_repetida' and field 'atrelado_ao_ticket' is not null", async () => {
@@ -35,7 +35,7 @@ describe("Handle Ticket", () => {
         state: "SP"
       }
     };
-    expect(await handleTicket(ticket, [] as never, 1)).toStrictEqual(undefined);
+    expect(await proccessMatch(ticket, 1, undefined)).not.toStrictEqual(22970);
   });
 
   it("should return early if ticket subject doesn't have a subject with a type", async () => {

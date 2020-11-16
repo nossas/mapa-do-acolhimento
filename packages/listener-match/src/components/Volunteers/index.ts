@@ -6,7 +6,7 @@ const log = dbg.extend("fetchVolunteersAvailable");
 
 const VOLUNTEERS_FOR_MATCH = gql`
   query VolunteersForMatch(
-    $recipientOrganizationId: bigint_comparison_exp!
+    $volunteerOrganizationId: bigint_comparison_exp!
     $lastMonth: timestamp_comparison_exp!
   ) {
     volunteers: solidarity_users(
@@ -21,7 +21,7 @@ const VOLUNTEERS_FOR_MATCH = gql`
         city: { _neq: "Internacional" }
         _or: [{ phone: { _is_null: false } }, { whatsapp: { _is_null: false } }]
         _and: [
-          { organization_id: $recipientOrganizationId }
+          { organization_id: $volunteerOrganizationId }
           { organization_id: { _is_null: false } }
         ]
       }
@@ -63,7 +63,7 @@ export default async (volunteerOrganizationId: number) => {
     const res = await GraphQLAPI.query({
       query: VOLUNTEERS_FOR_MATCH,
       variables: {
-        recipientOrganizationId: { _eq: volunteerOrganizationId },
+        volunteerOrganizationId: { _eq: volunteerOrganizationId },
         lastMonth: { _gte: timestamp }
       }
     });

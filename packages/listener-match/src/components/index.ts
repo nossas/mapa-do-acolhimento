@@ -1,5 +1,5 @@
-import handleTicket from "./Services/handleTicket";
-import { fetchVolunteersAvailable } from "./Volunteers";
+import { proccessMatch } from "./Services";
+import { fetchVolunteersAvailable, getClosestVolunteer } from "./Volunteers";
 import { updateSolidarityTickets } from "../graphql/mutations";
 import { getDifference, getVolunteerOrganizationId } from "../utils";
 import { SubscriptionResponse, IndividualTicket } from "../types";
@@ -25,7 +25,7 @@ export const Queue = {
   size: (data: IndividualTicket[]) => data.length
 };
 
-const syncTickets = async (ids: number[]) => {
+const markAsMatchSyncronized = async (ids: number[]) => {
   syncLog(`Updating sync status from MSR tickets ${ids}`);
   const isSynced = await updateSolidarityTickets(
     { match_syncronized: true },
@@ -47,10 +47,11 @@ const syncTickets = async (ids: number[]) => {
 
   log("Match is done");
 
-  return isSynced && isSynced.map(s => s.ticket_id);
+  return isSynced.map(s => s.ticket_id);
 };
 
 export const createMatch = async (ticket: IndividualTicket) => {
+  // Which type of volunteer the MSR needs
   const volunteerOrganizationId = getVolunteerOrganizationId(ticket.subject);
 
   let matching;
@@ -64,7 +65,14 @@ export const createMatch = async (ticket: IndividualTicket) => {
       volunteerOrganizationId
     );
 
-    matching = await handleTicket(ticket, volunteersAvailable, AGENT);
+    log(`Searching for closest volunteer to MSR '${ticket.requester_id}'`);
+
+    const closestVolunteer = getClosestVolunteer(
+      ticket.individual,
+      volunteersAvailable
+    );
+
+    matching = await proccessMatch(ticket, AGENT, closestVolunteer);
   }
 
   const resolvedMatchs =
@@ -77,7 +85,7 @@ export const createMatch = async (ticket: IndividualTicket) => {
     return undefined;
   }
 
-  return await syncTickets(resolvedMatchs);
+  return resolvedMatchs;
 };
 
 export const setRecursionLogic = (
@@ -112,7 +120,9 @@ export const handleMatch = (lastTicketSynced?: number) => async ({
     Queue.size(data) > 0 &&
     oldFirst.ticket_id != Queue.first(data).ticket_id
   ) {
-    await createMatch(Queue.first(data));
+    const resolvedMatchs = await createMatch(Queue.first(data));
+    await markAsMatchSyncronized(resolvedMatchs);
+
     const response = {
       data: { solidarity_tickets: [] }
     };
@@ -124,4 +134,4 @@ export const handleMatch = (lastTicketSynced?: number) => async ({
 };
 
 export default handleMatch;
-export { default as handleTicket } from "./Services/handleTicket";
+export { default as proccessMatch } from "./Services/proccessMatch";

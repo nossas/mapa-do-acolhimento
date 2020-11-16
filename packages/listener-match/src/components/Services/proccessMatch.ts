@@ -1,4 +1,4 @@
-import { getClosestVolunteer, createVolunteerTicket } from "../Volunteers";
+import { createVolunteerTicket } from "../Volunteers";
 import { forwardPublicService, updateIndividualTicket } from "../Individual";
 import { createMatchTicket } from "../../graphql/mutations";
 import { Volunteer, IndividualTicket } from "../../types";
@@ -21,13 +21,12 @@ const setReferences = (ticket: IndividualTicket) => {
 
 export default async (
   individualTicket: IndividualTicket,
-  volunteersAvailable: Volunteer[],
-  AGENT: number
+  AGENT: number,
+  closestVolunteer?: Volunteer
 ) => {
   const {
     status_acolhimento: statusAcolhimento,
     atrelado_ao_ticket: atreladoAoTicket,
-    requester_id: requesterId,
     ticket_id: ticketId,
     individual
   } = individualTicket;
@@ -44,10 +43,7 @@ export default async (
 
   const localIndividualTicket = setReferences(individualTicket);
 
-  log(`Searching for closest volunteer to MSR '${requesterId}'`);
-  const volunteer = getClosestVolunteer(individual, volunteersAvailable);
-
-  if (!volunteer) {
+  if (!closestVolunteer) {
     const updateIndividual = await forwardPublicService(
       {
         ticket_id: localIndividualTicket["ticket_id"],
@@ -67,21 +63,21 @@ export default async (
   }
 
   const volunteerTicketId = await createVolunteerTicket(
-    volunteer,
+    closestVolunteer,
     localIndividualTicket,
     AGENT
   );
   if (!volunteerTicketId) {
     log(
-      `No ticket ID returned after volunteer '${volunteer.user_id}' ticket tried to be created`
+      `No ticket ID returned after volunteer '${closestVolunteer.user_id}' ticket tried to be created`
     );
     return undefined;
   }
-  volunteer["ticket_id"] = volunteerTicketId;
+  closestVolunteer["ticket_id"] = volunteerTicketId;
 
   const updateIndividual = await updateIndividualTicket(
     localIndividualTicket,
-    volunteer as Volunteer & { ticket_id: number },
+    closestVolunteer as Volunteer & { ticket_id: number },
     AGENT
   );
   if (!updateIndividual) {
@@ -93,7 +89,7 @@ export default async (
 
   const matchTicket = await createMatchTicket(
     localIndividualTicket,
-    volunteer as Volunteer & { ticket_id: number }
+    closestVolunteer as Volunteer & { ticket_id: number }
   );
   if (!matchTicket) {
     log("No match ticket response was generated");
