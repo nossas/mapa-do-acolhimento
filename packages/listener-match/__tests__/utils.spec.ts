@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
-  getRequestedVolunteerType,
   getVolunteerOrganizationId,
   calcDistance,
   getDifference,
@@ -12,23 +11,15 @@ import {
 describe("Utils", () => {
   it('should return "therapist" if support type is "psicológico"', () => {
     const subject = "[Psicológico] Lilian, Paranapanema - SP";
-    expect(getRequestedVolunteerType(subject)).toStrictEqual("therapist");
+    expect(getVolunteerOrganizationId(subject)).toStrictEqual(360282119532);
   });
   it('should return "lawyer" if support type is "jurídico"', () => {
     const subject = "[Jurídico] Teste, São Paulo - SP";
-    expect(getRequestedVolunteerType(subject)).toStrictEqual("lawyer");
+    expect(getVolunteerOrganizationId(subject)).toStrictEqual(360269610652);
   });
   it('should return "undefined" if there is no support type in subject', () => {
     const subject = "";
-    expect(getRequestedVolunteerType(subject)).toStrictEqual(undefined);
-  });
-
-  it("should return the correct organization id", () => {
-    expect(getVolunteerOrganizationId("lawyer")).toStrictEqual(360269610652);
-    expect(getVolunteerOrganizationId("individual")).toStrictEqual(
-      360273031591
-    );
-    expect(getVolunteerOrganizationId("therapist")).toStrictEqual(360282119532);
+    expect(getVolunteerOrganizationId(subject)).toStrictEqual(undefined);
   });
 
   it("should return undefined if one of the values inside the tuple isn'nt a number", () => {

@@ -27,7 +27,17 @@ export const Queue = {
 
 const syncTickets = async (ids: number[]) => {
   syncLog(`Updating sync status from MSR tickets ${ids}`);
-  const sync = await updateSolidarityTickets({ match_syncronized: true }, ids);
+  const isSynced = await updateSolidarityTickets(
+    { match_syncronized: true },
+    ids
+  );
+
+  if (!isSynced) {
+    syncLog("Couldn't update sync status from MSR tickets:", ids);
+    return undefined;
+  }
+
+  log("Tickets that passed through match:", isSynced);
 
   if (AGENT < 3) {
     AGENT++;
@@ -35,14 +45,17 @@ const syncTickets = async (ids: number[]) => {
     AGENT = 1;
   }
 
-  return sync && sync.map(s => s.ticket_id);
+  log("Match is done");
+
+  return isSynced && isSynced.map(s => s.ticket_id);
 };
 
-const createMatch = async (ticket: IndividualTicket) => {
+export const createMatch = async (ticket: IndividualTicket) => {
   const volunteerOrganizationId = getVolunteerOrganizationId(ticket.subject);
 
   let matching;
-
+  // No volunteer type was found in ticket subject
+  // Usually is "[Psicológico] {Name}" or "[Jurídico] {Name}"
   if (!volunteerOrganizationId) {
     log(`Ticket subject is not valid '${ticket.subject}'`);
     matching = ticket.ticket_id;
@@ -64,15 +77,7 @@ const createMatch = async (ticket: IndividualTicket) => {
     return undefined;
   }
 
-  const isSynced = await syncTickets(resolvedMatchs as number[]);
-  if (!isSynced) {
-    syncLog("Couldn't update sync status from MSR tickets:", resolvedMatchs);
-    return undefined;
-  }
-
-  log("Tickets that passed through match:", isSynced);
-  log("Match is done");
-  return true;
+  return await syncTickets(resolvedMatchs);
 };
 
 export const setRecursionLogic = (

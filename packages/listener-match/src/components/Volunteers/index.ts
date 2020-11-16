@@ -73,23 +73,27 @@ export default async (volunteerOrganizationId: number) => {
       return undefined;
     }
 
-    return res.data.volunteers
-      .map(user => {
-        const { user_id } = user;
+    return (
+      res &&
+      res.data &&
+      res.data.volunteers
+        .map(user => {
+          const { user_id } = user;
 
-        const countForwardings = res.data.pendingTickets.filter(
-          ticket => ticket.volunteers_user_id === user_id
-        ).length;
+          const countForwardings = res.data.pendingTickets.filter(
+            ticket => ticket.volunteers_user_id === user_id
+          ).length;
 
-        const availability = 1 - (countForwardings || 0);
+          const availability = 1 - (countForwardings || 0);
 
-        return {
-          ...user,
-          pending: countForwardings,
-          availability
-        };
-      })
-      .filter(user => user.availability > 0);
+          return {
+            ...user,
+            pending: countForwardings,
+            availability
+          };
+        })
+        .filter(user => user.availability > 0)
+    );
   } catch (err) {
     log("failed to fetch available volunteers: ".red, err);
     return undefined;

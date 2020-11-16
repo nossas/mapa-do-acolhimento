@@ -1,4 +1,4 @@
-import { handleTicket } from "../src/components";
+import { handleTicket, createMatch } from "../src/components";
 
 describe("Handle Ticket", () => {
   it("should return early if 'solicitação_repetida' and field 'atrelado_ao_ticket' is null", async () => {
@@ -54,24 +54,6 @@ describe("Handle Ticket", () => {
         state: "SP"
       }
     };
-    expect(await handleTicket(ticket, [] as never, 1)).toStrictEqual(22964);
-  });
-
-  it("should pass because subject is correct", async () => {
-    const ticket = {
-      subject: "[Jurídico] Viviane, Imbituba - SC",
-      ticket_id: 27072,
-      atrelado_ao_ticket: null,
-      requester_id: 0,
-      nome_msr: "Viviane",
-      status_acolhimento: "solicitação_recebida",
-      external_id: 0,
-      individual: {
-        latitude: "0",
-        longitude: "0",
-        state: "SC"
-      }
-    };
-    expect(await handleTicket(ticket, [] as never, 1)).toStrictEqual(undefined);
+    expect(await createMatch(ticket)).toStrictEqual(22964);
   });
 });
