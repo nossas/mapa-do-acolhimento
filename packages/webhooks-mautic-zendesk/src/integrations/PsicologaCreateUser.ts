@@ -5,7 +5,7 @@ import Base from "./Base";
 import { CONDITION } from "../types";
 import {
   verificaEstudoDeCaso,
-  verificaLocalização,
+  verifyLocation,
   verificaDiretrizesAtendimento,
   removeFalsyValues
 } from "../utils";
@@ -31,9 +31,7 @@ class PsicologaCreateUser extends Base {
     const condition: [CONDITION] = [CONDITION.UNSET];
     newData = await verificaDiretrizesAtendimento(condition, newData);
     newData = await verificaEstudoDeCaso(condition, newData);
-    const validatedResult = await verificaLocalização(newData, getGeolocation);
-
-    const { tags } = validatedResult;
+    const userWithGeolocation = await verifyLocation(newData, getGeolocation);
 
     try {
       const zendeskValidation = yup
@@ -118,9 +116,12 @@ class PsicologaCreateUser extends Base {
         })
         .required();
 
-      const zendeskData = await zendeskValidation.validate(validatedResult, {
-        stripUnknown: true
-      });
+      const zendeskData = await zendeskValidation.validate(
+        userWithGeolocation,
+        {
+          stripUnknown: true
+        }
+      );
 
       const dataToBeSent = {
         user: {
@@ -128,7 +129,6 @@ class PsicologaCreateUser extends Base {
         }
       };
       return {
-        tags,
         response: await this.send(dataToBeSent)
       };
     } catch (e) {
