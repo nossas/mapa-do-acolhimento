@@ -13,8 +13,17 @@ export const zendeskOrganizations = JSON.parse(
   process.env.ZENDESK_ORGANIZATIONS || "{}"
 );
 
-export const getVolunteerOrganizationId = (type: string) =>
-  zendeskOrganizations[type];
+export const getVolunteerOrganizationId = (
+  subject?: string
+): number | undefined => {
+  const str = typeof subject === "string" ? subject.toLowerCase() : "";
+  const removeSpecialCaracters = str.replace(/[^\w\s]/gi, "");
+  if (removeSpecialCaracters.indexOf("jurdico") !== -1)
+    return zendeskOrganizations["lawyer"];
+  if (removeSpecialCaracters.indexOf("psicolgico") !== -1)
+    return zendeskOrganizations["therapist"];
+  return undefined;
+};
 
 export const getCurrentDate = () => {
   const today = new Date();
@@ -42,19 +51,7 @@ export const getVolunteerType = (id: number) => {
   throw new Error("Volunteer organization_id not supported in search for type");
 };
 
-export const customFieldsDicio: {
-  360014379412: "status_acolhimento";
-  360016631592: "nome_voluntaria";
-  360016631632: "link_match";
-  360016681971: "nome_msr";
-  360017056851: "data_inscricao_bonde";
-  360017432652: "data_encaminhamento";
-  360021665652: "status_inscricao";
-  360021812712: "telefone";
-  360021879791: "estado";
-  360021879811: "cidade";
-  360032229831: "atrelado_ao_ticket";
-} = {
+export const customFieldsDicio: Record<number, string> = {
   360014379412: "status_acolhimento",
   360016631592: "nome_voluntaria",
   360016631632: "link_match",
