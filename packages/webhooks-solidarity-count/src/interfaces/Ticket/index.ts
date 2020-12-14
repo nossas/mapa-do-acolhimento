@@ -35,7 +35,7 @@ export interface TicketZendesk {
   submitter_id: number;
   tags: string[];
   updated_at: string;
-  community_id: number;
+  community_id?: number;
 }
 
 export type customFields = {

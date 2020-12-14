@@ -15,7 +15,6 @@ $atendimentos_em_andamento_calculado__${index}: bigint
 $cep_${index}: String
 $chat_only_${index}: Boolean
 $city_${index}: String
-$community_id_${index}: Int
 $condition_${index}: String
 $cor_${index}: String
 $disponibilidade_de_atendimentos_${index}: String
@@ -79,7 +78,6 @@ atendimentos_em_andamento_calculado_: $atendimentos_em_andamento_calculado__${in
 cep: $cep_${index}
 chat_only: $chat_only_${index}
 city: $city_${index}
-community_id: $community_id_${index}
 condition: $condition_${index}
 cor: $cor_${index}
 disponibilidade_de_atendimentos: $disponibilidade_de_atendimentos_${index}
@@ -154,7 +152,6 @@ const createQuery = (users: User[]) => `mutation (${generateVariables(users)}) {
       cep
       chat_only
       city
-      community_id
       condition
       cor
       disponibilidade_de_atendimentos

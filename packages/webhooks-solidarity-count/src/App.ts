@@ -14,7 +14,6 @@ import updateUserTicketCount from "./hasura/updateUserTicketCount";
 import getUser from "./zendesk/getUser";
 import saveUsers from "./hasura/saveUsers";
 import handleCustomFields from "./interfaces/Ticket/handleCustomFields";
-import setCommunity from "./util/setCommunity";
 import parseZipcode from "./util/parseZipcode";
 import handleTicketId from "./interfaces/Ticket/handleTicketId";
 
@@ -32,9 +31,7 @@ const App = async (ticket_id: string, res: Response) => {
 
   // Converte o ticket para conter os custom_fields na raiz
   const { ticket: ticketWithoutCustomValues } = response.data;
-  const ticket = handleCustomFields(
-    setCommunity(handleTicketId(ticketWithoutCustomValues))
-  );
+  const ticket = handleCustomFields(handleTicketId(ticketWithoutCustomValues));
 
   // Salva o ticket no Hasura
   if (!(await updateHasura(ticket))) {
