@@ -122,4 +122,42 @@ describe("check if countTickets calculate fields correctly", () => {
     const count = countTickets(data as any);
     expect(count).toStrictEqual(expectedResult);
   });
+
+  it("should calculate the 'calculado' fields with 0 values", async () => {
+    const data = [
+      {
+        requester_id: 377501500792,
+        status_acolhimento: "atendimento__iniciado",
+        status: "closed",
+        organization_id: 360282119532
+      },
+      {
+        requester_id: 377501500792,
+        status_acolhimento: "atendimento__iniciado",
+        status: "closed",
+        organization_id: 360282119532
+      },
+      {
+        requester_id: 377501500792,
+        status_acolhimento: "encaminhamento__realizado",
+        status: "closed",
+        organization_id: 360282119532
+      },
+      {
+        requester_id: 377501500792,
+        status: "closed",
+        status_acolhimento: "encaminhamento__realizado",
+        organization_id: 360282119532
+      }
+    ];
+
+    const expectedResult = {
+      atendimentos_em_andamento_calculado_: 0,
+      atendimentos_concludos_calculado_: 0,
+      encaminhamentos_realizados_calculado_: 0
+    };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const count = countTickets(data as any);
+    expect(count).toStrictEqual(expectedResult);
+  });
 });
