@@ -91,7 +91,11 @@ export const calcDistance = (pointA: number[], pointB: number[]) => {
     typeof pointA[0] !== "number" ||
     typeof pointA[1] !== "number" ||
     typeof pointB[0] !== "number" ||
-    typeof pointB[1] !== "number"
+    typeof pointB[1] !== "number" ||
+    isNaN(pointA[0]) ||
+    isNaN(pointA[1]) ||
+    isNaN(pointB[0]) ||
+    isNaN(pointB[1])
   )
     return undefined;
   const a = turf.point(pointA);
