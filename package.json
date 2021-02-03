@@ -36,7 +36,7 @@
     "url": "https://github.com/nossas/mapa-do-acolhimento/issues"
   },
   "engines": {
-    "pnpm": "5.2.1",
-    "node": ">= 12.13 <13"
+    "pnpm": ">=5",
+    "node": ">=12"
   }
 }
