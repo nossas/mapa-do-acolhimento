@@ -8,7 +8,8 @@ import { handleUserError, removeDuplicatesBy } from "../utils";
 import { Widget, FormEntry, User, FormEntriesResponse } from "../types";
 import logger from "../logger";
 
-const log = logger.child({ module: "integration" });
+const log = logger.child({ labels: { process: "handleIntegration" } });
+
 const limiter = new Bottleneck({
   maxConcurrent: 1,
   minTime: 1000

@@ -4,7 +4,7 @@ import { handleIntegration } from "../../components";
 import { Widget } from "../../types";
 import logger from "../../logger";
 
-const log = logger.child({ module: "subscriptionFormEntries" });
+const log = logger.child({ labels: { process: "subscriptionFormEntries" } });
 
 const FORM_ENTRIES_SUBSCRIPTION = gql`
   subscription pipeline_form_entries($widgets: [Int!], $community_id: Int!) {

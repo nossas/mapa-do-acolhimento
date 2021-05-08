@@ -3,7 +3,7 @@ import { createZendeskUsers } from "./";
 import { User } from "../../types";
 import logger from "../../logger";
 
-const log = logger.child({ module: "batchRequests" });
+const log = logger.child({ labels: { process: "batchRequests" } });
 
 const limiter = new Bottleneck({
   maxConcurrent: 1,

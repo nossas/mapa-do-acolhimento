@@ -2,7 +2,7 @@ import client from "../../zendesk";
 import { User, ZendeskUserCreationResponse } from "../../types";
 import logger from "../../logger";
 
-const log = logger.child({ module: "createZendeskUsers" });
+const log = logger.child({ labels: { process: "createZendeskUsers" } });
 
 export default async (
   users: User[]

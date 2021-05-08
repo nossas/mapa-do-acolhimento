@@ -10,7 +10,8 @@ import {
 } from "../../types";
 import logger from "../../logger";
 
-const log = logger.child({ module: "composeUser" });
+const log = logger.child({ labels: { process: "composeUser" } });
+
 const limiter = new Bottleneck({
   maxConcurrent: 1,
   minTime: 1000

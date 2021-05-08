@@ -11,9 +11,11 @@ const limiter = new Bottleneck({
   minTime: 2000
 });
 
-const createTicketLog = logger.child({ module: "createTicket" });
-const fetchUserTicketsLog = logger.child({ module: "fetchUserTickets" });
-const log = logger.child({ module: "createZendeskTickets" });
+const createTicketLog = logger.child({ labels: { process: "createTicket" } });
+const fetchUserTicketsLog = logger.child({
+  labels: { process: "fetchUserTickets" }
+});
+const log = logger.child({ labels: { process: "createZendeskTickets" } });
 
 const dicio = {
   360014379412: "status_acolhimento",
