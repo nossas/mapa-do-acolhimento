@@ -390,7 +390,6 @@ importers:
       axios: ^0.19.0
       bonde-core-tools: ^0.1.6-alpha.4
       components: workspace:^0.0.3
-      debug: ^4.1.1
       dotenv: ^8.2.0
       elastic-apm-node: ^3.14.0
       express: ^4.17.1
@@ -406,7 +405,6 @@ importers:
       axios: 0.19.2
       bonde-core-tools: 0.1.6
       components: link:../components
-      debug: 4.3.1
       dotenv: 8.2.0
       elastic-apm-node: 3.14.0
       express: 4.17.1
