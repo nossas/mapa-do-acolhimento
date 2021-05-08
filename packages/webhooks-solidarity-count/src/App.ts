@@ -17,7 +17,7 @@ import handleCustomFields from "./interfaces/Ticket/handleCustomFields";
 import parseZipcode from "./util/parseZipcode";
 import handleTicketId from "./interfaces/Ticket/handleTicketId";
 
-const log = dbg.extend("app");
+const log = dbg.child({ module: "app" });
 
 /**
  * @param ticket_id ID do ticket
@@ -35,15 +35,15 @@ const App = async (ticket_id: string, res: Response) => {
 
   // Salva o ticket no Hasura
   if (!(await updateHasura(ticket))) {
-    log(`Failed to update ticket '${ticket_id}' in Hasura.`);
+    log.error(`Failed to update ticket '${ticket_id}' in Hasura.`);
     return res.status(500).json("Failed to save ticket in Hasura.");
   }
-  log(`Ticket '${ticket_id}' updated in Hasura.`);
+  log.info(`Ticket '${ticket_id}' updated in Hasura.`);
 
   // Busca a usuária no zendesk
   const getUserResponse = await getUser(ticket.requester_id);
   if (!getUserResponse) {
-    log(`Failed to get user '${ticket.requester_id}'.`);
+    log.error(`Failed to get user '${ticket.requester_id}'.`);
     return res.status(500).json("Failed to get user.");
   }
 
@@ -86,12 +86,14 @@ const App = async (ticket_id: string, res: Response) => {
         coordinates
       );
       if (!updateRequesterZendeskResponse) {
-        log(
+        log.error(
           `Can't update user fields for user '${ticket.requester_id}', ticket '${ticket_id}'.`
         );
         return res.status(500).json("Can't update user fields.");
       }
-      log(`User '${ticket.requester_id}' lat/lng/address updated in Zendesk.`);
+      log.info(`
+        User '${ticket.requester_id}' lat/lng/address updated in Zendesk.
+      `);
     }
 
     // Save users in Mautic
@@ -100,12 +102,12 @@ const App = async (ticket_id: string, res: Response) => {
     // Salva a usuária no Hasura
     const saveUserResponse = await saveUsers([userWithUserFields]);
     if (!saveUserResponse) {
-      log(
+      log.error(
         `Failed to save user '${ticket.requester_id}'. Ticket ${ticket.ticket_id}.`
       );
       return res.status(500).json("Failed to save user.");
     }
-    log(`User '${ticket.requester_id}' fields updated in Hasura`);
+    log.info(`User '${ticket.requester_id}' fields updated in Hasura`);
   }
 
   // Faz o count dos tickets das voluntárias e atualiza no zendesk e hasura
@@ -116,7 +118,7 @@ const App = async (ticket_id: string, res: Response) => {
     // Busca todos os tickets do requester_id
     const ticketsFromUser = await getUserRequestedTickets(ticket.requester_id);
     if (!ticketsFromUser) {
-      log(
+      log.error(
         `Can't find tickets for user '${ticket.requester_id}', ticket '${ticket_id}'.`
       );
       return res.status(500).json("Can't find tickets.");
@@ -135,12 +137,12 @@ const App = async (ticket_id: string, res: Response) => {
     );
 
     if (!updateRequesterZendeskResponse) {
-      log(
+      log.error(
         `Can't update user count for user '${ticket.requester_id}', ticket '${ticket_id}'.`
       );
       return res.status(500).json("Can't update user count.");
     }
-    log(
+    log.info(
       `User '${ticket.requester_id}' count updated in Zendesk, ticket '${ticket_id}'.`
     );
 
@@ -153,26 +155,28 @@ const App = async (ticket_id: string, res: Response) => {
     ]);
 
     if (!saveUsersHasuraResponse) {
-      log(`Failed to update user count '${ticket.requester_id}' in Hasura.`);
+      log.error(`
+        Failed to update user count '${ticket.requester_id}' in Hasura.
+      `);
       return res.status(500).json("Failed to update user count in Hasura.");
     }
 
-    log(
+    log.info(
       `User '${ticket.requester_id}' count updated in Hasura, ticket '${ticket_id}'.`
     );
-    log("Finished sync");
+    log.info("Finished sync");
     return res.status(200).json("Ok!");
   }
 
   if (organization === ORGANIZATIONS.MSR) {
-    log(
+    log.info(
       `Updated ticket '${ticket_id}' belongs to MSR organization, recount tickets isn't necessary.`
     );
-    log("Finished sync");
+    log.info("Finished sync");
     return res.status(200).json("Ok!");
   }
 
-  log("Finished sync");
+  log.info("Finished sync");
   return res
     .status(202)
     .json(`Failed to parse the organization_id for this ticket '${ticket_id}`);

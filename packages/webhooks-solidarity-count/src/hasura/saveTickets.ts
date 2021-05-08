@@ -146,7 +146,7 @@ const createQuery = (tickets: Tickets) => `mutation (${generateVariables(
   }
 }`;
 
-const log = dbg.extend("saveTickets");
+const log = dbg.child({ labels: { process: "saveTickets" } });
 
 interface Response {
   affected_rows: number;
@@ -164,12 +164,12 @@ const saveTickets = async (tickets: Tickets[]) => {
     >(query, variables);
 
     if (isError(response.data)) {
-      return log(response.data.errors);
+      return log.error(response.data.errors as object);
     }
 
     return response.data.data.insert_solidarity_tickets.affected_rows;
   } catch (e) {
-    return log(e);
+    return log.error(e);
   }
 };
 
