@@ -28,6 +28,7 @@
     "clean": "rimraf coverage dist tmp"
   },
   "dependencies": {
+    "@elastic/ecs-pino-format": "^1.1.1",
     "@turf/turf": "5.1.6",
     "apollo-cache-inmemory": "^1.6.6",
     "apollo-client": "^2.6.10",
@@ -43,6 +44,7 @@
     "graphql": "^15.1.0",
     "graphql-tag": "^2.10.3",
     "node-zendesk": "1.4.0",
+    "pino": "^6.11.3",
     "throng": "^4.0.0",
     "ws": "^7.3.0",
     "yup": "^0.29.1"
