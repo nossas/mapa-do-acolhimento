@@ -3,7 +3,7 @@ import dbg from "./dbg";
 import { Ticket } from "./interfaces/Ticket";
 import { ORGANIZATIONS } from "./interfaces/Organizations";
 
-const log = dbg.extend("verifyOrganization");
+const log = dbg.child({ labels: { process: "verifyOrganization" } });
 
 const verifyOrganization = async (ticket: Ticket) => {
   const { ZENDESK_ORGANIZATIONS = "" } = process.env;
@@ -28,11 +28,11 @@ const verifyOrganization = async (ticket: Ticket) => {
       case organizations.PSICÓLOGA:
         return ORGANIZATIONS.PSICOLOGA;
       default:
-        log(`failed to parse organization '${organization_id}'`);
+        log.warn(`failed to parse organization '${organization_id}'`);
         return null;
     }
   } catch (e) {
-    dbg.extend("verifyOrganization")(e);
+    dbg.child({ labels: { process: "verifyOrganization" } }).error(e);
     return null;
   }
 };

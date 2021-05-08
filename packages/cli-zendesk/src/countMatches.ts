@@ -6,7 +6,7 @@ import { ORGANIZATIONS } from "./interfaces/Organizations";
 import dbg from "./dbg";
 import saveMatches from "./hasura/saveMatches";
 
-const log = dbg.extend("saveMatches");
+const log = dbg.child({ labels: { process: "saveMatches" } });
 
 const countMatches = async (tickets: Ticket[]) => {
   // Recebe lista de tickets, pareia os matches objeto do tipo id -> id, e salva no banco do hasura
@@ -19,12 +19,12 @@ const countMatches = async (tickets: Ticket[]) => {
     if (i.link_match) {
       const matchId = Number(i.link_match.split("/").slice(-1)[0]);
       if (Number.isNaN(matchId)) {
-        return log(
+        return log.warn(
           `failed to convert '${i.link_match}' for ticket '${i.ticket_id}'`
         );
       }
       if (i.ticket_id === matchId) {
-        return log(
+        return log.warn(
           `you can't match a ticket with itself. Ticket '${i.ticket_id}'`
         );
       }
@@ -70,7 +70,7 @@ const countMatches = async (tickets: Ticket[]) => {
   let counter = 0;
   for await (const i of splittedArray) {
     counter += i.length;
-    log(`[${counter}/${array.length}]`);
+    log.info(`[${counter}/${array.length}]`);
     await saveMatches(i);
   }
 

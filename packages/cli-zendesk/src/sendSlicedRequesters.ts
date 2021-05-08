@@ -2,7 +2,7 @@ import updateRequesterFields from "./zendesk/updateRequesterFields";
 import { Requester } from "./interfaces/Requester";
 import dbg from "./dbg";
 
-const log = dbg.extend("sendSlicedRequesters");
+const log = dbg.child({ labels: { process: "sendSlicedRequesters" } });
 
 const sendSlicedRequesters = async (
   slicedRequesters: Requester[],
@@ -10,7 +10,7 @@ const sendSlicedRequesters = async (
   counter: number
 ): Promise<boolean> => {
   if (counter >= tries) {
-    log("Tentou mais de três vezes", slicedRequesters);
+    log.warn("Tentou mais de três vezes", slicedRequesters);
     return false;
   }
   const response = await updateRequesterFields(slicedRequesters);
@@ -18,12 +18,12 @@ const sendSlicedRequesters = async (
   await new Promise(r => setTimeout(r, 1000));
 
   if (!response) {
-    log("Resposta indefinida!");
+    log.warn("Resposta indefinida!");
     return sendSlicedRequesters(slicedRequesters, tries, counter + 1);
   }
 
   if ((response as { status: number }).status !== 200) {
-    log("Resposta diferente de 200 para o usuário", slicedRequesters);
+    log.warn("Resposta diferente de 200 para o usuário", slicedRequesters);
     return sendSlicedRequesters(slicedRequesters, tries, counter + 1);
   }
 

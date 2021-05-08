@@ -1,3 +1,6 @@
-import debug from "debug";
+import pino from "pino";
+import ecsFormat from "@elastic/ecs-pino-format";
 
-export default debug("cli-zendesk");
+const logger = pino({ ...ecsFormat({ convertReqRes: true }) });
+
+export default logger;

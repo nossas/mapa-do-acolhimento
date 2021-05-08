@@ -3,7 +3,7 @@ import dbg from "./dbg";
 import saveUsers from "./hasura/saveUsers";
 import User from "./interfaces/User";
 
-const log = dbg.extend("saveUsersInChunks");
+const log = dbg.child({ labels: { process: "saveUsersInChunks" } });
 
 const saveUsersInChunks = async (users: User[]) => {
   const splitedUsers = R.splitEvery(1000, users) as User[][];

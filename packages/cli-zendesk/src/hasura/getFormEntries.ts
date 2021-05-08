@@ -2,7 +2,7 @@ import axios from "axios";
 import * as yup from "yup";
 import dbg from "./dbg";
 
-const log = dbg.extend("BondeCreatedDate");
+const log = dbg.child({ module: "BondeCreatedDate" });
 
 const query = `query($advogadaId: Int!, $psicologaId: Int!, $volunteerId: Int!) {
   form_entries(where: {widget_id: {_in: [$advogadaId, $psicologaId, $volunteerId]}}) {
@@ -88,7 +88,7 @@ export const filterByEmail = (formEntries: FormEntry[], email) => {
     );
 
   if (filteredFormEntries.length === 0) {
-    log(`Sem data do bonde para o email ${email}.`);
+    log.info(`Sem data do bonde para o email ${email}.`);
     return null;
   }
 

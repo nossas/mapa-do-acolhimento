@@ -2,7 +2,7 @@ import { Ticket, TicketResponse } from "./interfaces/Ticket";
 import getTicketsByPage from "./zendesk/getTicketsByPage";
 import dbg from "./dbg";
 
-const log = dbg.extend("getAllTickets");
+const log = dbg.child({ labels: { process: "getAllTickets" } });
 
 const getAllTickets = async () => {
   const tickets: Ticket[] = [];
@@ -21,7 +21,7 @@ const getAllTickets = async () => {
       start_time = end_time;
       requestedTickets.forEach(i => tickets.push(i));
       counter += count;
-      log(`[${counter}], end_time: ${start_time}`);
+      log.info(`[${counter}], end_time: ${start_time}`);
       if (count < 1000) {
         break;
       }

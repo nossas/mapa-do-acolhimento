@@ -173,7 +173,7 @@ const saveTickets = async (tickets: Tickets) => {
     }
   );
 
-  response.data.errors && dbg(response.data.errors);
+  response.data.errors && dbg.error(response.data.errors);
 
   return response;
 };

@@ -2,7 +2,7 @@ import getUsersByPage from "./zendesk/getUsersByPage";
 import User, { UserResponse } from "./interfaces/User";
 import dbg from "./dbg";
 
-const log = dbg.extend("getAllUsers");
+const log = dbg.child({ labels: { process: "getAllUsers" } });
 
 const getAllUsers = async () => {
   const users: User[] = [];
@@ -21,7 +21,7 @@ const getAllUsers = async () => {
       start_time = end_time;
       requestedUsers.forEach(i => users.push(i));
       counter += count;
-      log(`[${counter}], end_time: ${start_time}`);
+      log.info(`[${counter}], end_time: ${start_time}`);
       if (count < 1000) {
         break;
       }

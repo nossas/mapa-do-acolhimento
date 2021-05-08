@@ -1,8 +1,8 @@
 import urljoin from "url-join";
 import axios from "axios";
-import { Debugger } from "debug";
+import { Logger } from "pino";
 
-const get = async <T>(url: string, log: Debugger, params?: unknown) => {
+const get = async <T>(url: string, log: Logger, params?: unknown) => {
   const {
     ZENDESK_API_URL = "",
     ZENDESK_API_TOKEN = "",
@@ -18,11 +18,11 @@ const get = async <T>(url: string, log: Debugger, params?: unknown) => {
       params
     });
   } catch (e) {
-    return log(e.response.data);
+    return log.error(e.response.data);
   }
 };
 
-const put = async <T>(url: string, log: Debugger, data?: unknown) => {
+const put = async <T>(url: string, log: Logger, data?: unknown) => {
   const {
     ZENDESK_API_URL = "",
     ZENDESK_API_TOKEN = "",
@@ -37,7 +37,7 @@ const put = async <T>(url: string, log: Debugger, data?: unknown) => {
       }
     });
   } catch (e) {
-    return log(e);
+    return log.error(e);
   }
 };
 

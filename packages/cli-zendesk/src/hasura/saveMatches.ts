@@ -66,7 +66,7 @@ const saveMatches = async (matches: Match[]) => {
     }
   );
 
-  response.data.errors && dbg(response.data.errors[0]);
+  response.data.errors && dbg.error(response.data.errors[0]);
 
   return response;
 };

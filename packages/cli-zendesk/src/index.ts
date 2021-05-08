@@ -9,13 +9,6 @@ const {
 } = process.env;
 
 import apm from "elastic-apm-node";
-
-apm.start({
-  secretToken,
-  serverUrl,
-  serviceName
-});
-
 import { install } from "source-map-support";
 import commander from "commander";
 import signale from "signale";
@@ -33,6 +26,13 @@ program.option(
 
 const init = async () => {
   try {
+    if (secretToken && serverUrl && serviceName) {
+      apm.start({
+        secretToken,
+        serverUrl,
+        serviceName
+      });
+    }
     checkConfig();
 
     program.parse(process.argv);
@@ -50,7 +50,7 @@ const init = async () => {
       signale.fatal(`'${program.mode}' is not a valid operation mode`);
     }
   } catch (e) {
-    dbg(e);
+    dbg.error(e);
   }
 };
 

@@ -2,7 +2,7 @@ import { Requester } from "./interfaces/Requester";
 import dbg from "./dbg";
 import sendSlicedRequesters from "./sendSlicedRequesters";
 
-const log = dbg.extend("sendRequesters");
+const log = dbg.child({ labels: { process: "sendRequesters" } });
 
 const sendRequesters = async (requesters: Requester[]) => {
   const limit = 100;
@@ -12,7 +12,7 @@ const sendRequesters = async (requesters: Requester[]) => {
     const slicedRequesters = requesters.slice(offset, offset + limit);
     // eslint-disable-next-line no-await-in-loop
     const responseOk = await sendSlicedRequesters(slicedRequesters, 3, 0);
-    log(
+    log.info(
       `[${
         offset + limit < requesters.length ? offset + limit : requesters.length
       }/${requesters.length}]`
@@ -24,7 +24,7 @@ const sendRequesters = async (requesters: Requester[]) => {
       }
       offset += limit;
     } else {
-      log("Falha na integração!");
+      log.error("Falha na integração!");
       break;
     }
   }

@@ -20,7 +20,7 @@ const updateRequesterFields = (requestData: UpdateRequesterFieldsRequest[]) => {
   };
   return Base.put(
     "users/update_many",
-    dbg.extend("updateRequesterFields"),
+    dbg.child({ labels: { process: "updateRequesterFields" } }),
     data
   );
 };

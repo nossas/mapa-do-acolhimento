@@ -5,7 +5,7 @@ import dbg from "./dbg";
 const getTicketsByPage = (start_time: number) =>
   Base.get<TicketResponse>(
     "incremental/tickets",
-    dbg.extend("getTicketsByPage"),
+    dbg.child({ labels: { process: "getTicketsByPage" } }),
     { start_time }
   );
 
