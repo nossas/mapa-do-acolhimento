@@ -26,6 +26,7 @@
     "clean": "rimraf coverage dist tmp"
   },
   "dependencies": {
+    "@elastic/ecs-pino-format": "^1.1.1",
     "apollo-cache-inmemory": "^1.6.5",
     "apollo-client": "^2.6.8",
     "apollo-link": "^1.2.13",
@@ -40,6 +41,7 @@
     "cross-fetch": "^3.0.4",
     "debug": "^4.1.1",
     "dotenv-safe": "^8.2.0",
+    "elastic-apm-node": "^3.14.0",
     "faker": "^4.1.0",
     "graphql": "^14.6.0",
     "graphql-tag": "^2.10.3",
