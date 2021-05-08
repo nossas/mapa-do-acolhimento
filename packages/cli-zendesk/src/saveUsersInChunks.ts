@@ -11,7 +11,7 @@ const saveUsersInChunks = async (users: User[]) => {
   for await (const usersChunk of splitedUsers) {
     await saveUsers(usersChunk);
     contador += usersChunk.length;
-    log(`[${contador}/${users.length}]`);
+    log.info(`[${contador}/${users.length}]`);
   }
 };
 

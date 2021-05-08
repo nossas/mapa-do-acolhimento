@@ -50,7 +50,6 @@ importers:
       '@types/yup': ^0.29.3
       axios: ^0.19.0
       commander: ^4.0.1
-      debug: ^4.1.1
       dotenv: ^8.2.0
       elastic-apm-node: ^3.2.0
       express: ^4.17.1
@@ -66,7 +65,6 @@ importers:
       '@elastic/ecs-pino-format': 1.1.1
       axios: 0.19.2
       commander: 4.1.1
-      debug: 4.3.1
       dotenv: 8.2.0
       elastic-apm-node: 3.9.0
       express: 4.17.1
