@@ -3,7 +3,10 @@ import { client as GraphQLAPI } from "..";
 import handleMatch from "../../components";
 import dbg from "../../dbg";
 
-const log = dbg.extend("subscriptionFormEntries");
+const log = dbg.child({
+  module: "hasura",
+  labels: { process: "subscriptionFormEntries" }
+});
 
 const SOLIDARITY_USERS_SUBSCRIPTION = gql`
   subscription pipeline_solidarity_tickets($organization_id: bigint) {
@@ -46,7 +49,7 @@ const SOLIDARITY_USERS_SUBSCRIPTION = gql`
 `;
 
 const error = err => {
-  log("Receiving error on subscription GraphQL API: ", err);
+  log.error("Receiving error on subscription GraphQL API: ", err);
 };
 
 export default async (): Promise<unknown> => {
@@ -61,7 +64,7 @@ export default async (): Promise<unknown> => {
 
     return observable;
   } catch (err) {
-    log("failed on subscription: ".red, err);
+    log.error("failed on subscription: ".red, err);
     return undefined;
   }
 };

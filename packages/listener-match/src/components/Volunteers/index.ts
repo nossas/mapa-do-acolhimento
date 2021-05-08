@@ -2,7 +2,7 @@ import gql from "graphql-tag";
 import { client as GraphQLAPI } from "../../graphql";
 import dbg from "../../dbg";
 
-const log = dbg.extend("fetchVolunteersAvailable");
+const log = dbg.child({ labels: { process: "fetchVolunteersAvailable" } });
 
 const VOLUNTEERS_FOR_MATCH = gql`
   query VolunteersForMatch(
@@ -54,7 +54,7 @@ const VOLUNTEERS_FOR_MATCH = gql`
 `;
 
 export default async (volunteerOrganizationId: number) => {
-  log("Fetching available volunteers");
+  log.info("Fetching available volunteers");
   const today = new Date();
   // get last month and format
   const last_month = new Date().setDate(today.getDate() - 30);
@@ -71,7 +71,7 @@ export default async (volunteerOrganizationId: number) => {
     });
 
     if (res && res.data && res.data.errors) {
-      log("failed to fetch available volunteers: ".red, res.data.errors);
+      log.info("failed to fetch available volunteers: ".red, res.data.errors);
       return undefined;
     }
 
@@ -97,7 +97,7 @@ export default async (volunteerOrganizationId: number) => {
         .filter(user => (user.availability || 0) > 0)
     );
   } catch (err) {
-    log("failed to fetch available volunteers: ".red, err);
+    log.info("failed to fetch available volunteers: ".red, err);
     return undefined;
   }
 };

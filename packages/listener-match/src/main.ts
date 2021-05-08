@@ -2,23 +2,23 @@ import throng from "throng";
 import { subscriptionSolidarityTickets } from "./graphql/subscriptions";
 import dbg from "./dbg";
 
-const log = dbg.extend("main");
+const log = dbg.child({ module: "main" });
 
 throng({
   workers: 1,
   start: async (id: number) => {
-    log(`Started worker ${id}`);
+    log.info(`Started worker ${id}`);
 
     try {
-      log("Fetching solidarity tickets for match...");
+      log.info("Fetching solidarity tickets for match...");
       await subscriptionSolidarityTickets();
     } catch (err) {
-      log("throng err: ".red, err);
+      log.error("throng err: ".red, err);
     }
 
     process.on("SIGTERM", function() {
-      log(`Worker ${id} exiting`);
-      log("Cleanup here");
+      log.info(`Worker ${id} exiting`);
+      log.info("Cleanup here");
       process.exit();
     });
   }

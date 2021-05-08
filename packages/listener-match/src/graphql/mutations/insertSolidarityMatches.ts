@@ -4,7 +4,10 @@ import { client as GraphQLAPI } from "../";
 import dbg from "../../dbg";
 import { IndividualTicket, Volunteer, MatchTicket } from "../../types";
 
-const log = dbg.extend("insertSolidaritymatches");
+const log = dbg.child({
+  module: "hasura",
+  labels: { process: "insertSolidaritymatches" }
+});
 
 const CREATE_MATCH_TICKET_MUTATION = gql`
   mutation createMatchTicket($match: solidarity_matches_insert_input!) {
@@ -43,7 +46,7 @@ export default async (
   individual: IndividualTicket,
   volunteer: Volunteer & { ticket_id: number }
 ): Promise<number | undefined> => {
-  log(
+  log.info(
     `Saving match ticket for individual '${individual.requester_id}' and volunteer '${volunteer.user_id}' in Hasura...`
   );
   const match: MatchTicket = {
@@ -65,7 +68,7 @@ export default async (
     });
 
     if (res && res.data && res.data.errors) {
-      log("failed on insert solidarity matches: ".red, res.data.errors);
+      log.error("failed on insert solidarity matches: ".red, res.data.errors);
       return undefined;
     }
 
@@ -77,7 +80,7 @@ export default async (
 
     return insert_solidarity_matches_one && insert_solidarity_matches_one.id;
   } catch (err) {
-    log("failed on insert solidarity matches: ".red, err);
+    log.error("failed on insert solidarity matches: ".red, err);
     return undefined;
   }
 };
