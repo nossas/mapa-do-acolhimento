@@ -40,6 +40,7 @@
     "colors": "^1.4.0",
     "cross-fetch": "^3.0.5",
     "dotenv-safe": "^8.2.0",
+    "elastic-apm-node": "^3.14.0",
     "graphql": "^15.1.0",
     "graphql-tag": "^2.10.3",
     "node-zendesk": "1.4.0",
