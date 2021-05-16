@@ -1,6 +1,7 @@
 import Express from "express";
-import debug, { Debugger } from "debug";
+import { Logger } from "pino";
 import axios from "axios";
+import log from "./logger";
 
 const mutation = `mutation(
   $json: jsonb!,
@@ -29,10 +30,10 @@ interface DataType {
 class Server {
   server = Express().use(Express.json());
 
-  private dbg: Debugger;
+  private dbg: Logger;
 
   constructor() {
-    this.dbg = debug("webhooks-mautic-registry");
+    this.dbg = log;
   }
 
   private request = async (serviceName: string, json: object) => {
@@ -58,16 +59,16 @@ class Server {
           }
         }
       );
-      this.dbg(`Success logged "${serviceName}" req with id "${id}"`);
+      this.dbg.info(`Success logged "${serviceName}" req with id "${id}"`);
     } catch (e) {
-      this.dbg(e);
+      this.dbg.error(e);
     }
   };
 
   start = () => {
     this.server.post("/:serviceName", async (req, res) => {
       const { serviceName } = req.params as { [s: string]: string };
-      this.dbg(`Incomming request from "${serviceName}"`);
+      this.dbg.info(`Incomming request from "${serviceName}"`);
       if (!serviceName) {
         return res
           .status(400)
@@ -83,7 +84,7 @@ class Server {
   listen = () => {
     const { PORT } = process.env;
     this.server.listen(Number(PORT), "0.0.0.0", () => {
-      this.dbg(`Server listen on port ${PORT}`);
+      this.dbg.info(`Server listen on port ${PORT}`);
     });
   };
 }
