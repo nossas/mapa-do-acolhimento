@@ -1,7 +1,10 @@
 import { client as GraphQLAPI } from "../";
 import dbg from "../../dbg";
 
-const log = dbg.extend("fetchSolidarityMatches");
+const log = dbg.child({
+  module: "hasura",
+  labels: { process: "fetchSolidarityMatches" }
+});
 
 const fetchSolidarityMatches = async ({
   query,
@@ -17,7 +20,7 @@ const fetchSolidarityMatches = async ({
     });
 
     if (res && res.data && res.data.errors) {
-      log("failed to fetch solidarity_matches: ".red, res.data.errors);
+      log.error("failed to fetch solidarity_matches: ".red, res.data.errors);
       return undefined;
     }
 
@@ -29,7 +32,7 @@ const fetchSolidarityMatches = async ({
 
     return solidarity_matches || [];
   } catch (err) {
-    log("failed to fetch solidarity_matches: ".red, err);
+    log.error("failed to fetch solidarity_matches: ".red, err);
     return undefined;
   }
 };

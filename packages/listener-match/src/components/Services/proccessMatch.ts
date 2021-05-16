@@ -4,7 +4,7 @@ import { createMatchTicket } from "../../graphql/mutations";
 import { Volunteer, IndividualTicket } from "../../types";
 import dbg from "../../dbg";
 
-const log = dbg.extend("handleTicket");
+const log = dbg.child({ labels: { process: "handleTicket" } });
 
 const setReferences = (ticket: IndividualTicket) => {
   if (
@@ -35,7 +35,7 @@ export default async (
     statusAcolhimento === "solicitação_repetida" &&
     atreladoAoTicket === null
   ) {
-    log(
+    log.warn(
       `Ticket is "solicitação_repetida" but field "atrelado_ao_ticket is null`
     );
     return ticketId;
@@ -52,7 +52,7 @@ export default async (
       AGENT
     );
     if (!updateIndividual) {
-      log(
+      log.warn(
         `No ticket ID returned after individual ticket '${localIndividualTicket.ticket_id}' tried to be updated`
       );
       return undefined;
@@ -68,7 +68,7 @@ export default async (
     AGENT
   );
   if (!volunteerTicketId) {
-    log(
+    log.warn(
       `No ticket ID returned after volunteer '${closestVolunteer.user_id}' ticket tried to be created`
     );
     return undefined;
@@ -81,7 +81,7 @@ export default async (
     AGENT
   );
   if (!updateIndividual) {
-    log(
+    log.warn(
       `No ticket ID returned after individual ticket '${localIndividualTicket.ticket_id}' tried to be updated`
     );
     return undefined;
@@ -92,7 +92,7 @@ export default async (
     closestVolunteer as Volunteer & { ticket_id: number }
   );
   if (!matchTicket) {
-    log("No match ticket response was generated");
+    log.warn("No match ticket response was generated");
     return undefined;
   }
 

@@ -10,7 +10,7 @@ import {
 import { IndividualTicket, Volunteer } from "../../types";
 import dbg from "../../dbg";
 
-const log = dbg.extend("createVolunteerTicket");
+const log = dbg.child({ labels: { process: "createVolunteerTicket" } });
 
 const hasuraSchema = yup
   .object()
@@ -88,7 +88,7 @@ export default async (
     ]
   };
   try {
-    log(
+    log.info(
       `Creating a ticket to volunteer '${ticket.requester_id}' in Zendesk...`
     );
 
@@ -108,7 +108,7 @@ export default async (
       stripUnknown: true
     });
 
-    log(
+    log.info(
       `Saving new volunteer ticket '${validatedTicket.ticket_id}' in Hasura...`
     );
     saveSolidarityTicket([validatedTicket]);
@@ -116,7 +116,7 @@ export default async (
     // log("Successfully saved volunteer ticket in Hasura");
     return zendeskTicket.id;
   } catch (e) {
-    log("failed to create ticket: ".red, e);
+    log.error("failed to create ticket: ".red, e);
     return undefined;
   }
 };

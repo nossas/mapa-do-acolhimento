@@ -5,7 +5,7 @@ import { getCurrentDate, agentSelectionDicio, agentDicio } from "../../utils";
 import dbg from "../../dbg";
 import individualComment from "./email";
 
-const log = dbg.extend("updateIndividualTicket");
+const log = dbg.child({ labels: { process: "updateIndividualTicket" } });
 
 const hasuraSchema = yup
   .object()
@@ -40,7 +40,7 @@ export default async (
   volunteer: Volunteer & { ticket_id: number },
   agent: number
 ) => {
-  log("Entering updateIndividualTicket");
+  log.info("Entering updateIndividualTicket");
   const ticket = {
     ticket_id: individual.ticket_id,
     status: "pending",

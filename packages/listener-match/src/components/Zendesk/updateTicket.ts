@@ -4,7 +4,10 @@ import { UpdateTicket, Ticket } from "../../types";
 import { agentSelectionDicio } from "../../utils";
 import * as yup from "yup";
 
-const log = dbg.extend("zendesk").extend("updateTicket");
+const log = dbg.child({
+  module: "zendesk",
+  labels: { process: "updateTicket" }
+});
 
 const schema = yup
   .object()
@@ -64,7 +67,7 @@ export default async (
         { ticket: validatedTicket } as { ticket },
         (err, _req, result) => {
           if (err) {
-            log(`Failed to update ticket '${ticketId}'`.red, err);
+            log.error(`Failed to update ticket '${ticketId}'`.red, err);
             return resolve(undefined);
           }
           // log(
@@ -80,7 +83,7 @@ export default async (
       );
     });
   } catch (e) {
-    log("failed to update msr ticket: ".red, e);
+    log.error("failed to update msr ticket: ".red, e);
     return undefined;
   }
 };

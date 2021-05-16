@@ -1,24 +1,38 @@
 import throng from "throng";
+import apm from "elastic-apm-node";
 import { subscriptionSolidarityTickets } from "./graphql/subscriptions";
 import dbg from "./dbg";
 
-const log = dbg.extend("main");
+const log = dbg.child({ module: "main" });
+
+const {
+  ELASTIC_APM_SECRET_TOKEN: secretToken,
+  ELASTIC_APM_SERVER_URL: serverUrl,
+  ELASTIC_APM_SERVICE_NAME: serviceName
+} = process.env;
 
 throng({
   workers: 1,
   start: async (id: number) => {
-    log(`Started worker ${id}`);
+    log.info(`Started worker ${id}`);
 
     try {
-      log("Fetching solidarity tickets for match...");
+      if (secretToken && serverUrl && serviceName) {
+        apm.start({
+          secretToken,
+          serverUrl,
+          serviceName
+        });
+      }
+      log.info("Fetching solidarity tickets for match...");
       await subscriptionSolidarityTickets();
     } catch (err) {
-      log("throng err: ".red, err);
+      log.error("throng err: ".red, err);
     }
 
     process.on("SIGTERM", function() {
-      log(`Worker ${id} exiting`);
-      log("Cleanup here");
+      log.info(`Worker ${id} exiting`);
+      log.info("Cleanup here");
       process.exit();
     });
   }

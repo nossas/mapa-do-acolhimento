@@ -4,11 +4,11 @@ import dbg from "../../dbg";
 import { updateSolidarityTickets } from "../../graphql/mutations";
 import { UpdateTicket } from "../../types";
 
-const log = dbg.extend("updateTicket");
+const log = dbg.child({ labels: { process: "updateTicket" } });
 
 export default async (ticket: UpdateTicket & { ticket_id: number }, schema) => {
   try {
-    log(`Updating MSR ticket '${ticket.ticket_id}' in Zendesk...`);
+    log.info(`Updating MSR ticket '${ticket.ticket_id}' in Zendesk...`);
     const zendeskTicket = await updateTicket(
       ticket.ticket_id,
       ticket as UpdateTicket
@@ -27,7 +27,7 @@ export default async (ticket: UpdateTicket & { ticket_id: number }, schema) => {
       stripUnknown: true
     });
 
-    log(
+    log.info(
       `Updating individual ticket '${validatedTicket.ticket_id}' in Hasura...`
     );
 
@@ -35,7 +35,7 @@ export default async (ticket: UpdateTicket & { ticket_id: number }, schema) => {
 
     return zendeskTicket.id;
   } catch (e) {
-    log("failed to create ticket in zendesk: ".red, e);
+    log.error("failed to create ticket in zendesk: ".red, e);
     return undefined;
   }
 };

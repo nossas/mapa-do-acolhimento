@@ -4,7 +4,10 @@ import { agentSelectionDicio } from "../../utils";
 import { Ticket } from "../../types";
 import * as yup from "yup";
 
-const log = dbg.extend("zendesk").extend("createTicket");
+const log = dbg.child({
+  module: "zendesk",
+  labels: { process: "createTicket" }
+});
 
 const schema = yup
   .object()
@@ -58,7 +61,7 @@ export default async (ticket: Ticket): Promise<Ticket | undefined> => {
         { ticket: validatedTicket } as { ticket },
         (err, _req, result) => {
           if (err) {
-            log(
+            log.error(
               `Failed to create ticket for user '${ticket.requester_id}'`.red,
               err
             );
@@ -77,7 +80,7 @@ export default async (ticket: Ticket): Promise<Ticket | undefined> => {
       );
     });
   } catch (e) {
-    log("failed to create ticket: ".red, e);
+    log.error("failed to create ticket: ".red, e);
     return undefined;
   }
 };

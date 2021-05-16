@@ -3,7 +3,7 @@ import { updateTicket } from "../Services";
 import { getCurrentDate, agentSelectionDicio } from "../../utils";
 import dbg from "../../dbg";
 
-const log = dbg.extend("updateIndividualTicket");
+const log = dbg.child({ label: { process: "updateIndividualTicket" } });
 
 const hasuraSchema = yup
   .object()
@@ -39,7 +39,7 @@ export default async (
   { ticket_id, state }: { ticket_id: number; state: string },
   agent: number
 ) => {
-  log("Couldn't find any close volunteers for MSR");
+  log.info("Couldn't find any close volunteers for MSR");
   const ticket = {
     ticket_id,
     status: "pending",

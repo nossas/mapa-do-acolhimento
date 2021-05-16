@@ -5,8 +5,8 @@ import { getDifference, getVolunteerOrganizationId } from "../utils";
 import { SubscriptionResponse, IndividualTicket } from "../types";
 import dbg from "../dbg";
 
-const log = dbg.extend("match");
-const syncLog = dbg.extend("match").extend("syncTickets");
+const log = dbg.child({ module: "match" });
+const syncLog = log.child({ labels: { process: "syncTickets" } });
 
 let AGENT = 1;
 let data: IndividualTicket[] = [];
@@ -26,18 +26,18 @@ export const Queue = {
 };
 
 const markAsMatchSyncronized = async (ids: number[]) => {
-  syncLog(`Updating sync status from MSR tickets ${ids}`);
+  syncLog.info(`Updating sync status from MSR tickets ${ids}`);
   const isSynced = await updateSolidarityTickets(
     { match_syncronized: true },
     ids
   );
 
   if (!isSynced) {
-    syncLog("Couldn't update sync status from MSR tickets:", ids);
+    syncLog.warn("Couldn't update sync status from MSR tickets:", ids);
     return undefined;
   }
 
-  log("Tickets that passed through match:", isSynced);
+  log.info("Tickets that passed through match:", isSynced);
 
   if (AGENT < 3) {
     AGENT++;
@@ -45,7 +45,7 @@ const markAsMatchSyncronized = async (ids: number[]) => {
     AGENT = 1;
   }
 
-  log("Match is done");
+  log.info("Match is done");
 
   return isSynced.map(s => s.ticket_id);
 };
@@ -58,14 +58,14 @@ export const createMatch = async (ticket: IndividualTicket) => {
   // No volunteer type was found in ticket subject
   // Usually is "[Psicológico] {Name}" or "[Jurídico] {Name}"
   if (!volunteerOrganizationId) {
-    log(`Ticket subject is not valid '${ticket.subject}'`);
+    log.warn(`Ticket subject is not valid '${ticket.subject}'`);
     matching = ticket.ticket_id;
   } else {
     const volunteersAvailable = await fetchVolunteersAvailable(
       volunteerOrganizationId
     );
 
-    log(`Searching for closest volunteer to MSR '${ticket.requester_id}'`);
+    log.info(`Searching for closest volunteer to MSR '${ticket.requester_id}'`);
 
     const closestVolunteer = getClosestVolunteer(
       ticket.individual,
@@ -81,7 +81,7 @@ export const createMatch = async (ticket: IndividualTicket) => {
       : matching.flat(2);
 
   if (!resolvedMatchs) {
-    log("No tickets to sync");
+    log.info("No tickets to sync");
     return undefined;
   }
 
@@ -112,7 +112,7 @@ export const handleMatch = (lastTicketSynced?: number) => async ({
   data: { solidarity_tickets: tickets }
 }: SubscriptionResponse) => {
   if (tickets.length > 0)
-    log(`${new Date()}: \nReceiving data on subscription GraphQL API...`);
+    log.info(`${new Date()}: \nReceiving data on subscription GraphQL API...`);
 
   const oldFirst = setRecursionLogic(tickets, lastTicketSynced);
 
@@ -128,7 +128,7 @@ export const handleMatch = (lastTicketSynced?: number) => async ({
     };
     return handleMatch(Queue.first(data).ticket_id)(response);
   } else {
-    log("No tickets to sync");
+    log.info("No tickets to sync");
     return undefined;
   }
 };

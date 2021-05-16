@@ -2,7 +2,10 @@ import gql from "graphql-tag";
 import { client as GraphQLAPI } from "../";
 import dbg from "../../dbg";
 
-const log = dbg.extend("insertSolidarityTickets");
+const log = dbg.child({
+  module: "hasura",
+  labels: { process: "insertSolidarityTickets" }
+});
 
 const SAVE_TICKETS_MUTATION = gql`
   mutation saveSolidarityTicket($tickets: [solidarity_tickets_insert_input!]!) {
@@ -43,7 +46,7 @@ export default async (
     });
 
     if (res && res.data && res.data.errors) {
-      log("failed on insert solidarity tickets: ".red, res.data.errors);
+      log.error("failed on insert solidarity tickets: ".red, res.data.errors);
       return undefined;
     }
 
@@ -53,7 +56,7 @@ export default async (
 
     return insert_solidarity_tickets && insert_solidarity_tickets.returning;
   } catch (err) {
-    log("failed on insert solidarity tickets: ".red, err);
+    log.error("failed on insert solidarity tickets: ".red, err);
     return undefined;
   }
 };

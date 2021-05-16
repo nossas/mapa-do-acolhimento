@@ -1,3 +1,6 @@
-import debug from "debug";
+import pino from "pino";
+import ecsFormat from "@elastic/ecs-pino-format";
 
-export default debug("listener-match");
+const logger = pino({ ...ecsFormat({ convertReqRes: true }) });
+
+export default logger;
