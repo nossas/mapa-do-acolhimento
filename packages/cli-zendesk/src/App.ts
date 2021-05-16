@@ -14,40 +14,58 @@ import getFormEntries, { filterByEmail } from "./hasura/getFormEntries";
 import { Ticket } from "./interfaces/Ticket";
 import User from "./interfaces/User";
 
-const ticket = async () => {
-  // const tickets = JSON.parse(((await promisify(fs.readFile)('tickets.json')).toString())) as Ticket[]
-  const ticketsWithoutCustomFields = await getAllTickets();
-  const tickets = getTicketsWithCustomFields(ticketsWithoutCustomFields);
-  const unrepeatedTicketsMap: { [s: number]: Ticket } = {};
-  tickets.forEach(i => {
-    unrepeatedTicketsMap[i.ticket_id] = i;
-  });
-  const unrepeatedTickets = Object.values(unrepeatedTicketsMap);
-  // await promisify(fs.writeFile)('tickets.json', JSON.stringify(tickets))
-  const requesters = await countTickets(unrepeatedTickets);
-  const requestersArray = convertRequestersToArray(requesters);
-  await sendRequesters(requestersArray);
-  await saveTicketsInChunks(unrepeatedTickets);
-  await countMatches(unrepeatedTickets);
+const ticket = async apm => {
+  const transaction = apm.startTransaction("ticket");
+  try {
+    // const tickets = JSON.parse(((await promisify(fs.readFile)('tickets.json')).toString())) as Ticket[]
+    const ticketsWithoutCustomFields = await getAllTickets();
+    const tickets = getTicketsWithCustomFields(ticketsWithoutCustomFields);
+    const unrepeatedTicketsMap: { [s: number]: Ticket } = {};
+    tickets.forEach(i => {
+      unrepeatedTicketsMap[i.ticket_id] = i;
+    });
+    const unrepeatedTickets = Object.values(unrepeatedTicketsMap);
+    // await promisify(fs.writeFile)('tickets.json', JSON.stringify(tickets))
+    const requesters = await countTickets(unrepeatedTickets);
+    const requestersArray = convertRequestersToArray(requesters);
+    await sendRequesters(requestersArray);
+    await saveTicketsInChunks(unrepeatedTickets);
+    await countMatches(unrepeatedTickets);
+    transaction.result = 200;
+    transaction.end();
+  } catch (e) {
+    transaction.result = 500;
+    transaction.end();
+    apm.captureError(e);
+  }
 };
 
-const user = async () => {
-  // const users = JSON.parse(((await promisify(fs.readFile)('users.json')).toString())) as User[]
-  const usersWithoutCustomFields = await getAllUsers();
-  const users = await getUsersWithUserFields(usersWithoutCustomFields);
-  // await promisify(fs.writeFile)('users.json', JSON.stringify(users))
-  const formEntries = await getFormEntries();
-  const usersWithBondeDate = users
-    .filter(i => i.email !== null)
-    .map(i => ({
-      ...i,
-      data_de_inscricao_no_bonde: filterByEmail(formEntries, i.email)
-    }));
-  const unrepeatedUsers: { [s: number]: User } = {};
-  usersWithBondeDate.forEach(i => {
-    unrepeatedUsers[i.user_id] = i;
-  });
-  await saveUsersInChunks(Object.values(unrepeatedUsers));
+const user = async apm => {
+  const transaction = apm.startTransaction("user");
+  try {
+    // const users = JSON.parse(((await promisify(fs.readFile)('users.json')).toString())) as User[]
+    const usersWithoutCustomFields = await getAllUsers();
+    const users = await getUsersWithUserFields(usersWithoutCustomFields);
+    // await promisify(fs.writeFile)('users.json', JSON.stringify(users))
+    const formEntries = await getFormEntries();
+    const usersWithBondeDate = users
+      .filter(i => i.email !== null)
+      .map(i => ({
+        ...i,
+        data_de_inscricao_no_bonde: filterByEmail(formEntries, i.email)
+      }));
+    const unrepeatedUsers: { [s: number]: User } = {};
+    usersWithBondeDate.forEach(i => {
+      unrepeatedUsers[i.user_id] = i;
+    });
+    await saveUsersInChunks(Object.values(unrepeatedUsers));
+    transaction.result = 200;
+    transaction.end();
+  } catch (e) {
+    transaction.result = 500;
+    transaction.end();
+    apm.captureError(e);
+  }
 };
 
 export default { ticket, user };
