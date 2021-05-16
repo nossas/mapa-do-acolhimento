@@ -343,7 +343,7 @@ importers:
       components: workspace:^0.0.3
       debug: ^4.1.1
       dotenv: ^8.2.0
-      elastic-apm-node: ^3.2.0
+      elastic-apm-node: ^3.14.0
       express: ^4.17.1
       jest: ^26.1.0
       pino: ^6.11.3
@@ -358,7 +358,7 @@ importers:
       components: link:../components
       debug: 4.3.1
       dotenv: 8.2.0
-      elastic-apm-node: 3.9.0
+      elastic-apm-node: 3.14.0
       express: 4.17.1
       pino: 6.11.3
       source-map-support: 0.5.19
@@ -4144,6 +4144,59 @@ packages:
       readable-stream: 3.6.0
       stream-chopper: 3.0.1
       unicode-byte-truncate: 1.0.0
+    dev: false
+
+  /elastic-apm-http-client/9.8.0:
+    resolution: {integrity: sha512-JrlQbijs4dY8539zH+QNKLqLDCNyNymyy720tDaj+/i5pcwWYz5ipPARAdrKkor56AmKBxib8Fd6KsSWtIYjcA==}
+    engines: {node: ^8.6.0 || 10 || >=12}
+    dependencies:
+      breadth-filter: 2.0.0
+      container-info: 1.1.0
+      end-of-stream: 1.4.4
+      fast-safe-stringify: 2.0.7
+      fast-stream-to-buffer: 1.0.0
+      object-filter-sequence: 1.0.0
+      readable-stream: 3.6.0
+      stream-chopper: 3.0.1
+      unicode-byte-truncate: 1.0.0
+    dev: false
+
+  /elastic-apm-node/3.14.0:
+    resolution: {integrity: sha512-B7Xkz6UL44mm+2URdZy2yxpEB2C5CvZLOP3sGpf2h/hepXr4NgrVoRxGqO1F2b2wCB48smPv4a3v35b396VSwA==}
+    engines: {node: ^8.6.0 || 10 || 12 || 13 || 14}
+    dependencies:
+      '@elastic/ecs-pino-format': 1.1.1
+      after-all-results: 2.0.0
+      async-value-promise: 1.1.1
+      basic-auth: 2.0.1
+      cookie: 0.4.1
+      core-util-is: 1.0.2
+      elastic-apm-http-client: 9.8.0
+      end-of-stream: 1.4.4
+      error-stack-parser: 2.0.6
+      escape-string-regexp: 4.0.0
+      fast-safe-stringify: 2.0.7
+      http-headers: 3.0.2
+      is-native: 1.0.1
+      measured-reporting: 1.51.1
+      monitor-event-loop-delay: 1.0.0
+      object-filter-sequence: 1.0.0
+      object-identity-map: 1.0.2
+      original-url: 1.2.3
+      pino: 6.11.3
+      read-pkg-up: 7.0.1
+      relative-microtime: 2.0.0
+      require-in-the-middle: 5.0.3
+      semver: 6.3.0
+      set-cookie-serde: 1.0.0
+      shallow-clone-shim: 2.0.0
+      sql-summary: 1.0.1
+      stackman: 4.0.1
+      traceparent: 1.0.0
+      traverse: 0.6.6
+      unicode-byte-truncate: 1.0.0
+    transitivePeerDependencies:
+      - supports-color
     dev: false
 
   /elastic-apm-node/3.9.0:
