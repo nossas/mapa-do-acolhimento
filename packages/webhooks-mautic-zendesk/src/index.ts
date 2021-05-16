@@ -1,7 +1,5 @@
-import dotenv from "dotenv";
 import apm from "elastic-apm-node";
-import { install } from "source-map-support";
-import Server from "./Server";
+import dotenv from "dotenv";
 
 dotenv.config();
 
@@ -15,9 +13,13 @@ if (secretToken && serverUrl && serviceName) {
   apm.start({
     secretToken,
     serverUrl,
-    serviceName
+    serviceName,
+    environment: process.env.NODE_ENV
   });
 }
+
+import { install } from "source-map-support";
+import Server from "./Server";
 
 install();
 
