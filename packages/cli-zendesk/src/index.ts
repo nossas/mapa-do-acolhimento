@@ -1,4 +1,11 @@
 import dotenv from "dotenv";
+import apm from "elastic-apm-node";
+import { install } from "source-map-support";
+import commander from "commander";
+import signale from "signale";
+import checkConfig from "./checkConfig";
+import dbg from "./dbg";
+import App from "./App";
 
 dotenv.config();
 
@@ -8,15 +15,21 @@ const {
   ELASTIC_APM_SERVICE_NAME: serviceName
 } = process.env;
 
-import apm from "elastic-apm-node";
-import { install } from "source-map-support";
-import commander from "commander";
-import signale from "signale";
-import checkConfig from "./checkConfig";
-import dbg from "./dbg";
-import App from "./App";
-
 install();
+
+if (secretToken && serverUrl && serviceName) {
+  console.log(
+    "Estou tentando conectar com o APM",
+    secretToken,
+    serverUrl,
+    serviceName
+  );
+  apm.start({
+    secretToken,
+    serverUrl,
+    serviceName
+  });
+}
 
 const program = new commander.Command();
 program.option(
@@ -26,19 +39,6 @@ program.option(
 
 const init = async () => {
   try {
-    if (secretToken && serverUrl && serviceName) {
-      console.log(
-        "Estou tentando conectar com o APM",
-        secretToken,
-        serverUrl,
-        serviceName
-      );
-      apm.start({
-        secretToken,
-        serverUrl,
-        serviceName
-      });
-    }
     checkConfig();
 
     program.parse(process.argv);
