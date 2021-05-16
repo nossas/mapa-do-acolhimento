@@ -132,7 +132,7 @@ class PsicologaCreateUser extends Base {
         response: await this.send(dataToBeSent)
       };
     } catch (e) {
-      return this.dbg("validation failed", e);
+      return this.dbg.error("validation failed", e);
     }
   };
 }

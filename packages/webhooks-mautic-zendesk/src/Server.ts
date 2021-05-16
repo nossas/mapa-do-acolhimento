@@ -1,5 +1,5 @@
 import Express, { Response } from "express";
-import debug, { Debugger } from "debug";
+import { Logger } from "pino";
 import { userToContact } from "components/dist";
 import AdvogadaCreateUser from "./integrations/AdvogadaCreateUser";
 import PsicologaCreateUser from "./integrations/PsicologaCreateUser";
@@ -13,6 +13,7 @@ import { FILTER_FORM_NAME_STATUS, filterFormName } from "./filterFormName";
 import getFormEntries from "./getFormEntries";
 import BondeCreatedDate from "./integrations/BondeCreatedDate";
 import { checkNames, checkCep } from "./utils";
+import log from "./dbg";
 
 // interface DataType {
 //   data: {
@@ -31,19 +32,19 @@ import { checkNames, checkCep } from "./utils";
 class Server {
   private server = Express().use(Express.json());
 
-  private dbg: Debugger;
+  private dbg: Logger;
 
   // private formData?: FormData;
 
   constructor() {
-    this.dbg = debug("webhooks-mautic-zendesk");
+    this.dbg = log;
   }
 
   dictionary: { [s: string]: string } = {
     aprovada: "aprovada",
     reprovada_estudo_de_caso: "reprovada_-_estudo_de_caso",
     reprovada_registro_inválido: "reprovada_-_registro_inválido",
-    reprovada_diretrizes_do_mapa: "reprovada_-_diretrizes_do_mapa"
+    reprovada_diretrizes_do_mapa: "reprovada_-_diretrizes_do_mapa",
   };
 
   createTicket = async (
@@ -53,7 +54,7 @@ class Server {
       organization_id,
       name,
       phone,
-      user_fields: { registration_number, condition, state, city }
+      user_fields: { registration_number, condition, state, city },
     },
     created_at: string,
     res: Response
@@ -232,7 +233,7 @@ class Server {
             );
         }
         if (serviceStatus === FILTER_SERVICE_STATUS.INVALID_REQUEST) {
-          this.dbg("Erro desconhecido ao filtrar por serviço.");
+          this.dbg.warn("Erro desconhecido ao filtrar por serviço.");
           return res
             .status(400)
             .json("Erro desconhecido ao filtrar por serviço.");
@@ -247,14 +248,14 @@ class Server {
           dateSubmitted
         } = await filterFormName(data!);
         if (formNameStatus === FILTER_FORM_NAME_STATUS.FORM_NOT_IMPLEMENTED) {
-          this.dbg(`Form "${name}" not implemented. But it's ok`);
+          this.dbg.warn(`Form "${name}" not implemented. But it's ok`);
           return res
             .status(200)
             .json(`Form "${name}" not implemented. But it's ok`);
         }
         if (formNameStatus === FILTER_FORM_NAME_STATUS.INVALID_REQUEST) {
-          this.dbg("Invalid request.");
-          this.dbg(errorData);
+          this.dbg.error("Invalid request.");
+          this.dbg.error(errorData as object);
           return res.status(400).json("Invalid request, see logs.");
         }
 
@@ -266,7 +267,7 @@ class Server {
 
         const formEntries = await getFormEntries();
         if (!formEntries) {
-          return this.dbg("getFormEntries error");
+          return this.dbg.error("getFormEntries error");
         }
 
         const bondeCreatedDate = new BondeCreatedDate(
@@ -275,10 +276,6 @@ class Server {
           checkCep(results.cep)
         );
         const bondeCreatedAt = await bondeCreatedDate.start(formEntries);
-
-        if (!bondeCreatedAt) {
-          return this.dbg(bondeCreatedAt);
-        }
 
         const instance = await new InstanceClass!(res);
         let user;
@@ -289,7 +286,7 @@ class Server {
         }
 
         if (!user.response) {
-          this.dbg(`Failed to create user ${results.email}`);
+          this.dbg.error(`Failed to create user ${results.email}`);
           return res.status(500).json("Failed to create user");
         }
 
@@ -310,9 +307,9 @@ class Server {
         await userToContact([{ ...createdUser, user_id: userId }]);
 
         if (responseCreatedAt === responseUpdatedAt) {
-          this.dbg(`Success, created user "${userId}"!`);
+          this.dbg.info(`Success, created user "${userId}"!`);
         } else {
-          this.dbg(`Success, updated user "${userId}"!`);
+          this.dbg.info(`Success, updated user "${userId}"!`);
         }
 
         const resultTicket = (await this.createTicket(
@@ -322,15 +319,17 @@ class Server {
           res
         )) as { data: { ticket: { id: number } } };
         if (resultTicket) {
-          this.dbg(`Success updated ticket "${resultTicket.data.ticket.id}".`);
+          this.dbg.info(
+            `Success updated ticket "${resultTicket.data.ticket.id}".`
+          );
 
           return res.status(200).json("Success finish integration");
         }
-        this.dbg("Failed to create ticket");
+        this.dbg.error("Failed to create ticket");
         return res.status(500).json("Failed failed integration");
       })
       .listen(Number(PORT), "0.0.0.0", () => {
-        this.dbg(`Server listen on port ${PORT}`);
+        this.dbg.info(`Server listen on port ${PORT}`);
       });
   };
 }

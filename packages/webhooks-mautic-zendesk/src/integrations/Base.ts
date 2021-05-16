@@ -1,7 +1,8 @@
-import debug, { Debugger } from "debug";
+import { Logger } from "pino";
 import urljoin from "url-join";
 import axios from "axios";
 import { Response } from "express";
+import log from "../dbg";
 
 export enum GMAPS_ERRORS {
   REQUEST_FAILED,
@@ -11,7 +12,7 @@ export enum GMAPS_ERRORS {
 abstract class Base {
   protected name: string;
 
-  protected dbg: Debugger;
+  protected dbg: Logger;
 
   protected url: string;
 
@@ -28,8 +29,8 @@ abstract class Base {
     method: "GET" | "POST" | "PUT" = "POST"
   ) {
     this.method = method;
-    this.name = `webhooks-mautic-zendesk:${name}`;
-    this.dbg = debug(this.name);
+    this.name = name;
+    this.dbg = log.child({ label: { process: this.name } });
     this.url = url;
     this.res = res;
     const { ZENDESK_ORGANIZATIONS } = process.env;
@@ -70,7 +71,7 @@ abstract class Base {
       });
       return result;
     } catch (e) {
-      return this.dbg(e);
+      return this.dbg.error(e);
     }
   };
 

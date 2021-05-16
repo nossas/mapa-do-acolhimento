@@ -1,9 +1,9 @@
 import * as yup from "yup";
-import debug from "debug";
 import AdvogadaCreateUser from "./integrations/AdvogadaCreateUser";
 import PsicologaCreateUser from "./integrations/PsicologaCreateUser";
+import log from "./dbg";
 
-const dbg = debug("filterFormName");
+const dbg = log.child({ labels: { process: "filterFormName" } });
 
 export enum FILTER_FORM_NAME_STATUS {
   SUCCESS,
@@ -35,7 +35,7 @@ export const filterFormName = async (data: object) => {
   try {
     validationResult = await validation.validate(data);
   } catch (e) {
-    dbg(e);
+    dbg.error(e);
     return {
       status: FILTER_FORM_NAME_STATUS.INVALID_REQUEST,
       data
@@ -60,7 +60,7 @@ export const filterFormName = async (data: object) => {
     } else if (name.toLowerCase().includes("cadastro: psicólogas")) {
       InstanceClass = PsicologaCreateUser;
     } else {
-      dbg(`InstanceClass "${name}" doesn't exist`);
+      dbg.warn(`InstanceClass "${name}" doesn't exist`);
       return {
         status: FILTER_FORM_NAME_STATUS.FORM_NOT_IMPLEMENTED,
         name

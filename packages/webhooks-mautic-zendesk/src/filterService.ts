@@ -1,6 +1,6 @@
-import debug from "debug";
+import log from "./dbg";
 
-const dbg = debug("filterService");
+const dbg = log.child({ label: { process: "filterService" } });
 
 interface Payload {
   event: {
@@ -29,9 +29,9 @@ export const filterService = (payload: Payload) => {
         }
       }
     } = payload;
-    dbg(`received service "${serviceName}"`);
+    dbg.info(`received service "${serviceName}"`);
     if (serviceName !== "mautic-form") {
-      dbg(`${serviceName} not desired service`);
+      dbg.warn(`${serviceName} not desired service`);
       return {
         status: FILTER_SERVICE_STATUS.NOT_DESIRED_SERVICE,
         serviceName
@@ -42,7 +42,7 @@ export const filterService = (payload: Payload) => {
       data
     };
   } catch (e) {
-    dbg(e);
+    dbg.error(e);
     return {
       status: FILTER_SERVICE_STATUS.INVALID_REQUEST
     };

@@ -36,7 +36,7 @@ class PsicologaUpdateTicket extends Base {
         stripUnknown: true
       });
     } catch (e) {
-      return this.dbg("Falhou ao validar ticket");
+      return this.dbg.error("Falhou ao validar ticket");
     }
     try {
       return this.send<T>({
@@ -45,7 +45,7 @@ class PsicologaUpdateTicket extends Base {
         }
       });
     } catch (e) {
-      return this.dbg(e);
+      return this.dbg.error(e);
     }
   };
 }

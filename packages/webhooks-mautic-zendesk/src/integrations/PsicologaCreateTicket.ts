@@ -32,7 +32,7 @@ class PsicologaCreateTicket extends Base {
         stripUnknown: true
       });
     } catch (e) {
-      return this.dbg("Falhou ao validar ticket");
+      return this.dbg.error("Falhou ao validar ticket");
     }
     try {
       return this.send<T>({
@@ -41,7 +41,7 @@ class PsicologaCreateTicket extends Base {
         }
       });
     } catch (e) {
-      return this.dbg(e);
+      return this.dbg.error(e);
     }
   };
 }

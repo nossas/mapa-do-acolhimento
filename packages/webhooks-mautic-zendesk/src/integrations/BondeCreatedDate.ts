@@ -1,7 +1,7 @@
-import debug from "debug";
 import { FormEntry } from "../types";
 import { filterByEmail } from "../utils";
 import * as yup from "yup";
+import log from "../dbg";
 
 const verificaFormEntries = yup
   .array()
@@ -26,7 +26,7 @@ class BondeCreatedDate {
 
   cep: string | null;
 
-  dbg = debug("webhooks-mautic-zendesk-BondeCreatedDate");
+  dbg = log.child({ label: { process: "BondeCreatedDate" } });
 
   constructor(email: string, name: string | null, cep: string | null) {
     this.email = email;
@@ -60,7 +60,7 @@ class BondeCreatedDate {
       };
       return aux;
     } catch (e) {
-      this.dbg(e);
+      this.dbg.error(e);
       return {
         createdAt: new Date().toISOString(),
         name: this.name || "sem nome",
