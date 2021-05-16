@@ -27,6 +27,12 @@ program.option(
 const init = async () => {
   try {
     if (secretToken && serverUrl && serviceName) {
+      console.log(
+        "Estou tentando conectar com o APM",
+        secretToken,
+        serverUrl,
+        serviceName
+      );
       apm.start({
         secretToken,
         serverUrl,
