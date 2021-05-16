@@ -1,4 +1,7 @@
 import dotenv from "dotenv";
+import apm from "elastic-apm-node";
+import { install } from "source-map-support";
+import Server from "./Server";
 
 dotenv.config();
 
@@ -8,16 +11,13 @@ const {
   ELASTIC_APM_SERVICE_NAME: serviceName
 } = process.env;
 
-import apm from "elastic-apm-node";
-
-apm.start({
-  secretToken,
-  serverUrl,
-  serviceName
-});
-
-import { install } from "source-map-support";
-import Server from "./Server";
+if (secretToken && serverUrl && serviceName) {
+  apm.start({
+    secretToken,
+    serverUrl,
+    serviceName
+  });
+}
 
 install();
 
