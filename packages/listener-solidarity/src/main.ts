@@ -12,34 +12,38 @@ const {
   ELASTIC_APM_SERVICE_NAME: serviceName
 } = process.env;
 
-throng({
-  workers: 1,
-  start: async (id: number) => {
-    log.info(`Started worker ${id}`);
-
-    try {
-      if (secretToken && serverUrl && serviceName) {
-        apm.start({
-          secretToken,
-          serverUrl,
-          serviceName
-        });
-      }
-
-      log.info("Fetching solidarity users...");
-      log.info(
-        "Call subscriptions to form_entries... %s",
-        widgets.map(w => w.id)
-      );
-      await subscriptionFormEntries(widgets);
-    } catch (err) {
-      log.error("throng err: %s", err);
-    }
-
-    process.on("SIGTERM", function() {
-      log.fatal(`Worker ${id} exiting`);
-      log.info("Cleanup here");
-      process.exit();
+try {
+  if (secretToken && serverUrl && serviceName) {
+    apm.start({
+      secretToken,
+      serverUrl,
+      serviceName
     });
   }
-});
+
+  throng({
+    workers: 1,
+    start: async (id: number) => {
+      log.info(`Started worker ${id}`);
+
+      try {
+        log.info("Fetching solidarity users...");
+        log.info(
+          "Call subscriptions to form_entries... %s",
+          widgets.map(w => w.id)
+        );
+        await subscriptionFormEntries(widgets);
+      } catch (err) {
+        log.error("throng err: %s", err);
+      }
+
+      process.on("SIGTERM", function() {
+        log.fatal(`Worker ${id} exiting`);
+        log.info("Cleanup here");
+        process.exit();
+      });
+    }
+  });
+} catch (e) {
+  log.error(e);
+}
