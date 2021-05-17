@@ -17,7 +17,6 @@ export default async (users: User[]) => {
   const step = 50;
   const usersLength = users.length;
   for (start; start < usersLength; start += step) {
-    // log({ start, step });
     const batch = users.slice(start, start + step - 1);
     return await limiter.schedule(() => createZendeskUsers(batch));
   }

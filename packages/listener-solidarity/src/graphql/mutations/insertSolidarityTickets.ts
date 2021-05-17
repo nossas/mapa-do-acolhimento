@@ -112,8 +112,6 @@ const insertSolidarityTickets = async ticket => {
       data: { insert_solidarity_tickets_one }
     } = res;
 
-    // log({ returning: insert_solidarity_tickets_one });
-
     return (
       insert_solidarity_tickets_one && insert_solidarity_tickets_one.ticket_id
     );

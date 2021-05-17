@@ -7,7 +7,7 @@ const log = logger.child({ labels: { process: "createZendeskUsers" } });
 export default async (
   users: User[]
 ): Promise<ZendeskUserCreationResponse[] | undefined> => {
-  log.info(`${new Date()}: \nEntering createZendeskUser`);
+  log.info(`Entering createZendeskUser`);
   // ADD YUP VALIDATION
   return new Promise(resolve => {
     return client.users.createOrUpdateMany({ users }, (err, _req, result) => {
@@ -25,13 +25,7 @@ export default async (
             return resolve(undefined);
           }
           const results = result as { job_status: { status: string; results } };
-          // log(
-          //   `Results from zendesk user creation ${JSON.stringify(
-          //     result,
-          //     null,
-          //     2
-          //   )}`
-          // );
+
           if (
             results &&
             results["job_status"] &&

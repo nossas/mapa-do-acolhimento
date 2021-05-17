@@ -93,8 +93,6 @@ export default async (
       ).value;
     });
 
-    // log({ instance });
-
     const register = createUser();
 
     register["email"] = instance.email;
@@ -130,12 +128,10 @@ export default async (
     register["user_fields"]["data_de_inscricao_no_bonde"] =
       formEntry.created_at;
 
-    // register["user_fields"]["state"] = "";
-
     const geocoding = (await limiter.schedule(() =>
       getGeolocation(instance)
     )) as IndividualGeolocation;
-    // log.debug({ geocoding });
+
     Object.keys(geocoding).map(g => {
       register["user_fields"][g] = geocoding[g];
     });
@@ -149,8 +145,6 @@ export default async (
     register["user_fields"]["tipo_de_acolhimento"] = setType(
       instance.tipo_de_acolhimento
     );
-
-    // log.debug({ register });
 
     return register;
   });
