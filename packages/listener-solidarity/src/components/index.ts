@@ -7,6 +7,24 @@ import { insertSolidarityUsers, updateFormEntries } from "../graphql/mutations";
 import { handleUserError, removeDuplicatesBy } from "../utils";
 import { Widget, FormEntry, User, FormEntriesResponse } from "../types";
 import logger from "../logger";
+import apm from "elastic-apm-node";
+
+const {
+  ELASTIC_APM_SECRET_TOKEN: secretToken,
+  ELASTIC_APM_SERVER_URL: serverUrl,
+  ELASTIC_APM_SERVICE_NAME: serviceName
+} = process.env;
+
+let apmAgent;
+
+if (secretToken && serverUrl && serviceName) {
+  apmAgent = apm.start({
+    secretToken,
+    serverUrl,
+    serviceName,
+    environment: process.env.NODE_ENV
+  });
+}
 
 const log = logger.child({ labels: { process: "handleIntegration" } });
 
@@ -20,6 +38,8 @@ let cache: FormEntry[] = [];
 export const handleIntegration = (widgets: Widget[]) => async (
   response: FormEntriesResponse
 ) => {
+  const transaction = apmAgent.startTransaction("integration");
+
   let syncronizedForms: number[] = [];
   log.info(`${new Date()}: Receiving data on subscription GraphQL API...`);
 
@@ -32,6 +52,9 @@ export const handleIntegration = (widgets: Widget[]) => async (
     .concat(entries);
 
   if (cache.length > 0) {
+    apmAgent.setCustomContext({
+      entries: JSON.stringify(cache)
+    });
     const usersToRegister = await composeUsers(cache, widgets, getGeolocation);
     // log(usersToRegister);
 
@@ -43,6 +66,8 @@ export const handleIntegration = (widgets: Widget[]) => async (
         "Zendesk user creation failed on these form entries: %o",
         cache
       );
+      transaction.result = 500;
+      transaction.end();
       return undefined;
     }
 
@@ -60,6 +85,8 @@ export const handleIntegration = (widgets: Widget[]) => async (
         userBatches.filter(u => !!u.error)
       );
       handleUserError(usersToRegister);
+      transaction.result = 500;
+      transaction.end();
       return undefined;
     }
 
@@ -92,7 +119,11 @@ export const handleIntegration = (widgets: Widget[]) => async (
 
     // Save users in Hasura
     const inserted = await insertSolidarityUsers(withoutDuplicates as never);
-    if (!inserted) handleUserError(withoutDuplicates);
+    if (!inserted) {
+      handleUserError(withoutDuplicates);
+      transaction.result = 500;
+      transaction.end();
+    }
 
     // Save users in Mautic
     await userToContact(withoutDuplicates);
@@ -110,12 +141,18 @@ export const handleIntegration = (widgets: Widget[]) => async (
         "Couldn't update form entries with already syncronized forms: %o",
         syncronizedForms
       );
+      transaction.result = 500;
+      transaction.end();
       return undefined;
     }
     log.info({ syncronizedForms });
     log.info("User integration is done.");
+    transaction.result = 200;
+    transaction.end();
     return (cache = []);
   } else {
+    transaction.result = 200;
+    transaction.end();
     log.info("No items for integration.");
   }
 };

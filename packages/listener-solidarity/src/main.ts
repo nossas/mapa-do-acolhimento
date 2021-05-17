@@ -1,20 +1,3 @@
-import apm from "elastic-apm-node";
-
-const {
-  ELASTIC_APM_SECRET_TOKEN: secretToken,
-  ELASTIC_APM_SERVER_URL: serverUrl,
-  ELASTIC_APM_SERVICE_NAME: serviceName
-} = process.env;
-
-if (secretToken && serverUrl && serviceName) {
-  apm.start({
-    secretToken,
-    serverUrl,
-    serviceName,
-    environment: process.env.NODE_ENV
-  });
-}
-
 import throng from "throng";
 import { subscriptionFormEntries } from "./graphql/subscriptions";
 import widgets from "./form_entries_mapping";
