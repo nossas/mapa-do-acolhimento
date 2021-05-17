@@ -146,7 +146,7 @@ const insertSolidarityUsers = async (
     return returning;
   } catch (err) {
     log.error(`failed on insert solidarity users: ${ids} %o`, err);
-    return undefined;
+    return err;
   }
 };
 

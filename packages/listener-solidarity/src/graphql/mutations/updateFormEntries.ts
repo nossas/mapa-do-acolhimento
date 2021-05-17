@@ -51,7 +51,7 @@ const updateFormEntries = async (forms: number[]) => {
     return formEntries;
   } catch (err) {
     log.error(`failed on update form entries: ${forms} %o`, err);
-    return undefined;
+    return err;
   }
 };
 
