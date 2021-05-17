@@ -1,9 +1,25 @@
+import apm from "elastic-apm-node";
 import { proccessMatch } from "./Services";
 import { fetchVolunteersAvailable, getClosestVolunteer } from "./Volunteers";
 import { updateSolidarityTickets } from "../graphql/mutations";
 import { getDifference, getVolunteerOrganizationId } from "../utils";
 import { SubscriptionResponse, IndividualTicket } from "../types";
 import dbg from "../dbg";
+
+const {
+  ELASTIC_APM_SECRET_TOKEN: secretToken,
+  ELASTIC_APM_SERVER_URL: serverUrl,
+  ELASTIC_APM_SERVICE_NAME: serviceName
+} = process.env;
+
+let apmAgent;
+if (secretToken && serverUrl && serviceName) {
+  apmAgent = apm.start({
+    secretToken,
+    serverUrl,
+    serviceName
+  });
+}
 
 const log = dbg.child({ module: "match" });
 const syncLog = log.child({ labels: { process: "syncTickets" } });
@@ -26,6 +42,12 @@ export const Queue = {
 };
 
 const markAsMatchSyncronized = async (ids: number[]) => {
+  const transaction = apmAgent.startTransaction("markAsMatchSyncronized");
+
+  apmAgent.setCustomContext({
+    idsToSyncronize: ids
+  });
+
   syncLog.info(`Updating sync status from MSR tickets ${ids}`);
   const isSynced = await updateSolidarityTickets(
     { match_syncronized: true },
@@ -34,6 +56,10 @@ const markAsMatchSyncronized = async (ids: number[]) => {
 
   if (!isSynced) {
     syncLog.warn("Couldn't update sync status from MSR tickets:", ids);
+
+    transaction.result = 500;
+    transaction.end();
+
     return undefined;
   }
 
@@ -47,10 +73,20 @@ const markAsMatchSyncronized = async (ids: number[]) => {
 
   log.info("Match is done");
 
+  transaction.result = 200;
+  transaction.end();
+
   return isSynced.map(s => s.ticket_id);
 };
 
 export const createMatch = async (ticket: IndividualTicket) => {
+  const transaction = apmAgent.startTransaction("createMatch");
+
+  apmAgent.setUserContext({
+    id: ticket.ticket_id,
+    username: ticket.nome_msr
+  });
+
   // Which type of volunteer the MSR needs
   const volunteerOrganizationId = getVolunteerOrganizationId(ticket.subject);
 
@@ -60,6 +96,9 @@ export const createMatch = async (ticket: IndividualTicket) => {
   if (!volunteerOrganizationId) {
     log.warn(`Ticket subject is not valid '${ticket.subject}'`);
     matching = ticket.ticket_id;
+
+    transaction.result = 422;
+    transaction.end();
   } else {
     const volunteersAvailable = await fetchVolunteersAvailable(
       volunteerOrganizationId
@@ -72,7 +111,12 @@ export const createMatch = async (ticket: IndividualTicket) => {
       volunteersAvailable
     );
 
-    matching = await proccessMatch(ticket, AGENT, closestVolunteer);
+    matching = await proccessMatch({
+      individualTicket: ticket,
+      AGENT,
+      closestVolunteer,
+      apm: apmAgent
+    });
   }
 
   const resolvedMatchs =
@@ -82,8 +126,15 @@ export const createMatch = async (ticket: IndividualTicket) => {
 
   if (!resolvedMatchs) {
     log.info("No tickets to sync");
+
+    transaction.result = 204;
+    transaction.end();
+
     return undefined;
   }
+
+  transaction.result = 200;
+  transaction.end();
 
   return resolvedMatchs;
 };

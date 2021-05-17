@@ -19,11 +19,21 @@ const setReferences = (ticket: IndividualTicket) => {
   return ticket;
 };
 
-export default async (
-  individualTicket: IndividualTicket,
-  AGENT: number,
-  closestVolunteer?: Volunteer
-) => {
+type Args = {
+  individualTicket: IndividualTicket;
+  AGENT: number;
+  closestVolunteer?: Volunteer;
+  apm?: Record<string, any>;
+};
+
+export default async ({
+  individualTicket,
+  AGENT,
+  closestVolunteer,
+  apm
+}: Args) => {
+  const transaction = apm?.startTransaction("processMatch");
+
   const {
     status_acolhimento: statusAcolhimento,
     atrelado_ao_ticket: atreladoAoTicket,
@@ -38,6 +48,10 @@ export default async (
     log.warn(
       `Ticket is "solicitação_repetida" but field "atrelado_ao_ticket is null`
     );
+
+    transaction.result = 406;
+    transaction.end();
+
     return ticketId;
   }
 
@@ -51,15 +65,31 @@ export default async (
       },
       AGENT
     );
+
     if (!updateIndividual) {
-      log.warn(
+      log.error(
         `No ticket ID returned after individual ticket '${localIndividualTicket.ticket_id}' tried to be updated`
       );
+
+      transaction.result = 500;
+      transaction.end();
+
       return undefined;
     }
-    return localIndividualTicket["ticket_id"] !== individualTicket["ticket_id"]
-      ? [individualTicket["ticket_id"], updateIndividual]
-      : updateIndividual;
+
+    const updatedTickets =
+      localIndividualTicket["ticket_id"] !== individualTicket["ticket_id"]
+        ? [individualTicket["ticket_id"], updateIndividual]
+        : updateIndividual;
+
+    apm?.setCustomContext({
+      updatedTickets
+    });
+
+    transaction.result = 200;
+    transaction.end();
+
+    return updatedTickets;
   }
 
   const volunteerTicketId = await createVolunteerTicket(
@@ -67,12 +97,18 @@ export default async (
     localIndividualTicket,
     AGENT
   );
+
   if (!volunteerTicketId) {
     log.warn(
       `No ticket ID returned after volunteer '${closestVolunteer.user_id}' ticket tried to be created`
     );
+
+    transaction.result = 500;
+    transaction.end();
+
     return undefined;
   }
+
   closestVolunteer["ticket_id"] = volunteerTicketId;
 
   const updateIndividual = await updateIndividualTicket(
@@ -81,9 +117,13 @@ export default async (
     AGENT
   );
   if (!updateIndividual) {
-    log.warn(
+    log.error(
       `No ticket ID returned after individual ticket '${localIndividualTicket.ticket_id}' tried to be updated`
     );
+
+    transaction.result = 500;
+    transaction.end();
+
     return undefined;
   }
 
@@ -92,11 +132,25 @@ export default async (
     closestVolunteer as Volunteer & { ticket_id: number }
   );
   if (!matchTicket) {
-    log.warn("No match ticket response was generated");
+    log.error("No match ticket response was generated");
+
+    transaction.result = 500;
+    transaction.end();
+
     return undefined;
   }
 
-  return localIndividualTicket["ticket_id"] !== individualTicket["ticket_id"]
-    ? [individualTicket["ticket_id"], updateIndividual]
-    : updateIndividual;
+  const updatedTickets =
+    localIndividualTicket["ticket_id"] !== individualTicket["ticket_id"]
+      ? [individualTicket["ticket_id"], updateIndividual]
+      : updateIndividual;
+
+  apm?.setCustomContext({
+    updatedTickets
+  });
+
+  transaction.result = 200;
+  transaction.end();
+
+  return updatedTickets;
 };

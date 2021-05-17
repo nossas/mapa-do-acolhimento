@@ -17,7 +17,12 @@ describe("Handle Ticket", () => {
         state: "SP"
       }
     };
-    expect(await proccessMatch(ticket, 1, undefined)).toStrictEqual(22964);
+    expect(
+      await proccessMatch({
+        individualTicket: ticket,
+        AGENT: 1
+      })
+    ).toStrictEqual(22964);
   });
 
   it("should pass if 'solicitação_repetida' and field 'atrelado_ao_ticket' is not null", async () => {
@@ -35,7 +40,12 @@ describe("Handle Ticket", () => {
         state: "SP"
       }
     };
-    expect(await proccessMatch(ticket, 1, undefined)).not.toStrictEqual(22970);
+    expect(
+      await proccessMatch({
+        individualTicket: ticket,
+        AGENT: 1
+      })
+    ).not.toStrictEqual(22970);
   });
 
   it("should return early if ticket subject doesn't have a subject with a type", async () => {
