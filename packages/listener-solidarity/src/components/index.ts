@@ -7,24 +7,6 @@ import { insertSolidarityUsers, updateFormEntries } from "../graphql/mutations";
 import { handleUserError, removeDuplicatesBy } from "../utils";
 import { Widget, FormEntry, User, FormEntriesResponse } from "../types";
 import logger from "../logger";
-import apm from "elastic-apm-node";
-
-const {
-  ELASTIC_APM_SECRET_TOKEN: secretToken,
-  ELASTIC_APM_SERVER_URL: serverUrl,
-  ELASTIC_APM_SERVICE_NAME: serviceName
-} = process.env;
-
-let apmAgent;
-
-if (secretToken && serverUrl && serviceName) {
-  apmAgent = apm.start({
-    secretToken,
-    serverUrl,
-    serviceName,
-    environment: process.env.NODE_ENV
-  });
-}
 
 const log = logger.child({ labels: { process: "handleIntegration" } });
 
@@ -35,13 +17,13 @@ const limiter = new Bottleneck({
 
 let cache: FormEntry[] = [];
 
-export const handleIntegration = (widgets: Widget[]) => async (
+export const handleIntegration = (widgets: Widget[], apm) => async (
   response: FormEntriesResponse
 ) => {
-  const transaction = apmAgent.startTransaction("integration");
+  const transaction = apm.startTransaction("integration");
 
   let syncronizedForms: number[] = [];
-  log.info(`${new Date()}: Receiving data on subscription GraphQL API...`);
+  log.info(`Receiving data on subscription GraphQL API...`);
 
   const {
     data: { form_entries: entries }
@@ -52,11 +34,11 @@ export const handleIntegration = (widgets: Widget[]) => async (
     .concat(entries);
 
   if (cache.length > 0) {
-    apmAgent.setCustomContext({
-      entries: JSON.stringify(cache)
+    apm.setCustomContext({
+      entries: cache
     });
+
     const usersToRegister = await composeUsers(cache, widgets, getGeolocation);
-    // log(usersToRegister);
 
     // Batch insert individuals
     // Create users in Zendesk
@@ -66,8 +48,14 @@ export const handleIntegration = (widgets: Widget[]) => async (
         "Zendesk user creation failed on these form entries: %o",
         cache
       );
+
+      apm.setCustomContext({
+        usersWithError: usersToRegister
+      });
+
       transaction.result = 500;
       transaction.end();
+
       return undefined;
     }
 
@@ -80,13 +68,19 @@ export const handleIntegration = (widgets: Widget[]) => async (
       userBatches.length < 1 ||
       usersToRegister.length < 1
     ) {
-      log.error(
-        "Zendesk user creation results with error: %o",
-        userBatches.filter(u => !!u.error)
-      );
-      handleUserError(usersToRegister);
+      const usersWithError = userBatches.filter(u => !!u.error);
+
+      log.error("Zendesk user creation results with error: %o", usersWithError);
+      handleUserError(usersWithError);
+
+      apm.setCustomContext({
+        usersWithError
+      });
+      apm.captureError(userBatches);
+
       transaction.result = 500;
       transaction.end();
+
       return undefined;
     }
 
@@ -112,21 +106,21 @@ export const handleIntegration = (widgets: Widget[]) => async (
     );
 
     if (removeDesabilitadedUsers.length > 0) {
-      const tickets = await composeTickets(removeDesabilitadedUsers);
-      // log(JSON.stringify(tickets, null, 2));
+      const tickets = composeTickets(removeDesabilitadedUsers);
       await limiter.schedule(() => createZendeskTickets(tickets));
     }
 
     // Save users in Hasura
-    const inserted = await insertSolidarityUsers(withoutDuplicates as never);
-    if (!inserted) {
+    insertSolidarityUsers(withoutDuplicates as never).catch(e => {
       handleUserError(withoutDuplicates);
-      transaction.result = 500;
-      transaction.end();
-    }
+
+      apm.captureError(e);
+    });
 
     // Save users in Mautic
-    await userToContact(withoutDuplicates);
+    userToContact(withoutDuplicates).catch(e => {
+      apm.captureError(e);
+    });
 
     // Batch update syncronized forms
     syncronizedForms = [
@@ -135,21 +129,30 @@ export const handleIntegration = (widgets: Widget[]) => async (
         .filter(i => !!i.external_id)
         .map(i => Number(i.external_id))
     ];
-    const updateEntries = await updateFormEntries(syncronizedForms);
-    if (!updateEntries) {
-      log.error(
-        "Couldn't update form entries with already syncronized forms: %o",
-        syncronizedForms
-      );
-      transaction.result = 500;
-      transaction.end();
-      return undefined;
-    }
-    log.info({ syncronizedForms });
-    log.info("User integration is done.");
-    transaction.result = 200;
-    transaction.end();
-    return (cache = []);
+
+    return updateFormEntries(syncronizedForms)
+      .then(entries => {
+        log.info({ entries });
+        log.info("User integration is done.");
+
+        transaction.result = 200;
+        transaction.end();
+
+        return (cache = []);
+      })
+      .catch(e => {
+        log.error(
+          "Couldn't update form entries with already syncronized forms: %o",
+          syncronizedForms
+        );
+
+        apm.captureError(e);
+
+        transaction.result = 500;
+        transaction.end();
+
+        return undefined;
+      });
   } else {
     transaction.result = 200;
     transaction.end();
