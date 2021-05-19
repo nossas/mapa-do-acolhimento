@@ -34,11 +34,23 @@ export const handleIntegration = (widgets: Widget[], apm) => async (
     .concat(entries);
 
   if (cache.length > 0) {
-    apm.setCustomContext({
-      entries: cache
-    });
-
     const usersToRegister = await composeUsers(cache, widgets, getGeolocation);
+
+    apm.setCustomContext({
+      usersToRegister: usersToRegister.map(({ user_fields, ...user }) => ({
+        name: user.name,
+        email: user.email,
+        external_id: user.external_id,
+        user_fields: {
+          state: user_fields.state,
+          disponibilidade_de_atendimentos:
+            user_fields.disponibilidade_de_atendimentos,
+          condition: user_fields.condition,
+          tipo_de_acolhimento: user_fields.tipo_de_acolhimento,
+          cor: user_fields.cor
+        }
+      }))
+    });
 
     // Batch insert individuals
     // Create users in Zendesk
@@ -48,10 +60,6 @@ export const handleIntegration = (widgets: Widget[], apm) => async (
         "Zendesk user creation failed on these form entries: %o",
         cache
       );
-
-      apm.setCustomContext({
-        usersWithError: usersToRegister
-      });
 
       transaction.result = 500;
       transaction.end();
@@ -73,10 +81,7 @@ export const handleIntegration = (widgets: Widget[], apm) => async (
       log.error("Zendesk user creation results with error: %o", usersWithError);
       handleUserError(usersWithError);
 
-      apm.setCustomContext({
-        usersWithError
-      });
-      apm.captureError(userBatches);
+      apm.captureError(usersWithError);
 
       transaction.result = 500;
       transaction.end();
@@ -112,6 +117,7 @@ export const handleIntegration = (widgets: Widget[], apm) => async (
 
     // Save users in Hasura
     insertSolidarityUsers(withoutDuplicates as never).catch(e => {
+      log.error(`Couldn't insert users in Hasura: ${e}`);
       handleUserError(withoutDuplicates);
 
       apm.captureError(e);
@@ -119,6 +125,7 @@ export const handleIntegration = (widgets: Widget[], apm) => async (
 
     // Save users in Mautic
     userToContact(withoutDuplicates).catch(e => {
+      log.error(`Couldn't update/create users in Mautic: ${e}`);
       apm.captureError(e);
     });
 
