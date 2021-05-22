@@ -92,6 +92,16 @@ export default async ({
     return updatedTickets;
   }
 
+  apm?.setCustomContext({
+    volunteer: {
+      latitude: closestVolunteer.latitude,
+      longitude: closestVolunteer.longitude,
+      user_id: closestVolunteer.user_id,
+      email: closestVolunteer.email,
+      organization_id: closestVolunteer.organization_id
+    }
+  });
+
   const volunteerTicketId = await createVolunteerTicket(
     closestVolunteer,
     localIndividualTicket,
@@ -108,6 +118,12 @@ export default async ({
 
     return undefined;
   }
+
+  apm?.setCustomContext({
+    closestVolunteer: {
+      ticket_id: volunteerTicketId
+    }
+  });
 
   closestVolunteer["ticket_id"] = volunteerTicketId;
 

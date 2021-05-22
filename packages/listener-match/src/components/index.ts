@@ -84,7 +84,9 @@ export const createMatch = async (ticket: IndividualTicket) => {
 
   apmAgent.setUserContext({
     id: ticket.ticket_id,
-    username: ticket.nome_msr
+    username: ticket.nome_msr,
+    latitude: ticket.individual.latitude,
+    longitude: ticket.individual.longitude
   });
 
   // Which type of volunteer the MSR needs
