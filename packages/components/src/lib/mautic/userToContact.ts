@@ -28,7 +28,7 @@ const schema = yup
  * Creates a new Mutic contact object based on the User data passed
  * from the param.
  */
-export const newContact = async (user: User): Promise<Contact | undefined> => {
+export const newContact = async (user: User): Promise<Contact> => {
   const contact = {
     ...user,
     ...user.user_fields,
@@ -45,7 +45,7 @@ export const newContact = async (user: User): Promise<Contact | undefined> => {
     return validatedContact;
   } catch (e) {
     log.error(e);
-    return undefined;
+    return e;
   }
 };
 
@@ -58,25 +58,29 @@ export default async (
   users: User[]
 ): Promise<Array<{ contact: FullContact } | undefined>> => {
   const contacts = users.map(async user => {
-    const findUser = await findUserByEmail(user.email);
-    let mauticId = 0;
-    if (findUser && findUser.total > 0) {
-      log.info("Found a user with this email");
-      mauticId = Number(Object.keys(findUser.contacts)[0]);
-    }
+    try {
+      const findUser = await findUserByEmail(user.email);
+      let mauticId = 0;
+      if (findUser && findUser.total > 0) {
+        log.info("Found a user with this email");
+        mauticId = Number(Object.keys(findUser.contacts)[0]);
+      }
 
-    const contact = await newContact(user);
+      const contact = await newContact(user);
 
-    if (!contact) {
-      log.error(`Failed to create new contact with email ${user.email}`);
-      return undefined;
-    }
+      const create = await createOrUpdateContact(mauticId, contact);
 
-    const create = await createOrUpdateContact(mauticId, contact);
-    if (!create) {
-      log.error(`Failed to create or update contact in Mautic ${user.email}`);
+      return create;
+    } catch (e) {
+      if (e.name === "ValidationError") {
+        log.error(`Failed to create new contact with email ${user.email}`);
+      } else {
+        log.error(`Failed to create or update contact in Mautic ${user.email}`);
+      }
+
+      return e;
     }
-    return create;
   });
+
   return await Promise.all(contacts);
 };

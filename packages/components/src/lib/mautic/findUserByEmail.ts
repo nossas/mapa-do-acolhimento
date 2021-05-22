@@ -3,7 +3,7 @@ import { getToken } from "../../utils";
 import { ContactSearchRes } from "../../types";
 import logger from "./childLogger";
 
-const log = logger.child({ module: "findUserByEmail" });
+const log = logger.child({ label: { process: "findUserByEmail" } });
 
 /**
  * Tries to find a Mautic contact based on the email passed in the param
@@ -30,6 +30,6 @@ export default async (email: string): Promise<ContactSearchRes | undefined> => {
     return data && data.data;
   } catch (e) {
     log.error(`${e.response.status}: ${e.response.statusText} %o`, e.config);
-    return undefined;
+    return e;
   }
 };
