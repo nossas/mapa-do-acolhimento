@@ -19,7 +19,7 @@ interface DataType {
 
 const dbg = log.child({ labels: { process: "getFormEntries" } });
 
-const getFormEntries = async () => {
+const getFormEntries = async (apm: any) => {
   const { HASURA_API_URL, X_HASURA_ADMIN_SECRET, WIDGET_IDS } = process.env;
   let widget_ids;
   try {
@@ -53,6 +53,7 @@ const getFormEntries = async () => {
     );
     return data.data.data.form_entries;
   } catch (e) {
+    apm.captureError(e);
     return dbg.error(e);
   }
 };

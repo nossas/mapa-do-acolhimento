@@ -9,8 +9,10 @@ const {
   ELASTIC_APM_SERVICE_NAME: serviceName
 } = process.env;
 
+let apmAgent;
+
 if (secretToken && serverUrl && serviceName) {
-  apm.start({
+  apmAgent = apm.start({
     secretToken,
     serverUrl,
     serviceName,
@@ -23,5 +25,5 @@ import Server from "./Server";
 
 install();
 
-const app = new Server();
+const app = new Server(apmAgent);
 app.start();

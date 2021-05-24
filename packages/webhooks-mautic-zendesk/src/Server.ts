@@ -33,11 +33,13 @@ class Server {
   private server = Express().use(Express.json());
 
   private dbg: Logger;
+  private apm: any;
 
   // private formData?: FormData;
 
-  constructor() {
+  constructor(apm) {
     this.dbg = log;
+    this.apm = apm;
   }
 
   dictionary: { [s: string]: string } = {
@@ -62,7 +64,7 @@ class Server {
     const listTickets = new ListTicketsFromUser(id, res);
     const tickets = await listTickets.start();
     if (!tickets) {
-      return undefined;
+      return res.status(404).json(`Ticket not found for user ${id}`);
     }
     const filteredTickets = (tickets as {
       data: { tickets };
@@ -219,11 +221,9 @@ class Server {
     const { PORT } = process.env;
     this.server
       .post("/", async (req, res) => {
-        const {
-          status: serviceStatus,
-          serviceName,
-          data
-        } = await filterService(req.body);
+        const { status: serviceStatus, serviceName, data } = filterService(
+          req.body
+        );
 
         if (serviceStatus === FILTER_SERVICE_STATUS.NOT_DESIRED_SERVICE) {
           return res
@@ -233,10 +233,10 @@ class Server {
             );
         }
         if (serviceStatus === FILTER_SERVICE_STATUS.INVALID_REQUEST) {
-          this.dbg.warn("Erro desconhecido ao filtrar por serviço.");
+          this.dbg.warn("Unkown error while filtering by service status");
           return res
             .status(400)
-            .json("Erro desconhecido ao filtrar por serviço.");
+            .json("Unkown error while filtering by service status");
         }
 
         const {
@@ -247,6 +247,9 @@ class Server {
           data: errorData,
           dateSubmitted
         } = await filterFormName(data!);
+        this.apm.setUserContext({
+          email: results.email
+        });
         if (formNameStatus === FILTER_FORM_NAME_STATUS.FORM_NOT_IMPLEMENTED) {
           this.dbg.warn(`Form "${name}" not implemented. But it's ok`);
           return res
@@ -265,15 +268,16 @@ class Server {
             .json("Invalid request, failed to parse results");
         }
 
-        const formEntries = await getFormEntries();
+        const formEntries = await getFormEntries(this.apm);
         if (!formEntries) {
-          return this.dbg.error("getFormEntries error");
+          return res.status(500);
         }
 
         const bondeCreatedDate = new BondeCreatedDate(
           results.email,
           checkNames(results),
-          checkCep(results.cep)
+          checkCep(results.cep),
+          this.apm
         );
         const bondeCreatedAt = await bondeCreatedDate.start(formEntries);
 
@@ -302,6 +306,10 @@ class Server {
             }
           }
         } = user;
+
+        this.apm.setUserContext({
+          id: userId
+        });
 
         // Save users in Mautic
         await userToContact([{ ...createdUser, user_id: userId }]);
