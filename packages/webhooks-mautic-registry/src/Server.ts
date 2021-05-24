@@ -62,22 +62,27 @@ class Server {
       this.dbg.info(`Success logged "${serviceName}" req with id "${id}"`);
     } catch (e) {
       this.dbg.error(e);
+      return e;
     }
   };
 
   start = () => {
     this.server.post("/:serviceName", async (req, res) => {
-      const { serviceName } = req.params as { [s: string]: string };
-      this.dbg.info(`Incomming request from "${serviceName}"`);
-      if (!serviceName) {
-        return res
-          .status(400)
-          .json(
-            'O caminho "/" do bonde-webhooks-mautic-registry não deve ser acessado. Favor acessar o caminho "/<nome do serviço que está acessando>" para que ele funcione.'
-          );
+      try {
+        const { serviceName } = req.params as { [s: string]: string };
+        this.dbg.info(`Incomming request from "${serviceName}"`);
+        if (!serviceName) {
+          return res
+            .status(400)
+            .json(
+              'O caminho "/" do bonde-webhooks-mautic-registry não deve ser acessado. Favor acessar o caminho "/<nome do serviço que está acessando>" para que ele funcione.'
+            );
+        }
+        await this.request(serviceName, req.body);
+        return res.status(200).json("OK!");
+      } catch (e) {
+        return res.status(500).json(e);
       }
-      await this.request(serviceName, req.body);
-      return res.status(200).json("OK!");
     });
   };
 

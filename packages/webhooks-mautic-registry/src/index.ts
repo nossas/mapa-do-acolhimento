@@ -10,14 +10,20 @@ const {
   ELASTIC_APM_SERVICE_NAME: serviceName
 } = process.env;
 
+let apmAgent;
+
 if (secretToken && serverUrl && serviceName) {
-  apm.start({
+  apmAgent = apm.start({
     secretToken,
     serverUrl,
     serviceName
   });
 }
 
-const app = new Server();
-app.start();
-app.listen();
+try {
+  const app = new Server();
+  app.start();
+  app.listen();
+} catch (e) {
+  apmAgent.captureError(e);
+}
