@@ -3,7 +3,7 @@ import * as yup from "yup";
 import { client as GraphQLAPI } from "../";
 import logger from "../../logger";
 
-const log = logger.child({ module: "insertSolidarityTickets" });
+const log = logger.child({ labels: { process: "insertSolidarityTickets" } });
 
 const CREATE_TICKETS_MUTATION = gql`
   mutation createSolidarityTicket($ticket: solidarity_tickets_insert_input!) {
@@ -111,8 +111,6 @@ const insertSolidarityTickets = async ticket => {
     const {
       data: { insert_solidarity_tickets_one }
     } = res;
-
-    // log({ returning: insert_solidarity_tickets_one });
 
     return (
       insert_solidarity_tickets_one && insert_solidarity_tickets_one.ticket_id

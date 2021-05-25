@@ -1,3 +1,6 @@
-import logger from "pino";
+import pino from "pino";
+import ecsFormat from "@elastic/ecs-pino-format";
 
-export default logger();
+const logger = pino({ ...ecsFormat({ convertReqRes: true }) });
+
+export default logger;

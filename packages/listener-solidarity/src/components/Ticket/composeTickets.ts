@@ -2,7 +2,7 @@ import { capitalize, formatDate } from "../../utils";
 import { User, PartialTicket } from "../../types";
 import logger from "../../logger";
 
-const log = logger.child({ module: "composeTickets" });
+const log = logger.child({ labels: { process: "composeTickets" } });
 
 interface HasuraUser extends User {
   community_id: number;
