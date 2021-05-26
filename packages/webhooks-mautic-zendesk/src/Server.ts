@@ -61,6 +61,12 @@ class Server {
     created_at: string,
     res: Response
   ) => {
+    this.apm.setCustomContext({
+      registration_number,
+      condition,
+      state,
+      city
+    });
     const listTickets = new ListTicketsFromUser(id, res);
     const tickets = await listTickets.start();
     if (!tickets) {
@@ -83,7 +89,7 @@ class Server {
 
     if (filteredTickets.length === 0) {
       if (instance instanceof AdvogadaCreateUser) {
-        const advogadaCreateTicket = new AdvogadaCreateTicket(res);
+        const advogadaCreateTicket = new AdvogadaCreateTicket(res, this.apm);
         return advogadaCreateTicket.start({
           requester_id: id,
           organization_id,
@@ -115,7 +121,7 @@ class Server {
           created_at
         });
       }
-      const psicólogaCreateTicket = new PsicologaCreateTicket(res);
+      const psicólogaCreateTicket = new PsicologaCreateTicket(res, this.apm);
       return psicólogaCreateTicket.start({
         requester_id: id,
         organization_id,
@@ -150,7 +156,8 @@ class Server {
     if (instance instanceof AdvogadaCreateUser) {
       const advogadaUpdateTicket = new AdvogadaUpdateTicket(
         filteredTickets[0].id,
-        res
+        res,
+        this.apm
       );
       return advogadaUpdateTicket.start({
         requester_id: id,
@@ -184,7 +191,8 @@ class Server {
     }
     const psicólogaUpdateTicket = new PsicologaUpdateTicket(
       filteredTickets[0].id,
-      res
+      res,
+      this.apm
     );
     return psicólogaUpdateTicket.start({
       requester_id: id,
@@ -225,6 +233,10 @@ class Server {
           req.body
         );
 
+        this.apm.setCustomContext({
+          serviceStatus
+        });
+
         if (serviceStatus === FILTER_SERVICE_STATUS.NOT_DESIRED_SERVICE) {
           return res
             .status(200)
@@ -246,9 +258,12 @@ class Server {
           name,
           data: errorData,
           dateSubmitted
-        } = await filterFormName(data!);
+        } = await filterFormName(data!, this.apm);
         this.apm.setUserContext({
           email: results.email
+        });
+        this.apm.setCustomContext({
+          formNameStatus
         });
         if (formNameStatus === FILTER_FORM_NAME_STATUS.FORM_NOT_IMPLEMENTED) {
           this.dbg.warn(`Form "${name}" not implemented. But it's ok`);
@@ -281,7 +296,7 @@ class Server {
         );
         const bondeCreatedAt = await bondeCreatedDate.start(formEntries);
 
-        const instance = await new InstanceClass!(res);
+        const instance = await new InstanceClass!(res, this.apm);
         let user;
         if (instance instanceof AdvogadaCreateUser) {
           user = await instance.start(results, bondeCreatedAt);

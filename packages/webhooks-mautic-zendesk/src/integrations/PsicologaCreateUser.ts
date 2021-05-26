@@ -18,9 +18,11 @@ interface InputFromMautic {
 
 class PsicologaCreateUser extends Base {
   organization = "PSICÓLOGA";
+  private apm: any;
 
-  constructor(res: Response) {
+  constructor(res: Response, apm: any) {
     super("PsicólogaCreateUser", "users/create_or_update", res);
+    this.apm = apm;
   }
 
   start = async (data, { createdAt, name, cep }: InputFromMautic) => {
@@ -132,6 +134,7 @@ class PsicologaCreateUser extends Base {
         response: await this.send(dataToBeSent)
       };
     } catch (e) {
+      this.apm.captureError(e);
       return this.dbg.error("validation failed", e);
     }
   };

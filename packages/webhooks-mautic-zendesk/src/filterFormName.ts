@@ -11,7 +11,7 @@ export enum FILTER_FORM_NAME_STATUS {
   INVALID_REQUEST
 }
 
-export const filterFormName = async (data: object) => {
+export const filterFormName = async (data: object, apm: any) => {
   const validation = yup.object().shape({
     "mautic.form_on_submit": yup.array().of(
       yup.object().shape({
@@ -36,6 +36,7 @@ export const filterFormName = async (data: object) => {
     validationResult = await validation.validate(data);
   } catch (e) {
     dbg.error(e);
+    apm.captureError(e);
     return {
       status: FILTER_FORM_NAME_STATUS.INVALID_REQUEST,
       data
@@ -54,6 +55,9 @@ export const filterFormName = async (data: object) => {
     ]
   } = validationResult;
   let InstanceClass;
+  apm.setCustomContext({
+    formName: name
+  });
   if (typeof name === "string") {
     if (name.toLowerCase().includes("cadastro: advogadas")) {
       InstanceClass = AdvogadaCreateUser;

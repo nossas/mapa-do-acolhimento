@@ -3,8 +3,11 @@ import * as yup from "yup";
 import Base from "./Base";
 
 class PsicologaCreateTicket extends Base {
-  constructor(res: Response) {
+  private apm: any;
+
+  constructor(res: Response, apm: any) {
     super("PsicólogaCreateTicket", "tickets", res);
+    this.apm = apm;
   }
 
   start = async <T>(data: object) => {
@@ -32,6 +35,7 @@ class PsicologaCreateTicket extends Base {
         stripUnknown: true
       });
     } catch (e) {
+      this.apm.captureError(e);
       return this.dbg.error("Falhou ao validar ticket");
     }
     try {
@@ -41,6 +45,7 @@ class PsicologaCreateTicket extends Base {
         }
       });
     } catch (e) {
+      this.apm.captureError(e);
       return this.dbg.error(e);
     }
   };
