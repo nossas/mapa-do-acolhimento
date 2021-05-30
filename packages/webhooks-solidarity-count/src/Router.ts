@@ -34,7 +34,7 @@ const getTicketIdFromRequest = async (req: Express.Request) => {
   return id;
 };
 
-const Router = (): Express.Express =>
+const Router = (apm): Express.Express =>
   Express()
     .use(Express.json())
     .use(JSONErrorHandler)
@@ -42,10 +42,15 @@ const Router = (): Express.Express =>
       try {
         const id = await getTicketIdFromRequest(req);
         log.info(`incoming request with id '${id}'`);
-        return App(id, res);
+        apm.setCustomContext({
+          ticket_id: id
+        });
+        const response = await App(id);
+        return res.status(200).json(response);
       } catch (e) {
         log.error(e);
-        return res.status(400).json("Corpo inválido da requisição");
+        apm.captureError(e);
+        return res.status(500).json(e);
       }
     });
 
