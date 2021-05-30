@@ -283,7 +283,7 @@ class Server {
             .json("Invalid request, failed to parse results");
         }
 
-        const formEntries = await getFormEntries(this.apm);
+        const formEntries = await getFormEntries(results.email, this.apm);
         if (!formEntries) {
           return res.status(500);
         }
