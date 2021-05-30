@@ -14,6 +14,7 @@ interface InputFromMautic {
   createdAt: string;
   name: string;
   cep?: string;
+  registration_number: string | null;
 }
 
 class PsicologaCreateUser extends Base {
@@ -25,7 +26,10 @@ class PsicologaCreateUser extends Base {
     this.apm = apm;
   }
 
-  start = async (data, { createdAt, name, cep }: InputFromMautic) => {
+  start = async (
+    data,
+    { createdAt, name, cep, registration_number }: InputFromMautic
+  ) => {
     let newData = {
       ...data,
       cep
@@ -70,6 +74,8 @@ class PsicologaCreateUser extends Base {
             organization_id: this.organizations[this.organization],
             user_fields: {
               ...removeFalsyValues(userFields),
+              registration_number:
+                userFields.registration_number || registration_number,
               cep,
               address,
               state,
@@ -124,6 +130,17 @@ class PsicologaCreateUser extends Base {
           stripUnknown: true
         }
       );
+
+      this.apm.setCustomContext({
+        zendesk: {
+          registration_number: zendeskData.user_fields?.registration_number,
+          cep: zendeskData.user_fields?.cep,
+          username: zendeskData.name,
+          email: zendeskData.email,
+          state: zendeskData.user_fields?.state,
+          city: zendeskData.user_fields?.city
+        }
+      });
 
       const dataToBeSent = {
         user: {

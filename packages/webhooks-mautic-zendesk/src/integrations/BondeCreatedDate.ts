@@ -54,7 +54,13 @@ class BondeCreatedDate {
       if (!filteredFormEntry) {
         throw new Error(`formEntries not found for email ${this.email}`);
       }
-      const { name, lastname, cep, created_at: createdAt } = filteredFormEntry;
+      const {
+        name,
+        lastname,
+        cep,
+        created_at: createdAt,
+        registration_number
+      } = filteredFormEntry;
       const aux = {
         createdAt,
         name:
@@ -64,13 +70,17 @@ class BondeCreatedDate {
         cep:
           typeof this.cep !== "string" || this.cep?.length === 0
             ? String(cep)
-            : this.cep
+            : this.cep,
+        registration_number
       };
       this.apm.setUserContext({
-        username: aux.name || this.name
+        username: aux.name
       });
       this.apm.setCustomContext({
-        cep: aux.cep || this.cep
+        form_entry: {
+          cep: aux.cep,
+          registration_number: aux.registration_number
+        }
       });
       return aux;
     } catch (e) {
@@ -80,12 +90,16 @@ class BondeCreatedDate {
         username: this.name || "sem nome"
       });
       this.apm.setCustomContext({
-        cep: this.cep ?? undefined
+        form_entry: {
+          cep: this.cep ?? undefined,
+          registration_number: null
+        }
       });
       return {
         createdAt: new Date().toISOString(),
         name: this.name || "sem nome",
-        cep: this.cep ?? undefined
+        cep: this.cep ?? undefined,
+        registration_number: null
       };
     }
   };

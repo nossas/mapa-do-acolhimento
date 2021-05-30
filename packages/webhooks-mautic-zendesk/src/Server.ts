@@ -15,27 +15,11 @@ import BondeCreatedDate from "./integrations/BondeCreatedDate";
 import { checkNames, checkCep } from "./utils";
 import log from "./dbg";
 
-// interface DataType {
-//   data: {
-//     logTable: {
-//       returning: {
-//         id: number;
-//       }[];
-//     };
-//   };
-// }
-
-// interface FormData {
-//   cep: string;
-// }
-
 class Server {
   private server = Express().use(Express.json());
 
   private dbg: Logger;
   private apm: any;
-
-  // private formData?: FormData;
 
   constructor(apm) {
     this.dbg = log;
@@ -46,7 +30,7 @@ class Server {
     aprovada: "aprovada",
     reprovada_estudo_de_caso: "reprovada_-_estudo_de_caso",
     reprovada_registro_inválido: "reprovada_-_registro_inválido",
-    reprovada_diretrizes_do_mapa: "reprovada_-_diretrizes_do_mapa",
+    reprovada_diretrizes_do_mapa: "reprovada_-_diretrizes_do_mapa"
   };
 
   createTicket = async (
@@ -56,17 +40,11 @@ class Server {
       organization_id,
       name,
       phone,
-      user_fields: { registration_number, condition, state, city },
+      user_fields: { registration_number, condition, state, city }
     },
     created_at: string,
     res: Response
   ) => {
-    this.apm.setCustomContext({
-      registration_number,
-      condition,
-      state,
-      city
-    });
     const listTickets = new ListTicketsFromUser(id, res);
     const tickets = await listTickets.start();
     if (!tickets) {
