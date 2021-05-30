@@ -26,7 +26,7 @@ class BondeCreatedDate {
 
   cep: string | null;
 
-  apm: any;
+  apm?: any;
 
   dbg = log.child({ label: { process: "BondeCreatedDate" } });
 
@@ -34,7 +34,7 @@ class BondeCreatedDate {
     email: string,
     name: string | null,
     cep: string | null,
-    apm: any
+    apm?: any
   ) {
     this.email = email;
     this.name = name;
@@ -66,17 +66,21 @@ class BondeCreatedDate {
             ? String(cep)
             : this.cep
       };
+      this.apm.setUserContext({
+        username: aux.name || this.name
+      });
       this.apm.setCustomContext({
-        cep: aux.cep || this.cep,
-        name: aux.name || this.name
+        cep: aux.cep || this.cep
       });
       return aux;
     } catch (e) {
       this.dbg.error(e);
       this.apm.captureError(e);
+      this.apm.setUserContext({
+        username: this.name || "sem nome"
+      });
       this.apm.setCustomContext({
-        cep: this.cep ?? undefined,
-        name: this.name || "sem nome"
+        cep: this.cep ?? undefined
       });
       return {
         createdAt: new Date().toISOString(),

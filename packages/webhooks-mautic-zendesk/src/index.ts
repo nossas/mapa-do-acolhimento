@@ -16,7 +16,8 @@ if (secretToken && serverUrl && serviceName) {
     secretToken,
     serverUrl,
     serviceName,
-    environment: process.env.NODE_ENV
+    environment: process.env.NODE_ENV,
+    captureBody: "errors"
   });
 }
 
