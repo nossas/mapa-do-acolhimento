@@ -1,6 +1,7 @@
 import { newContact } from "./userToContact";
 import { StatusMulher } from "../../types";
 import faker from "faker/locale/pt_BR";
+import * as yup from "yup";
 
 export const geolocation = {
   latitude: Number(faker.address.latitude()).toFixed(2),
@@ -89,6 +90,8 @@ describe("Check if user is correctly transformed into Mautic contact", () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const contact = await newContact(user as any);
 
-    expect(contact).toStrictEqual(undefined);
+    expect((contact as unknown as yup.ValidationError).name).toEqual("ValidationError");
+    expect((contact as unknown as yup.ValidationError).message).toEqual("user_id is a required field");
+  
   });
 });
