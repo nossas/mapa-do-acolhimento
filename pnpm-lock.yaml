@@ -220,6 +220,7 @@ importers:
 
   packages/listener-solidarity:
     specifiers:
+      '@elastic/ecs-pino-format': ^1.1.1
       '@types/debug': ^4.1.5
       '@types/faker': ^4.1.12
       '@types/jest': ~25.1.0
@@ -243,6 +244,7 @@ importers:
       cross-fetch: ^3.0.4
       debug: ^4.1.1
       dotenv-safe: ^8.2.0
+      elastic-apm-node: ^3.14.0
       faker: ^4.1.0
       graphql: ^14.6.0
       graphql-tag: ^2.10.3
@@ -256,6 +258,7 @@ importers:
       ws: ^7.2.1
       yup: ^0.29.1
     dependencies:
+      '@elastic/ecs-pino-format': 1.1.1
       apollo-cache-inmemory: 1.6.6_graphql@14.7.0
       apollo-client: 2.6.10_graphql@14.7.0
       apollo-link: 1.2.14_graphql@14.7.0
@@ -270,6 +273,7 @@ importers:
       cross-fetch: 3.0.6
       debug: 4.3.1
       dotenv-safe: 8.2.0
+      elastic-apm-node: 3.14.0
       faker: 4.1.0
       graphql: 14.7.0
       graphql-tag: 2.11.0_graphql@14.7.0
@@ -2440,6 +2444,8 @@ packages:
       regexpp: 3.1.0
       tsutils: 3.17.1_typescript@3.9.5
       typescript: 3.9.5
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /@typescript-eslint/experimental-utils/2.34.0_eslint@6.8.0+typescript@3.9.5:
@@ -2447,13 +2453,15 @@ packages:
     engines: {node: ^8.10.0 || ^10.13.0 || >=11.10.1}
     peerDependencies:
       eslint: '*'
-      typescript: '*'
     dependencies:
       '@types/json-schema': 7.0.6
       '@typescript-eslint/typescript-estree': 2.34.0_typescript@3.9.5
       eslint: 6.8.0
       eslint-scope: 5.1.1
       eslint-utils: 2.1.0
+    transitivePeerDependencies:
+      - supports-color
+      - typescript
     dev: true
 
   /@typescript-eslint/parser/2.34.0_eslint@6.8.0+typescript@3.9.5:
@@ -2472,6 +2480,8 @@ packages:
       eslint: 6.8.0
       eslint-visitor-keys: 1.3.0
       typescript: 3.9.5
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /@typescript-eslint/typescript-estree/2.34.0_typescript@3.9.5:
@@ -2491,6 +2501,8 @@ packages:
       semver: 7.3.4
       tsutils: 3.17.1_typescript@3.9.5
       typescript: 3.9.5
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /@ungap/global-this/0.4.3:
@@ -2578,6 +2590,8 @@ packages:
     engines: {node: '>= 6.0.0'}
     dependencies:
       debug: 4.3.1
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /ajv/6.12.6:
@@ -2770,23 +2784,25 @@ packages:
   /apollo-link-ws/1.0.20_1a57dc41c5bb360fc012030499aa0880:
     resolution: {integrity: sha512-mjSFPlQxmoLArpHBeUb2Xj+2HDYeTaJqFGOqQ+I8NVJxgL9lJe84PDWcPah/yMLv3rB7QgBDSuZ0xoRFBPlySw==}
     peerDependencies:
-      graphql: '*'
       subscriptions-transport-ws: ^0.9.0
     dependencies:
       apollo-link: 1.2.14_graphql@14.7.0
       subscriptions-transport-ws: 0.9.18_graphql@14.7.0
       tslib: 1.14.1
+    transitivePeerDependencies:
+      - graphql
     dev: false
 
   /apollo-link-ws/1.0.20_491719fd7f80adf32a3f94f9d5debb8e:
     resolution: {integrity: sha512-mjSFPlQxmoLArpHBeUb2Xj+2HDYeTaJqFGOqQ+I8NVJxgL9lJe84PDWcPah/yMLv3rB7QgBDSuZ0xoRFBPlySw==}
     peerDependencies:
-      graphql: '*'
       subscriptions-transport-ws: ^0.9.0
     dependencies:
       apollo-link: 1.2.14_graphql@15.4.0
       subscriptions-transport-ws: 0.9.18_graphql@15.4.0
       tslib: 1.14.1
+    transitivePeerDependencies:
+      - graphql
     dev: false
 
   /apollo-link/1.2.14_graphql@14.7.0:
@@ -3015,6 +3031,8 @@ packages:
       eslint: 6.8.0
       eslint-visitor-keys: 1.3.0
       resolve: 1.19.0
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /babel-jest/26.6.3_@babel+core@7.12.10:
@@ -3196,8 +3214,6 @@ packages:
 
   /bonde-core-tools/0.1.6_e402506cbc4cfe50edf63a0698a14451:
     resolution: {integrity: sha512-TEhsRKyuMGhmh1+3Hb52CWTT+df/j+GemrRx/hfra4hH4uKYY2PhhsI3zVB37akuqfBY5xrdUbh7Au0TAHnf/g==}
-    peerDependencies:
-      subscriptions-transport-ws: '*'
     dependencies:
       '@apollo/client': 3.3.6_7f7b2e3b73795d1ad7365d948d85a29e
       '@types/react': 16.14.2
@@ -3214,6 +3230,14 @@ packages:
       react-router: 5.2.0_react@16.14.0
       react-router-dom: 5.2.0_react@16.14.0
       styled-components: 5.2.1_react-dom@16.14.0+react@16.14.0
+    transitivePeerDependencies:
+      - bufferutil
+      - canvas
+      - react-is
+      - subscriptions-transport-ws
+      - supports-color
+      - ts-node
+      - utf-8-validate
     dev: false
 
   /bottleneck/2.19.5:
@@ -3475,6 +3499,8 @@ packages:
       js-yaml: 3.14.0
       teeny-request: 6.0.1
       urlgrey: 0.4.4
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /collect-v8-coverage/1.0.1:
@@ -4363,10 +4389,12 @@ packages:
     engines: {node: '>=8'}
     peerDependencies:
       eslint: '>=5'
-      typescript: '*'
     dependencies:
       '@typescript-eslint/experimental-utils': 2.34.0_eslint@6.8.0+typescript@3.9.5
       eslint: 6.8.0
+    transitivePeerDependencies:
+      - supports-color
+      - typescript
     dev: true
 
   /eslint-plugin-jsx-a11y/6.4.1_eslint@6.8.0:
@@ -4504,6 +4532,8 @@ packages:
       table: 5.4.6
       text-table: 0.2.0
       v8-compile-cache: 2.2.0
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /espree/6.2.1:
@@ -5301,6 +5331,8 @@ packages:
       '@tootallnate/once': 1.1.2
       agent-base: 6.0.2
       debug: 4.3.1
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /http-request-to-url/1.0.0:
@@ -5324,6 +5356,8 @@ packages:
     dependencies:
       agent-base: 5.1.1
       debug: 4.3.1
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /human-signals/1.1.1:
@@ -6231,6 +6265,12 @@ packages:
       '@jest/core': 26.6.3
       import-local: 3.0.2
       jest-cli: 26.6.3
+    transitivePeerDependencies:
+      - bufferutil
+      - canvas
+      - supports-color
+      - ts-node
+      - utf-8-validate
     dev: true
 
   /jest/26.6.3:
@@ -8742,6 +8782,8 @@ packages:
       node-fetch: 2.6.1
       stream-events: 1.0.5
       uuid: 3.4.0
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /terminal-link/2.1.1:
