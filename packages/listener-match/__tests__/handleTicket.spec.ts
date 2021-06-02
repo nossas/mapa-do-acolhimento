@@ -1,4 +1,7 @@
-import { proccessMatch, createMatch } from "../src/components";
+import { proccessMatch, createMatch} from "../src/components";
+import apm from "elastic-apm-node";
+
+
 
 describe("Handle Ticket", () => {
   it("should return early if 'solicitação_repetida' and field 'atrelado_ao_ticket' is null", async () => {
@@ -20,7 +23,8 @@ describe("Handle Ticket", () => {
     expect(
       await proccessMatch({
         individualTicket: ticket,
-        AGENT: 1
+        AGENT: 1,
+        apm
       })
     ).toStrictEqual(22964);
   });
@@ -39,11 +43,12 @@ describe("Handle Ticket", () => {
         longitude: "0",
         state: "SP"
       }
-    };
+    };  
     expect(
       await proccessMatch({
         individualTicket: ticket,
-        AGENT: 1
+        AGENT: 1,
+        apm
       })
     ).not.toStrictEqual(22970);
   });
