@@ -1,6 +1,11 @@
 import BondeCreatedDate from "../integrations/BondeCreatedDate";
 import { checkNames, checkCep } from "../utils";
-import apm from "elastic-apm-node";
+
+const apm = {
+  captureError: jest.fn(),
+  setCustomContext: jest.fn(),
+  setUserContext: jest.fn()
+};
 
 describe("BondeCreatedData Class", () => {
   describe("form entry not found for email, but there is name and cep from Mautic form results", () => {
@@ -28,7 +33,7 @@ describe("BondeCreatedData Class", () => {
           primeiro_nome: "Gabriela",
           sobrenome_completo: "Caetano"
         }),
-        checkCep(undefined), 
+        checkCep(undefined),
         apm
       );
       const bondeCreatedAt = await bondeCreatedDate.start([]);
