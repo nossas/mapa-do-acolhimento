@@ -1,10 +1,14 @@
 import axios from "axios";
 import * as yup from "yup";
-import debug from "debug";
 import { FormEntry } from "./types";
+import log from "./dbg";
 
-const query = `query($widgets: [Int!]!) {
-  form_entries(where: {widget_id: {_in: $widgets}}) {
+const query = `query($widgets: [Int!]!, $email: String!) {
+  form_entries(where: {
+    widget_id: {_in: $widgets}
+    fields: { _like: $email }
+  }) 
+  {
     fields
     created_at
     widget_id
@@ -17,9 +21,9 @@ interface DataType {
   };
 }
 
-const dbg = debug("webhooks-mautic-zendesk-getFormEntries");
+const dbg = log.child({ labels: { process: "getFormEntries" } });
 
-const getFormEntries = async () => {
+const getFormEntries = async (email: string, apm: any) => {
   const { HASURA_API_URL, X_HASURA_ADMIN_SECRET, WIDGET_IDS } = process.env;
   let widget_ids;
   try {
@@ -34,7 +38,8 @@ const getFormEntries = async () => {
       throw new Error("Invalid WIDGET_IDS env var");
     }
   } catch (e) {
-    return dbg(e);
+    apm.captureError(e);
+    return dbg.error(e);
   }
   try {
     const data = await axios.post<DataType>(
@@ -42,7 +47,8 @@ const getFormEntries = async () => {
       {
         query,
         variables: {
-          widgets: widget_ids
+          widgets: widget_ids,
+          email: `%${email}%`
         }
       },
       {
@@ -53,7 +59,8 @@ const getFormEntries = async () => {
     );
     return data.data.data.form_entries;
   } catch (e) {
-    return dbg(e);
+    apm.captureError(e);
+    return dbg.error(e);
   }
 };
 

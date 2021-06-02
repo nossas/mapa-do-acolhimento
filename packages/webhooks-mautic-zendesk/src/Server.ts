@@ -1,5 +1,5 @@
 import Express, { Response } from "express";
-import debug, { Debugger } from "debug";
+import { Logger } from "pino";
 import { userToContact } from "components/dist";
 import AdvogadaCreateUser from "./integrations/AdvogadaCreateUser";
 import PsicologaCreateUser from "./integrations/PsicologaCreateUser";
@@ -13,30 +13,17 @@ import { FILTER_FORM_NAME_STATUS, filterFormName } from "./filterFormName";
 import getFormEntries from "./getFormEntries";
 import BondeCreatedDate from "./integrations/BondeCreatedDate";
 import { checkNames, checkCep } from "./utils";
-
-// interface DataType {
-//   data: {
-//     logTable: {
-//       returning: {
-//         id: number;
-//       }[];
-//     };
-//   };
-// }
-
-// interface FormData {
-//   cep: string;
-// }
+import log from "./dbg";
 
 class Server {
   private server = Express().use(Express.json());
 
-  private dbg: Debugger;
+  private dbg: Logger;
+  private apm: any;
 
-  // private formData?: FormData;
-
-  constructor() {
-    this.dbg = debug("webhooks-mautic-zendesk");
+  constructor(apm) {
+    this.dbg = log;
+    this.apm = apm;
   }
 
   dictionary: { [s: string]: string } = {
@@ -61,7 +48,7 @@ class Server {
     const listTickets = new ListTicketsFromUser(id, res);
     const tickets = await listTickets.start();
     if (!tickets) {
-      return undefined;
+      return res.status(404).json(`Ticket not found for user ${id}`);
     }
     const filteredTickets = (tickets as {
       data: { tickets };
@@ -80,7 +67,7 @@ class Server {
 
     if (filteredTickets.length === 0) {
       if (instance instanceof AdvogadaCreateUser) {
-        const advogadaCreateTicket = new AdvogadaCreateTicket(res);
+        const advogadaCreateTicket = new AdvogadaCreateTicket(res, this.apm);
         return advogadaCreateTicket.start({
           requester_id: id,
           organization_id,
@@ -112,7 +99,7 @@ class Server {
           created_at
         });
       }
-      const psicólogaCreateTicket = new PsicologaCreateTicket(res);
+      const psicólogaCreateTicket = new PsicologaCreateTicket(res, this.apm);
       return psicólogaCreateTicket.start({
         requester_id: id,
         organization_id,
@@ -147,7 +134,8 @@ class Server {
     if (instance instanceof AdvogadaCreateUser) {
       const advogadaUpdateTicket = new AdvogadaUpdateTicket(
         filteredTickets[0].id,
-        res
+        res,
+        this.apm
       );
       return advogadaUpdateTicket.start({
         requester_id: id,
@@ -181,7 +169,8 @@ class Server {
     }
     const psicólogaUpdateTicket = new PsicologaUpdateTicket(
       filteredTickets[0].id,
-      res
+      res,
+      this.apm
     );
     return psicólogaUpdateTicket.start({
       requester_id: id,
@@ -218,11 +207,13 @@ class Server {
     const { PORT } = process.env;
     this.server
       .post("/", async (req, res) => {
-        const {
-          status: serviceStatus,
-          serviceName,
-          data
-        } = await filterService(req.body);
+        const { status: serviceStatus, serviceName, data } = filterService(
+          req.body
+        );
+
+        this.apm.setCustomContext({
+          serviceStatus
+        });
 
         if (serviceStatus === FILTER_SERVICE_STATUS.NOT_DESIRED_SERVICE) {
           return res
@@ -232,10 +223,10 @@ class Server {
             );
         }
         if (serviceStatus === FILTER_SERVICE_STATUS.INVALID_REQUEST) {
-          this.dbg("Erro desconhecido ao filtrar por serviço.");
+          this.dbg.warn("Unkown error while filtering by service status");
           return res
             .status(400)
-            .json("Erro desconhecido ao filtrar por serviço.");
+            .json("Unkown error while filtering by service status");
         }
 
         const {
@@ -245,16 +236,22 @@ class Server {
           name,
           data: errorData,
           dateSubmitted
-        } = await filterFormName(data!);
+        } = await filterFormName(data!, this.apm);
+        this.apm.setUserContext({
+          email: results.email
+        });
+        this.apm.setCustomContext({
+          formNameStatus
+        });
         if (formNameStatus === FILTER_FORM_NAME_STATUS.FORM_NOT_IMPLEMENTED) {
-          this.dbg(`Form "${name}" not implemented. But it's ok`);
+          this.dbg.warn(`Form "${name}" not implemented. But it's ok`);
           return res
             .status(200)
             .json(`Form "${name}" not implemented. But it's ok`);
         }
         if (formNameStatus === FILTER_FORM_NAME_STATUS.INVALID_REQUEST) {
-          this.dbg("Invalid request.");
-          this.dbg(errorData);
+          this.dbg.error("Invalid request.");
+          this.dbg.error(errorData as object);
           return res.status(400).json("Invalid request, see logs.");
         }
 
@@ -264,23 +261,20 @@ class Server {
             .json("Invalid request, failed to parse results");
         }
 
-        const formEntries = await getFormEntries();
+        const formEntries = await getFormEntries(results.email, this.apm);
         if (!formEntries) {
-          return this.dbg("getFormEntries error");
+          return res.status(500);
         }
 
         const bondeCreatedDate = new BondeCreatedDate(
           results.email,
           checkNames(results),
-          checkCep(results.cep)
+          checkCep(results.cep),
+          this.apm
         );
         const bondeCreatedAt = await bondeCreatedDate.start(formEntries);
 
-        if (!bondeCreatedAt) {
-          return this.dbg(bondeCreatedAt);
-        }
-
-        const instance = await new InstanceClass!(res);
+        const instance = await new InstanceClass!(res, this.apm);
         let user;
         if (instance instanceof AdvogadaCreateUser) {
           user = await instance.start(results, bondeCreatedAt);
@@ -289,7 +283,7 @@ class Server {
         }
 
         if (!user.response) {
-          this.dbg(`Failed to create user ${results.email}`);
+          this.dbg.error(`Failed to create user ${results.email}`);
           return res.status(500).json("Failed to create user");
         }
 
@@ -306,13 +300,17 @@ class Server {
           }
         } = user;
 
+        this.apm.setUserContext({
+          id: userId
+        });
+
         // Save users in Mautic
         await userToContact([{ ...createdUser, user_id: userId }]);
 
         if (responseCreatedAt === responseUpdatedAt) {
-          this.dbg(`Success, created user "${userId}"!`);
+          this.dbg.info(`Success, created user "${userId}"!`);
         } else {
-          this.dbg(`Success, updated user "${userId}"!`);
+          this.dbg.info(`Success, updated user "${userId}"!`);
         }
 
         const resultTicket = (await this.createTicket(
@@ -322,15 +320,17 @@ class Server {
           res
         )) as { data: { ticket: { id: number } } };
         if (resultTicket) {
-          this.dbg(`Success updated ticket "${resultTicket.data.ticket.id}".`);
+          this.dbg.info(
+            `Success updated ticket "${resultTicket.data.ticket.id}".`
+          );
 
           return res.status(200).json("Success finish integration");
         }
-        this.dbg("Failed to create ticket");
+        this.dbg.error("Failed to create ticket");
         return res.status(500).json("Failed failed integration");
       })
       .listen(Number(PORT), "0.0.0.0", () => {
-        this.dbg(`Server listen on port ${PORT}`);
+        this.dbg.info(`Server listen on port ${PORT}`);
       });
   };
 }

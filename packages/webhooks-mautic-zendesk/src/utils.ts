@@ -174,6 +174,7 @@ export const filterByEmail = (
       cep: string | null;
       created_at: string;
       widget_id: number;
+      registration_number: string;
     }
   | undefined => {
   const dicio = {
@@ -194,7 +195,13 @@ export const filterByEmail = (
     "field-1497369214092-68": "cep",
     "field-1530889290557-13": "cep",
     "field-1530889888615-19": "cep",
-    "field-1533733650118-7": "cep"
+    "field-1533733650118-7": "cep",
+    "field-1464962055652-41": "registration_number",
+    "field-1497368693005-33": "registration_number",
+    "field-1530889245511-83": "registration_number",
+    "field-1530889844695-35": "registration_number",
+    "field-1533733501716-34": "registration_number",
+    "field-1533735761357-93": "registration_number"
   };
   const getFieldsValue = formEntries.map(i => {
     try {

@@ -1,6 +1,12 @@
 import BondeCreatedDate from "../integrations/BondeCreatedDate";
 import { checkNames, checkCep } from "../utils";
 
+const apm = {
+  captureError: jest.fn(),
+  setCustomContext: jest.fn(),
+  setUserContext: jest.fn()
+};
+
 describe("BondeCreatedData Class", () => {
   describe("form entry not found for email, but there is name and cep from Mautic form results", () => {
     it("should return name/cep from mautic and createdAt is current", async () => {
@@ -10,7 +16,8 @@ describe("BondeCreatedData Class", () => {
           primeiro_nome: "Nádia",
           sobrenome_completo: "de Lima"
         }),
-        checkCep("30710456")
+        checkCep("30710456"),
+        apm
       );
       const bondeCreatedAt = await bondeCreatedDate.start([]);
       expect(bondeCreatedAt).toHaveProperty("cep", "30710456");
@@ -26,7 +33,8 @@ describe("BondeCreatedData Class", () => {
           primeiro_nome: "Gabriela",
           sobrenome_completo: "Caetano"
         }),
-        checkCep(undefined)
+        checkCep(undefined),
+        apm
       );
       const bondeCreatedAt = await bondeCreatedDate.start([]);
       expect(bondeCreatedAt).toHaveProperty("cep", undefined);
@@ -42,7 +50,8 @@ describe("BondeCreatedData Class", () => {
           primeiro_nome: "",
           sobrenome_completo: ""
         }),
-        checkCep(undefined)
+        checkCep(undefined),
+        apm
       );
       const bondeCreatedAt = await bondeCreatedDate.start([]);
       expect(bondeCreatedAt).toHaveProperty("cep", undefined);
@@ -58,7 +67,8 @@ describe("BondeCreatedData Class", () => {
           primeiro_nome: "Ana",
           sobrenome_completo: "Moniz"
         }),
-        checkCep(undefined)
+        checkCep(undefined),
+        apm
       );
       const bondeCreatedAt = await bondeCreatedDate.start([
         {
@@ -97,7 +107,8 @@ describe("BondeCreatedData Class", () => {
           primeiro_nome: "Fátima",
           sobrenome_completo: "Furtado"
         }),
-        checkCep("11075600")
+        checkCep("11075600"),
+        apm
       );
       const bondeCreatedAt = await bondeCreatedDate.start([
         {

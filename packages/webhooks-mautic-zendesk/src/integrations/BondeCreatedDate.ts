@@ -1,7 +1,7 @@
-import debug from "debug";
 import { FormEntry } from "../types";
 import { filterByEmail } from "../utils";
 import * as yup from "yup";
+import log from "../dbg";
 
 const verificaFormEntries = yup
   .array()
@@ -26,12 +26,20 @@ class BondeCreatedDate {
 
   cep: string | null;
 
-  dbg = debug("webhooks-mautic-zendesk-BondeCreatedDate");
+  apm?: any;
 
-  constructor(email: string, name: string | null, cep: string | null) {
+  dbg = log.child({ label: { process: "BondeCreatedDate" } });
+
+  constructor(
+    email: string,
+    name: string | null,
+    cep: string | null,
+    apm?: any
+  ) {
     this.email = email;
     this.name = name;
     this.cep = cep;
+    this.apm = apm;
   }
 
   start = async (formEntries: FormEntry[]) => {
@@ -46,7 +54,13 @@ class BondeCreatedDate {
       if (!filteredFormEntry) {
         throw new Error(`formEntries not found for email ${this.email}`);
       }
-      const { name, lastname, cep, created_at: createdAt } = filteredFormEntry;
+      const {
+        name,
+        lastname,
+        cep,
+        created_at: createdAt,
+        registration_number
+      } = filteredFormEntry;
       const aux = {
         createdAt,
         name:
@@ -56,15 +70,36 @@ class BondeCreatedDate {
         cep:
           typeof this.cep !== "string" || this.cep?.length === 0
             ? String(cep)
-            : this.cep
+            : this.cep,
+        registration_number
       };
+      this.apm.setUserContext({
+        username: aux.name
+      });
+      this.apm.setCustomContext({
+        form_entry: {
+          cep: aux.cep,
+          registration_number: aux.registration_number
+        }
+      });
       return aux;
     } catch (e) {
-      this.dbg(e);
+      this.dbg.error(e);
+      this.apm.captureError(e);
+      this.apm.setUserContext({
+        username: this.name || "sem nome"
+      });
+      this.apm.setCustomContext({
+        form_entry: {
+          cep: this.cep ?? undefined,
+          registration_number: null
+        }
+      });
       return {
         createdAt: new Date().toISOString(),
         name: this.name || "sem nome",
-        cep: this.cep ?? undefined
+        cep: this.cep ?? undefined,
+        registration_number: null
       };
     }
   };
