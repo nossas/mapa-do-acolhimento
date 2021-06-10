@@ -9,7 +9,7 @@ import { FILTER_SERVICE_STATUS, filterService } from "../../webhooks-mautic-zend
 import { FILTER_FORM_NAME_STATUS, filterFormName } from "./filterFormName";
 import getFormEntries from "../../webhooks-mautic-zendesk/src/getFormEntries";
 import BondeCreatedDate from "../../webhooks-mautic-zendesk/src/integrations/BondeCreatedDate";
-import { checkNames, checkCep } from "./utils";
+import { checkNames, checkCep } from "../../webhooks-mautic-zendesk/src/utils";
 
 
 class Server {
