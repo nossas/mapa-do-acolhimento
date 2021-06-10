@@ -10,17 +10,23 @@ describe("Test the Express server", () => {
   app = new Server();
 
   test("createTicket", async () => {
-   
+     
     const res: any = undefined
     const user = new AdvogadaCreateUser(res)
     const info = {
       id: null,
-      organization_id:2,  
-      name:'nome',
-      phone: '9999999',
-      user_fields: { registration_number: null, condition: null, state:"", city: ""}
+      organization_id:null,  
+      name:null,
+      phone: null,
+      user_fields: { registration_number: null, condition: null, state:null, city: null}
     }
-    expect(app.createTicket( user,info,'',res)).toBe(undefined);
+   
+    const response = app.createTicket( user,info,'',res)
+    expect(response).toBeInstanceOf(Promise)
+
+    return response.then(data => {
+        expect(data).toBe(undefined);  
+    });
   });
 
 });
