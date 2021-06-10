@@ -6,8 +6,8 @@ process.env.ZENDESK_ORGANIZATIONS = `{"ADVOGADA":"","MSR":"","PSICOLOGA":""}`
 process.env.ZENDESK_API_URL = ""
 
 describe("Test the Express server", () => {
-  let app: Server;
-  app = new Server();
+
+  const app = new Server();
 
   test("createTicket", async () => {
      
