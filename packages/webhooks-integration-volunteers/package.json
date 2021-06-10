@@ -1,0 +1,17 @@
+{
+  "name": "bonde-webhooks-mautic-registry-zendensk",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest --coverage"
+  },
+  "author": "adriele",
+  "license": "ISC",
+  "dependencies": {
+    "bonde-core-tools": "^0.1.7-alpha.10",
+    "dotenv": "^10.0.0",
+    "elastic-apm-node": "^3.15.0",
+    "express": "^4.17.1"
+  }
+}
