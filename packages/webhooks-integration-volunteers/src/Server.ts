@@ -1,6 +1,6 @@
 import Express, { Response } from "express";
 import debug, { Debugger } from "debug";
-import { userToContact } from "components/dist";
+import { userToContact } from "../../components/src/lib/mautic/index";
 import VolunteerCreateUser from "./integrations/volunteerCreateUser";
 import ListTicketsFromUser from "../../webhooks-mautic-zendesk/src/integrations/ListTicket";
 import VolunteerUpdateTicket from "./integrations/volunteerUpdateTicket";
@@ -44,6 +44,8 @@ class Server {
   ) => {
     const listTickets = new ListTicketsFromUser(id, res);
     const tickets = await listTickets.start();
+    let organization = instance.organization.substring(0,1).toUpperCase().concat(instance.organization.substring(1));
+
     if (!tickets) {
       return undefined;
     }
@@ -53,19 +55,20 @@ class Server {
   
       return (
         ["open", "new", "pending", "hold"].includes(i.status) &&
-        i.subject === `[${VolunteerCreateUser.organization}] ${name} - ${registration_number}`
+        i.subject === `[${instance.organization}] ${name} - ${registration_number}`
       );  
     });
 
     if (filteredTickets.length === 0) {
      
       const volunteerCreateTicket = new VolunteerCreateTicket(VolunteerCreateUser.name,res);
+    
       return volunteerCreateTicket.start({
         requester_id: id,
         organization_id,
         description: "-",
         status_inscricao: "aprovada",
-        subject: `[${VolunteerCreateUser.organization}] ${name} - ${registration_number}`,
+        subject: `[${organization}] ${name} - ${registration_number}`,
         custom_fields: [
           {
             id: 360021665652,
@@ -94,7 +97,7 @@ class Server {
      
     }
    
-      const volunteerUpdateTicket = new VolunteerUpdateTicket('',
+      const volunteerUpdateTicket = new VolunteerUpdateTicket(organization.concat("CreateTicket"),
         filteredTickets[0].id,
         res
       );
@@ -103,7 +106,7 @@ class Server {
         organization_id,
         description: "-",
         status_inscricao: "aprovada",
-        subject: `[${VolunteerCreateUser.organization}] ${name} - ${registration_number}`,
+        subject: `[${organization}] ${name} - ${registration_number}`,
         custom_fields: [
           {
             id: 360021665652,
