@@ -1,14 +1,14 @@
 import * as yup from "yup";
 import { Response } from "express";
 import { getGeolocation } from "bonde-core-tools";
-import Base from "../../../webhooks-mautic-zendesk/src/integrations/Base";
-import { CONDITION } from "../../../webhooks-mautic-zendesk/src/types";
+import Base from '../integrations/Base'
+import { CONDITION } from "../types";
 import {
   verificaEstudoDeCaso,
   verifyLocation,
   verificaDiretrizesAtendimento,
   removeFalsyValues
-} from "/home/adriele/nossas/bonde/webhooks/mapa-do-acolhimento/packages/webhooks-mautic-zendesk/src/utils";
+} from "../utils";
 
 interface InputFromMautic {
   createdAt: string;
@@ -18,11 +18,11 @@ interface InputFromMautic {
 
 class VolunteerCreateUser extends Base {
 
-  protected organization : string;
+  public organization : string;
    
-  constructor(name: string, organization: string, res: Response) {
-    super(name, "users/create_or_update", res);
-    this.organization = organization;
+  constructor(organization: string, res: Response) {
+    super(organization.concat("CreateUser"), "users/create_or_update", res);
+    this.organization = organization.toUpperCase();
   }
 
   start = async (data, { createdAt, name, cep }: InputFromMautic) => {

@@ -1,6 +1,5 @@
 import * as yup from "yup";
 import debug from "debug";
-import VolunteerCreateUser from "./integrations/volunteerCreateUser";
 
 const dbg = debug("filterFormName");
 
@@ -52,12 +51,15 @@ export const filterFormName = async (data: object) => {
       }
     ]
   } = validationResult;
-  let InstanceClass;
+  
+  let organization: string ="";
   if (typeof name === "string") {
-    if (name.toLowerCase().includes("cadastro: advogadas" || "cadastro: psicólogas")) {
-      InstanceClass = VolunteerCreateUser;
+    if (name.toLowerCase().includes("cadastro: advogadas")) {
+      organization = "Advogada";
+    } else if (name.toLowerCase().includes("cadastro: psicólogas")) {
+      organization = "Psicóloga";
     } else {
-      dbg(`InstanceClass "${name}" doesn't exist`);
+      dbg(`Organization "${name}" doesn't exist`);
       return {
         status: FILTER_FORM_NAME_STATUS.FORM_NOT_IMPLEMENTED,
         name
@@ -66,7 +68,7 @@ export const filterFormName = async (data: object) => {
   }
   return {
     status: FILTER_FORM_NAME_STATUS.SUCCESS,
-    InstanceClass,
+    organization,
     results,
     timestamp,
     dateSubmitted
