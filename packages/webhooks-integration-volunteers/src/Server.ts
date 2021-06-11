@@ -1,14 +1,14 @@
 import Express, { Response } from "express";
 import debug, { Debugger } from "debug";
-import { userToContact } from "../../components/src/lib/mautic/index";
+import { userToContact } from "components/dist";
 import VolunteerCreateUser from "./integrations/volunteerCreateUser";
-import ListTicketsFromUser from "../../webhooks-mautic-zendesk/src/integrations/ListTicket";
+import ListTicketsFromUser from "./integrations/ListTicket";
 import VolunteerUpdateTicket from "./integrations/volunteerUpdateTicket";
 import VolunteerCreateTicket from "./integrations/volunteerCreateTicket";
-import { FILTER_SERVICE_STATUS, filterService } from "../../webhooks-mautic-zendesk/src/filterService";
+import { FILTER_SERVICE_STATUS, filterService } from "./filterService";
 import { FILTER_FORM_NAME_STATUS, filterFormName } from "./filterFormName";
-import getFormEntries from "../../webhooks-mautic-zendesk/src/getFormEntries";
-import BondeCreatedDate from "../../webhooks-mautic-zendesk/src/integrations/BondeCreatedDate";
+import getFormEntries from "./getFormEntries";
+import BondeCreatedDate from "./integrations/BondeCreatedDate";
 import { checkNames, checkCep } from "../../webhooks-mautic-zendesk/src/utils";
 
 
@@ -61,7 +61,7 @@ class Server {
 
     if (filteredTickets.length === 0) {
      
-      const volunteerCreateTicket = new VolunteerCreateTicket(VolunteerCreateUser.name,res);
+      const volunteerCreateTicket = new VolunteerCreateTicket(organization.concat('CreateTicket'),res);
     
       return volunteerCreateTicket.start({
         requester_id: id,
@@ -92,12 +92,10 @@ class Server {
           }
         ],
           created_at
-        });
-      
-     
+        });   
     }
    
-      const volunteerUpdateTicket = new VolunteerUpdateTicket(organization.concat("CreateTicket"),
+      const volunteerUpdateTicket = new VolunteerUpdateTicket(organization.concat("UpdateTicket"),
         filteredTickets[0].id,
         res
       );
@@ -157,7 +155,7 @@ class Server {
         }
 
         const {
-          InstanceClass,
+          organization,
           results,
           status: formNameStatus,
           name,
@@ -197,8 +195,8 @@ class Server {
         if (!bondeCreatedAt) {
           return this.dbg(bondeCreatedAt);
         }
-
-        const instance = await new InstanceClass!(res);
+        
+        const instance = await new VolunteerCreateUser!(organization!, res);
         let user;
         
         if (instance.organization == "ADVOGADA" ) {
