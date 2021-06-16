@@ -1,9 +1,10 @@
 import * as yup from "yup";
+import debug from "debug";
 import AdvogadaCreateUser from "./integrations/AdvogadaCreateUser";
 import PsicologaCreateUser from "./integrations/PsicologaCreateUser";
-import log from "./dbg";
+import { Mautic } from "./filterService";
 
-const dbg = log.child({ labels: { process: "filterFormName" } });
+const dbg = debug("filterFormName");
 
 export enum FILTER_FORM_NAME_STATUS {
   SUCCESS,
@@ -11,7 +12,7 @@ export enum FILTER_FORM_NAME_STATUS {
   INVALID_REQUEST
 }
 
-export const filterFormName = async (data: object, apm: any) => {
+export const filterFormName = async (data: Mautic) => {
   const validation = yup.object().shape({
     "mautic.form_on_submit": yup.array().of(
       yup.object().shape({
@@ -35,8 +36,7 @@ export const filterFormName = async (data: object, apm: any) => {
   try {
     validationResult = await validation.validate(data);
   } catch (e) {
-    dbg.error(e);
-    apm.captureError(e);
+    dbg(e);
     return {
       status: FILTER_FORM_NAME_STATUS.INVALID_REQUEST,
       data
@@ -55,16 +55,13 @@ export const filterFormName = async (data: object, apm: any) => {
     ]
   } = validationResult;
   let InstanceClass;
-  apm.setCustomContext({
-    formName: name
-  });
   if (typeof name === "string") {
     if (name.toLowerCase().includes("cadastro: advogadas")) {
       InstanceClass = AdvogadaCreateUser;
     } else if (name.toLowerCase().includes("cadastro: psicólogas")) {
       InstanceClass = PsicologaCreateUser;
     } else {
-      dbg.warn(`InstanceClass "${name}" doesn't exist`);
+      dbg(`InstanceClass "${name}" doesn't exist`);
       return {
         status: FILTER_FORM_NAME_STATUS.FORM_NOT_IMPLEMENTED,
         name
