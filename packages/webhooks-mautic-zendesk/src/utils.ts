@@ -23,9 +23,9 @@ export const verifyLocation = async (data, getGeolocation) => {
   };
 };
 
-export const verificaDiretrizesAtendimento = async (
+export const verificaDiretrizesAtendimento = async <T>(
   condition: [CONDITION],
-  data: Record<string, unknown>
+  data: T
 ) => {
   let newData = data;
   const verificaCamposDiretrizesAtendimento = yup
@@ -73,14 +73,14 @@ export const verificaDiretrizesAtendimento = async (
     })
     .required();
 
-  newData = stripDiretrizesAtendimento.cast(newData);
+  newData = stripDiretrizesAtendimento.cast(newData) as any;
 
   return newData;
 };
 
-export const verificaEstudoDeCaso = async (
+export const verificaEstudoDeCaso = async <T>(
   condition: [CONDITION],
-  data: object
+  data: T
 ) => {
   let newData = data;
   const verificaCamposEstudoDeCaso = yup
@@ -125,7 +125,7 @@ export const verificaEstudoDeCaso = async (
     })
     .required();
 
-  newData = stripRespostaEstudoDeCaso.cast(newData);
+  newData = stripRespostaEstudoDeCaso.cast(newData) as any;
 
   return newData;
 };
@@ -174,7 +174,7 @@ export const filterByEmail = (
       cep: string | null;
       created_at: string;
       widget_id: number;
-      registration_number: string;
+      registration_number?: string;
     }
   | undefined => {
   const dicio = {

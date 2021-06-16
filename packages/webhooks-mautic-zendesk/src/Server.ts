@@ -1,6 +1,8 @@
 import Express, { Response } from "express";
-import debug, { Debugger } from "debug";
-import { userToContact } from "components/dist";
+import { Logger } from "pino";
+// import debug, { Debugger } from "debug";
+import log from "./dbg";
+// import { userToContact } from "components/dist";
 import AdvogadaCreateUser from "./integrations/AdvogadaCreateUser";
 import PsicologaCreateUser from "./integrations/PsicologaCreateUser";
 import ListTicketsFromUser from "./integrations/ListTicket";
@@ -9,34 +11,18 @@ import AdvogadaUpdateTicket from "./integrations/AdvogadaUpdateTicket";
 import PsicologaCreateTicket from "./integrations/PsicologaCreateTicket";
 import PsicologaUpdateTicket from "./integrations/PsicologaUpdateTicket";
 import read_mautic_request from "./filterService";
-import { FILTER_FORM_NAME_STATUS, filterFormName } from "./filterFormName";
-import getFormEntries from "./getFormEntries";
-import BondeCreatedDate from "./integrations/BondeCreatedDate";
-import { checkNames, checkCep } from "./utils";
-
-// interface DataType {
-//   data: {
-//     logTable: {
-//       returning: {
-//         id: number;
-//       }[];
-//     };
-//   };
-// }
-
-// interface FormData {
-//   cep: string;
-// }
+import { filterFormName, FILTER_FORM_NAME_STATUS } from "./filterFormName";
+import createZendeskUser from "./integration-functions/create-user";
 
 class Server {
   private server = Express().use(Express.json());
 
-  private dbg: Debugger;
+  private dbg: Logger;
+  private apm: any;
 
-  // private formData?: FormData;
-
-  constructor() {
-    this.dbg = debug("webhooks-mautic-zendesk");
+  constructor(apm) {
+    this.dbg = log;
+    this.apm = apm;
   }
 
   dictionary: { [s: string]: string } = {
@@ -61,7 +47,7 @@ class Server {
     const listTickets = new ListTicketsFromUser(id, res);
     const tickets = await listTickets.start();
     if (!tickets) {
-      return undefined;
+      return res.status(404).json(`Ticket not found for user ${id}`);
     }
     const filteredTickets = (tickets as {
       data: { tickets };
@@ -80,7 +66,7 @@ class Server {
 
     if (filteredTickets.length === 0) {
       if (instance instanceof AdvogadaCreateUser) {
-        const advogadaCreateTicket = new AdvogadaCreateTicket(res);
+        const advogadaCreateTicket = new AdvogadaCreateTicket(res, this.apm);
         return advogadaCreateTicket.start({
           requester_id: id,
           organization_id,
@@ -112,7 +98,7 @@ class Server {
           created_at
         });
       }
-      const psicólogaCreateTicket = new PsicologaCreateTicket(res);
+      const psicólogaCreateTicket = new PsicologaCreateTicket(res, this.apm);
       return psicólogaCreateTicket.start({
         requester_id: id,
         organization_id,
@@ -147,7 +133,8 @@ class Server {
     if (instance instanceof AdvogadaCreateUser) {
       const advogadaUpdateTicket = new AdvogadaUpdateTicket(
         filteredTickets[0].id,
-        res
+        res,
+        this.apm
       );
       return advogadaUpdateTicket.start({
         requester_id: id,
@@ -181,7 +168,8 @@ class Server {
     }
     const psicólogaUpdateTicket = new PsicologaUpdateTicket(
       filteredTickets[0].id,
-      res
+      res,
+      this.apm
     );
     return psicólogaUpdateTicket.start({
       requester_id: id,
@@ -216,123 +204,75 @@ class Server {
 
   start = () => {
     const { PORT } = process.env;
-    
-    this.dbg(`PORT ${PORT}`);
 
     this.server
       .get("/", async (_req, res) => {
-        return res.status(200).json({ status: 'success' });
+        return res.status(200).json({ status: "success" });
       })
-      .post("/asdads", async (req, res) => {
+      .post("/mautic-zendesk", async (req, res) => {
         const data = read_mautic_request(req);
 
-        // if (serviceStatus === FILTER_SERVICE_STATUS.NOT_DESIRED_SERVICE) {
-        //   return res
-        //     .status(200)
-        //     .json(
-        //       `Service "${serviceName}" isn't desired, but everything is OK.`
-        //     );
-        // }
-        // if (serviceStatus === FILTER_SERVICE_STATUS.INVALID_REQUEST) {
-        //   this.dbg("Erro desconhecido ao filtrar por serviço.");
-        //   return res
-        //     .status(400)
-        //     .json("Erro desconhecido ao filtrar por serviço.");
-        // }
-
         const {
-          InstanceClass,
           results,
+          organization,
           status: formNameStatus,
           name,
           data: errorData,
           dateSubmitted
-        } = await filterFormName(data!);
+        } = await filterFormName(data!, this.apm);
+
         if (formNameStatus === FILTER_FORM_NAME_STATUS.FORM_NOT_IMPLEMENTED) {
-          this.dbg(`Form "${name}" not implemented. But it's ok`);
+          this.dbg.warn(`Form "${name}" not implemented. But it's ok`);
           return res
-            .status(200)
-            .json(`Form "${name}" not implemented. But it's ok`);
+            .status(404)
+            .json({ error: `Form "${name}" not implemented. But it's ok` });
         }
+
         if (formNameStatus === FILTER_FORM_NAME_STATUS.INVALID_REQUEST) {
-          this.dbg("Invalid request.");
-          this.dbg(errorData);
-          return res.status(400).json("Invalid request, see logs.");
+          this.dbg.error("Invalid request.");
+          this.dbg.error(errorData as object);
+          return res.status(404).json({ error: "Invalid request, see logs." });
         }
 
         if (!results || !dateSubmitted) {
           return res
-            .status(400)
-            .json("Invalid request, failed to parse results");
+            .status(404)
+            .json({ error: "Invalid request, failed to parse results" });
         }
 
-        const formEntries = await getFormEntries();
-        if (!formEntries) {
-          return this.dbg("getFormEntries error");
-        }
+        const user = await createZendeskUser({ results, organization });
 
-        const bondeCreatedDate = new BondeCreatedDate(
-          results.email,
-          checkNames(results),
-          checkCep(results.cep)
-        );
-        const bondeCreatedAt = await bondeCreatedDate.start(formEntries);
-
-        if (!bondeCreatedAt) {
-          return this.dbg(bondeCreatedAt);
-        }
-
-        const instance = await new InstanceClass!(res);
-        let user;
-        if (instance instanceof AdvogadaCreateUser) {
-          user = await instance.start(results, bondeCreatedAt);
-        } else if (instance instanceof PsicologaCreateUser) {
-          user = await instance.start(results!, bondeCreatedAt);
-        }
-
-        if (!user.response) {
+        if (!user) {
           this.dbg(`Failed to create user ${results.email}`);
-          return res.status(500).json("Failed to create user");
+          return res.status(500).json("Failed to Create Zendesk User");
         }
 
-        const {
-          response: {
-            data: {
-              user: createdUser,
-              user: {
-                created_at: responseCreatedAt,
-                updated_at: responseUpdatedAt,
-                id: userId
-              }
-            }
-          }
-        } = user;
-
+        return res.status(200).json({ user });
         // Save users in Mautic
-        await userToContact([{ ...createdUser, user_id: userId }]);
+        // await userToContact([{ user, user_id: user.id }]);
 
-        if (responseCreatedAt === responseUpdatedAt) {
-          this.dbg(`Success, created user "${userId}"!`);
-        } else {
-          this.dbg(`Success, updated user "${userId}"!`);
-        }
+        // if (responseCreatedAt === responseUpdatedAt) {
+        //   this.dbg(`Success, created user "${userId}"!`);
+        // } else {
+        //   this.dbg(`Success, updated user "${userId}"!`);
+        // }
 
-        const resultTicket = (await this.createTicket(
-          instance,
-          createdUser,
-          dateSubmitted,
-          res
-        )) as { data: { ticket: { id: number } } };
-        if (resultTicket) {
-          this.dbg(`Success updated ticket "${resultTicket.data.ticket.id}".`);
+        // const resultTicket = (await this.createTicket(
+        //   instance,
+        //   createdUser,
+        //   dateSubmitted,
+        //   res
+        // )) as { data: { ticket: { id: number } } };
+        // if (resultTicket) {
+        //   this.dbg(`Success updated ticket "${resultTicket.data.ticket.id}".`);
 
-          return res.status(200).json("Success finish integration");
-        }
-        this.dbg("Failed to create ticket");
-        return res.status(500).json("Failed failed integration");
+        //   return res.status(200).json("Success finish integration");
+        // }
+        // this.dbg("Failed to create ticket");
+        // return res.status(500).json("Failed failed integration");
       })
       .listen(Number(PORT), "0.0.0.0", () => {
-        this.dbg(`Server listen on port ${PORT}`);
+        this.dbg.info(`Server listen on port ${PORT}`);
       });
   };
 }
