@@ -1,5 +1,5 @@
 import Express, { Response } from "express";
-import { Logger } from "pino";
+import debug, { Debugger } from "debug";
 import { userToContact } from "components/dist";
 import AdvogadaCreateUser from "./integrations/AdvogadaCreateUser";
 import PsicologaCreateUser from "./integrations/PsicologaCreateUser";
@@ -8,22 +8,35 @@ import AdvogadaCreateTicket from "./integrations/AdvogadaCreateTicket";
 import AdvogadaUpdateTicket from "./integrations/AdvogadaUpdateTicket";
 import PsicologaCreateTicket from "./integrations/PsicologaCreateTicket";
 import PsicologaUpdateTicket from "./integrations/PsicologaUpdateTicket";
-import { FILTER_SERVICE_STATUS, filterService } from "./filterService";
+import read_mautic_request from "./filterService";
 import { FILTER_FORM_NAME_STATUS, filterFormName } from "./filterFormName";
 import getFormEntries from "./getFormEntries";
 import BondeCreatedDate from "./integrations/BondeCreatedDate";
 import { checkNames, checkCep } from "./utils";
-import log from "./dbg";
+
+// interface DataType {
+//   data: {
+//     logTable: {
+//       returning: {
+//         id: number;
+//       }[];
+//     };
+//   };
+// }
+
+// interface FormData {
+//   cep: string;
+// }
 
 class Server {
   private server = Express().use(Express.json());
 
-  private dbg: Logger;
-  private apm: any;
+  private dbg: Debugger;
 
-  constructor(apm) {
-    this.dbg = log;
-    this.apm = apm;
+  // private formData?: FormData;
+
+  constructor() {
+    this.dbg = debug("webhooks-mautic-zendesk");
   }
 
   dictionary: { [s: string]: string } = {
@@ -48,7 +61,7 @@ class Server {
     const listTickets = new ListTicketsFromUser(id, res);
     const tickets = await listTickets.start();
     if (!tickets) {
-      return res.status(404).json(`Ticket not found for user ${id}`);
+      return undefined;
     }
     const filteredTickets = (tickets as {
       data: { tickets };
@@ -67,7 +80,7 @@ class Server {
 
     if (filteredTickets.length === 0) {
       if (instance instanceof AdvogadaCreateUser) {
-        const advogadaCreateTicket = new AdvogadaCreateTicket(res, this.apm);
+        const advogadaCreateTicket = new AdvogadaCreateTicket(res);
         return advogadaCreateTicket.start({
           requester_id: id,
           organization_id,
@@ -99,7 +112,7 @@ class Server {
           created_at
         });
       }
-      const psicólogaCreateTicket = new PsicologaCreateTicket(res, this.apm);
+      const psicólogaCreateTicket = new PsicologaCreateTicket(res);
       return psicólogaCreateTicket.start({
         requester_id: id,
         organization_id,
@@ -134,8 +147,7 @@ class Server {
     if (instance instanceof AdvogadaCreateUser) {
       const advogadaUpdateTicket = new AdvogadaUpdateTicket(
         filteredTickets[0].id,
-        res,
-        this.apm
+        res
       );
       return advogadaUpdateTicket.start({
         requester_id: id,
@@ -169,8 +181,7 @@ class Server {
     }
     const psicólogaUpdateTicket = new PsicologaUpdateTicket(
       filteredTickets[0].id,
-      res,
-      this.apm
+      res
     );
     return psicólogaUpdateTicket.start({
       requester_id: id,
@@ -205,29 +216,29 @@ class Server {
 
   start = () => {
     const { PORT } = process.env;
+    
+    this.dbg(`PORT ${PORT}`);
+
     this.server
-      .post("/", async (req, res) => {
-        const { status: serviceStatus, serviceName, data } = filterService(
-          req.body
-        );
+      .get("/", async (_req, res) => {
+        return res.status(200).json({ status: 'success' });
+      })
+      .post("/asdads", async (req, res) => {
+        const data = read_mautic_request(req);
 
-        this.apm.setCustomContext({
-          serviceStatus
-        });
-
-        if (serviceStatus === FILTER_SERVICE_STATUS.NOT_DESIRED_SERVICE) {
-          return res
-            .status(200)
-            .json(
-              `Service "${serviceName}" isn't desired, but everything is OK.`
-            );
-        }
-        if (serviceStatus === FILTER_SERVICE_STATUS.INVALID_REQUEST) {
-          this.dbg.warn("Unkown error while filtering by service status");
-          return res
-            .status(400)
-            .json("Unkown error while filtering by service status");
-        }
+        // if (serviceStatus === FILTER_SERVICE_STATUS.NOT_DESIRED_SERVICE) {
+        //   return res
+        //     .status(200)
+        //     .json(
+        //       `Service "${serviceName}" isn't desired, but everything is OK.`
+        //     );
+        // }
+        // if (serviceStatus === FILTER_SERVICE_STATUS.INVALID_REQUEST) {
+        //   this.dbg("Erro desconhecido ao filtrar por serviço.");
+        //   return res
+        //     .status(400)
+        //     .json("Erro desconhecido ao filtrar por serviço.");
+        // }
 
         const {
           InstanceClass,
@@ -236,22 +247,16 @@ class Server {
           name,
           data: errorData,
           dateSubmitted
-        } = await filterFormName(data!, this.apm);
-        this.apm.setUserContext({
-          email: results.email
-        });
-        this.apm.setCustomContext({
-          formNameStatus
-        });
+        } = await filterFormName(data!);
         if (formNameStatus === FILTER_FORM_NAME_STATUS.FORM_NOT_IMPLEMENTED) {
-          this.dbg.warn(`Form "${name}" not implemented. But it's ok`);
+          this.dbg(`Form "${name}" not implemented. But it's ok`);
           return res
             .status(200)
             .json(`Form "${name}" not implemented. But it's ok`);
         }
         if (formNameStatus === FILTER_FORM_NAME_STATUS.INVALID_REQUEST) {
-          this.dbg.error("Invalid request.");
-          this.dbg.error(errorData as object);
+          this.dbg("Invalid request.");
+          this.dbg(errorData);
           return res.status(400).json("Invalid request, see logs.");
         }
 
@@ -261,20 +266,23 @@ class Server {
             .json("Invalid request, failed to parse results");
         }
 
-        const formEntries = await getFormEntries(results.email, this.apm);
+        const formEntries = await getFormEntries();
         if (!formEntries) {
-          return res.status(500);
+          return this.dbg("getFormEntries error");
         }
 
         const bondeCreatedDate = new BondeCreatedDate(
           results.email,
           checkNames(results),
-          checkCep(results.cep),
-          this.apm
+          checkCep(results.cep)
         );
         const bondeCreatedAt = await bondeCreatedDate.start(formEntries);
 
-        const instance = await new InstanceClass!(res, this.apm);
+        if (!bondeCreatedAt) {
+          return this.dbg(bondeCreatedAt);
+        }
+
+        const instance = await new InstanceClass!(res);
         let user;
         if (instance instanceof AdvogadaCreateUser) {
           user = await instance.start(results, bondeCreatedAt);
@@ -283,7 +291,7 @@ class Server {
         }
 
         if (!user.response) {
-          this.dbg.error(`Failed to create user ${results.email}`);
+          this.dbg(`Failed to create user ${results.email}`);
           return res.status(500).json("Failed to create user");
         }
 
@@ -300,17 +308,13 @@ class Server {
           }
         } = user;
 
-        this.apm.setUserContext({
-          id: userId
-        });
-
         // Save users in Mautic
         await userToContact([{ ...createdUser, user_id: userId }]);
 
         if (responseCreatedAt === responseUpdatedAt) {
-          this.dbg.info(`Success, created user "${userId}"!`);
+          this.dbg(`Success, created user "${userId}"!`);
         } else {
-          this.dbg.info(`Success, updated user "${userId}"!`);
+          this.dbg(`Success, updated user "${userId}"!`);
         }
 
         const resultTicket = (await this.createTicket(
@@ -320,17 +324,15 @@ class Server {
           res
         )) as { data: { ticket: { id: number } } };
         if (resultTicket) {
-          this.dbg.info(
-            `Success updated ticket "${resultTicket.data.ticket.id}".`
-          );
+          this.dbg(`Success updated ticket "${resultTicket.data.ticket.id}".`);
 
           return res.status(200).json("Success finish integration");
         }
-        this.dbg.error("Failed to create ticket");
+        this.dbg("Failed to create ticket");
         return res.status(500).json("Failed failed integration");
       })
       .listen(Number(PORT), "0.0.0.0", () => {
-        this.dbg.info(`Server listen on port ${PORT}`);
+        this.dbg(`Server listen on port ${PORT}`);
       });
   };
 }
