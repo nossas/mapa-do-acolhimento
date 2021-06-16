@@ -1,4 +1,4 @@
-import { FormEntry } from "../types";
+import { FormEntry, BondeCreatedAt } from "../integration-functions/types";
 import { filterByEmail } from "../utils";
 import * as yup from "yup";
 import log from "../dbg";
@@ -42,7 +42,7 @@ class BondeCreatedDate {
     this.apm = apm;
   }
 
-  start = async (formEntries: FormEntry[]) => {
+  start = async (formEntries: FormEntry[]): Promise<BondeCreatedAt> => {
     try {
       const validatedFormEntries = await verificaFormEntries.validate(
         formEntries,
@@ -92,14 +92,14 @@ class BondeCreatedDate {
       this.apm.setCustomContext({
         form_entry: {
           cep: this.cep ?? undefined,
-          registration_number: null
+          registration_number: undefined
         }
       });
       return {
         createdAt: new Date().toISOString(),
         name: this.name || "sem nome",
         cep: this.cep ?? undefined,
-        registration_number: null
+        registration_number: undefined
       };
     }
   };
