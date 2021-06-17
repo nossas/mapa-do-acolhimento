@@ -1,9 +1,9 @@
 import axios from "axios";
 import * as yup from "yup";
 import { FormEntry } from "./types";
-import log from "./dbg";
+import { apmAgent } from "./dbg";
 
-const query = `query($widgets: [Int!]!, $email: String!) {
+export const query = `query($widgets: [Int!]!, $email: String!) {
   form_entries(where: {
     widget_id: {_in: $widgets}
     fields: { _like: $email }
@@ -21,28 +21,22 @@ interface DataType {
   };
 }
 
-const dbg = log.child({ labels: { process: "getFormEntries" } });
-
-const getFormEntries = async (email: string, apm?: any) => {
+const getFormEntries = async (email: string): Promise<FormEntry[]> => {
   const { HASURA_API_URL, X_HASURA_ADMIN_SECRET, WIDGET_IDS } = process.env;
   let widget_ids;
   try {
-    widget_ids = WIDGET_IDS.split(",").map(Number);
-    if (
-      !yup
-        .array()
-        .of(yup.string())
-        .min(6)
-        .isValid(widget_ids)
-    ) {
-      throw new Error("Invalid WIDGET_IDS env var");
-    }
+    widget_ids = await yup
+      .array()
+      .of(yup.number())
+      .min(6)
+      .validate(WIDGET_IDS.split(",").map(Number));
   } catch (e) {
-    apm.captureError(e);
-    return dbg.error(e);
+    apmAgent?.captureError(e);
+    throw new Error("Invalid WIDGET_IDS env var");
   }
+
   try {
-    const data = await axios.post<DataType>(
+    const res = await axios.post<DataType>(
       HASURA_API_URL!,
       {
         query,
@@ -57,10 +51,11 @@ const getFormEntries = async (email: string, apm?: any) => {
         }
       }
     );
-    return data.data.data.form_entries;
+
+    return res.data.data.form_entries;
   } catch (e) {
-    apm && apm.captureError(e);
-    return dbg.error(e);
+    apmAgent?.captureError(e);
+    throw new Error("Failed request to GraphQL API");
   }
 };
 
