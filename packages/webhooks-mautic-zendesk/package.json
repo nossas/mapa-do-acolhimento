@@ -19,7 +19,7 @@
     "dev": "tsc-watch --onSuccess \"node dist/index.js\"",
     "clean": "rm -rf node_modules dist",
     "build": "tsc -p tsconfig.json",
-    "test": "jest --coverage",
+    "test": "NODE_ENV=test jest --coverage",
     "test:watch": "jest --watch --runInBand --detectOpenHandles"
   },
   "devDependencies": {
