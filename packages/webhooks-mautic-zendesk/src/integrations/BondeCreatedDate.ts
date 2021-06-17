@@ -1,7 +1,7 @@
 import { FormEntry, BondeCreatedAt } from "../integration-functions/types";
 import { filterByEmail } from "../utils";
 import * as yup from "yup";
-import log from "../dbg";
+import log, { apmAgent } from "../dbg";
 
 const verificaFormEntries = yup
   .array()
@@ -26,24 +26,15 @@ class BondeCreatedDate {
 
   cep: string | null;
 
-  apm?: any;
-
   dbg = log.child({ label: { process: "BondeCreatedDate" } });
 
-  constructor(
-    email: string,
-    name: string | null,
-    cep: string | null,
-    apm?: any
-  ) {
+  constructor(email: string, name: string | null, cep: string | null) {
     this.email = email;
     this.name = name;
     this.cep = cep;
-    this.apm = apm;
   }
 
   start = async (formEntries: FormEntry[]): Promise<BondeCreatedAt> => {
-    this.dbg.info(`formEntries ${JSON.stringify(formEntries, null, 2)}`);
     try {
       const validatedFormEntries = await verificaFormEntries.validate(
         formEntries,
@@ -51,10 +42,12 @@ class BondeCreatedDate {
           stripUnknown: true
         }
       );
+
       const filteredFormEntry = filterByEmail(validatedFormEntries, this.email);
       if (!filteredFormEntry) {
         throw new Error(`formEntries not found for email ${this.email}`);
       }
+
       const {
         name,
         lastname,
@@ -74,28 +67,30 @@ class BondeCreatedDate {
             : this.cep,
         registration_number
       };
-      this.apm.setUserContext({
-        username: aux.name
-      });
-      this.apm.setCustomContext({
+
+      apmAgent?.setUserContext({ username: aux.name });
+      apmAgent?.setCustomContext({
         form_entry: {
           cep: aux.cep,
           registration_number: aux.registration_number
         }
       });
+
       return aux;
     } catch (e) {
       this.dbg.error(e);
-      this.apm.captureError(e);
-      this.apm.setUserContext({
+
+      apmAgent?.captureError(e);
+      apmAgent?.setUserContext({
         username: this.name || "sem nome"
       });
-      this.apm.setCustomContext({
+      apmAgent?.setCustomContext({
         form_entry: {
           cep: this.cep ?? undefined,
           registration_number: undefined
         }
       });
+
       return {
         createdAt: new Date().toISOString(),
         name: this.name || "sem nome",

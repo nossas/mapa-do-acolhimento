@@ -17,7 +17,7 @@ const requestZendeskApi = async <T>(
     case "GET":
       return await axios.get<T>(endpoint, { auth });
     case "PUT":
-      return await axios.get<T>(endpoint, { auth });
+      return await axios.put<T>(endpoint, data, { auth });
     default:
       throw new Error(`method ${method} not is valid`);
   }

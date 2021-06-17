@@ -188,10 +188,9 @@ export const filterByEmail = (
   };
   const getFieldsValue = formEntries.map(i => {
     try {
-      const parsedFields = JSON.parse(i.fields);
       return {
         ...i,
-        ...parsedFields.reduce((newObj, old) => {
+        ...i.fields.reduce((newObj, old) => {
           const key = (dicio[old.uid] && dicio[old.uid]) || old.kind;
           return {
             ...newObj,
@@ -204,5 +203,6 @@ export const filterByEmail = (
       return undefined;
     }
   });
+
   return getFieldsValue.find(f => f.email === email);
 };

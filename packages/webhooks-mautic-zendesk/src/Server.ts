@@ -240,14 +240,21 @@ class Server {
             .json({ error: "Invalid request, failed to parse results" });
         }
 
-        const user = await createZendeskUser({ results, organization });
+        try {
+          const user = await createZendeskUser({ results, organization });
+          if (!user) {
+            this.dbg.error(`Failed to create user ${results.email}`);
+            return res.status(500).json("Failed to Create Zendesk User");
+          }
 
-        if (!user) {
-          this.dbg.error(`Failed to create user ${results.email}`);
-          return res.status(500).json("Failed to Create Zendesk User");
+          return res.status(200).json({ user });
+        } catch (e) {
+          this.dbg.error(`createZendeskUser ${e}`);
+          return res
+            .status(500)
+            .json({ error: "Failed to Create Zendesk User" });
         }
 
-        return res.status(200).json({ user });
         // Save users in Mautic
         // await userToContact([{ user, user_id: user.id }]);
 
