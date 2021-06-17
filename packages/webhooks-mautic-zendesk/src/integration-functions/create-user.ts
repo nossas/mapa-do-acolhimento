@@ -1,7 +1,9 @@
 import requestZendeskApi from "./request-zendesk-api";
-import { useDebug } from "./utils";
-import { businessRules, fetchBondeData } from "./rules";
+import log from "../dbg";
+import { businessRules } from "./rules";
+import verifySubscribe from "./verify-subscribe";
 import { Results } from "./types";
+import { checkNames, checkCep } from "../utils";
 
 export type CreateUserInput = {
   results: Results;
@@ -21,18 +23,22 @@ export type User = {
 };
 
 export default async (input: CreateUserInput): Promise<User> => {
-  const dbg = useDebug("users/create_or_update");
-
   const { results } = input;
-  const { createdAt } = await fetchBondeData(results);
+
+  const subscribe = await verifySubscribe({
+    ...results,
+    name: checkNames(results),
+    cep: checkCep(results.cep)
+  });
+  log.info(`input zendesk api: ${JSON.stringify(results, null, 2)}`);
 
   const organizations = JSON.parse(process.env.ZENDESK_ORGANIZATIONS);
   const data = await businessRules(
     results,
-    createdAt,
+    subscribe,
     organizations[input.organization]
   );
-  dbg("input zendesk api", { data });
+  log.info("input zendesk api", { data });
 
   const response = await requestZendeskApi<User>(
     "POST",
@@ -40,6 +46,6 @@ export default async (input: CreateUserInput): Promise<User> => {
     data
   );
 
-  dbg("response data", { response });
+  log.info("response data", { response });
   return response.data;
 };

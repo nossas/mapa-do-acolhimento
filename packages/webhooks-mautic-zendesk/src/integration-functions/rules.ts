@@ -1,17 +1,13 @@
 import * as yup from "yup";
 import { getGeolocation } from "bonde-core-tools";
 import log from "../dbg";
-import { BondeCreatedAt, CONDITION, FormEntry, Results } from "./types";
+import { CONDITION, Results, Subscribe } from "./types";
 import {
-  checkNames,
-  checkCep,
   verificaDiretrizesAtendimento,
   verificaEstudoDeCaso,
   verifyLocation,
   removeFalsyValues
 } from "../utils";
-import BondeCreatedDate from "../integrations/BondeCreatedDate";
-import getFormEntries from "../getFormEntries";
 
 const dbg = log.child({ label: { process: "rules" } });
 
@@ -37,6 +33,7 @@ const zendeskValidation = (input: ValidationInput) =>
     .from("qual_sua_area_de_atuacao", "occupation_area")
     .transform(obj => {
       const {
+        name,
         email,
         phone,
         latitude,
@@ -107,48 +104,25 @@ const zendeskValidation = (input: ValidationInput) =>
 
 export const businessRules = async (
   results: Results,
-  createdAt: BondeCreatedAt,
+  subscribe: Subscribe,
   organizationId: number
 ) => {
-  let data = { ...results, cep: createdAt.cep };
+  let data = { ...results, ...subscribe };
   const condition: [CONDITION] = [CONDITION.UNSET];
-  dbg.info(`data to verify: ${JSON.stringify(data, null, 2)}`);
+  dbg.info(`businessRules: ${JSON.stringify(data, null, 2)}`);
 
   data = await verificaDiretrizesAtendimento(condition, data);
+
   data = await verificaEstudoDeCaso(condition, data);
 
   const userWithGeolocation = await verifyLocation(data, getGeolocation);
+
   const zendeskData = await zendeskValidation({
     condition: condition[0],
     cep: data.cep,
-    createdAt: createdAt.createdAt,
+    createdAt: subscribe.created_at,
     organizationId
   }).validate(userWithGeolocation, { stripUnknown: true });
 
   return zendeskData;
-};
-
-export type FetchBondeDataResult = {
-  formEntries: FormEntry[];
-  createdAt: BondeCreatedAt;
-};
-
-export const fetchBondeData = async (
-  results: Results
-): Promise<FetchBondeDataResult> => {
-  dbg.info(`getFormEntries: ${results.email}`);
-
-  const formEntries = await getFormEntries(results.email);
-
-  if (!formEntries) throw new Error("form entries not found");
-
-  const instance = new BondeCreatedDate(
-    results.email,
-    checkNames(results),
-    checkCep(results.cep)
-  );
-  const createdAt = await instance.start(formEntries);
-
-  dbg.info(`finish fetchBondeData: ${createdAt.createdAt}`);
-  return { formEntries, createdAt };
 };

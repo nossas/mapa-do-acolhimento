@@ -5,13 +5,6 @@ export interface Results extends Record<string, unknown> {
   sobrenome_completo?: Array<string> | string;
 }
 
-export type BondeCreatedAt = {
-  createdAt: string;
-  name: string;
-  cep?: string;
-  registration_number?: string;
-};
-
 export enum CONDITION {
   UNSET = "unset",
   REPROVADA_REGISTRO_INVÁLIDO = "reprovada_registro_inválido",
@@ -19,8 +12,25 @@ export enum CONDITION {
   REPROVADA_ESTUDO_DE_CASO = "reprovada_estudo_de_caso"
 }
 
-export type FormEntry = {
+export interface FormEntry {
   fields: string;
   created_at: string;
   widget_id: number;
-};
+}
+
+export interface FormEntryFields {
+  name?: string;
+  lastname?: string;
+  cep?: string;
+  created_at: string;
+  widget_id: number;
+  registration_number?: string;
+}
+
+export interface Subscribe {
+  name: string;
+  lastname?: string;
+  cep?: string;
+  registration_number?: string;
+  created_at: string;
+}

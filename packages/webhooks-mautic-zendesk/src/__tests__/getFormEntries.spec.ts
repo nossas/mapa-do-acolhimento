@@ -1,5 +1,5 @@
 import axios from "axios";
-import getFormEntries, { query } from "../getFormEntries";
+import getFormEntries, { query, getFormEntryByEmail } from "../getFormEntries";
 
 jest.mock("axios");
 
@@ -63,9 +63,7 @@ describe("form entries", () => {
     mockedAxios.post.mockResolvedValue(mockResolvedValue);
     const email = "email@test.org";
 
-    await expect(getFormEntries(email)).resolves.toEqual(
-      mockResolvedValue.data.data.form_entries
-    );
+    await expect(getFormEntries(email)).resolves.toEqual([]);
 
     expect(mockedAxios.post).toBeCalledWith(
       process.env.HASURA_API_URL,
@@ -94,5 +92,43 @@ describe("form entries", () => {
     );
 
     return done();
+  });
+
+  describe("getFormEntryByEmail", () => {
+    it("throw error when form_entry invalid", async done => {
+      mockedAxios.post.mockResolvedValue({
+        data: {
+          data: {
+            form_entries: [{ fields: [], created_at: "", widget_id: 1 }]
+          }
+        }
+      });
+
+      await expect(getFormEntryByEmail("email@test.org")).rejects.toThrow(
+        "form_entry is invalid"
+      );
+      return done();
+    });
+
+    it("throw error when form_entry fields invalid", async done => {
+      mockedAxios.post.mockResolvedValue({
+        data: {
+          data: {
+            form_entries: [
+              {
+                fields: [2, 3, 4],
+                created_at: "2020-06-12 12:00:00",
+                widget_id: 1
+              }
+            ]
+          }
+        }
+      });
+
+      await expect(getFormEntryByEmail("email@test.org")).rejects.toThrow(
+        "form_entry is invalid"
+      );
+      return done();
+    });
   });
 });
