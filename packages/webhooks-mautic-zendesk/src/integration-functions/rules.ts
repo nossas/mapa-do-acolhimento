@@ -1,6 +1,6 @@
 import * as yup from "yup";
 import { getGeolocation } from "bonde-core-tools";
-import { useDebug } from "./utils";
+import log from "../dbg";
 import { BondeCreatedAt, CONDITION, FormEntry, Results } from "./types";
 import {
   checkNames,
@@ -12,6 +12,8 @@ import {
 } from "../utils";
 import BondeCreatedDate from "../integrations/BondeCreatedDate";
 import getFormEntries from "../getFormEntries";
+
+const dbg = log.child({ label: { process: "rules" } });
 
 export type ValidationInput = {
   organizationId: number;
@@ -108,10 +110,9 @@ export const businessRules = async (
   createdAt: BondeCreatedAt,
   organizationId: number
 ) => {
-  const dbg = useDebug("businessRules");
   let data = { ...results, cep: createdAt.cep };
   const condition: [CONDITION] = [CONDITION.UNSET];
-  dbg("data to verify", JSON.stringify(data, null, 2));
+  dbg.info(`data to verify: ${JSON.stringify(data, null, 2)}`);
 
   data = await verificaDiretrizesAtendimento(condition, data);
   data = await verificaEstudoDeCaso(condition, data);
@@ -135,9 +136,9 @@ export type FetchBondeDataResult = {
 export const fetchBondeData = async (
   results: Results
 ): Promise<FetchBondeDataResult> => {
-  const dbg = useDebug("fetchBondeData");
+  dbg.info(`getFormEntries: ${results.email}`);
 
-  const formEntries = await getFormEntries();
+  const formEntries = await getFormEntries(results.email);
 
   if (!formEntries) throw new Error("form entries not found");
 
@@ -148,6 +149,6 @@ export const fetchBondeData = async (
   );
   const createdAt = await instance.start(formEntries);
 
-  dbg("finish fetchBondeData", { createdAt: createdAt.createdAt });
+  dbg.info(`finish fetchBondeData: ${createdAt.createdAt}`);
   return { formEntries, createdAt };
 };

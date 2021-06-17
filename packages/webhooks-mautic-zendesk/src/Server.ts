@@ -243,7 +243,7 @@ class Server {
         const user = await createZendeskUser({ results, organization });
 
         if (!user) {
-          this.dbg(`Failed to create user ${results.email}`);
+          this.dbg.error(`Failed to create user ${results.email}`);
           return res.status(500).json("Failed to Create Zendesk User");
         }
 

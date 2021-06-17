@@ -43,6 +43,7 @@ class BondeCreatedDate {
   }
 
   start = async (formEntries: FormEntry[]): Promise<BondeCreatedAt> => {
+    this.dbg.info(`formEntries ${JSON.stringify(formEntries, null, 2)}`);
     try {
       const validatedFormEntries = await verificaFormEntries.validate(
         formEntries,
