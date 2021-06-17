@@ -1,7 +1,8 @@
 import axios from "axios";
 import * as yup from "yup";
-import { FormEntry } from "./types";
+import { FormEntry, FormEntryFields } from "./types";
 import { apmAgent } from "./dbg";
+import { filterByEmail } from "./utils";
 
 export const query = `query($widgets: [Int!]!, $email: String!) {
   form_entries(where: {
@@ -57,6 +58,50 @@ const getFormEntries = async (email: string): Promise<FormEntry[]> => {
     apmAgent?.captureError(e);
     throw new Error("Failed request to GraphQL API");
   }
+};
+
+const validationField = yup.object().shape({
+  uid: yup.string().required(),
+  kind: yup.string().required(),
+  label: yup.string().required(),
+  placeholder: yup.string().required(),
+  required: yup.string().required(),
+  value: yup.string().required()
+});
+
+export const getFormEntryByEmail = async (
+  email: string
+): Promise<FormEntryFields> => {
+  let formEntries;
+
+  try {
+    formEntries = await yup
+      .array()
+      .of(
+        yup
+          .object()
+          .shape({
+            fields: yup
+              .array()
+              .of(validationField)
+              .required(),
+            created_at: yup.string().required(),
+            widget_id: yup.number().required()
+          })
+          .required()
+      )
+      .notRequired()
+      .validate(await getFormEntries(email));
+  } catch (e) {
+    apmAgent?.captureError(e);
+    throw new Error(`form_entry is invalid`);
+  }
+
+  const formEntry = filterByEmail(formEntries || [], email);
+
+  if (!formEntry) throw new Error(`formEntries not found for email ${email}`);
+
+  return formEntry;
 };
 
 export default getFormEntries;

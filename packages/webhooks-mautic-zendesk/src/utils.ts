@@ -1,5 +1,5 @@
 import * as yup from "yup";
-import { CONDITION, FormEntry } from "./types";
+import { CONDITION, FormEntry, FormEntryFields } from "./types";
 
 export const setCondition = (condition: [CONDITION], value: CONDITION) => {
   const newCondition = condition;
@@ -139,7 +139,7 @@ export const checkNames = ({
 }: {
   primeiro_nome?: Array<string> | string;
   sobrenome_completo?: Array<string> | string;
-}) => {
+}): string | undefined => {
   let aux = "";
   if (primeiro_nome && primeiro_nome.length > 0) {
     aux += `${primeiro_nome}`;
@@ -149,34 +149,17 @@ export const checkNames = ({
     aux += ` ${sobrenome_completo}`;
   }
 
-  if (aux.length > 0) {
-    return aux;
-  }
-
-  return null;
+  if (aux.length > 0) return aux;
 };
 
 export const checkCep = (cep?: string) => {
-  if (cep && cep.length > 0) {
-    return cep.toString();
-  }
-
-  return null;
+  if (cep && cep.length > 0) return cep.toString();
 };
 
 export const filterByEmail = (
   formEntries: FormEntry[],
   email: string
-):
-  | {
-      name: string | null;
-      lastname: string | null;
-      cep: string | null;
-      created_at: string;
-      widget_id: number;
-      registration_number?: string;
-    }
-  | undefined => {
+): FormEntryFields | undefined => {
   const dicio = {
     "field-1533735738039-59": "name",
     "field-1464961964463-91": "name",
