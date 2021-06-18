@@ -2,7 +2,7 @@ import Express, { Response } from "express";
 import { Logger } from "pino";
 // import debug, { Debugger } from "debug";
 import log from "./dbg";
-// import { userToContact } from "components/dist";
+import { userToContact } from "components/dist";
 import AdvogadaCreateUser from "./integrations/AdvogadaCreateUser";
 import PsicologaCreateUser from "./integrations/PsicologaCreateUser";
 import ListTicketsFromUser from "./integrations/ListTicket";
@@ -241,9 +241,19 @@ class Server {
 
         try {
           const user = await createZendeskUser({ results, organization });
+
           if (!user) {
             this.dbg.error(`Failed to create user ${results.email}`);
             return res.status(500).json("Failed to Create Zendesk User");
+          }
+
+          // Save users in Mautic
+          await userToContact([user]);
+
+          if (user.created_at === user.updated_at) {
+            this.dbg.info(`Success, created user "${user.user_id}"`);
+          } else {
+            this.dbg.info(`Success, updated user "${user.user_id}"`);
           }
 
           return res.status(200).json({ user });
@@ -253,15 +263,6 @@ class Server {
             .status(500)
             .json({ error: "Failed to Create Zendesk User" });
         }
-
-        // Save users in Mautic
-        // await userToContact([{ user, user_id: user.id }]);
-
-        // if (responseCreatedAt === responseUpdatedAt) {
-        //   this.dbg(`Success, created user "${userId}"!`);
-        // } else {
-        //   this.dbg(`Success, updated user "${userId}"!`);
-        // }
 
         // const resultTicket = (await this.createTicket(
         //   instance,
