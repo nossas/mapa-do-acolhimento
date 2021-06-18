@@ -13,7 +13,7 @@ export enum CONDITION {
 }
 
 export interface FormEntry {
-  fields: string;
+  fields: any[];
   created_at: string;
   widget_id: number;
 }
