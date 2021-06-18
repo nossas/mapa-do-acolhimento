@@ -221,6 +221,10 @@ class Server {
           dateSubmitted
         } = await filterFormName(data!, this.apm);
 
+        this.apm.setCustomContext({
+          formNameStatus
+        });
+
         if (formNameStatus === FILTER_FORM_NAME_STATUS.FORM_NOT_IMPLEMENTED) {
           this.dbg.warn(`Form "${name}" not implemented. But it's ok`);
           return res
@@ -247,6 +251,8 @@ class Server {
             this.dbg.error(`Failed to create user ${results.email}`);
             return res.status(500).json("Failed to Create Zendesk User");
           }
+
+          this.apm.setUserContext({ id: user.user_id });
 
           // Save users in Mautic
           await userToContact([user]);
