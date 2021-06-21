@@ -2,7 +2,7 @@ import Express, { Response } from "express";
 import { Logger } from "pino";
 // import debug, { Debugger } from "debug";
 import log from "./dbg";
-import { userToContact } from "components/dist";
+import { mauticZendeskHandle } from "./resolvers";
 import AdvogadaCreateUser from "./integrations/AdvogadaCreateUser";
 import PsicologaCreateUser from "./integrations/PsicologaCreateUser";
 import ListTicketsFromUser from "./integrations/ListTicket";
@@ -10,9 +10,6 @@ import AdvogadaCreateTicket from "./integrations/AdvogadaCreateTicket";
 import AdvogadaUpdateTicket from "./integrations/AdvogadaUpdateTicket";
 import PsicologaCreateTicket from "./integrations/PsicologaCreateTicket";
 import PsicologaUpdateTicket from "./integrations/PsicologaUpdateTicket";
-import read_mautic_request from "./filterService";
-import { filterFormName, FILTER_FORM_NAME_STATUS } from "./filterFormName";
-import createZendeskUser from "./integration-functions/create-user";
 
 class Server {
   private server = Express().use(Express.json());
@@ -209,81 +206,7 @@ class Server {
       .get("/", async (_req, res) => {
         return res.status(200).json({ status: "success" });
       })
-      .post("/mautic-zendesk", async (req, res) => {
-        const data = await read_mautic_request(req); 
-        const {
-          results,
-          organization,
-          status: formNameStatus,
-          name,
-          data: errorData,
-          dateSubmitted
-        } = await filterFormName(data!, this.apm);
-
-        this.apm.setCustomContext({
-          formNameStatus
-        });
-
-        if (formNameStatus === FILTER_FORM_NAME_STATUS.FORM_NOT_IMPLEMENTED) {
-          this.dbg.warn(`Form "${name}" not implemented. But it's ok`);
-          return res
-            .status(404)
-            .json({ error: `Form "${name}" not implemented. But it's ok` });
-        }
-
-        if (formNameStatus === FILTER_FORM_NAME_STATUS.INVALID_REQUEST) {
-          this.dbg.error("Invalid request.");
-          this.dbg.error(errorData as object);
-          return res.status(404).json({ error: "Invalid request, see logs." });
-        }
-
-        if (!results || !dateSubmitted) {
-          return res
-            .status(404)
-            .json({ error: "Invalid request, failed to parse results" });
-        }
-
-        try {
-          const user = await createZendeskUser({ results, organization });
-
-          if (!user) {
-            this.dbg.error(`Failed to create user ${results.email}`);
-            return res.status(500).json("Failed to Create Zendesk User");
-          }
-
-          this.apm.setUserContext({ id: user.user_id });
-
-          // Save users in Mautic
-          await userToContact([user]);
-
-          if (user.created_at === user.updated_at) {
-            this.dbg.info(`Success, created user "${user.user_id}"`);
-          } else {
-            this.dbg.info(`Success, updated user "${user.user_id}"`);
-          }
-
-          return res.status(200).json({ user });
-        } catch (e) {
-          this.dbg.error(`createZendeskUser ${e}`);
-          return res
-            .status(500)
-            .json({ error: "Failed to Create Zendesk User" });
-        }
-
-        // const resultTicket = (await this.createTicket(
-        //   instance,
-        //   createdUser,
-        //   dateSubmitted,
-        //   res
-        // )) as { data: { ticket: { id: number } } };
-        // if (resultTicket) {
-        //   this.dbg(`Success updated ticket "${resultTicket.data.ticket.id}".`);
-
-        //   return res.status(200).json("Success finish integration");
-        // }
-        // this.dbg("Failed to create ticket");
-        // return res.status(500).json("Failed failed integration");
-      })
+      .post("/mautic-zendesk", mauticZendeskHandle)
       .listen(Number(PORT), "0.0.0.0", () => {
         this.dbg.info(`Server listen on port ${PORT}`);
       });

@@ -1,6 +1,6 @@
 import { Request } from "express";
-import {mauticValidation} from "./validationMauticform"
-import log, {apmAgent} from "./dbg"
+import { mauticValidation } from "./validationMauticform";
+import log, { apmAgent } from "./dbg";
 
 type IPDetails = {
   extra?: string;
@@ -73,14 +73,14 @@ export type Mautic = {
   "mautic.form_on_submit": FormSubmit[];
 };
 
-export default  async (req: Request<any, any, Mautic>): Promise<Mautic | any> => {
-  
+export default async (
+  req: Request<unknown, unknown, Mautic>
+): Promise<Mautic | any> => {
   try {
-    const mautic = await mauticValidation.validate(req.body);   
-    return mautic;
+    return await mauticValidation.validate(req.body);
   } catch (error) {
     log.error(error);
     apmAgent?.captureError(error);
-    throw new Error("Mautic payload invalid!");  
+    throw new Error("Mautic payload invalid!");
   }
 };

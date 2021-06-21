@@ -56,7 +56,7 @@ export const filterFormName = async (data: Mautic, apm: any) => {
     ]
   } = validationResult;
 
-  apm.setCustomContext({
+  apm?.setCustomContext({
     formName: name
   });
 

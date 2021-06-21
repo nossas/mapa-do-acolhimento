@@ -2,6 +2,7 @@
   "name": "components",
   "version": "0.0.3",
   "description": "Mapa do Acolhimento Components",
+  "main": "dist/index.js",
   "scripts": {
     "describe": "npm-scripts-info",
     "build": "tsc -p tsconfig.json",

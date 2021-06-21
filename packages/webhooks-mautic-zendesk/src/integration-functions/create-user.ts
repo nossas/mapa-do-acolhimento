@@ -24,7 +24,7 @@ interface Base {
   updated_at?: string;
 }
 
-interface User extends Base {
+export interface User extends Base {
   user_id: number;
 }
 
