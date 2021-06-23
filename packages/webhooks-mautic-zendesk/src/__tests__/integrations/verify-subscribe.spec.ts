@@ -1,7 +1,7 @@
 import * as getFormEntries from "../../getFormEntries";
 import verifySubscribe from "../../integration-functions/verify-subscribe";
 
-const spy = jest.spyOn(getFormEntries, "default");
+const spy = jest.spyOn(getFormEntries, "getFormEntries");
 
 describe("verify subscribe", () => {
   beforeEach(() => {

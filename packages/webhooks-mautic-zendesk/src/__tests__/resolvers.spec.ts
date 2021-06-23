@@ -1,4 +1,4 @@
-import { mauticZendeskHandle } from "../resolvers";
+import { mauticZendeskHandle } from "../resolvers/mauticZendesk";
 import * as filterService from "../filterService";
 import * as createUser from "../integration-functions/create-user";
 import { mockMauticFormRequest } from "../mocks";
@@ -12,7 +12,7 @@ const components = require("components");
 const userToContactSpy = jest.spyOn(components, "userToContact");
 
 const createUserSpy = jest.spyOn(createUser, "default");
-const readMauticRequestSpy = jest.spyOn(filterService, "default");
+const readMauticRequestSpy = jest.spyOn(filterService, "readMauticRequest");
 
 describe("Express resolvers functions", () => {
   describe("/mautic-zendesk", () => {

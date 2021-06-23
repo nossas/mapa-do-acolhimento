@@ -1,5 +1,9 @@
 import axios from "axios";
-import getFormEntries, { query, getFormEntryByEmail } from "../getFormEntries";
+import {
+  query,
+  getFormEntryByEmail,
+  customGetFormEntries as getFormEntries
+} from "../getFormEntries";
 
 jest.mock("axios");
 
