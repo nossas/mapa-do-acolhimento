@@ -39,6 +39,18 @@ As seguintes variáveis de ambiente devem ser configuradas:
 - HASURA_API_URL - endpoint da api do HASURA, onde serão salvos os tickets
 - X_HASURA_ADMIN_SECRET - chave de segurança de administrador do hasura para autenticação
 
+## Teste
+
+Os testes para a integração mautic-zendesk podem ser realizados manualmente uasando formulários mautic de voluntárias teste para realizar o post no endpoint através de uma ferramenta de teste de requisições como o Postman ou Insomnia para checar se a integração irá ocorrer no Zendesk. 
+
+Um ponto importante para a criação dos fomulários teste é não criar voluntárias que possam ser aprovadas, com todos dados e informações de localização corretas para não atrapalhar o fluxo em produção. Também é bom colocar indicação que são voluntárias teste no nome ou email. 
+
+- Postman: 
+https://www.postman.com/
+
+- Insominia: 
+https://insomnia.rest
+
 ## Show your support
 
 Give a ⭐️ if this project helped you!
