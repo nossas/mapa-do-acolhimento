@@ -4,9 +4,8 @@ dotenv.config();
 
 import { install } from "source-map-support";
 import Server from "./Server";
-import { apmAgent } from "./dbg";
 
 install();
 
-const app = new Server(apmAgent);
+const app = new Server();
 app.start();

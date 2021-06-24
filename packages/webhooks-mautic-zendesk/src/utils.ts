@@ -190,7 +190,7 @@ export const filterByEmail = (
     try {
       return {
         ...i,
-        ...i.fields.reduce((newObj, old) => {
+        ...(i.fields as any[]).reduce((newObj, old) => {
           const key = (dicio[old.uid] && dicio[old.uid]) || old.kind;
           return {
             ...newObj,

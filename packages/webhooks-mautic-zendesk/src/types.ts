@@ -6,7 +6,7 @@ export enum CONDITION {
 }
 
 export interface FormEntry {
-  fields: any[];
+  fields: any[] | string;
   created_at: string;
   widget_id: number;
 }
