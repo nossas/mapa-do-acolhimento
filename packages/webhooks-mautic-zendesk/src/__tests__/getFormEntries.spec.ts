@@ -22,7 +22,11 @@ describe("form entries", () => {
 
   beforeEach(() => {
     jest.resetModules(); // Most important - it clears the cache
-    process.env = { ...OLD_ENV }; // Make a copy
+    process.env = {
+      ...OLD_ENV,
+      WIDGET_IDS: "12,45,55,23,12,34",
+      HASURA_API_URL: "http://localhost:8080/graphql"
+    }; // Make a copy
   });
 
   afterAll(() => {

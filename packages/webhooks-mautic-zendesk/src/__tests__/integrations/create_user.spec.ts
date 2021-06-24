@@ -9,6 +9,21 @@ const spySubscribe = jest.spyOn(verifySubscribe, "default");
 import createUser from "../../integration-functions/create-user";
 
 describe("users/create_or_update", () => {
+  const OLD_ENV = process.env;
+
+  beforeEach(() => {
+    jest.resetModules(); // Most important - it clears the cache
+    process.env = {
+      ...OLD_ENV,
+      ZENDESK_ORGANIZATIONS: '{"PSICOLOGA": 1234, "ADVOGADA": 4321}',
+      HASURA_API_URL: "http://localhost:8080/graphql"
+    }; // Make a copy
+  });
+
+  afterAll(() => {
+    process.env = OLD_ENV; // Restore old environment
+  });
+
   it("return parsed user", async (done: any) => {
     const email = "roge@example.org";
     const name = "Roger Wilco";
@@ -17,7 +32,7 @@ describe("users/create_or_update", () => {
       name,
       created_at: new Date().toISOString()
     });
-    spyRules.mockResolvedValue({ name, email } as any)
+    spyRules.mockResolvedValue({ name, email } as any);
     spyZendesk.mockResolvedValue({
       data: {
         user: {
