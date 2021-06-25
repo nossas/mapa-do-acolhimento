@@ -2,7 +2,7 @@ pipeline:
   unit-tests:
     image: node:12-alpine
     commands:
-      - yarn global add pnpm@5.2.1
+      - yarn global add pnpm@6.7.6
       - pnpm i
       - pnpm run lint
       - pnpm m run test
