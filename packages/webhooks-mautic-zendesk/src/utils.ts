@@ -165,8 +165,7 @@ export const checkCep = (cep?: string) => {
 };
 
 export const filterByEmail = (
-  formEntries: FormEntry[],
-  email: string
+  formEntries: FormEntry[]
 ):
   | {
       name: string | null;
@@ -175,6 +174,8 @@ export const filterByEmail = (
       created_at: string;
       widget_id: number;
       registration_number: string;
+      whatsapp: string | null;
+      phone: string;
     }
   | undefined => {
   const dicio = {
@@ -201,25 +202,39 @@ export const filterByEmail = (
     "field-1530889245511-83": "registration_number",
     "field-1530889844695-35": "registration_number",
     "field-1533733501716-34": "registration_number",
-    "field-1533735761357-93": "registration_number"
+    "field-1533735761357-93": "registration_number",
+    "field-1464961993261-67": "phone",
+    "field-1530889321904-94": "phone",
+    "field-1533734419113-13": "phone",
+    "field-1497369273804-61": "phone",
+    "field-1530889910384-28": "phone",
+    "field-1533735813563-2": "phone",
+    "field-1465303586925-83": "whatsapp",
+    "field-1530889345052-73": "whatsapp",
+    "field-1533734468460-38": "whatsapp",
+    "field-1530889937136-21": "whatsapp",
+    "field-1533735832329-53": "whatsapp",
+    "field-1593720184872-74": "whatsapp",
+    "field-1593717629660-4": "whatsapp"
   };
   const getFieldsValue = formEntries.map(i => {
     try {
       const parsedFields = JSON.parse(i.fields);
+      const translateFieldsIntoObject = parsedFields.reduce((newObj, old) => {
+        const key = (dicio[old.uid] && dicio[old.uid]) || old.kind;
+        return {
+          ...newObj,
+          [key]: old.value
+        };
+      }, {});
       return {
         ...i,
-        ...parsedFields.reduce((newObj, old) => {
-          const key = (dicio[old.uid] && dicio[old.uid]) || old.kind;
-          return {
-            ...newObj,
-            [key]: old.value
-          };
-        }, {})
+        ...translateFieldsIntoObject
       };
     } catch (e) {
       console.log(e);
-      return undefined;
+      return [];
     }
   });
-  return getFieldsValue.find(f => f.email === email);
+  return getFieldsValue[0];
 };

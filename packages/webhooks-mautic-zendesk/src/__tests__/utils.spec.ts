@@ -248,28 +248,28 @@ describe("filterByEmail", () => {
   ];
   describe("there's an entry with that e-mail", () => {
     it("should return an object with email/name/lastname/cep, part. 3", () => {
-      const data = filterByEmail(entries, "herminia.amorim@email.com");
+      const data = filterByEmail(entries);
       expect(data).toHaveProperty("email", "herminia.amorim@email.com");
       expect(data).toHaveProperty("cep", "22461010");
       expect(data).toHaveProperty("lastname", "Amorim");
       expect(data).toHaveProperty("name", "Hermínia");
     });
     it("should return an object with email/name/lastname/cep, part. 4", () => {
-      const data = filterByEmail(entries, "ligia.garcia@email.com");
+      const data = filterByEmail(entries);
       expect(data).toHaveProperty("email", "ligia.garcia@email.com");
       expect(data).toHaveProperty("cep", "61760-906");
       expect(data).toHaveProperty("lastname", "Garcia");
       expect(data).toHaveProperty("name", "Lígia");
     });
     it("should return an object with email/name/lastname/cep, part. 2", () => {
-      const data = filterByEmail(entries, "teresa.nascimento@email.com");
+      const data = filterByEmail(entries);
       expect(data).toHaveProperty("email", "teresa.nascimento@email.com");
       expect(data).toHaveProperty("cep", "82300332");
       expect(data).toHaveProperty("lastname", "Nascimento");
       expect(data).toHaveProperty("name", "Teresa");
     });
     it("should return an object with email/name/lastname/cep, part. 1", () => {
-      const data = filterByEmail(entries, "angelica.lopes@email.com");
+      const data = filterByEmail(entries);
       expect(data).toHaveProperty("email", "angelica.lopes@email.com");
       expect(data).toHaveProperty("cep", "05422030");
       expect(data).toHaveProperty("lastname", "Lopes");
@@ -278,24 +278,16 @@ describe("filterByEmail", () => {
   });
   describe("there's no entry with that e-mail", () => {
     it("should return undefined, part. 1", () => {
-      expect(filterByEmail(entries, "nossas@email.com")).toStrictEqual(
-        undefined
-      );
+      expect(filterByEmail(entries)).toStrictEqual(undefined);
     });
     it("should return undefined, part. 2", () => {
-      expect(filterByEmail(entries, "bonde@email.com")).toStrictEqual(
-        undefined
-      );
+      expect(filterByEmail(entries)).toStrictEqual(undefined);
     });
     it("should return undefined, part. 3", () => {
-      expect(filterByEmail(entries, "teste@email.com")).toStrictEqual(
-        undefined
-      );
+      expect(filterByEmail(entries)).toStrictEqual(undefined);
     });
     it("should return undefined, part. 4", () => {
-      expect(filterByEmail(entries, "ligia.garci@email.com")).toStrictEqual(
-        undefined
-      );
+      expect(filterByEmail(entries)).toStrictEqual(undefined);
     });
   });
 });
