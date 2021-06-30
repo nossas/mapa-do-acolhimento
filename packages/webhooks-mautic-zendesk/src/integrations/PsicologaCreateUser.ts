@@ -15,6 +15,8 @@ interface InputFromMautic {
   name: string;
   cep?: string;
   registration_number: string | null;
+  phone: string | null;
+  whatsapp: string | null;
 }
 
 class PsicologaCreateUser extends Base {
@@ -28,7 +30,14 @@ class PsicologaCreateUser extends Base {
 
   start = async (
     data,
-    { createdAt, name, cep, registration_number }: InputFromMautic
+    {
+      createdAt,
+      name,
+      cep,
+      registration_number,
+      phone,
+      whatsapp
+    }: InputFromMautic
   ) => {
     let newData = {
       ...data,
@@ -55,7 +64,7 @@ class PsicologaCreateUser extends Base {
         .transform(obj => {
           const {
             email,
-            phone,
+            phone: mauticPhone,
             latitude,
             longitude,
             address,
@@ -70,12 +79,13 @@ class PsicologaCreateUser extends Base {
           return {
             name,
             email,
-            phone,
+            phone: mauticPhone || phone,
             organization_id: this.organizations[this.organization],
             user_fields: {
               ...removeFalsyValues(userFields),
               registration_number:
                 userFields.registration_number || registration_number,
+              whatsapp: userFields.whatsapp || whatsapp,
               cep,
               address,
               state,
