@@ -6,7 +6,7 @@ packages:
   - "packages/webhooks-solidarity-count"
   # - "packages/client-solidarity"
   - "packages/listener-solidarity"
-  - "packages/listener-match"
   - "packages/components"
+  - "packages/listener-match"
   # - "packages/cli-mautic"
 

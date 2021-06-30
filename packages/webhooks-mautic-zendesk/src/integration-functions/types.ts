@@ -1,3 +1,10 @@
+export interface Results extends Record<string, unknown> {
+  email: string;
+  cep?: string;
+  primeiro_nome?: Array<string> | string;
+  sobrenome_completo?: Array<string> | string;
+}
+
 export enum CONDITION {
   UNSET = "unset",
   REPROVADA_REGISTRO_INVÁLIDO = "reprovada_registro_inválido",
@@ -6,7 +13,7 @@ export enum CONDITION {
 }
 
 export interface FormEntry {
-  fields: any[] | string;
+  fields: any[];
   created_at: string;
   widget_id: number;
 }

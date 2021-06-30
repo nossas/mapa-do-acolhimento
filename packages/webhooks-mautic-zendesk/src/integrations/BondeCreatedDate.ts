@@ -22,27 +22,22 @@ const verificaFormEntries = yup
 class BondeCreatedDate {
   email: string;
 
-  name: string | null;
+  name?: string;
 
-  cep: string | null;
+  cep?: string;
 
   apm?: any;
 
   dbg = log.child({ label: { process: "BondeCreatedDate" } });
 
-  constructor(
-    email: string,
-    name: string | null,
-    cep: string | null,
-    apm?: any
-  ) {
+  constructor(email: string, name?: string, cep?: string, apm?: any) {
     this.email = email;
     this.name = name;
     this.cep = cep;
     this.apm = apm;
   }
 
-  start = async (formEntries: FormEntry[]) => {
+  start = async (formEntries: FormEntry[]): Promise<any> => {
     try {
       const validatedFormEntries = await verificaFormEntries.validate(
         formEntries,
