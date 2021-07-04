@@ -3,7 +3,7 @@
   "dependencies": {
     "@elastic/ecs-pino-format": "^1.1.1",
     "axios": "^0.19.0",
-    "bonde-core-tools": "^0.1.8-alpha.6",
+    "bonde-core-tools": "^0.1.8-alpha.7",
     "components": "workspace:^0.0.3",
     "debug": "^4.1.1",
     "dotenv": "^8.2.0",
