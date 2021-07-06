@@ -4,6 +4,7 @@ import log, { apmAgent } from "../dbg";
 import { readMauticRequest } from "../filterService";
 import { customFilterName, FILTER_FORM_NAME_STATUS } from "../filterFormName";
 import createZendeskUser from "../integration-functions/create-user";
+import createOrUpdateTicket from "../integration-functions/create-or-update-ticket";
 
 export const mauticZendeskHandle = async (req: Request, res: Response) => {
   const data = await readMauticRequest(req);
@@ -47,7 +48,7 @@ export const mauticZendeskHandle = async (req: Request, res: Response) => {
       return res.status(500).json("Failed to Create Zendesk User");
     }
 
-    apmAgent?.setUserContext({ id: user.user_id });
+    apmAgent?.setUserContext({ id: user.user_id || user.user_id });
 
     // Save users in Mautic
     await userToContact([user]);
@@ -58,23 +59,20 @@ export const mauticZendeskHandle = async (req: Request, res: Response) => {
       log.info(`Success, updated user "${user.user_id}"`);
     }
 
-    return res.status(200).json({ user });
+    const result = await createOrUpdateTicket(
+      organization,
+      user,
+      dateSubmitted
+    );
+    if (!result) throw new Error("Failed to create ticket");
+
+    log.info(`Success create or updated ticket ${result.data.ticket.id}.`);
+    return res.status(200).json({ user, ticket: result.data.ticket });
   } catch (e) {
-    log.error(`createZendeskUser ${e}`);
-    return res.status(500).json({ error: "Failed to Create Zendesk User" });
+    apmAgent?.captureError(e);
+    log.error(e);
+    return res
+      .status(500)
+      .json({ error: "Failed to Create Zendesk User or Ticket" });
   }
-
-  // const resultTicket = (await this.createTicket(
-  //   instance,
-  //   createdUser,
-  //   dateSubmitted,
-  //   res
-  // )) as { data: { ticket: { id: number } } };
-  // if (resultTicket) {
-  //   this.dbg(`Success updated ticket "${resultTicket.data.ticket.id}".`);
-
-  //   return res.status(200).json("Success finish integration");
-  // }
-  // this.dbg("Failed to create ticket");
-  // return res.status(500).json("Failed failed integration");
 };

@@ -19,7 +19,12 @@ interface Base {
   external_id: string;
   phone: string;
   verified: boolean;
-  user_fields?: Record<string, unknown>;
+  user_fields: {
+    registration_number: string;
+    condition: string;
+    state: string;
+    city: string;
+  };
   created_at?: string;
   updated_at?: string;
 }

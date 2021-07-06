@@ -1,19 +1,21 @@
 import * as yup from "yup";
 import requestZendeskApi from "./request-zendesk-api";
 
-type Ticket = {
-  status: "open" | "new" | "pending" | "hold";
+export type Ticket = {
+  id: number;
+  status: "open" | "new" | "pending" | "hold" | string;
   subject: string;
 };
 
 type FetchTicketsInput = {
-  userId: number;
+  userId: number | string;
 };
 
 const validationTickets = yup.array().of(
   yup
     .object()
     .shape({
+      id: yup.number().required(),
       status: yup.string().required(),
       subject: yup.string().required()
     })

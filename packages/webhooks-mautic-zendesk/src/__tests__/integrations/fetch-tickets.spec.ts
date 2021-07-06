@@ -60,7 +60,7 @@ describe("users/{userId}/tickets/requested", () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   it("return result ZendeskAPI tickets", async (done: any) => {
     const userId = 2;
-    const tickets = [{ subject: "[PSICOLOGA] Teste 1", status: "open" }];
+    const tickets = [{ id: 2, subject: "[PSICOLOGA] Teste 1", status: "open" }];
     spyZendesk.mockResolvedValue({
       data: { tickets }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
