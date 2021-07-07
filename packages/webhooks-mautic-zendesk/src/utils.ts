@@ -157,8 +157,7 @@ export const checkCep = (cep?: string) => {
 };
 
 export const filterByEmail = (
-  formEntries: FormEntry[],
-  email: string
+  formEntries: FormEntry[]
 ): FormEntryFields | undefined => {
   const dicio = {
     "field-1533735738039-59": "name",
@@ -184,10 +183,25 @@ export const filterByEmail = (
     "field-1530889245511-83": "registration_number",
     "field-1530889844695-35": "registration_number",
     "field-1533733501716-34": "registration_number",
-    "field-1533735761357-93": "registration_number"
+    "field-1533735761357-93": "registration_number",
+    "field-1464961993261-67": "phone",
+    "field-1530889321904-94": "phone",
+    "field-1533734419113-13": "phone",
+    "field-1497369273804-61": "phone",
+    "field-1530889910384-28": "phone",
+    "field-1533735813563-2": "phone",
+    "field-1465303586925-83": "whatsapp",
+    "field-1530889345052-73": "whatsapp",
+    "field-1533734468460-38": "whatsapp",
+    "field-1530889937136-21": "whatsapp",
+    "field-1533735832329-53": "whatsapp",
+    "field-1593720184872-74": "whatsapp",
+    "field-1593717629660-4": "whatsapp"
   };
+  
   const getFieldsValue = formEntries.map(i => {
     try {
+    
       return {
         ...i,
         ...(i.fields as any[]).reduce((newObj, old) => {
@@ -198,11 +212,12 @@ export const filterByEmail = (
           };
         }, {})
       };
+     
     } catch (e) {
       console.log(e);
       return undefined;
     }
   });
 
-  return getFieldsValue.find(f => f.email === email);
+  return getFieldsValue[0];
 };
