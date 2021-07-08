@@ -18,6 +18,8 @@ export interface FormEntryFields {
   created_at: string;
   widget_id: number;
   registration_number?: string;
+  whatsapp?: string;
+  phone?: string;
 }
 
 export interface Subscribe {
@@ -26,4 +28,6 @@ export interface Subscribe {
   cep?: string;
   registration_number?: string;
   created_at: string;
+  whatsapp?: string;
+  phone?: string;
 }

@@ -16,6 +16,8 @@ export type ValidationInput = {
   createdAt: string;
   condition: unknown;
   cep?: string;
+  phone?: string;
+  whatsapp?: string;
 };
 
 const zendeskValidation = (input: ValidationInput) =>
@@ -35,7 +37,7 @@ const zendeskValidation = (input: ValidationInput) =>
       const {
         name,
         email,
-        phone,
+        phone: mauticPhone,
         latitude,
         longitude,
         address,
@@ -50,10 +52,11 @@ const zendeskValidation = (input: ValidationInput) =>
       return {
         name,
         email,
-        phone,
+        phone: mauticPhone || input.phone,
         organization_id: input.organizationId,
         user_fields: {
           ...removeFalsyValues(userFields),
+          whatsapp: userFields.whatsapp || input.whatsapp,
           cep: input.cep,
           address,
           state,
@@ -121,7 +124,9 @@ export const businessRules = async (
     condition: condition[0],
     cep: data.cep,
     createdAt: subscribe.created_at,
-    organizationId
+    organizationId,
+    phone: data.phone,
+    whatsapp: data.whatsapp 
   }).validate(userWithGeolocation, { stripUnknown: true });
 
   return zendeskData;

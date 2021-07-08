@@ -3,6 +3,8 @@ export interface Results extends Record<string, unknown> {
   cep?: string;
   primeiro_nome?: Array<string> | string;
   sobrenome_completo?: Array<string> | string;
+  phone?: string;
+  whatsapp?: string;
 }
 
 export enum CONDITION {
