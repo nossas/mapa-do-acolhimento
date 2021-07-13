@@ -23,6 +23,12 @@ describe("Express resolvers functions", () => {
         external_id: "123",
         phone: "011999999999",
         verified: true,
+        user_fields: {
+          registration_number: "1234567",
+          condition: "open",
+          state: "RJ",
+          city: "Rio de Janeiro"
+        },
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
         user_id: 123

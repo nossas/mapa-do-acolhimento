@@ -338,71 +338,72 @@ describe("filterByEmail", () => {
       created_at: "2020-09-16T00:47:23.429155",
       widget_id: 17628
     },
-    {  
-      fields:[
+    {
+      fields: [
         {
-          uid:"field-1533733461113-5",
-          kind:"text",
-          label:"NOME",
-          placeholder:"",
-          required:"true",
-          value:"Teresa"
+          uid: "field-1533733461113-5",
+          kind: "text",
+          label: "NOME",
+          placeholder: "",
+          required: "true",
+          value: "Teresa"
         },
         {
-          uid:"field-1533733485653-99",
-          kind:"text",
-          label:"SOBRENOME",
-          placeholder:"",
-          required:"true",
-          value:"Nascimento"
+          uid: "field-1533733485653-99",
+          kind: "text",
+          label: "SOBRENOME",
+          placeholder: "",
+          required: "true",
+          value: "Nascimento"
         },
         {
-          uid:"field-1533733493037-11",
-          kind:"email",
-          label:"SEU MELHOR EMAIL",
-          placeholder:"",
-          required:"true",
-          value:"teresa.nascimento@email.com"
+          uid: "field-1533733493037-11",
+          kind: "email",
+          label: "SEU MELHOR EMAIL",
+          placeholder: "",
+          required: "true",
+          value: "teresa.nascimento@email.com"
         },
         {
-          uid:"field-1533733501716-34",
-          kind:"text",
-          label:"CRP (Só números)",
-          placeholder:"",
-          required:"true",
-          value:"08/06886"
+          uid: "field-1533733501716-34",
+          kind: "text",
+          label: "CRP (Só números)",
+          placeholder: "",
+          required: "true",
+          value: "08/06886"
         },
         {
-          uid:"field-1533733650118-7",
-          kind:"text",
-          label:"CEP DE ATENDIMENTO (Só números)",
-          placeholder:"",
-          required:"true",
-          value:"82300332"
+          uid: "field-1533733650118-7",
+          kind: "text",
+          label: "CEP DE ATENDIMENTO (Só números)",
+          placeholder: "",
+          required: "true",
+          value: "82300332"
         },
         {
-          uid:"field-1533734419113-13",
-          kind:"text",
-          label:"TELEFONE PARA ATENDIMENTO (COM DDD)",
-          placeholder:"",
-          required:"true",
-          value:"1212121212"
+          uid: "field-1533734419113-13",
+          kind: "text",
+          label: "TELEFONE PARA ATENDIMENTO (COM DDD)",
+          placeholder: "",
+          required: "true",
+          value: "1212121212"
         },
         {
-          uid:"field-1533734468460-38",
-          kind:"text",
-          label:"WHATSAPP (COM DDD)",
-          placeholder:"Obrigatório para contato com a equipe",
-          required:"true",
-          value:"1212121212"
+          uid: "field-1533734468460-38",
+          kind: "text",
+          label: "WHATSAPP (COM DDD)",
+          placeholder: "Obrigatório para contato com a equipe",
+          required: "true",
+          value: "1212121212"
         },
         {
-          uid:"field-1533734495315-40",
-          kind:"dropdown",
-          label:"Como voluntária do Mapa do Acolhimento, você se dispõe a atender, pelo menos, uma (1) mulher que precisa de ajuda. Caso você tenha mais tempo disponível, você pode atender mais de uma (1) mulher, de maneira concomitante. Lembrando que os atendimentos devem ser sempre individuais. Quantas vagas você pode oferecer para atender, simultaneamente, mulheres do Mapa do Acolhimento?",
-          placeholder:"1, 2, 3, 4, 5 ou mais",
-          required:"true",
-          value:"2"
+          uid: "field-1533734495315-40",
+          kind: "dropdown",
+          label:
+            "Como voluntária do Mapa do Acolhimento, você se dispõe a atender, pelo menos, uma (1) mulher que precisa de ajuda. Caso você tenha mais tempo disponível, você pode atender mais de uma (1) mulher, de maneira concomitante. Lembrando que os atendimentos devem ser sempre individuais. Quantas vagas você pode oferecer para atender, simultaneamente, mulheres do Mapa do Acolhimento?",
+          placeholder: "1, 2, 3, 4, 5 ou mais",
+          required: "true",
+          value: "2"
         }
       ],
       created_at: "2020-09-15T18:47:28.387207",
@@ -411,72 +412,74 @@ describe("filterByEmail", () => {
     {
       fields: [
         {
-           uid:"field-1533733461113-5",
-           kind:"text",
-           label:"NOME",
-           placeholder:"",
-           required:"true",
-           value:"Angélica"
+          uid: "field-1533733461113-5",
+          kind: "text",
+          label: "NOME",
+          placeholder: "",
+          required: "true",
+          value: "Angélica"
         },
         {
-           uid:"field-1533733485653-99",
-           kind:"text",label:"SOBRENOME",
-           placeholder:"",
-           required:"true",
-           value:"Lopes"
+          uid: "field-1533733485653-99",
+          kind: "text",
+          label: "SOBRENOME",
+          placeholder: "",
+          required: "true",
+          value: "Lopes"
         },
         {
-           uid:"field-1533733493037-11",
-           kind:"email",
-           label:"SEU MELHOR EMAIL",
-           placeholder:"",
-           required:"true",
-           value:"angelica.lopes@email.com"
+          uid: "field-1533733493037-11",
+          kind: "email",
+          label: "SEU MELHOR EMAIL",
+          placeholder: "",
+          required: "true",
+          value: "angelica.lopes@email.com"
         },
         {
-           uid:"field-1533733501716-34",
-           kind:"text",
-           label:"CRP (Só números)",
-           placeholder:"",
-           required:"true",
-           value:"00000000000"
+          uid: "field-1533733501716-34",
+          kind: "text",
+          label: "CRP (Só números)",
+          placeholder: "",
+          required: "true",
+          value: "00000000000"
         },
         {
-           uid:"field-1533733650118-7",
-           kind:"text",
-           label:"CEP DE ATENDIMENTO (Só números)",
-           placeholder:"",
-           required:"true",
-           value:"05422030"
+          uid: "field-1533733650118-7",
+          kind: "text",
+          label: "CEP DE ATENDIMENTO (Só números)",
+          placeholder: "",
+          required: "true",
+          value: "05422030"
         },
         {
-           uid:"field-1533734419113-13",
-           kind:"text",
-           label:"TELEFONE PARA ATENDIMENTO (COM DDD)",
-           placeholder:"",
-           required:"true",
-           value:"12121212"
+          uid: "field-1533734419113-13",
+          kind: "text",
+          label: "TELEFONE PARA ATENDIMENTO (COM DDD)",
+          placeholder: "",
+          required: "true",
+          value: "12121212"
         },
         {
-           uid:"field-1533734468460-38",
-           kind:"text",
-           label:"WHATSAPP (COM DDD)",
-           placeholder:"Obrigatório para contato com a equipe",
-           required:"true",
-           value:"12121212"
+          uid: "field-1533734468460-38",
+          kind: "text",
+          label: "WHATSAPP (COM DDD)",
+          placeholder: "Obrigatório para contato com a equipe",
+          required: "true",
+          value: "12121212"
         },
         {
-           uid:"field-1533734495315-40",
-           kind:"dropdown",
-           label:"Como voluntária do Mapa do Acolhimento, você se dispõe a atender, pelo menos, uma (1) mulher que precisa de ajuda. Caso você tenha mais tempo disponível, você pode atender mais de uma (1) mulher, de maneira concomitante. Lembrando que os atendimentos devem ser sempre individuais. Quantas vagas você pode oferecer para atender, simultaneamente, mulheres do Mapa do Acolhimento?",
-           placeholder:"1, 2, 3, 4, 5 ou mais",
-           required:"true",
-           value:"1"
+          uid: "field-1533734495315-40",
+          kind: "dropdown",
+          label:
+            "Como voluntária do Mapa do Acolhimento, você se dispõe a atender, pelo menos, uma (1) mulher que precisa de ajuda. Caso você tenha mais tempo disponível, você pode atender mais de uma (1) mulher, de maneira concomitante. Lembrando que os atendimentos devem ser sempre individuais. Quantas vagas você pode oferecer para atender, simultaneamente, mulheres do Mapa do Acolhimento?",
+          placeholder: "1, 2, 3, 4, 5 ou mais",
+          required: "true",
+          value: "1"
         }
-       ],
-       created_at: "2020-09-14T22:10:46.092246",
-       widget_id: 17628
-   }
+      ],
+      created_at: "2020-09-14T22:10:46.092246",
+      widget_id: 17628
+    }
   ];
   describe("there's an entry with that e-mail", () => {
     it("should return an object with email/name/lastname/cep, part. 3", () => {

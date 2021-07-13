@@ -172,6 +172,9 @@ describe("createOrUpdateTicket", () => {
       }
     ];
     spyFetchTickets.mockResolvedValueOnce(results);
+    spyZendesk.mockImplementation(() => {
+      throw new Error("Request failed with status code 422");
+    });
 
     await expect(
       createOrUpdateTicket(organization, user, createdAt)
