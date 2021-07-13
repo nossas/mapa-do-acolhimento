@@ -1,5 +1,5 @@
 import * as yup from "yup";
-import { CONDITION, FormEntry } from "./types";
+import { CONDITION, FormEntry, FormEntryFields } from "./types";
 
 export const setCondition = (condition: [CONDITION], value: CONDITION) => {
   const newCondition = condition;
@@ -23,9 +23,9 @@ export const verifyLocation = async (data, getGeolocation) => {
   };
 };
 
-export const verificaDiretrizesAtendimento = async (
+export const verificaDiretrizesAtendimento = async <T>(
   condition: [CONDITION],
-  data: Record<string, unknown>
+  data: T
 ) => {
   let newData = data;
   const verificaCamposDiretrizesAtendimento = yup
@@ -73,14 +73,14 @@ export const verificaDiretrizesAtendimento = async (
     })
     .required();
 
-  newData = stripDiretrizesAtendimento.cast(newData);
+  newData = stripDiretrizesAtendimento.cast(newData) as any;
 
   return newData;
 };
 
-export const verificaEstudoDeCaso = async (
+export const verificaEstudoDeCaso = async <T>(
   condition: [CONDITION],
-  data: object
+  data: T
 ) => {
   let newData = data;
   const verificaCamposEstudoDeCaso = yup
@@ -125,7 +125,7 @@ export const verificaEstudoDeCaso = async (
     })
     .required();
 
-  newData = stripRespostaEstudoDeCaso.cast(newData);
+  newData = stripRespostaEstudoDeCaso.cast(newData) as any;
 
   return newData;
 };
@@ -139,7 +139,7 @@ export const checkNames = ({
 }: {
   primeiro_nome?: Array<string> | string;
   sobrenome_completo?: Array<string> | string;
-}) => {
+}): string | undefined => {
   let aux = "";
   if (primeiro_nome && primeiro_nome.length > 0) {
     aux += `${primeiro_nome}`;
@@ -149,35 +149,16 @@ export const checkNames = ({
     aux += ` ${sobrenome_completo}`;
   }
 
-  if (aux.length > 0) {
-    return aux;
-  }
-
-  return null;
+  if (aux.length > 0) return aux;
 };
 
 export const checkCep = (cep?: string) => {
-  if (cep && cep.length > 0) {
-    return cep.toString();
-  }
-
-  return null;
+  if (cep && cep.length > 0) return cep.toString();
 };
 
 export const filterByEmail = (
   formEntries: FormEntry[]
-):
-  | {
-      name: string | null;
-      lastname: string | null;
-      cep: string | null;
-      created_at: string;
-      widget_id: number;
-      registration_number: string;
-      whatsapp: string | null;
-      phone: string;
-    }
-  | undefined => {
+): FormEntryFields | undefined => {
   const dicio = {
     "field-1533735738039-59": "name",
     "field-1464961964463-91": "name",
@@ -217,20 +198,21 @@ export const filterByEmail = (
     "field-1593720184872-74": "whatsapp",
     "field-1593717629660-4": "whatsapp"
   };
+  
   const getFieldsValue = formEntries.map(i => {
     try {
-      const parsedFields = JSON.parse(i.fields);
-      const translateFieldsIntoObject = parsedFields.reduce((newObj, old) => {
-        const key = (dicio[old.uid] && dicio[old.uid]) || old.kind;
-        return {
-          ...newObj,
-          [key]: old.value
-        };
-      }, {});
+    
       return {
         ...i,
-        ...translateFieldsIntoObject
+        ...(i.fields as any[]).reduce((newObj, old) => {
+          const key = (dicio[old.uid] && dicio[old.uid]) || old.kind;
+          return {
+            ...newObj,
+            [key]: old.value
+          };
+        }, {})
       };
+     
     } catch (e) {
       console.log(e);
       return [];
