@@ -99,7 +99,7 @@ export const getFormEntryByEmail = async (
     throw new Error(`form_entry is invalid`);
   }
 
-  const formEntry = filterByEmail(formEntries || [], email);
+  const formEntry = filterByEmail(formEntries || []);
 
   if (!formEntry) throw new Error(`formEntries not found for email ${email}`);
 

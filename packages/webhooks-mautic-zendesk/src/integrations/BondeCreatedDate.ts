@@ -45,8 +45,8 @@ class BondeCreatedDate {
           stripUnknown: true
         }
       );
-      const filteredFormEntry = filterByEmail(validatedFormEntries, this.email);
-      if (!filteredFormEntry) {
+      const parsedFieldsFormEntry = filterByEmail(validatedFormEntries);
+      if (!parsedFieldsFormEntry) {
         throw new Error(`formEntries not found for email ${this.email}`);
       }
       const {
@@ -54,8 +54,10 @@ class BondeCreatedDate {
         lastname,
         cep,
         created_at: createdAt,
-        registration_number
-      } = filteredFormEntry;
+        registration_number,
+        whatsapp,
+        phone
+      } = parsedFieldsFormEntry;
       const aux = {
         createdAt,
         name:
@@ -66,7 +68,9 @@ class BondeCreatedDate {
           typeof this.cep !== "string" || this.cep?.length === 0
             ? String(cep)
             : this.cep,
-        registration_number
+        registration_number,
+        whatsapp,
+        phone
       };
       this.apm.setUserContext({
         username: aux.name
@@ -94,7 +98,9 @@ class BondeCreatedDate {
         createdAt: new Date().toISOString(),
         name: this.name || "sem nome",
         cep: this.cep ?? undefined,
-        registration_number: null
+        registration_number: null,
+        whatsapp: null,
+        phone: null
       };
     }
   };

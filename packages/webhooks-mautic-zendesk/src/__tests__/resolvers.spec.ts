@@ -3,9 +3,7 @@ import * as filterService from "../filterService";
 import * as createUser from "../integration-functions/create-user";
 import { mockMauticFormRequest } from "../mocks";
 
-jest.mock("components", () => ({
-  ...jest.requireActual("components")
-}));
+jest.mock("components");
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const components = require("components");
