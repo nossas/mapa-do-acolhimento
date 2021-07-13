@@ -215,9 +215,8 @@ export const filterByEmail = (
      
     } catch (e) {
       console.log(e);
-      return undefined;
+      return [];
     }
   });
-
   return getFieldsValue[0];
 };
