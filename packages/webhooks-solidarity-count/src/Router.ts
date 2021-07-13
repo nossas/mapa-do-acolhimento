@@ -3,7 +3,7 @@ import * as yup from "yup";
 import dbg from "./dbg";
 import App from "./App";
 
-const log = dbg.extend("app");
+const log = dbg.child({ module: "router" });
 
 const JSONErrorHandler = (
   err: Error,
@@ -12,7 +12,7 @@ const JSONErrorHandler = (
   __: Express.NextFunction
 ) => {
   if (err instanceof SyntaxError) {
-    log(err);
+    log.error(err);
     res.status(400).json("Falha de sintaxe, objeto JSON inválido!");
   }
 };
@@ -34,18 +34,23 @@ const getTicketIdFromRequest = async (req: Express.Request) => {
   return id;
 };
 
-const Router = (): Express.Express =>
+const Router = (apm): Express.Express =>
   Express()
     .use(Express.json())
     .use(JSONErrorHandler)
     .post("/", async (req, res) => {
       try {
         const id = await getTicketIdFromRequest(req);
-        log(`incoming request with id '${id}'`);
-        return App(id, res);
+        log.info(`incoming request with id '${id}'`);
+        apm.setCustomContext({
+          ticket_id: id
+        });
+        const response = await App(id);
+        return res.status(200).json(response);
       } catch (e) {
-        log(e);
-        return res.status(400).json("Corpo inválido da requisição");
+        log.error(e);
+        apm.captureError(e);
+        return res.status(500).json(e);
       }
     });
 

@@ -1,3 +1,3 @@
 import dbg from "../dbg";
 
-export default dbg.extend("util");
+export default dbg.child({ module: "utils" });

@@ -2,7 +2,7 @@ import HasuraBase from "./HasuraBase";
 import isError, { HasuraResponse } from "./isError";
 import dbg from "./dbg";
 
-const log = dbg.extend("getFormEntries");
+const log = dbg.child({ labels: { process: "getFormEntries" } });
 
 const query = `query($advogadaId: Int!, $psicologaId: Int!) {
   form_entries(where: {widget_id: {_in: [$advogadaId, $psicologaId]}}) {
@@ -38,7 +38,7 @@ const getFormEntries = async () => {
 
     return response.data.data.form_entries;
   } catch (e) {
-    return log(e);
+    return log.error(e);
   }
 };
 

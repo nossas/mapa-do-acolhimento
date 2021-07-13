@@ -4,7 +4,7 @@ import path from "path";
 import dbg from "./dbg";
 
 const readFile = promisify(fs.readFile);
-const log = dbg.extend("openStateFile");
+const log = dbg.child({ labels: { process: "openStateFile" } });
 
 const openStateFile = async (filename: string) => {
   try {
@@ -14,7 +14,7 @@ const openStateFile = async (filename: string) => {
     const state = buffer.toString();
     return JSON.parse(state);
   } catch (e) {
-    log(e);
+    log.error(e);
     return null;
   }
 };

@@ -1,3 +1,9 @@
-import debug from "debug";
+import pino from "pino";
+import ecsFormat from "@elastic/ecs-pino-format";
 
-export default debug("webhooks-solidarity-count");
+const logger = pino({
+  ...ecsFormat({ convertReqRes: true }),
+  labels: { env: process.env }
+});
+
+export default logger;

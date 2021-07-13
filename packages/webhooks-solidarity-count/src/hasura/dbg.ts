@@ -1,3 +1,3 @@
 import dbg from "../dbg";
 
-export default dbg.extend("hasura");
+export default dbg.child({ module: "hasura" });
