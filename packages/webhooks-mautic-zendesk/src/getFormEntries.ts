@@ -66,7 +66,7 @@ const validationField = yup.object().shape({
   uid: yup.string().required(),
   kind: yup.string().required(),
   label: yup.string().required(),
-  placeholder: yup.string().required(),
+  placeholder: yup.string(),
   required: yup.string().required(),
   value: yup.string().required()
 });
