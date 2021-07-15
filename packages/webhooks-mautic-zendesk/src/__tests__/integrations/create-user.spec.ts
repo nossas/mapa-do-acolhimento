@@ -32,7 +32,8 @@ describe("users/create_or_update", () => {
       name,
       created_at: new Date().toISOString()
     });
-    spyRules.mockResolvedValue({ name, email } as any);
+    const data = { user:{ name, email } }; 
+    spyRules.mockResolvedValue(data as any);
     spyZendesk.mockResolvedValue({
       data: {
         user: {
@@ -54,7 +55,7 @@ describe("users/create_or_update", () => {
       organization_id: 57542,
       role: "end-user"
     });
-
+    expect(spyZendesk).toBeCalledWith("POST","users/create_or_update",data);
     return done();
   });
 });

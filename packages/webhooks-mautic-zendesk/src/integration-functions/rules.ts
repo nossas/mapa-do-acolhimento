@@ -109,7 +109,7 @@ export const businessRules = async (
   results: Results,
   subscribe: Subscribe,
   organizationId: number
-) => {
+): Promise<{ user: any }> => {
   let data = { ...results, ...subscribe };
   const condition: [CONDITION] = [CONDITION.UNSET];
   dbg.info(`businessRules: ${JSON.stringify(data, null, 2)}`);
@@ -129,5 +129,5 @@ export const businessRules = async (
     whatsapp: data.whatsapp 
   }).validate(userWithGeolocation, { stripUnknown: true });
 
-  return zendeskData;
+  return { user: zendeskData };
 };
