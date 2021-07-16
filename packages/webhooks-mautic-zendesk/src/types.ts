@@ -9,6 +9,7 @@ export interface FormEntry {
   fields: any[] | string;
   created_at: string;
   widget_id: number;
+  external_id?: number;
 }
 
 export interface FormEntryFields {
@@ -20,6 +21,7 @@ export interface FormEntryFields {
   registration_number?: string;
   whatsapp?: string;
   phone?: string;
+  external_id: string;
 }
 
 export interface Subscribe {
@@ -30,4 +32,5 @@ export interface Subscribe {
   created_at: string;
   whatsapp?: string;
   phone?: string;
+  external_id: string;
 }

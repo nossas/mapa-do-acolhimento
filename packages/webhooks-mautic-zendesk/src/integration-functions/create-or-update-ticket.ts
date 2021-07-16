@@ -1,5 +1,5 @@
 import * as yup from "yup";
-import { apmAgent } from "../dbg";
+import log, { apmAgent } from "../dbg";
 import fetchTickets, { Ticket } from "./fetch-tickets";
 import { User as ZendeskUser } from "./create-user";
 import requestZendeskApi from "./request-zendesk-api";
@@ -85,9 +85,11 @@ const createOrUpdateTicket = async (
     ],
     created_at
   };
-
+  
   try {
     const data = await ticketSchema.validate(input, { stripUnknown: true });
+    log.info("create or update ticket zendesk api:", { data });
+
     if (tickets.length === 0) {
       // Create new Zendesk Ticket
       return await requestZendeskApi("POST", "/tickets", data);

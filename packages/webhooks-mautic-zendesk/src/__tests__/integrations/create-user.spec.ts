@@ -27,10 +27,13 @@ describe("users/create_or_update", () => {
   it("return parsed user", async (done: any) => {
     const email = "roge@example.org";
     const name = "Roger Wilco";
+    const external_id = "1234";
+
     // Mock functions
     spySubscribe.mockResolvedValue({
       name,
-      created_at: new Date().toISOString()
+      created_at: new Date().toISOString(),
+      external_id
     });
     const data = { user:{ name, email } }; 
     spyRules.mockResolvedValue(data as any);

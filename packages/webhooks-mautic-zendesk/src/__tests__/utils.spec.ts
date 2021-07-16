@@ -265,7 +265,8 @@ describe("filterByEmail", () => {
         }
       ],
       created_at: "2020-09-16T19:49:59.848563",
-      widget_id: 17628
+      widget_id: 17628,
+      external_id: 2345
     },
     {
       fields: [
@@ -336,7 +337,8 @@ describe("filterByEmail", () => {
         }
       ],
       created_at: "2020-09-16T00:47:23.429155",
-      widget_id: 17628
+      widget_id: 17628,
+      external_id: 7890
     },
     {
       fields: [
@@ -407,7 +409,8 @@ describe("filterByEmail", () => {
         }
       ],
       created_at: "2020-09-15T18:47:28.387207",
-      widget_id: 17628
+      widget_id: 17628,
+      external_id: 4567
     },
     {
       fields: [
@@ -478,37 +481,42 @@ describe("filterByEmail", () => {
         }
       ],
       created_at: "2020-09-14T22:10:46.092246",
-      widget_id: 17628
+      widget_id: 17628,
+      external_id: 1234
     }
   ];
   describe("there's an entry with that e-mail", () => {
-    it("should return an object with email/name/lastname/cep, part. 3", () => {
+    it("should return an object with email/name/lastname/cep/external_id, part. 3", () => {
       const data = filterByEmail([entries[0]]);
       expect(data).toHaveProperty("email", "herminia.amorim@email.com");
       expect(data).toHaveProperty("cep", "22461010");
       expect(data).toHaveProperty("lastname", "Amorim");
       expect(data).toHaveProperty("name", "Hermínia");
+      expect(data).toHaveProperty("external_id", "2345");
     });
-    it("should return an object with email/name/lastname/cep, part. 4", () => {
+    it("should return an object with email/name/lastname/cep/external_id, part. 4", () => {
       const data = filterByEmail([entries[1]]);
       expect(data).toHaveProperty("email", "ligia.garcia@email.com");
       expect(data).toHaveProperty("cep", "61760-906");
       expect(data).toHaveProperty("lastname", "Garcia");
       expect(data).toHaveProperty("name", "Lígia");
+      expect(data).toHaveProperty("external_id", "7890");
     });
-    it("should return an object with email/name/lastname/cep, part. 2", () => {
+    it("should return an object with email/name/lastname/cep/external_id, part. 2", () => {
       const data = filterByEmail([entries[2]]);
       expect(data).toHaveProperty("email", "teresa.nascimento@email.com");
       expect(data).toHaveProperty("cep", "82300332");
       expect(data).toHaveProperty("lastname", "Nascimento");
       expect(data).toHaveProperty("name", "Teresa");
+      expect(data).toHaveProperty("external_id", "4567");
     });
-    it("should return an object with email/name/lastname/cep, part. 1", () => {
+    it("should return an object with email/name/lastname/cep/external_id, part. 1", () => {
       const data = filterByEmail([entries[3]]);
       expect(data).toHaveProperty("email", "angelica.lopes@email.com");
       expect(data).toHaveProperty("cep", "05422030");
       expect(data).toHaveProperty("lastname", "Lopes");
       expect(data).toHaveProperty("name", "Angélica");
+      expect(data).toHaveProperty("external_id", "1234");
     });
   });
   describe("there's no entry with that e-mail", () => {

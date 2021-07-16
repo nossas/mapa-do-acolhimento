@@ -204,6 +204,7 @@ export const filterByEmail = (
     
       return {
         ...i,
+        external_id: i.external_id?.toString() || "",
         ...(i.fields as any[]).reduce((newObj, old) => {
           const key = (dicio[old.uid] && dicio[old.uid]) || old.kind;
           return {

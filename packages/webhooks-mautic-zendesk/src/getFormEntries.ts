@@ -13,6 +13,7 @@ export const query = `query($widgets: [Int!]!, $email: String!) {
     fields
     created_at
     widget_id
+    external_id: id
   }
 }`;
 

@@ -18,6 +18,7 @@ export interface FormEntry {
   fields: any[];
   created_at: string;
   widget_id: number;
+  external_id: number; 
 }
 
 export interface FormEntryFields {
@@ -27,6 +28,7 @@ export interface FormEntryFields {
   created_at: string;
   widget_id: number;
   registration_number?: string;
+  external_id: string;
 }
 
 export interface Subscribe {
@@ -35,4 +37,5 @@ export interface Subscribe {
   cep?: string;
   registration_number?: string;
   created_at: string;
+  external_id: string;
 }
