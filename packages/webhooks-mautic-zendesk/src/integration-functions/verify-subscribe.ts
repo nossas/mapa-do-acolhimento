@@ -21,6 +21,6 @@ export default async ({ email, name, cep }: Input): Promise<Subscribe> => {
       typeof name !== "string" || name.length === 0
         ? `${formEntryFields.name} ${formEntryFields.lastname}`
         : name,
-    cep: typeof cep !== "string" || cep.length === 0 ? String(cep) : cep
+    cep: typeof cep !== "string" || cep.length === 0 ? String(formEntryFields.cep) : cep
   };
 };
