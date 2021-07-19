@@ -18,6 +18,7 @@ export type ValidationInput = {
   cep?: string;
   phone?: string;
   whatsapp?: string;
+  external_id: string;
 };
 
 const zendeskValidation = (input: ValidationInput) =>
@@ -126,7 +127,8 @@ export const businessRules = async (
     createdAt: subscribe.created_at,
     organizationId,
     phone: data.phone,
-    whatsapp: data.whatsapp 
+    whatsapp: data.whatsapp,
+    external_id : data.external_id
   }).validate(userWithGeolocation, { stripUnknown: true });
 
   return { user: zendeskData };
