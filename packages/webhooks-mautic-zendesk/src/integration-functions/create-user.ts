@@ -16,7 +16,7 @@ interface Base {
   organization_id: number;
   name: string;
   email: string;
-  external_id: string;
+  external_id: any;
   phone: string;
   verified: boolean;
   user_fields: {
@@ -42,7 +42,7 @@ const schema = yup.object().shape({
   role: yup.string().required(),
   name: yup.string().required(),
   email: yup.string().required(),
-  external_id: yup.string(),
+  external_id: yup.string().nullable(),
   phone: yup.string(),
   verified: yup.boolean(),
   user_fields: yup.object(),
