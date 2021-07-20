@@ -54,21 +54,23 @@ describe("createOrUpdateTicket", () => {
     await createOrUpdateTicket(organization, user, createdAt);
 
     const data = {
-      requester_id: user.user_id,
-      organization_id: user.organization_id,
-      description: "-",
-      status_inscricao: "aprovada",
-      subject: `[${organization === "ADVOGADA" ? "Advogada" : "Psicóloga"}] ${
-        user.name
-      } - ${user.user_fields.registration_number}`,
-      custom_fields: [
-        { id: 360021665652, value: Status[user.user_fields.condition] },
-        { id: 360016631592, value: user.name },
-        { id: 360021812712, value: user.phone },
-        { id: 360021879791, value: user.user_fields.state },
-        { id: 360021879811, value: user.user_fields.city }
-      ],
-      created_at: createdAt
+      ticket: {
+        requester_id: user.user_id,
+        organization_id: user.organization_id,
+        description: "-",
+        status_inscricao: "aprovada",
+        subject: `[${organization === "ADVOGADA" ? "Advogada" : "Psicóloga"}] ${
+          user.name
+        } - ${user.user_fields.registration_number}`,
+        custom_fields: [
+          { id: 360021665652, value: Status[user.user_fields.condition] },
+          { id: 360016631592, value: user.name },
+          { id: 360021812712, value: user.phone },
+          { id: 360021879791, value: user.user_fields.state },
+          { id: 360021879811, value: user.user_fields.city }
+        ],
+        created_at: createdAt
+      }
     };
 
     expect(spyZendesk).toBeCalledWith("POST", "/tickets", data);
@@ -95,21 +97,23 @@ describe("createOrUpdateTicket", () => {
     await createOrUpdateTicket(organization, user, createdAt);
 
     const data = {
-      requester_id: user.user_id,
-      organization_id: user.organization_id,
-      description: "-",
-      status_inscricao: "aprovada",
-      subject: `[${organization === "ADVOGADA" ? "Advogada" : "Psicóloga"}] ${
-        user.name
-      } - ${user.user_fields.registration_number}`,
-      custom_fields: [
-        { id: 360021665652, value: Status[user.user_fields.condition] },
-        { id: 360016631592, value: user.name },
-        { id: 360021812712, value: user.phone },
-        { id: 360021879791, value: user.user_fields.state },
-        { id: 360021879811, value: user.user_fields.city }
-      ],
-      created_at: createdAt
+      ticket: {
+        requester_id: user.user_id,
+        organization_id: user.organization_id,
+        description: "-",
+        status_inscricao: "aprovada",
+        subject: `[${organization === "ADVOGADA" ? "Advogada" : "Psicóloga"}] ${
+          user.name
+        } - ${user.user_fields.registration_number}`,
+        custom_fields: [
+          { id: 360021665652, value: Status[user.user_fields.condition] },
+          { id: 360016631592, value: user.name },
+          { id: 360021812712, value: user.phone },
+          { id: 360021879791, value: user.user_fields.state },
+          { id: 360021879811, value: user.user_fields.city }
+        ],
+        created_at: createdAt
+      }
     };
 
     expect(spyZendesk).toBeCalledWith("PUT", `/tickets/${results[1].id}`, data);
@@ -136,21 +140,23 @@ describe("createOrUpdateTicket", () => {
     await createOrUpdateTicket(organization, user, createdAt);
 
     const data = {
-      requester_id: user.user_id,
-      organization_id: user.organization_id,
-      description: "-",
-      status_inscricao: "aprovada",
-      subject: `[${organization === "ADVOGADA" ? "Advogada" : "Psicóloga"}] ${
-        user.name
-      } - ${user.user_fields.registration_number}`,
-      custom_fields: [
-        { id: 360021665652, value: Status[user.user_fields.condition] },
-        { id: 360016631592, value: user.name },
-        { id: 360021812712, value: user.phone },
-        { id: 360021879791, value: user.user_fields.state },
-        { id: 360021879811, value: user.user_fields.city }
-      ],
-      created_at: createdAt
+      ticket: {
+        requester_id: user.user_id,
+        organization_id: user.organization_id,
+        description: "-",
+        status_inscricao: "aprovada",
+        subject: `[${organization === "ADVOGADA" ? "Advogada" : "Psicóloga"}] ${
+          user.name
+        } - ${user.user_fields.registration_number}`,
+        custom_fields: [
+          { id: 360021665652, value: Status[user.user_fields.condition] },
+          { id: 360016631592, value: user.name },
+          { id: 360021812712, value: user.phone },
+          { id: 360021879791, value: user.user_fields.state },
+          { id: 360021879811, value: user.user_fields.city }
+        ],
+        created_at: createdAt
+      }
     };
 
     expect(spyZendesk).toBeCalledWith("PUT", `/tickets/${results[1].id}`, data);
