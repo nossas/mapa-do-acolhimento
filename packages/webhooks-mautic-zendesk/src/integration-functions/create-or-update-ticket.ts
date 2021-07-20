@@ -88,7 +88,7 @@ const createOrUpdateTicket = async (
   
   try {
     const data = await ticketSchema.validate(input, { stripUnknown: true });
-    log.info("create or update ticket zendesk api:", { data });
+    log.info(`create or update ticket zendesk api: ${ JSON.stringify(data, null, 2) }`);
 
     if (tickets.length === 0) {
       // Create new Zendesk Ticket
