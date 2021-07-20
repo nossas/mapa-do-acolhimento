@@ -92,10 +92,10 @@ const createOrUpdateTicket = async (
 
     if (tickets.length === 0) {
       // Create new Zendesk Ticket
-      return await requestZendeskApi("POST", "/tickets", data);
+      return await requestZendeskApi("POST", "/tickets", { ticket: data });
     }
     // Update a Zendesk Ticket
-    return await requestZendeskApi("PUT", `/tickets/${tickets[0].id}`, data);
+    return await requestZendeskApi("PUT", `/tickets/${tickets[0].id}`, { ticket: data });
   } catch (e) {
     apmAgent?.captureError(e);
     throw new Error(e);
