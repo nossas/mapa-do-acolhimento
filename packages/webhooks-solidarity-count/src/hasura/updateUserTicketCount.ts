@@ -4,8 +4,6 @@ import generateRequestVariables from "./generateRequestVariables";
 import HasuraBase from "./HasuraBase";
 import isError, { HasuraResponse } from "./isError";
 
-const log = dbg.extend("saveUsers");
-
 const generateVariablesIndex = (index: number) => `
 $atendimentos_concludos_calculado__${index}: bigint!
 $atendimentos_em_andamento_calculado__${index}: bigint!
@@ -46,6 +44,8 @@ interface Response {
   affected_rows: number;
 }
 
+const log = dbg.child({ labels: { process: "updateUserTicketCount" } });
+
 const updateUserTicketCount = async users => {
   try {
     const query = createQuery(users);
@@ -55,12 +55,12 @@ const updateUserTicketCount = async users => {
     >(query, variables);
 
     if (isError(response.data)) {
-      return log(response.data.errors);
+      return log.error(response.data.errors as object);
     }
 
     return response.data.data.insert_solidarity_users.affected_rows === 1;
   } catch (e) {
-    return log(e);
+    return log.error(e);
   }
 };
 
