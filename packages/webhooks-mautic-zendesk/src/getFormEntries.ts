@@ -2,7 +2,7 @@ import axios from "axios";
 import * as yup from "yup";
 import { FormEntry, FormEntryFields } from "./types";
 import log, { apmAgent } from "./dbg";
-import { filterByEmail } from "./utils";
+import { customFilterByEmail } from "./utils";
 
 export const query = `query($widgets: [Int!]!, $email: String!) {
   form_entries(where: {
@@ -100,7 +100,7 @@ export const getFormEntryByEmail = async (
     throw new Error(`form_entry is invalid`);
   }
 
-  const formEntry = filterByEmail(formEntries || []);
+  const formEntry = customFilterByEmail(formEntries || []);
 
   if (!formEntry) throw new Error(`formEntries not found for email ${email}`);
 
