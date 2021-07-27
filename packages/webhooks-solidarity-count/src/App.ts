@@ -21,39 +21,57 @@ const log = dbg.child({ module: "app" });
 /**
  * @param ticket_id ID do ticket
  */
-const App = async (ticket_id: string) => {
+const App = async (ticket_id: string, apm: any) => {
   // Busca o ticket no zendesk
   const response = await getTicket(ticket_id);
   if (!response) {
-    throw new Error(`Can't find ticket '${ticket_id}' in Zendesk.`);
+    return Promise.reject({
+      status: 404,
+      msg: `Can't find ticket '${ticket_id}' in Zendesk.`
+    });
   }
 
   // Converte o ticket para conter os custom_fields na raiz
   const { ticket: ticketWithoutCustomValues } = response.data;
   const ticket = handleCustomFields(handleTicketId(ticketWithoutCustomValues));
-
+  apm.setUserContext({
+    id: ticket.requester_id
+  });
   const hasuraTicket = await updateHasura(ticket);
 
   // Salva o ticket no Hasura
   if (!hasuraTicket) {
-    throw new Error(`Failed to save ticket ${ticket_id} in Hasura.`);
+    return Promise.reject({
+      status: 502,
+      msg: `Failed to save ticket ${ticket_id} in Hasura.`
+    });
   }
   log.info(`Ticket '${ticket_id}' updated in Hasura.`);
 
   // Busca a usuária no zendesk
   const getUserResponse = await getUser(ticket.requester_id);
   if (!getUserResponse) {
-    throw new Error(`Failed to get user ${ticket.requester_id} in Zendesk.`);
+    return Promise.reject({
+      status: 404,
+      msg: `Failed to get user ${ticket.requester_id} in Zendesk.`
+    });
   }
 
   let userWithUserFields = handleUserFields(getUserResponse.data.user);
-
+  apm.setUserContext({
+    email: userWithUserFields.email
+  });
   const organization = await verifyOrganization(ticket);
+  apm.setCustomContext({
+    organization,
+    cep: userWithUserFields.cep
+  });
 
-  if (!organization) {
-    throw new Error(
-      `Failed to parse the organization_id for this ticket '${ticket_id}'`
-    );
+  if (typeof organization !== "number") {
+    return Promise.reject({
+      status: 422,
+      msg: `Failed to parse the organization_id for this ticket '${ticket_id}'`
+    });
   }
 
   // Atualizando todos os campos das usuárias
@@ -67,6 +85,9 @@ const App = async (ticket_id: string) => {
     const coordinates = await getGeolocation({
       cep: userWithUserFields.cep,
       email: userWithUserFields.email
+    });
+    apm.setCustomContext({
+      coordinates
     });
 
     userWithUserFields = {
@@ -86,9 +107,10 @@ const App = async (ticket_id: string) => {
       coordinates
     );
     if (!updateRequesterZendeskResponse) {
-      throw new Error(
-        `Can't update lat/lng/address for user '${ticket.requester_id}' in Zendesk. Ticket '${ticket_id}'.`
-      );
+      return Promise.reject({
+        status: 502,
+        msg: `Can't update lat/lng/address for user '${ticket.requester_id}' in Zendesk. Ticket '${ticket_id}'.`
+      });
     }
     log.info(`
       User '${ticket.requester_id}' lat/lng/address updated in Zendesk.
@@ -101,9 +123,10 @@ const App = async (ticket_id: string) => {
   // Salva a usuária no Hasura
   const saveUserResponse = await saveUsers([userWithUserFields]);
   if (!saveUserResponse) {
-    throw new Error(
-      `Failed to save user '${ticket.requester_id}' in Hasura. Ticket ${ticket.ticket_id}.`
-    );
+    return Promise.reject({
+      status: 502,
+      msg: `Failed to save user '${ticket.requester_id}' in Hasura. Ticket ${ticket.ticket_id}.`
+    });
   }
   log.info(`User '${ticket.requester_id}' fields updated in Hasura`);
 
@@ -119,9 +142,10 @@ const App = async (ticket_id: string) => {
   // Busca todos os tickets do requester_id
   const ticketsFromUser = await getUserRequestedTickets(ticket.requester_id);
   if (!ticketsFromUser) {
-    throw new Error(
-      `Can't find tickets for user '${ticket.requester_id}' in Zendesk. Ticket '${ticket_id}'.`
-    );
+    return Promise.reject({
+      status: 404,
+      msg: `Can't find tickets for user '${ticket.requester_id}' in Zendesk. Ticket '${ticket_id}'.`
+    });
   }
 
   // Conta os tickets
@@ -129,7 +153,9 @@ const App = async (ticket_id: string) => {
     data: { tickets }
   } = ticketsFromUser;
   const countTicket = countTickets(tickets.map(i => handleCustomFields(i)));
-
+  apm.setCustomContext({
+    calculatedFields: countTicket
+  });
   // Atualiza o count da voluntária no zendesk
   const updateRequesterZendeskResponse = await updateRequesterFields(
     ticket.requester_id,
@@ -137,9 +163,10 @@ const App = async (ticket_id: string) => {
   );
 
   if (!updateRequesterZendeskResponse) {
-    throw new Error(
-      `Can't update user count for user '${ticket.requester_id}' in Zendesk. Ticket '${ticket_id}'.`
-    );
+    return Promise.reject({
+      status: 502,
+      msg: `Can't update user count for user '${ticket.requester_id}' in Zendesk. Ticket '${ticket_id}'.`
+    });
   }
   log.info(
     `User '${ticket.requester_id}' count updated in Zendesk. Ticket '${ticket_id}'.`
@@ -154,9 +181,10 @@ const App = async (ticket_id: string) => {
   ]);
 
   if (!saveUsersHasuraResponse) {
-    throw new Error(
-      `Failed to update user count '${ticket.requester_id}' in Hasura.`
-    );
+    return Promise.reject({
+      status: 502,
+      msg: `Failed to update user count '${ticket.requester_id}' in Hasura.`
+    });
   }
 
   log.info(
