@@ -67,7 +67,7 @@ const App = async (ticket_id: string, apm: any) => {
     cep: userWithUserFields.cep
   });
 
-  if (!organization) {
+  if (typeof organization !== "number") {
     return Promise.reject({
       status: 422,
       msg: `Failed to parse the organization_id for this ticket '${ticket_id}'`
