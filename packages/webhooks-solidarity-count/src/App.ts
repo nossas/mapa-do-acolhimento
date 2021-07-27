@@ -21,7 +21,7 @@ const log = dbg.child({ module: "app" });
 /**
  * @param ticket_id ID do ticket
  */
-const App = async (ticket_id: string) => {
+const App = async (ticket_id: string, apm: any) => {
   // Busca o ticket no zendesk
   const response = await getTicket(ticket_id);
   if (!response) {
@@ -34,7 +34,9 @@ const App = async (ticket_id: string) => {
   // Converte o ticket para conter os custom_fields na raiz
   const { ticket: ticketWithoutCustomValues } = response.data;
   const ticket = handleCustomFields(handleTicketId(ticketWithoutCustomValues));
-
+  apm.setUserContext({
+    id: ticket.requester_id
+  });
   const hasuraTicket = await updateHasura(ticket);
 
   // Salva o ticket no Hasura
@@ -56,8 +58,14 @@ const App = async (ticket_id: string) => {
   }
 
   let userWithUserFields = handleUserFields(getUserResponse.data.user);
-
+  apm.setUserContext({
+    email: userWithUserFields.email
+  });
   const organization = await verifyOrganization(ticket);
+  apm.setCustomContext({
+    organization,
+    cep: userWithUserFields.cep
+  });
 
   if (!organization) {
     return Promise.reject({
@@ -77,6 +85,9 @@ const App = async (ticket_id: string) => {
     const coordinates = await getGeolocation({
       cep: userWithUserFields.cep,
       email: userWithUserFields.email
+    });
+    apm.setCustomContext({
+      coordinates
     });
 
     userWithUserFields = {
@@ -142,7 +153,9 @@ const App = async (ticket_id: string) => {
     data: { tickets }
   } = ticketsFromUser;
   const countTicket = countTickets(tickets.map(i => handleCustomFields(i)));
-
+  apm.setCustomContext({
+    calculatedFields: countTicket
+  });
   // Atualiza o count da voluntária no zendesk
   const updateRequesterZendeskResponse = await updateRequesterFields(
     ticket.requester_id,

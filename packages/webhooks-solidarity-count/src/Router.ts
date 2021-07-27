@@ -30,9 +30,9 @@ const Router = (apm): Express.Express =>
         const id = await getTicketIdFromRequest(req);
         log.info(`incoming request with id '${id}'`);
         apm.setCustomContext({
-          ticket_id: id
+          ticketId: id
         });
-        const response = await App(id);
+        const response = await App(id, apm);
         return res.status(200).json(response);
       } catch (e) {
         log.error(e.msg);
