@@ -79,8 +79,8 @@ const zendeskValidation = (input: ValidationInput) =>
         .email()
         .required(),
       phone: yup.string().nullable(),
-      organization_id: yup.number().nullable(),
-      external_id : yup.string().nullable(),
+      organization_id: yup.number().required(),
+      external_id: yup.string().nullable(),
       user_fields: yup
         .object()
         .shape({
@@ -130,7 +130,7 @@ export const businessRules = async (
     organizationId,
     phone: data.phone,
     whatsapp: data.whatsapp,
-    external_id : data.external_id
+    external_id: data.external_id
   }).validate(userWithGeolocation, { stripUnknown: true });
 
   return { user: zendeskData };

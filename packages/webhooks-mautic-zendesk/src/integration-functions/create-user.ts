@@ -8,7 +8,7 @@ import { checkNames, checkCep } from "../utils";
 
 export type CreateUserInput = {
   results: Results;
-  organization: "ADVOGADA" | "PSICOLOGA";
+  organization: "ADVOGADA" | "PSICÓLOGA";
 };
 
 interface Base {
@@ -65,7 +65,7 @@ export default async (input: CreateUserInput): Promise<User | undefined> => {
     subscribe,
     organizations[input.organization]
   );
-  log.info(`input zendesk api ${JSON.stringify(data,null,2) }`);
+  log.info(`input zendesk api ${JSON.stringify(data, null, 2)}`);
 
   const response = await requestZendeskApi<{ user: EndUser }>(
     "POST",

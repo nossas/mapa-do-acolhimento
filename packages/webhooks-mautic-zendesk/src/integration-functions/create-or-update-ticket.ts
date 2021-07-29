@@ -85,17 +85,21 @@ const createOrUpdateTicket = async (
     ],
     created_at
   };
-  
+
   try {
     const data = await ticketSchema.validate(input, { stripUnknown: true });
-    log.info(`create or update ticket zendesk api: ${ JSON.stringify(data, null, 2) }`);
+    log.info(
+      `create or update ticket zendesk api: ${JSON.stringify(data, null, 2)}`
+    );
 
     if (tickets.length === 0) {
       // Create new Zendesk Ticket
       return await requestZendeskApi("POST", "/tickets", { ticket: data });
     }
     // Update a Zendesk Ticket
-    return await requestZendeskApi("PUT", `/tickets/${tickets[0].id}`, { ticket: data });
+    return await requestZendeskApi("PUT", `/tickets/${tickets[0].id}`, {
+      ticket: data
+    });
   } catch (e) {
     apmAgent?.captureError(e);
     throw new Error(e);

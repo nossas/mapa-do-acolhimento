@@ -66,7 +66,7 @@ export const customFilterName = async (data: Mautic) => {
     if (name.toLowerCase().includes("cadastro: advogadas")) {
       organization = "ADVOGADA";
     } else if (name.toLowerCase().includes("cadastro: psicólogas")) {
-      organization = "PSICOLOGA";
+      organization = "PSICÓLOGA";
     } else {
       dbg.warn(`InstanceClass "${name}" doesn't exist`);
       return {
