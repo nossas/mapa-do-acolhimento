@@ -55,12 +55,12 @@ class PsicologaCreateUser extends Base {
         .from("sobrenome_completo", "lastname")
         .from("whatsapp_com_ddd", "whatsapp")
         .from("telefone_de_atendimento_c", "phone")
-        .from("insira_seu_numero_de_regi", "registration_number")
-        .from("qual_sua_area_de_atuacao", "occupation_area")
         .from("sendo_voluntaria_do_mapa", "disponibilidade_de_atendimentos")
         .from("quantas_vezes_voce_ja_rec", "encaminhamentos")
         .from("atualmente_quantas_mulher", "atendimentos_em_andamento")
         .from("quanto_atendimentos_pelo", "atendimentos_concluidos")
+        .from("insira_seu_numero_de_regi", "registration_number")
+        .from("qual_sua_area_de_atuacao", "occupation_area")
         .transform(obj => {
           const {
             email,
