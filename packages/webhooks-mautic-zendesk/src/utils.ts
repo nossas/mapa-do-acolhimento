@@ -196,7 +196,7 @@ const dicio = {
   "field-1593717629660-4": "whatsapp"
 };
 
-export const customFilterByEmail = (
+export const filterByEmail = (
   formEntries: FormEntry[]
 ): FormEntryFields | undefined => {
   const getFieldsValue = formEntries.map(i => {
@@ -211,42 +211,6 @@ export const customFilterByEmail = (
             [key]: old.value
           };
         }, {})
-      };
-    } catch (e) {
-      console.log(e);
-      return [];
-    }
-  });
-  return getFieldsValue[0];
-};
-
-export const filterByEmail = (
-  formEntries: FormEntry[]
-):
-  | {
-      name: string | null;
-      lastname: string | null;
-      cep: string | null;
-      created_at: string;
-      widget_id: number;
-      registration_number: string;
-      whatsapp: string | null;
-      phone: string;
-    }
-  | undefined => {
-  const getFieldsValue = formEntries.map(i => {
-    try {
-      const parsedFields = JSON.parse(i.fields.toString());
-      const translateFieldsIntoObject = parsedFields.reduce((newObj, old) => {
-        const key = (dicio[old.uid] && dicio[old.uid]) || old.kind;
-        return {
-          ...newObj,
-          [key]: old.value
-        };
-      }, {});
-      return {
-        ...i,
-        ...translateFieldsIntoObject
       };
     } catch (e) {
       console.log(e);

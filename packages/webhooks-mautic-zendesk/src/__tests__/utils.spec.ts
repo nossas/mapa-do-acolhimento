@@ -3,7 +3,7 @@ import {
   verificaEstudoDeCaso,
   verifyLocation,
   checkNames,
-  customFilterByEmail
+  filterByEmail
 } from "../utils";
 import { CONDITION } from "../types";
 
@@ -487,7 +487,7 @@ describe("filterByEmail", () => {
   ];
   describe("there's an entry with that e-mail", () => {
     it("should return an object with email/name/lastname/cep/external_id, part. 3", () => {
-      const data = customFilterByEmail([entries[0]]);
+      const data = filterByEmail([entries[0]]);
       expect(data).toHaveProperty("email", "herminia.amorim@email.com");
       expect(data).toHaveProperty("cep", "22461010");
       expect(data).toHaveProperty("lastname", "Amorim");
@@ -495,7 +495,7 @@ describe("filterByEmail", () => {
       expect(data).toHaveProperty("external_id", "2345");
     });
     it("should return an object with email/name/lastname/cep/external_id, part. 4", () => {
-      const data = customFilterByEmail([entries[1]]);
+      const data = filterByEmail([entries[1]]);
       expect(data).toHaveProperty("email", "ligia.garcia@email.com");
       expect(data).toHaveProperty("cep", "61760-906");
       expect(data).toHaveProperty("lastname", "Garcia");
@@ -503,7 +503,7 @@ describe("filterByEmail", () => {
       expect(data).toHaveProperty("external_id", "7890");
     });
     it("should return an object with email/name/lastname/cep/external_id, part. 2", () => {
-      const data = customFilterByEmail([entries[2]]);
+      const data = filterByEmail([entries[2]]);
       expect(data).toHaveProperty("email", "teresa.nascimento@email.com");
       expect(data).toHaveProperty("cep", "82300332");
       expect(data).toHaveProperty("lastname", "Nascimento");
@@ -511,7 +511,7 @@ describe("filterByEmail", () => {
       expect(data).toHaveProperty("external_id", "4567");
     });
     it("should return an object with email/name/lastname/cep/external_id, part. 1", () => {
-      const data = customFilterByEmail([entries[3]]);
+      const data = filterByEmail([entries[3]]);
       expect(data).toHaveProperty("email", "angelica.lopes@email.com");
       expect(data).toHaveProperty("cep", "05422030");
       expect(data).toHaveProperty("lastname", "Lopes");
@@ -521,7 +521,7 @@ describe("filterByEmail", () => {
   });
   describe("there's no entry with that e-mail", () => {
     it("should return undefined, part. 1", () => {
-      expect(customFilterByEmail([])).toStrictEqual(undefined);
+      expect(filterByEmail([])).toStrictEqual(undefined);
     });
   });
 });

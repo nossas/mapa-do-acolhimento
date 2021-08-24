@@ -1,8 +1,8 @@
 import axios from "axios";
 import * as yup from "yup";
 import { FormEntry, FormEntryFields } from "./types";
-import log, { apmAgent } from "./dbg";
-import { customFilterByEmail } from "./utils";
+import { apmAgent } from "./dbg";
+import { filterByEmail } from "./utils";
 
 export const query = `query($widgets: [Int!]!, $email: String!) {
   form_entries(where: {
@@ -23,9 +23,7 @@ interface DataType {
   };
 }
 
-export const customGetFormEntries = async (
-  email: string
-): Promise<FormEntry[]> => {
+export const getFormEntries = async (email: string): Promise<FormEntry[]> => {
   const { HASURA_API_URL, X_HASURA_ADMIN_SECRET, WIDGET_IDS } = process.env;
   let widget_ids;
   try {
@@ -94,64 +92,15 @@ export const getFormEntryByEmail = async (
           .required()
       )
       .notRequired()
-      .validate(await customGetFormEntries(email));
+      .validate(await getFormEntries(email));
   } catch (e) {
     apmAgent?.captureError(e);
     throw new Error(`form_entry is invalid`);
   }
 
-  const formEntry = customFilterByEmail(formEntries || []);
+  const formEntry = filterByEmail(formEntries || []);
 
   if (!formEntry) throw new Error(`formEntries not found for email ${email}`);
 
   return formEntry;
-};
-
-interface DataType {
-  data: {
-    form_entries: FormEntry[];
-  };
-}
-
-const dbg = log.child({ labels: { process: "getFormEntries" } });
-
-export const getFormEntries = async (email: string, apm: any) => {
-  const { HASURA_API_URL, X_HASURA_ADMIN_SECRET, WIDGET_IDS } = process.env;
-  let widget_ids;
-  try {
-    widget_ids = WIDGET_IDS.split(",").map(Number);
-    if (
-      !yup
-        .array()
-        .of(yup.string())
-        .min(6)
-        .isValid(widget_ids)
-    ) {
-      throw new Error("Invalid WIDGET_IDS env var");
-    }
-  } catch (e) {
-    apm.captureError(e);
-    return dbg.error(e);
-  }
-  try {
-    const data = await axios.post<DataType>(
-      HASURA_API_URL!,
-      {
-        query,
-        variables: {
-          widgets: widget_ids,
-          email: `%${email}%`
-        }
-      },
-      {
-        headers: {
-          "x-hasura-admin-secret": X_HASURA_ADMIN_SECRET
-        }
-      }
-    );
-    return data.data.data.form_entries;
-  } catch (e) {
-    apm.captureError(e);
-    return dbg.error(e);
-  }
 };

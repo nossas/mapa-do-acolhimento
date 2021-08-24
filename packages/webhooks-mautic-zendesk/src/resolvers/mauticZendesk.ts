@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { userToContact } from "components";
 import log, { apmAgent } from "../dbg";
 import { readMauticRequest } from "../filterService";
-import { customFilterName, FILTER_FORM_NAME_STATUS } from "../filterFormName";
+import { filterName, FILTER_FORM_NAME_STATUS } from "../filterFormName";
 import createZendeskUser from "../integration-functions/create-user";
 import createOrUpdateTicket from "../integration-functions/create-or-update-ticket";
 
@@ -15,7 +15,7 @@ export const mauticZendeskHandle = async (req: Request, res: Response) => {
     name,
     data: errorData,
     dateSubmitted
-  } = await customFilterName(data!);
+  } = await filterName(data!);
 
   apmAgent?.setCustomContext({
     formNameStatus
