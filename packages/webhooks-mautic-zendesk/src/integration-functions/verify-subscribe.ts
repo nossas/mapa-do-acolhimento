@@ -4,7 +4,7 @@
 // inputed in the form_entry.
 // import yup from "yup";
 import { getFormEntryByEmail } from "../getFormEntries";
-import { Subscribe } from "./types";
+import { Subscribe } from "../types";
 
 type Input = {
   email: string;
@@ -21,6 +21,9 @@ export default async ({ email, name, cep }: Input): Promise<Subscribe> => {
       typeof name !== "string" || name.length === 0
         ? `${formEntryFields.name} ${formEntryFields.lastname}`
         : name,
-    cep: typeof cep !== "string" || cep.length === 0 ? String(formEntryFields.cep) : cep
+    cep:
+      typeof cep !== "string" || cep.length === 0
+        ? String(formEntryFields.cep)
+        : cep
   };
 };

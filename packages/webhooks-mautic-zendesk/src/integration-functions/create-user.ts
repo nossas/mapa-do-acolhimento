@@ -3,7 +3,7 @@ import requestZendeskApi from "./request-zendesk-api";
 import log from "../dbg";
 import { businessRules } from "./rules";
 import verifySubscribe from "./verify-subscribe";
-import { Results } from "./types";
+import { Results } from "../types";
 import { checkNames, checkCep } from "../utils";
 
 export type CreateUserInput = {

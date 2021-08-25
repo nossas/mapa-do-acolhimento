@@ -1,3 +1,12 @@
+export interface Results extends Record<string, unknown> {
+  email: string;
+  cep?: string;
+  primeiro_nome?: Array<string> | string;
+  sobrenome_completo?: Array<string> | string;
+  phone?: string;
+  whatsapp?: string;
+}
+
 export enum CONDITION {
   UNSET = "unset",
   REPROVADA_REGISTRO_INVÁLIDO = "reprovada_registro_inválido",
