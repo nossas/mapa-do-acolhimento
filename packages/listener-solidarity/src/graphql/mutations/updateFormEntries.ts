@@ -30,7 +30,7 @@ const FORM_ENTRIES_MUTATION = gql`
 // };
 
 const updateFormEntries = async (forms: number[]) => {
-  log.info("Updating form_entries syncronized on GraphQL API...");
+  log.info(`Updating form_entries: ${forms} syncronized on GraphQL API...`);
   try {
     const res = await GraphQLAPI.mutate({
       mutation: FORM_ENTRIES_MUTATION,
