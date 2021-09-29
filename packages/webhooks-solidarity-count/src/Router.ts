@@ -34,7 +34,7 @@ const Router = (apm): Express.Express =>
         });
         const response = await App(id, apm);
         return res.status(200).json(response);
-      } catch (e) {
+      } catch (e: any) {
         log.error(e.msg);
         apm.captureError(new Error(e.msg));
         return res.status(e.status).json(e.msg);

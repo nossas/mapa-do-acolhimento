@@ -383,47 +383,47 @@ importers:
 
   packages/webhooks-solidarity-count:
     specifiers:
-      '@elastic/ecs-pino-format': ^1.1.1
-      '@types/debug': ^4.1.5
-      '@types/express': ^4.17.6
+      '@elastic/ecs-pino-format': ^1.3.0
+      '@types/debug': ^4.1.7
+      '@types/express': ^4.17.13
       '@types/jest': ^25.2.3
-      '@types/node': ^14.0.12
-      '@types/source-map-support': ^0.5.1
-      '@types/url-join': ^4.0.0
-      '@types/yup': ^0.29.2
-      axios: ^0.19.0
-      bonde-core-tools: ^0.1.8-alpha.7
+      '@types/node': ^14.17.19
+      '@types/source-map-support': ^0.5.4
+      '@types/url-join': ^4.0.1
+      '@types/yup': ^0.29.13
+      axios: ^0.19.2
+      bonde-core-tools: ^0.1.8
       components: workspace:^0.0.3
-      dotenv: ^8.2.0
-      elastic-apm-node: ^3.14.0
+      dotenv: ^8.6.0
+      elastic-apm-node: ^3.21.1
       express: ^4.17.1
       faker: ^4.1.0
       jest: 26.0.1
-      pino: ^6.11.3
+      pino: ^6.13.3
       ramda: ^0.26.1
-      source-map-support: ^0.5.16
-      ts-jest: ^26.1.1
+      source-map-support: ^0.5.20
+      ts-jest: ^26.5.6
       url-join: ^4.0.1
       yup: ^0.27.0
     dependencies:
-      '@elastic/ecs-pino-format': 1.2.0
+      '@elastic/ecs-pino-format': 1.3.0
       axios: 0.19.2
-      bonde-core-tools: 0.1.8-alpha.7
+      bonde-core-tools: 0.1.8
       components: link:../components
       dotenv: 8.6.0
-      elastic-apm-node: 3.17.0
+      elastic-apm-node: 3.21.1
       express: 4.17.1
-      pino: 6.12.0
+      pino: 6.13.3
       ramda: 0.26.1
-      source-map-support: 0.5.19
-      ts-jest: 26.5.6_jest@26.0.1
+      source-map-support: 0.5.20
+      ts-jest: 26.5.6_jest@26.0.1+typescript@3.9.5
       url-join: 4.0.1
       yup: 0.27.0
     devDependencies:
-      '@types/debug': 4.1.6
+      '@types/debug': 4.1.7
       '@types/express': 4.17.13
       '@types/jest': 25.2.3
-      '@types/node': 14.17.5
+      '@types/node': 14.17.19
       '@types/source-map-support': 0.5.4
       '@types/url-join': 4.0.1
       '@types/yup': 0.29.13
@@ -456,35 +456,6 @@ packages:
       prop-types: 15.7.2
       react: 16.14.0
       subscriptions-transport-ws: 0.9.19_graphql@14.7.0
-      symbol-observable: 4.0.0
-      ts-invariant: 0.8.2
-      tslib: 1.14.1
-      zen-observable: 0.8.15
-    dev: false
-
-  /@apollo/client/3.3.21_graphql@15.5.1+react@16.14.0:
-    resolution: {integrity: sha512-RAmZReFuKCKx0Rs5C0nVJwKomAHUHn+gGP/YvbEsXQWu0sXoncEUZa71UqlfCPVXa/0MkYOIbCXSQdOcuRrHgw==}
-    peerDependencies:
-      graphql: ^14.0.0 || ^15.0.0
-      react: ^16.8.0 || ^17.0.0
-      subscriptions-transport-ws: ^0.9.0
-    peerDependenciesMeta:
-      react:
-        optional: true
-      subscriptions-transport-ws:
-        optional: true
-    dependencies:
-      '@graphql-typed-document-node/core': 3.1.0_graphql@15.5.1
-      '@types/zen-observable': 0.8.3
-      '@wry/context': 0.6.0
-      '@wry/equality': 0.5.1
-      fast-json-stable-stringify: 2.1.0
-      graphql: 15.5.1
-      graphql-tag: 2.12.5_graphql@15.5.1
-      hoist-non-react-statics: 3.3.2
-      optimism: 0.16.1
-      prop-types: 15.7.2
-      react: 16.14.0
       symbol-observable: 4.0.0
       ts-invariant: 0.8.2
       tslib: 1.14.1
@@ -4313,6 +4284,14 @@ packages:
       follow-redirects: 1.5.10
     dev: false
 
+  /axios/0.21.4:
+    resolution: {integrity: sha512-ut5vewkiu8jjGBdqpM44XxjuCjq9LAKeHVmoVfHVzy8eHgxxq8SbAVQNovDA8mVi05kP0Ea/n/UzcSHcTJQfNg==}
+    dependencies:
+      follow-redirects: 1.14.4
+    transitivePeerDependencies:
+      - debug
+    dev: false
+
   /axios/0.21.4_debug@4.3.2:
     resolution: {integrity: sha512-ut5vewkiu8jjGBdqpM44XxjuCjq9LAKeHVmoVfHVzy8eHgxxq8SbAVQNovDA8mVi05kP0Ea/n/UzcSHcTJQfNg==}
     dependencies:
@@ -4603,32 +4582,27 @@ packages:
       - react-is
     dev: false
 
-  /bonde-core-tools/0.1.8-alpha.7:
-    resolution: {integrity: sha512-0Kzr/+0z1AvVkPW52CEcLCBEYU9Nj9pSWsDwhdHNcYrY+Hfxo2oO5gpLrwtQK+zXhvhfOfph91KGJ5MD7FdlCQ==}
+  /bonde-core-tools/0.1.8:
+    resolution: {integrity: sha512-1IOV8RIVG3683R/d08+uHKH/LXmCj/OTdbkXBetLIPJX3h4lZ1g+n29dnw2aBtbTIaAIDE9aGbJ/hjOymEDOsg==}
     dependencies:
-      '@apollo/client': 3.3.21_graphql@15.5.1+react@16.14.0
-      '@types/react': 16.14.11
-      '@types/react-router-dom': 5.1.8
-      axios: 0.19.2
-      bonde-components: 0.0.2-alpha.16_react-dom@16.14.0+react@16.14.0
+      '@apollo/client': 3.4.15_graphql@15.6.0+react@16.14.0
+      axios: 0.21.4
+      bonde-components: 0.0.6_react-dom@16.14.0+react@16.14.0
       cross-storage: 1.0.0
       faker: 4.1.0
-      graphql: 15.5.1
-      jest: 26.6.3
-      pino: 6.12.0
+      framer-motion: 4.1.17_react-dom@16.14.0+react@16.14.0
+      graphql: 15.6.0
+      lint-staged: 10.5.4
+      pino: 6.13.3
       react: 16.14.0
       react-dom: 16.14.0_react@16.14.0
-      react-router: 5.2.0_react@16.14.0
-      react-router-dom: 5.2.0_react@16.14.0
-      styled-components: 5.3.0_react-dom@16.14.0+react@16.14.0
     transitivePeerDependencies:
-      - bufferutil
-      - canvas
+      - '@babel/core'
+      - '@types/react'
+      - debug
       - react-is
       - subscriptions-transport-ws
       - supports-color
-      - ts-node
-      - utf-8-validate
     dev: false
 
   /bonde-core-tools/0.1.8-alpha.7_d2f3fe150cfc9c5dc87914c9c070014f:
@@ -6570,6 +6544,16 @@ packages:
     engines: {node: '>=10'}
     dependencies:
       tslib: 1.14.1
+    dev: false
+
+  /follow-redirects/1.14.4:
+    resolution: {integrity: sha512-zwGkiSXC1MUJG/qmeIFH2HBJx9u0V46QGUe3YR1fXG8bXQxq7fLj0RjLZQ5nubr9qNJUZrH+xUcwXEoXNpfS+g==}
+    engines: {node: '>=4.0'}
+    peerDependencies:
+      debug: '*'
+    peerDependenciesMeta:
+      debug:
+        optional: true
     dev: false
 
   /follow-redirects/1.14.4_debug@4.3.2:
@@ -9444,7 +9428,7 @@ packages:
     engines: {node: '>= 8.3'}
     dependencies:
       '@jest/types': 25.5.0
-      ansi-regex: 5.0.0
+      ansi-regex: 5.0.1
       ansi-styles: 4.3.0
       react-is: 16.13.1
     dev: true
@@ -11229,6 +11213,29 @@ packages:
       mkdirp: 1.0.4
       semver: 7.3.5
       yargs-parser: 20.2.9
+    dev: true
+
+  /ts-jest/26.5.6_jest@26.0.1+typescript@3.9.5:
+    resolution: {integrity: sha512-rua+rCP8DxpA8b4DQD/6X2HQS8Zy/xzViVYfEs2OQu68tkCuKLV0Md8pmX55+W24uRIyAsf/BajRfxOs+R2MKA==}
+    engines: {node: '>= 10'}
+    hasBin: true
+    peerDependencies:
+      jest: '>=26 <27'
+      typescript: '>=3.8 <5.0'
+    dependencies:
+      bs-logger: 0.2.6
+      buffer-from: 1.1.2
+      fast-json-stable-stringify: 2.1.0
+      jest: 26.0.1
+      jest-util: 26.6.2
+      json5: 2.2.0
+      lodash: 4.17.21
+      make-error: 1.3.6
+      mkdirp: 1.0.4
+      semver: 7.3.5
+      typescript: 3.9.5
+      yargs-parser: 20.2.9
+    dev: false
 
   /ts-jest/26.5.6_jest@26.6.3:
     resolution: {integrity: sha512-rua+rCP8DxpA8b4DQD/6X2HQS8Zy/xzViVYfEs2OQu68tkCuKLV0Md8pmX55+W24uRIyAsf/BajRfxOs+R2MKA==}
