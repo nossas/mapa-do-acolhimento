@@ -9,10 +9,5 @@ module.exports = {
   collectCoverageFrom: ["src/**/*.{ts,tsx,js,jsx}", "!src/**/*.d.ts"],
   modulePathIgnorePatterns: ["dist/"],
   preset: "ts-jest",
-  globals: {
-    "ts-jest": {
-      packageJson: "package.json"
-    }
-  },
   setupFiles: ["<rootDir>/src/beforeEachTest.ts"],
 };
