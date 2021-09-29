@@ -3,7 +3,7 @@ import * as yup from "yup";
 import { client as GraphQLAPI } from "../";
 import logger from "../../logger";
 
-const log = logger.child({ module: "insertSolidarityUsers" });
+const log = logger.child({ labels: { process: "insertSolidarityUsers" } });
 
 const CREATE_USERS_MUTATION = gql`
   mutation insert_solidarity_users($users: [solidarity_users_insert_input!]!) {
@@ -146,7 +146,7 @@ const insertSolidarityUsers = async (
     return returning;
   } catch (err) {
     log.error(`failed on insert solidarity users: ${ids} %o`, err);
-    return undefined;
+    return err;
   }
 };
 

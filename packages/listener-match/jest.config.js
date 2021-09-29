@@ -11,9 +11,4 @@ module.exports = {
   setupFilesAfterEnv: ["jest-extended"],
   modulePathIgnorePatterns: ["dist/"],
   preset: "ts-jest",
-  globals: {
-    "ts-jest": {
-      packageJson: "package.json"
-    }
-  }
 };

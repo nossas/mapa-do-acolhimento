@@ -3,8 +3,11 @@ import * as yup from "yup";
 import Base from "./Base";
 
 class AdvogadaCreateTicket extends Base {
-  constructor(res: Response) {
+  private apm: any;
+
+  constructor(res: Response, apm: any) {
     super("AdvogadaCreateTicket", "tickets", res);
+    this.apm = apm;
   }
 
   start = async <T>(data) => {
@@ -32,7 +35,8 @@ class AdvogadaCreateTicket extends Base {
         stripUnknown: true
       });
     } catch (e) {
-      return this.dbg("Falhou ao validar ticket");
+      this.apm.captureError(e);
+      return this.dbg.error("Falhou ao validar ticket");
     }
     try {
       return this.send<T>({
@@ -41,7 +45,8 @@ class AdvogadaCreateTicket extends Base {
         }
       });
     } catch (e) {
-      return this.dbg(e);
+      this.apm.captureError(e);
+      return this.dbg.error(e);
     }
   };
 }

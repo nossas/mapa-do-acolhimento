@@ -6,7 +6,31 @@ export enum CONDITION {
 }
 
 export interface FormEntry {
-  fields: string;
+  fields: any[] | string;
   created_at: string;
   widget_id: number;
+  external_id?: number;
+}
+
+export interface FormEntryFields {
+  name?: string;
+  lastname?: string;
+  cep?: string;
+  created_at: string;
+  widget_id: number;
+  registration_number?: string;
+  whatsapp?: string;
+  phone?: string;
+  external_id: string;
+}
+
+export interface Subscribe {
+  name: string;
+  lastname?: string;
+  cep?: string;
+  registration_number?: string;
+  created_at: string;
+  whatsapp?: string;
+  phone?: string;
+  external_id: string;
 }

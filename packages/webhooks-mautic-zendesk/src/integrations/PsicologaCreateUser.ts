@@ -14,16 +14,31 @@ interface InputFromMautic {
   createdAt: string;
   name: string;
   cep?: string;
+  registration_number: string | null;
+  phone: string | null;
+  whatsapp: string | null;
 }
 
 class PsicologaCreateUser extends Base {
   organization = "PSICÓLOGA";
+  private apm: any;
 
-  constructor(res: Response) {
+  constructor(res: Response, apm: any) {
     super("PsicólogaCreateUser", "users/create_or_update", res);
+    this.apm = apm;
   }
 
-  start = async (data, { createdAt, name, cep }: InputFromMautic) => {
+  start = async (
+    data,
+    {
+      createdAt,
+      name,
+      cep,
+      registration_number,
+      phone,
+      whatsapp
+    }: InputFromMautic
+  ) => {
     let newData = {
       ...data,
       cep
@@ -40,16 +55,16 @@ class PsicologaCreateUser extends Base {
         .from("sobrenome_completo", "lastname")
         .from("whatsapp_com_ddd", "whatsapp")
         .from("telefone_de_atendimento_c", "phone")
-        .from("insira_seu_numero_de_regi", "registration_number")
-        .from("qual_sua_area_de_atuacao", "occupation_area")
         .from("sendo_voluntaria_do_mapa", "disponibilidade_de_atendimentos")
         .from("quantas_vezes_voce_ja_rec", "encaminhamentos")
         .from("atualmente_quantas_mulher", "atendimentos_em_andamento")
         .from("quanto_atendimentos_pelo", "atendimentos_concluidos")
+        .from("insira_seu_numero_de_regi", "registration_number")
+        .from("qual_sua_area_de_atuacao", "occupation_area")
         .transform(obj => {
           const {
             email,
-            phone,
+            phone: mauticPhone,
             latitude,
             longitude,
             address,
@@ -64,10 +79,13 @@ class PsicologaCreateUser extends Base {
           return {
             name,
             email,
-            phone,
+            phone: mauticPhone || phone,
             organization_id: this.organizations[this.organization],
             user_fields: {
               ...removeFalsyValues(userFields),
+              registration_number:
+                userFields.registration_number || registration_number,
+              whatsapp: userFields.whatsapp || whatsapp,
               cep,
               address,
               state,
@@ -123,6 +141,17 @@ class PsicologaCreateUser extends Base {
         }
       );
 
+      this.apm.setCustomContext({
+        zendesk: {
+          registration_number: zendeskData.user_fields?.registration_number,
+          cep: zendeskData.user_fields?.cep,
+          username: zendeskData.name,
+          email: zendeskData.email,
+          state: zendeskData.user_fields?.state,
+          city: zendeskData.user_fields?.city
+        }
+      });
+
       const dataToBeSent = {
         user: {
           ...zendeskData
@@ -132,7 +161,8 @@ class PsicologaCreateUser extends Base {
         response: await this.send(dataToBeSent)
       };
     } catch (e) {
-      return this.dbg("validation failed", e);
+      this.apm.captureError(e);
+      return this.dbg.error("validation failed", e);
     }
   };
 }

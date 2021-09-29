@@ -3,6 +3,7 @@ import { ApolloClient } from "apollo-client";
 import { ApolloLink, concat, split } from "apollo-link";
 import { createHttpLink } from "apollo-link-http";
 import { InMemoryCache } from "apollo-cache-inmemory";
+import { SubscriptionClient } from "subscriptions-transport-ws"; // <- import this
 import { WebSocketLink } from "apollo-link-ws";
 import { getMainDefinition } from "apollo-utilities";
 import fetch from "cross-fetch";
@@ -28,15 +29,37 @@ const authMiddleware = new ApolloLink((operation, forward) => {
   return forward(operation);
 });
 
-// Create a WebSocket link:
-const wsLink = new WebSocketLink({
-  uri: process.env.WS_GRAPHQL_URL || "ws://localhost:5007/v1/graphql",
-  options: {
+const wsClient = new SubscriptionClient(
+  process.env.WS_GRAPHQL_URL || "ws://localhost:5007/v1/graphql",
+  {
     reconnect: true,
     connectionParams: { headers: authHeaders }
   },
-  webSocketImpl: ws
+  ws
+);
+
+wsClient.onConnecting(() => {
+  console.log("connecting");
 });
+
+wsClient.onConnected(() => {
+  console.log("connected");
+});
+
+wsClient.onReconnecting(() => {
+  console.log("reconnecting");
+});
+
+wsClient.onReconnected(() => {
+  console.log("reconnected");
+});
+
+wsClient.onDisconnected(() => {
+  console.log("disconnected");
+});
+
+// Create a WebSocket link:
+const wsLink = new WebSocketLink(wsClient);
 
 // using the ability to split links, you can send data to each link
 // depending on what kind of operation is being sent

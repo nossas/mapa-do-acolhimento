@@ -2,7 +2,7 @@ import { extractTypeFromSubject, getStatusAcolhimento } from "../../utils";
 import { Ticket } from "../../types";
 import logger from "../../logger";
 
-const log = logger.child({ module: "checkOldTickets" });
+const log = logger.child({ labels: { process: "checkOldTickets" } });
 
 const getOldestTicket = (tickets: Ticket[]) =>
   tickets.sort(

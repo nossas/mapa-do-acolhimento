@@ -3,7 +3,7 @@ import {
   verificaEstudoDeCaso,
   verifyLocation,
   checkNames,
-  filterByEmail
+  customFilterByEmail
 } from "../utils";
 import { CONDITION } from "../types";
 
@@ -148,31 +148,6 @@ describe("Checks geolocation process logic", () => {
     longitude: "-51.21005779999999"
   });
   describe("verifyLocation", () => {
-    // describe("cep falsy", () => {
-    //   it("should add to the tags array the value 'cep-incorreto'", async () => {
-    //     const data1 = await verifyLocation({}, mockGetGeolocationReject);
-    //     const data2 = await verifyLocation(
-    //       { cep: null },
-    //       mockGetGeolocationReject
-    //     );
-    //     const data3 = await verifyLocation(
-    //       { cep: undefined },
-    //       mockGetGeolocationReject
-    //     );
-    //     expect(data1).toHaveProperty("tags", ["cep-incorreto"]);
-    //     expect(data2).toHaveProperty("tags", ["cep-incorreto"]);
-    //     expect(data3).toHaveProperty("tags", ["cep-incorreto"]);
-    //   });
-    // });
-    // describe("GM returns ZERO_RESULTS", () => {
-    // it("variable 'tags' has value '[cep-incorreto]'", async () => {
-    //   const data = await verifyLocation(
-    //     { cep: "42250579" },
-    //     mockGetGeolocationReject
-    //   );
-    //   expect(data).toHaveProperty("tags", ["cep-incorreto"]);
-    // });
-    // });
     describe("GM returns a valid response", () => {
       it("latitude and longitude is not null", async () => {
         const data = await verifyLocation(
@@ -214,7 +189,7 @@ describe("checkNames", () => {
           primeiro_nome: undefined,
           sobrenome_completo: undefined
         })
-      ).toStrictEqual(null);
+      ).toEqual(undefined);
     });
   });
 });
@@ -222,80 +197,331 @@ describe("checkNames", () => {
 describe("filterByEmail", () => {
   const entries = [
     {
-      fields:
-        '[{"uid":"field-1533733461113-5","kind":"text","label":"NOME","placeholder":"","required":"true","value":"Hermínia"},{"uid":"field-1533733485653-99","kind":"text","label":"SOBRENOME","placeholder":"","required":"true","value":"Amorim"},{"uid":"field-1533733493037-11","kind":"email","label":"SEU MELHOR EMAIL","placeholder":"","required":"true","value":"herminia.amorim@email.com"},{"uid":"field-1533733501716-34","kind":"text","label":"CRP (Só números)","placeholder":"","required":"true","value":"000000"},{"uid":"field-1533733650118-7","kind":"text","label":"CEP DE ATENDIMENTO (Só números)","placeholder":"","required":"true","value":"22461010"},{"uid":"field-1533734419113-13","kind":"text","label":"TELEFONE PARA ATENDIMENTO (COM DDD)","placeholder":"","required":"true","value":"1212121212"},{"uid":"field-1533734468460-38","kind":"text","label":"WHATSAPP (COM DDD)","placeholder":"Obrigatório para contato com a equipe","required":"true","value":"1212121212"},{"uid":"field-1533734495315-40","kind":"dropdown","label":"Como voluntária do Mapa do Acolhimento, você se dispõe a atender, pelo menos, uma (1) mulher que precisa de ajuda. Caso você tenha mais tempo disponível, você pode atender mais de uma (1) mulher, de maneira concomitante. Lembrando que os atendimentos devem ser sempre individuais. Quantas vagas você pode oferecer para atender, simultaneamente, mulheres do Mapa do Acolhimento?","placeholder":"1, 2, 3, 4, 5 ou mais","required":"true","value":"2"}]',
+      fields: [
+        {
+          uid: "field-1533733461113-5",
+          kind: "text",
+          label: "NOME",
+          placeholder: "",
+          required: "true",
+          value: "Hermínia"
+        },
+        {
+          uid: "field-1533733485653-99",
+          kind: "text",
+          label: "SOBRENOME",
+          placeholder: "",
+          required: "true",
+          value: "Amorim"
+        },
+        {
+          uid: "field-1533733493037-11",
+          kind: "email",
+          label: "SEU MELHOR EMAIL",
+          placeholder: "",
+          required: "true",
+          value: "herminia.amorim@email.com"
+        },
+        {
+          uid: "field-1533733501716-34",
+          kind: "text",
+          label: "CRP (Só números)",
+          placeholder: "",
+          required: "true",
+          value: "000000"
+        },
+        {
+          uid: "field-1533733650118-7",
+          kind: "text",
+          label: "CEP DE ATENDIMENTO (Só números)",
+          placeholder: "",
+          required: "true",
+          value: "22461010"
+        },
+        {
+          uid: "field-1533734419113-13",
+          kind: "text",
+          label: "TELEFONE PARA ATENDIMENTO (COM DDD)",
+          placeholder: "",
+          required: "true",
+          value: "1212121212"
+        },
+        {
+          uid: "field-1533734468460-38",
+          kind: "text",
+          label: "WHATSAPP (COM DDD)",
+          placeholder: "Obrigatório para contato com a equipe",
+          required: "true",
+          value: "1212121212"
+        },
+        {
+          uid: "field-1533734495315-40",
+          kind: "dropdown",
+          label:
+            "Como voluntária do Mapa do Acolhimento, você se dispõe a atender, pelo menos, uma (1) mulher que precisa de ajuda. Caso você tenha mais tempo disponível, você pode atender mais de uma (1) mulher, de maneira concomitante. Lembrando que os atendimentos devem ser sempre individuais. Quantas vagas você pode oferecer para atender, simultaneamente, mulheres do Mapa do Acolhimento?",
+          placeholder: "1, 2, 3, 4, 5 ou mais",
+          required: "true",
+          value: "2"
+        }
+      ],
       created_at: "2020-09-16T19:49:59.848563",
-      widget_id: 17628
+      widget_id: 17628,
+      external_id: 2345
     },
     {
-      fields:
-        '[{"uid":"field-1533733461113-5","kind":"text","label":"NOME","placeholder":"","required":"true","value":"Lígia"},{"uid":"field-1533733485653-99","kind":"text","label":"SOBRENOME","placeholder":"","required":"true","value":"Garcia"},{"uid":"field-1533733493037-11","kind":"email","label":"SEU MELHOR EMAIL","placeholder":"","required":"true","value":"ligia.garcia@email.com"},{"uid":"field-1533733501716-34","kind":"text","label":"CRP (Só números)","placeholder":"","required":"true","value":"0000000"},{"uid":"field-1533733650118-7","kind":"text","label":"CEP DE ATENDIMENTO (Só números)","placeholder":"","required":"true","value":"61760-906"},{"uid":"field-1533734419113-13","kind":"text","label":"TELEFONE PARA ATENDIMENTO (COM DDD)","placeholder":"","required":"true","value":"1212121212"},{"uid":"field-1533734468460-38","kind":"text","label":"WHATSAPP (COM DDD)","placeholder":"Obrigatório para contato com a equipe","required":"true","value":"1212121212"},{"uid":"field-1533734495315-40","kind":"dropdown","label":"Como voluntária do Mapa do Acolhimento, você se dispõe a atender, pelo menos, uma (1) mulher que precisa de ajuda. Caso você tenha mais tempo disponível, você pode atender mais de uma (1) mulher, de maneira concomitante. Lembrando que os atendimentos devem ser sempre individuais. Quantas vagas você pode oferecer para atender, simultaneamente, mulheres do Mapa do Acolhimento?","placeholder":"1, 2, 3, 4, 5 ou mais","required":"true","value":"2"}]',
+      fields: [
+        {
+          uid: "field-1533733461113-5",
+          kind: "text",
+          label: "NOME",
+          placeholder: "",
+          required: "true",
+          value: "Lígia"
+        },
+        {
+          uid: "field-1533733485653-99",
+          kind: "text",
+          label: "SOBRENOME",
+          placeholder: "",
+          required: "true",
+          value: "Garcia"
+        },
+        {
+          uid: "field-1533733493037-11",
+          kind: "email",
+          label: "SEU MELHOR EMAIL",
+          placeholder: "",
+          required: "true",
+          value: "ligia.garcia@email.com"
+        },
+        {
+          uid: "field-1533733501716-34",
+          kind: "text",
+          label: "CRP (Só números)",
+          placeholder: "",
+          required: "true",
+          value: "0000000"
+        },
+        {
+          uid: "field-1533733650118-7",
+          kind: "text",
+          label: "CEP DE ATENDIMENTO (Só números)",
+          placeholder: "",
+          required: "true",
+          value: "61760-906"
+        },
+        {
+          uid: "field-1533734419113-13",
+          kind: "text",
+          label: "TELEFONE PARA ATENDIMENTO (COM DDD)",
+          placeholder: "",
+          required: "true",
+          value: "1212121212"
+        },
+        {
+          uid: "field-1533734468460-38",
+          kind: "text",
+          label: "WHATSAPP (COM DDD)",
+          placeholder: "Obrigatório para contato com a equipe",
+          required: "true",
+          value: "1212121212"
+        },
+        {
+          uid: "field-1533734495315-40",
+          kind: "dropdown",
+          label:
+            "Como voluntária do Mapa do Acolhimento, você se dispõe a atender, pelo menos, uma (1) mulher que precisa de ajuda. Caso você tenha mais tempo disponível, você pode atender mais de uma (1) mulher, de maneira concomitante. Lembrando que os atendimentos devem ser sempre individuais. Quantas vagas você pode oferecer para atender, simultaneamente, mulheres do Mapa do Acolhimento?",
+          placeholder: "1, 2, 3, 4, 5 ou mais",
+          required: "true",
+          value: "2"
+        }
+      ],
       created_at: "2020-09-16T00:47:23.429155",
-      widget_id: 17628
+      widget_id: 17628,
+      external_id: 7890
     },
     {
-      fields:
-        '[{"uid":"field-1533733461113-5","kind":"text","label":"NOME","placeholder":"","required":"true","value":"Teresa"},{"uid":"field-1533733485653-99","kind":"text","label":"SOBRENOME","placeholder":"","required":"true","value":"Nascimento"},{"uid":"field-1533733493037-11","kind":"email","label":"SEU MELHOR EMAIL","placeholder":"","required":"true","value":"teresa.nascimento@email.com"},{"uid":"field-1533733501716-34","kind":"text","label":"CRP (Só números)","placeholder":"","required":"true","value":"08/06886"},{"uid":"field-1533733650118-7","kind":"text","label":"CEP DE ATENDIMENTO (Só números)","placeholder":"","required":"true","value":"82300332"},{"uid":"field-1533734419113-13","kind":"text","label":"TELEFONE PARA ATENDIMENTO (COM DDD)","placeholder":"","required":"true","value":"1212121212"},{"uid":"field-1533734468460-38","kind":"text","label":"WHATSAPP (COM DDD)","placeholder":"Obrigatório para contato com a equipe","required":"true","value":"1212121212"},{"uid":"field-1533734495315-40","kind":"dropdown","label":"Como voluntária do Mapa do Acolhimento, você se dispõe a atender, pelo menos, uma (1) mulher que precisa de ajuda. Caso você tenha mais tempo disponível, você pode atender mais de uma (1) mulher, de maneira concomitante. Lembrando que os atendimentos devem ser sempre individuais. Quantas vagas você pode oferecer para atender, simultaneamente, mulheres do Mapa do Acolhimento?","placeholder":"1, 2, 3, 4, 5 ou mais","required":"true","value":"2"}]',
+      fields: [
+        {
+          uid: "field-1533733461113-5",
+          kind: "text",
+          label: "NOME",
+          placeholder: "",
+          required: "true",
+          value: "Teresa"
+        },
+        {
+          uid: "field-1533733485653-99",
+          kind: "text",
+          label: "SOBRENOME",
+          placeholder: "",
+          required: "true",
+          value: "Nascimento"
+        },
+        {
+          uid: "field-1533733493037-11",
+          kind: "email",
+          label: "SEU MELHOR EMAIL",
+          placeholder: "",
+          required: "true",
+          value: "teresa.nascimento@email.com"
+        },
+        {
+          uid: "field-1533733501716-34",
+          kind: "text",
+          label: "CRP (Só números)",
+          placeholder: "",
+          required: "true",
+          value: "08/06886"
+        },
+        {
+          uid: "field-1533733650118-7",
+          kind: "text",
+          label: "CEP DE ATENDIMENTO (Só números)",
+          placeholder: "",
+          required: "true",
+          value: "82300332"
+        },
+        {
+          uid: "field-1533734419113-13",
+          kind: "text",
+          label: "TELEFONE PARA ATENDIMENTO (COM DDD)",
+          placeholder: "",
+          required: "true",
+          value: "1212121212"
+        },
+        {
+          uid: "field-1533734468460-38",
+          kind: "text",
+          label: "WHATSAPP (COM DDD)",
+          placeholder: "Obrigatório para contato com a equipe",
+          required: "true",
+          value: "1212121212"
+        },
+        {
+          uid: "field-1533734495315-40",
+          kind: "dropdown",
+          label:
+            "Como voluntária do Mapa do Acolhimento, você se dispõe a atender, pelo menos, uma (1) mulher que precisa de ajuda. Caso você tenha mais tempo disponível, você pode atender mais de uma (1) mulher, de maneira concomitante. Lembrando que os atendimentos devem ser sempre individuais. Quantas vagas você pode oferecer para atender, simultaneamente, mulheres do Mapa do Acolhimento?",
+          placeholder: "1, 2, 3, 4, 5 ou mais",
+          required: "true",
+          value: "2"
+        }
+      ],
       created_at: "2020-09-15T18:47:28.387207",
-      widget_id: 17628
+      widget_id: 17628,
+      external_id: 4567
     },
     {
-      fields:
-        '[{"uid":"field-1533733461113-5","kind":"text","label":"NOME","placeholder":"","required":"true","value":"Angélica"},{"uid":"field-1533733485653-99","kind":"text","label":"SOBRENOME","placeholder":"","required":"true","value":"Lopes"},{"uid":"field-1533733493037-11","kind":"email","label":"SEU MELHOR EMAIL","placeholder":"","required":"true","value":"angelica.lopes@email.com"},{"uid":"field-1533733501716-34","kind":"text","label":"CRP (Só números)","placeholder":"","required":"true","value":"00000000000"},{"uid":"field-1533733650118-7","kind":"text","label":"CEP DE ATENDIMENTO (Só números)","placeholder":"","required":"true","value":"05422030"},{"uid":"field-1533734419113-13","kind":"text","label":"TELEFONE PARA ATENDIMENTO (COM DDD)","placeholder":"","required":"true","value":"12121212"},{"uid":"field-1533734468460-38","kind":"text","label":"WHATSAPP (COM DDD)","placeholder":"Obrigatório para contato com a equipe","required":"true","value":"12121212"},{"uid":"field-1533734495315-40","kind":"dropdown","label":"Como voluntária do Mapa do Acolhimento, você se dispõe a atender, pelo menos, uma (1) mulher que precisa de ajuda. Caso você tenha mais tempo disponível, você pode atender mais de uma (1) mulher, de maneira concomitante. Lembrando que os atendimentos devem ser sempre individuais. Quantas vagas você pode oferecer para atender, simultaneamente, mulheres do Mapa do Acolhimento?","placeholder":"1, 2, 3, 4, 5 ou mais","required":"true","value":"1"}]',
+      fields: [
+        {
+          uid: "field-1533733461113-5",
+          kind: "text",
+          label: "NOME",
+          placeholder: "",
+          required: "true",
+          value: "Angélica"
+        },
+        {
+          uid: "field-1533733485653-99",
+          kind: "text",
+          label: "SOBRENOME",
+          placeholder: "",
+          required: "true",
+          value: "Lopes"
+        },
+        {
+          uid: "field-1533733493037-11",
+          kind: "email",
+          label: "SEU MELHOR EMAIL",
+          placeholder: "",
+          required: "true",
+          value: "angelica.lopes@email.com"
+        },
+        {
+          uid: "field-1533733501716-34",
+          kind: "text",
+          label: "CRP (Só números)",
+          placeholder: "",
+          required: "true",
+          value: "00000000000"
+        },
+        {
+          uid: "field-1533733650118-7",
+          kind: "text",
+          label: "CEP DE ATENDIMENTO (Só números)",
+          placeholder: "",
+          required: "true",
+          value: "05422030"
+        },
+        {
+          uid: "field-1533734419113-13",
+          kind: "text",
+          label: "TELEFONE PARA ATENDIMENTO (COM DDD)",
+          placeholder: "",
+          required: "true",
+          value: "12121212"
+        },
+        {
+          uid: "field-1533734468460-38",
+          kind: "text",
+          label: "WHATSAPP (COM DDD)",
+          placeholder: "Obrigatório para contato com a equipe",
+          required: "true",
+          value: "12121212"
+        },
+        {
+          uid: "field-1533734495315-40",
+          kind: "dropdown",
+          label:
+            "Como voluntária do Mapa do Acolhimento, você se dispõe a atender, pelo menos, uma (1) mulher que precisa de ajuda. Caso você tenha mais tempo disponível, você pode atender mais de uma (1) mulher, de maneira concomitante. Lembrando que os atendimentos devem ser sempre individuais. Quantas vagas você pode oferecer para atender, simultaneamente, mulheres do Mapa do Acolhimento?",
+          placeholder: "1, 2, 3, 4, 5 ou mais",
+          required: "true",
+          value: "1"
+        }
+      ],
       created_at: "2020-09-14T22:10:46.092246",
-      widget_id: 17628
+      widget_id: 17628,
+      external_id: 1234
     }
   ];
   describe("there's an entry with that e-mail", () => {
-    it("should return an object with email/name/lastname/cep, part. 3", () => {
-      const data = filterByEmail(entries, "herminia.amorim@email.com");
+    it("should return an object with email/name/lastname/cep/external_id, part. 3", () => {
+      const data = customFilterByEmail([entries[0]]);
       expect(data).toHaveProperty("email", "herminia.amorim@email.com");
       expect(data).toHaveProperty("cep", "22461010");
       expect(data).toHaveProperty("lastname", "Amorim");
       expect(data).toHaveProperty("name", "Hermínia");
+      expect(data).toHaveProperty("external_id", "2345");
     });
-    it("should return an object with email/name/lastname/cep, part. 4", () => {
-      const data = filterByEmail(entries, "ligia.garcia@email.com");
+    it("should return an object with email/name/lastname/cep/external_id, part. 4", () => {
+      const data = customFilterByEmail([entries[1]]);
       expect(data).toHaveProperty("email", "ligia.garcia@email.com");
       expect(data).toHaveProperty("cep", "61760-906");
       expect(data).toHaveProperty("lastname", "Garcia");
       expect(data).toHaveProperty("name", "Lígia");
+      expect(data).toHaveProperty("external_id", "7890");
     });
-    it("should return an object with email/name/lastname/cep, part. 2", () => {
-      const data = filterByEmail(entries, "teresa.nascimento@email.com");
+    it("should return an object with email/name/lastname/cep/external_id, part. 2", () => {
+      const data = customFilterByEmail([entries[2]]);
       expect(data).toHaveProperty("email", "teresa.nascimento@email.com");
       expect(data).toHaveProperty("cep", "82300332");
       expect(data).toHaveProperty("lastname", "Nascimento");
       expect(data).toHaveProperty("name", "Teresa");
+      expect(data).toHaveProperty("external_id", "4567");
     });
-    it("should return an object with email/name/lastname/cep, part. 1", () => {
-      const data = filterByEmail(entries, "angelica.lopes@email.com");
+    it("should return an object with email/name/lastname/cep/external_id, part. 1", () => {
+      const data = customFilterByEmail([entries[3]]);
       expect(data).toHaveProperty("email", "angelica.lopes@email.com");
       expect(data).toHaveProperty("cep", "05422030");
       expect(data).toHaveProperty("lastname", "Lopes");
       expect(data).toHaveProperty("name", "Angélica");
+      expect(data).toHaveProperty("external_id", "1234");
     });
   });
   describe("there's no entry with that e-mail", () => {
     it("should return undefined, part. 1", () => {
-      expect(filterByEmail(entries, "nossas@email.com")).toStrictEqual(
-        undefined
-      );
-    });
-    it("should return undefined, part. 2", () => {
-      expect(filterByEmail(entries, "bonde@email.com")).toStrictEqual(
-        undefined
-      );
-    });
-    it("should return undefined, part. 3", () => {
-      expect(filterByEmail(entries, "teste@email.com")).toStrictEqual(
-        undefined
-      );
-    });
-    it("should return undefined, part. 4", () => {
-      expect(filterByEmail(entries, "ligia.garci@email.com")).toStrictEqual(
-        undefined
-      );
+      expect(customFilterByEmail([])).toStrictEqual(undefined);
     });
   });
 });

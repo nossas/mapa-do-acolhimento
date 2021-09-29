@@ -5,7 +5,7 @@ import dbg from "./dbg";
 
 const writeFile = promisify(fs.writeFile);
 
-const log = dbg.extend("saveStateToFile");
+const log = dbg.child({ labels: { process: "saveStateToFile" } });
 
 const saveStateToFile = async (
   filename: string,
@@ -16,9 +16,9 @@ const saveStateToFile = async (
       path.resolve("src/__tests__/data", `${filename}.json`),
       JSON.stringify(state)
     );
-    log(`saved to file '${filename}'.`);
+    log.info(`saved to file '${filename}'.`);
   } catch (e) {
-    log(e);
+    log.error(e);
   }
 };
 

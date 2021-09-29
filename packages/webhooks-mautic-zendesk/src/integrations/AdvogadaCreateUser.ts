@@ -14,16 +14,31 @@ interface InputFromMautic {
   createdAt: string;
   name: string;
   cep?: string;
+  registration_number: string | null;
+  phone: string | null;
+  whatsapp: string | null;
 }
 
 class AdvogadaCreateUser extends Base {
   organization = "ADVOGADA";
+  private apm: any;
 
-  constructor(res: Response) {
+  constructor(res: Response, apm) {
     super("AdvogadaCreateUser", "users/create_or_update", res);
+    this.apm = apm;
   }
 
-  start = async (data, { createdAt, name, cep }: InputFromMautic) => {
+  start = async (
+    data,
+    {
+      createdAt,
+      name,
+      cep,
+      registration_number,
+      phone,
+      whatsapp
+    }: InputFromMautic
+  ) => {
     let newData = {
       ...data,
       cep
@@ -49,7 +64,7 @@ class AdvogadaCreateUser extends Base {
         .transform(obj => {
           const {
             email,
-            phone,
+            phone: mauticPhone,
             latitude,
             longitude,
             address,
@@ -64,10 +79,13 @@ class AdvogadaCreateUser extends Base {
           return {
             name,
             email,
-            phone,
+            phone: mauticPhone || phone,
             organization_id: this.organizations[this.organization],
             user_fields: {
               ...removeFalsyValues(userFields),
+              registration_number:
+                userFields.registration_number || registration_number,
+              whatsapp: userFields.whatsapp || whatsapp,
               cep,
               address,
               state,
@@ -123,6 +141,17 @@ class AdvogadaCreateUser extends Base {
         }
       );
 
+      this.apm.setCustomContext({
+        zendesk: {
+          registration_number: zendeskData.user_fields?.registration_number,
+          cep: zendeskData.user_fields?.cep,
+          username: zendeskData.name,
+          email: zendeskData.email,
+          state: zendeskData.user_fields?.state,
+          city: zendeskData.user_fields?.city
+        }
+      });
+
       const dataToBeSent = {
         user: {
           ...zendeskData
@@ -132,7 +161,8 @@ class AdvogadaCreateUser extends Base {
         response: await this.send(dataToBeSent)
       };
     } catch (e) {
-      return this.dbg("validation failed", e);
+      this.apm.captureError(e);
+      return this.dbg.error("validation failed", e);
     }
   };
 }

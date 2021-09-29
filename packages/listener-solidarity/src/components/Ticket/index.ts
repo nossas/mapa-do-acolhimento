@@ -11,9 +11,11 @@ const limiter = new Bottleneck({
   minTime: 2000
 });
 
-const createTicketLog = logger.child({ module: "createTicket" });
-const fetchUserTicketsLog = logger.child({ module: "fetchUserTickets" });
-const log = logger.child({ module: "createZendeskTickets" });
+const createTicketLog = logger.child({ labels: { process: "createTicket" } });
+const fetchUserTicketsLog = logger.child({
+  labels: { process: "fetchUserTickets" }
+});
+const log = logger.child({ labels: { process: "createZendeskTickets" } });
 
 const dicio = {
   360014379412: "status_acolhimento",
@@ -58,7 +60,7 @@ const saveTicketInHasura = async (ticket: Ticket) => {
 };
 
 const createTicket = (ticket): Promise<boolean | undefined> => {
-  createTicketLog.info(`${new Date()}: CREATE TICKET`);
+  createTicketLog.info("CREATE TICKET");
   // ADD YUP VALIDATION
   return new Promise(resolve => {
     return client.tickets.create({ ticket }, (err, _req, result) => {
@@ -86,7 +88,7 @@ const createTicket = (ticket): Promise<boolean | undefined> => {
 export const fetchUserTickets = async ({
   requester_id
 }): Promise<Ticket[] | undefined> => {
-  fetchUserTicketsLog.info(`${new Date()}: LIST USER TICKETS`);
+  fetchUserTicketsLog.info("LIST USER TICKETS");
   return new Promise(resolve => {
     return client.tickets.listByUserRequested(
       requester_id,
@@ -106,7 +108,7 @@ export const fetchUserTickets = async ({
 };
 
 export default async (tickets: PartialTicket[]) => {
-  log.info(`${new Date()}: Entering createZendeskTickets`);
+  log.info("Entering createZendeskTickets");
   const createTickets = tickets.map(async ticket => {
     const userTickets = await limiter.schedule(() => fetchUserTickets(ticket));
     if (!userTickets) return undefined;

@@ -2,7 +2,7 @@ import urljoin from "url-join";
 import axios from "axios";
 import dbg from "./dbg";
 
-const log = dbg.extend("base");
+const log = dbg.child({ labels: { process: "base" } });
 
 const get = async <T>(url: string, params?) => {
   const { ZENDESK_API_URL, ZENDESK_API_TOKEN, ZENDESK_API_USER } = process.env;
@@ -16,7 +16,7 @@ const get = async <T>(url: string, params?) => {
       params
     });
   } catch (e) {
-    return log(e.response.data);
+    return log.error(e.response.data);
   }
 };
 
@@ -31,7 +31,7 @@ const put = async <T>(url: string, data?) => {
       }
     });
   } catch (e) {
-    return log(e.response.data);
+    return log.error(e.response.data);
   }
 };
 

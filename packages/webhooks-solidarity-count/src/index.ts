@@ -1,31 +1,24 @@
 import dotenv from "dotenv";
 import { install } from "source-map-support";
+import apmNode from "elastic-apm-node";
 
 install();
-
+const apm = apmNode.start({
+  captureBody: 'all'
+});
 dotenv.config();
 
-// const {
-//   ELASTIC_APM_SECRET_TOKEN: secretToken,
-//   ELASTIC_APM_SERVER_URL: serverUrl,
-//   ELASTIC_APM_SERVICE_NAME: serviceName
-// } = process.env;
-
-// import apm from "elastic-apm-node";
-
-// apm.start({
-//   secretToken,
-//   serverUrl,
-//   serviceName
-// });
-
-import Server from "./Server";
+import Router from "./Router";
 import checkConfig from "./checkConfig";
-import dbg from "./dbg";
+import log from "./dbg";
 
 try {
   checkConfig();
-  Server();
-} catch (e) {
-  dbg(e);
+  const { PORT } = process.env;
+  Router(apm).listen(Number(PORT), "0.0.0.0", () => {
+    log.info(`Server listen on PORT ${PORT}`);
+  });
+} catch (e: any) {
+  log.error(e);
+  apm.captureError(e);
 }

@@ -4,7 +4,7 @@ import { handleIntegration } from "../../components";
 import { Widget } from "../../types";
 import logger from "../../logger";
 
-const log = logger.child({ module: "subscriptionFormEntries" });
+const log = logger.child({ labels: { process: "subscriptionFormEntries" } });
 
 const FORM_ENTRIES_SUBSCRIPTION = gql`
   subscription pipeline_form_entries($widgets: [Int!], $community_id: Int!) {
@@ -29,7 +29,9 @@ const error = err => {
   log.error("Receiving error on subscription GraphQL API: %o", err);
 };
 
-export default async (widgets: Widget[]): Promise<unknown> => {
+export default async (widgets: Widget[], apm): Promise<unknown> => {
+  const transaction = apm.startTransaction("subscriptionFormEntries");
+
   try {
     const observable = GraphQLAPI.subscribe({
       query: FORM_ENTRIES_SUBSCRIPTION,
@@ -38,11 +40,20 @@ export default async (widgets: Widget[]): Promise<unknown> => {
         community_id: Number(process.env.COMMUNITY_ID)
       },
       fetchPolicy: "network-only"
-    }).subscribe({ next: handleIntegration(widgets), error });
+    }).subscribe({ next: handleIntegration(widgets, apm), error });
+
+    transaction.result = 200;
+    transaction.end();
 
     return observable;
   } catch (err) {
     log.error("failed on subscription: %o", err);
-    return undefined;
+
+    apm.captureError(err);
+
+    transaction.result = 500;
+    transaction.end();
+
+    return err;
   }
 };
