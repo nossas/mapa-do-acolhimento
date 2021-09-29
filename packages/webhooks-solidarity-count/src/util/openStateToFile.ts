@@ -14,7 +14,7 @@ const openStateFile = async (filename: string) => {
     const state = buffer.toString();
     return JSON.parse(state);
   } catch (e) {
-    log.error(e);
+    log.error(e + "");
     return null;
   }
 };

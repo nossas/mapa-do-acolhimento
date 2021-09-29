@@ -36,7 +36,7 @@ const Router = (apm): Express.Express =>
         return res.status(200).json(response);
       } catch (e: any) {
         log.error(e.msg);
-        apm.captureError(new Error(e.msg));
+        // apm.captureError(new Error(e.msg));
         return res.status(e.status).json(e.msg);
       }
     });

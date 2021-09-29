@@ -23,8 +23,8 @@ throng({
         widgets.map(w => w.id)
       );
       await subscriptionFormEntries(widgets, apm);
-    } catch (err: any) {
-      apm.captureError(err);
+    } catch (err) {
+      apm.captureError(err + "");
 
       transaction.result = 500;
       transaction.end();

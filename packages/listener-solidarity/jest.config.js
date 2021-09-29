@@ -10,9 +10,4 @@ module.exports = {
   setupFiles: ["<rootDir>/src/beforeEachTest.ts"],
   modulePathIgnorePatterns: ["dist/"],
   preset: "ts-jest",
-  globals: {
-    "ts-jest": {
-      packageJson: "package.json"
-    }
-  }
 };
