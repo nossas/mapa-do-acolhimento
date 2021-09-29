@@ -1,22 +1,9 @@
-import apm from "elastic-apm-node";
-
-const {
-  ELASTIC_APM_SECRET_TOKEN: secretToken,
-  ELASTIC_APM_SERVER_URL: serverUrl,
-  ELASTIC_APM_SERVICE_NAME: serviceName
-} = process.env;
-
-let apmAgent;
-if (secretToken && serverUrl && serviceName) {
-  apmAgent = apm.start({
-    secretToken,
-    serverUrl,
-    serviceName,
-    environment: process.env.NODE_ENV
-  });
-}
-
+import apmNode from "elastic-apm-node";
 import throng from "throng";
+const apm = apmNode.start({
+  captureBody: 'all'
+});
+
 import { subscriptionFormEntries } from "./graphql/subscriptions";
 import widgets from "./form_entries_mapping";
 import logger from "./logger";
@@ -27,7 +14,7 @@ throng({
   workers: 1,
   start: async (id: number) => {
     log.info(`Started worker ${id}`);
-    const transaction = apmAgent.startTransaction("worker");
+    const transaction: any = apm.startTransaction("worker");
 
     try {
       log.info("Fetching solidarity users...");
@@ -35,9 +22,9 @@ throng({
         "Call subscriptions to form_entries... %s",
         widgets.map(w => w.id)
       );
-      await subscriptionFormEntries(widgets, apmAgent);
-    } catch (err) {
-      apmAgent.captureError(err);
+      await subscriptionFormEntries(widgets, apm);
+    } catch (err: any) {
+      apm.captureError(err);
 
       transaction.result = 500;
       transaction.end();
