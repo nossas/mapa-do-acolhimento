@@ -1,6 +1,10 @@
+import apmNode from "elastic-apm-node";
 import throng from "throng";
 import { subscriptionSolidarityTickets } from "./graphql/subscriptions";
 import dbg from "./dbg";
+apmNode.start({
+  captureBody: 'all'
+});
 
 const log = dbg.extend("main");
 
