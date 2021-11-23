@@ -80,7 +80,7 @@ importers:
       '@types/url-join': 4.0.1
       '@types/yup': 0.29.13
       jest: 26.6.3
-      ts-jest: 26.5.6_jest@26.6.3+typescript@3.9.5
+      ts-jest: 26.5.6_jest@26.6.3
 
   packages/components:
     specifiers:
@@ -145,7 +145,7 @@ importers:
       rimraf: 3.0.2
       standard-version: 6.0.1
       subscriptions-transport-ws: 0.9.19_graphql@15.5.1
-      ts-jest: 26.5.6_jest@26.6.3+typescript@3.9.5
+      ts-jest: 26.5.6_jest@26.6.3
 
   packages/listener-match:
     specifiers:
@@ -218,7 +218,7 @@ importers:
       jest-extended: 0.11.5
       rimraf: 3.0.2
       subscriptions-transport-ws: 0.9.19_graphql@15.6.0
-      ts-jest: 26.5.6_jest@26.0.1+typescript@3.9.5
+      ts-jest: 26.5.6_jest@26.0.1
 
   packages/listener-solidarity:
     specifiers:
@@ -279,7 +279,7 @@ importers:
       faker: 4.1.0
       graphql: 14.7.0
       graphql-tag: 2.12.5_graphql@14.7.0
-      node-zendesk: 1.4.0
+      node-zendesk: 2.1.0
       pino: 6.13.3
       throng: 4.0.0
       ws: 7.5.5
@@ -297,7 +297,7 @@ importers:
       jest: 26.0.1
       rimraf: 3.0.2
       subscriptions-transport-ws: 0.9.19_graphql@14.7.0
-      ts-jest: 26.5.6_jest@26.0.1+typescript@3.9.5
+      ts-jest: 26.5.6_jest@26.0.1
 
   packages/webhooks-mautic-zendesk:
     specifiers:
@@ -346,7 +346,7 @@ importers:
       '@types/yup': 0.29.13
       jest: 26.6.3
       supertest: 6.1.6
-      ts-jest: 26.5.6_jest@26.6.3+typescript@3.9.5
+      ts-jest: 26.5.6_jest@26.6.3
 
   packages/webhooks-solidarity-count:
     specifiers:
@@ -383,7 +383,7 @@ importers:
       pino: 6.13.3
       ramda: 0.26.1
       source-map-support: 0.5.20
-      ts-jest: 26.5.6_jest@26.0.1+typescript@3.9.5
+      ts-jest: 26.5.6_jest@26.0.1
       url-join: 4.0.1
       yup: 0.27.0
     devDependencies:
@@ -2638,11 +2638,6 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
-  /ansi-regex/5.0.0:
-    resolution: {integrity: sha512-bY6fj56OUQ0hU1KjFNDQuJFezqKdrAyFdIevADiqrWHwSlbmBNMHp5ak2f40Pm8JTFyM2mqxkG6ngkHO11f/lg==}
-    engines: {node: '>=8'}
-    dev: false
-
   /ansi-regex/5.0.1:
     resolution: {integrity: sha512-quJQXlTSUGL2LH9SUXo8VwsY4soanhgo6LNSm84E1LBcE8s3O0wpdiRzyR9z/ZZJMlMWv37qOOb9pdJlMUEKFQ==}
     engines: {node: '>=8'}
@@ -3603,8 +3598,8 @@ packages:
   /cliui/7.0.4:
     resolution: {integrity: sha512-OcRE68cOsVMXp1Yvonl/fzkQOyjLSu/8bhPDfQt0e0/Eb283TKP20Fs2MqoPsr9SwA595rRCA+QMzYc9nBP+JQ==}
     dependencies:
-      string-width: 4.2.2
-      strip-ansi: 6.0.0
+      string-width: 4.2.3
+      strip-ansi: 6.0.1
       wrap-ansi: 7.0.0
     dev: false
 
@@ -8717,15 +8712,6 @@ packages:
       strip-ansi: 5.2.0
     dev: true
 
-  /string-width/4.2.2:
-    resolution: {integrity: sha512-XBJbT3N4JhVumXE0eoLU9DCjcaF92KLNqTmFCnG1pf8duUxFGwtP6AD6nkjw9a3IdiRtL3E2w3JDiE/xi3vOeA==}
-    engines: {node: '>=8'}
-    dependencies:
-      emoji-regex: 8.0.0
-      is-fullwidth-code-point: 3.0.0
-      strip-ansi: 6.0.0
-    dev: false
-
   /string-width/4.2.3:
     resolution: {integrity: sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==}
     engines: {node: '>=8'}
@@ -8802,13 +8788,6 @@ packages:
     dependencies:
       ansi-regex: 4.1.0
     dev: true
-
-  /strip-ansi/6.0.0:
-    resolution: {integrity: sha512-AuvKTrTfQNYNIctbR1K/YGTR1756GycPsg7b9bdV9Duqur4gv6aKqHXah67Z8ImS7WEz5QVcOtlfW2rZEugt6w==}
-    engines: {node: '>=8'}
-    dependencies:
-      ansi-regex: 5.0.0
-    dev: false
 
   /strip-ansi/6.0.1:
     resolution: {integrity: sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==}
@@ -9230,7 +9209,7 @@ packages:
       tslib: 2.3.1
     dev: false
 
-  /ts-jest/26.5.6_jest@26.0.1+typescript@3.9.5:
+  /ts-jest/26.5.6_jest@26.0.1:
     resolution: {integrity: sha512-rua+rCP8DxpA8b4DQD/6X2HQS8Zy/xzViVYfEs2OQu68tkCuKLV0Md8pmX55+W24uRIyAsf/BajRfxOs+R2MKA==}
     engines: {node: '>= 10'}
     hasBin: true
@@ -9248,10 +9227,9 @@ packages:
       make-error: 1.3.6
       mkdirp: 1.0.4
       semver: 7.3.5
-      typescript: 3.9.5
       yargs-parser: 20.2.9
 
-  /ts-jest/26.5.6_jest@26.6.3+typescript@3.9.5:
+  /ts-jest/26.5.6_jest@26.6.3:
     resolution: {integrity: sha512-rua+rCP8DxpA8b4DQD/6X2HQS8Zy/xzViVYfEs2OQu68tkCuKLV0Md8pmX55+W24uRIyAsf/BajRfxOs+R2MKA==}
     engines: {node: '>= 10'}
     hasBin: true
@@ -9269,7 +9247,6 @@ packages:
       make-error: 1.3.6
       mkdirp: 1.0.4
       semver: 7.3.5
-      typescript: 3.9.5
       yargs-parser: 20.2.9
     dev: true
 
@@ -9733,7 +9710,7 @@ packages:
       escalade: 3.1.1
       get-caller-file: 2.0.5
       require-directory: 2.1.1
-      string-width: 4.2.2
+      string-width: 4.2.3
       y18n: 5.0.8
       yargs-parser: 20.2.9
     dev: false
