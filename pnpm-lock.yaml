@@ -251,7 +251,7 @@ importers:
       graphql: ^14.7.0
       graphql-tag: ^2.12.5
       jest: 26.0.1
-      node-zendesk: 1.4.0
+      node-zendesk: 2.1.0
       pino: ^6.13.3
       rimraf: ~3.0.2
       subscriptions-transport-ws: ^0.9.19
