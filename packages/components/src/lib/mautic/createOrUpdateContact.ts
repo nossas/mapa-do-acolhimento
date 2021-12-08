@@ -3,7 +3,7 @@ import { getToken } from "../../utils";
 import { Contact, FullContact } from "../../types";
 import logger from "./childLogger";
 
-const log = logger.child({ module: "createOrUpdateContact" });
+const log = logger.child({ label: { process: "createOrUpdateContact" } });
 
 /**
  * Creates or updates a Mautic Contact based on the params id and body
@@ -11,7 +11,7 @@ const log = logger.child({ module: "createOrUpdateContact" });
 export default async (
   id = 0,
   body: Contact
-): Promise<{ contact: FullContact } | undefined> => {
+): Promise<{ contact: FullContact }> => {
   const {
     MAUTIC_API_URL,
     MAUTIC_USERNAME = "",
@@ -35,6 +35,6 @@ export default async (
     return res && res.data;
   } catch (e) {
     log.error(e.response.data.errors);
-    return undefined;
+    return e.response.data.errors;
   }
 };

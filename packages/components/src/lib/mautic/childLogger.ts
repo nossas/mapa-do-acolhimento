@@ -1,3 +1,3 @@
 import logger from "../../logger";
 
-export default logger.child({ component: "mautic" });
+export default logger.child({ module: "mautic" });
