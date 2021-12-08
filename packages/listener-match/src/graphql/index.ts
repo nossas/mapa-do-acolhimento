@@ -8,6 +8,7 @@ import { WebSocketLink } from "apollo-link-ws";
 import { getMainDefinition } from "apollo-utilities";
 import fetch from "cross-fetch";
 import ws from "ws";
+import { exit } from "process";
 
 // if (!process.env.JWT_TOKEN && !process.env.HASURA_SECRET) {
 //   throw new Error(
@@ -56,6 +57,7 @@ wsClient.onReconnected(() => {
 
 wsClient.onDisconnected(() => {
   console.log("disconnected");
+  exit(1);
 });
 
 // Create a WebSocket link:
