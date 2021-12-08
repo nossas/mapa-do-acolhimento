@@ -80,11 +80,12 @@ importers:
       '@types/url-join': 4.0.0
       '@types/yup': 0.29.11
       jest: 26.6.3
-      ts-jest: 26.4.4_jest@26.6.3
+      ts-jest: 26.4.4_jest@26.6.3+typescript@3.9.5
 
   packages/components:
     specifiers:
       '@bitjson/npm-scripts-info': ^1.0.0
+      '@elastic/ecs-pino-format': ^1.1.2
       '@types/faker': ^4.1.12
       '@types/jest': ^26.0.5
       '@types/node': ^14.0.24
@@ -115,6 +116,7 @@ importers:
       ws: ^7.3.1
       yup: ^0.29.1
     dependencies:
+      '@elastic/ecs-pino-format': 1.1.2
       apollo-cache-inmemory: 1.6.6_graphql@15.4.0
       apollo-client: 2.6.10_graphql@15.4.0
       apollo-link: 1.2.14_graphql@15.4.0
@@ -145,7 +147,7 @@ importers:
       rimraf: 3.0.2
       standard-version: 6.0.1
       subscriptions-transport-ws: 0.9.18_graphql@15.4.0
-      ts-jest: 26.4.4_jest@26.6.3
+      ts-jest: 26.4.4_jest@26.6.3+typescript@3.9.5
 
   packages/listener-match:
     specifiers:
@@ -220,7 +222,7 @@ importers:
       jest-extended: 0.11.5
       rimraf: 3.0.2
       subscriptions-transport-ws: 0.9.18_graphql@15.4.0
-      ts-jest: 26.4.4_jest@26.0.1
+      ts-jest: 26.4.4_jest@26.0.1+typescript@3.9.5
 
   packages/listener-solidarity:
     specifiers:
@@ -295,7 +297,7 @@ importers:
       jest: 26.0.1
       rimraf: 3.0.2
       subscriptions-transport-ws: 0.9.18_graphql@14.7.0
-      ts-jest: 26.4.4_jest@26.0.1
+      ts-jest: 26.4.4_jest@26.0.1+typescript@3.9.5
 
   packages/webhooks-mautic-registry:
     specifiers:
@@ -330,7 +332,7 @@ importers:
       '@types/source-map-support': 0.5.3
       '@types/supertest': 2.0.10
       jest: 26.6.3
-      ts-jest: 26.4.4_jest@26.6.3
+      ts-jest: 26.4.4_jest@26.6.3+typescript@3.9.5
 
   packages/webhooks-mautic-zendesk:
     specifiers:
@@ -375,7 +377,7 @@ importers:
       '@types/url-join': 4.0.0
       '@types/yup': 0.29.11
       jest: 26.6.3
-      ts-jest: 26.4.4_jest@26.6.3
+      ts-jest: 26.4.4_jest@26.6.3+typescript@3.9.5
 
   packages/webhooks-solidarity-count:
     specifiers:
@@ -410,7 +412,7 @@ importers:
       express: 4.17.1
       ramda: 0.26.1
       source-map-support: 0.5.19
-      ts-jest: 26.4.4_jest@26.0.1
+      ts-jest: 26.4.4_jest@26.0.1+typescript@3.9.5
       url-join: 4.0.1
       yup: 0.27.0
     devDependencies:
@@ -761,8 +763,6 @@ packages:
 
   /@babel/traverse/7.12.10_supports-color@5.5.0:
     resolution: {integrity: sha512-6aEtf0IeRgbYWzta29lePeYSk+YAFIC3kyqESeft8o5CkFlYIMX+EQDDWEiAQ9LHOA3d0oHdgrSsID/CKqXJlg==}
-    peerDependencies:
-      supports-color: '*'
     dependencies:
       '@babel/code-frame': 7.12.11
       '@babel/generator': 7.12.11
@@ -773,6 +773,8 @@ packages:
       debug: 4.3.1_supports-color@5.5.0
       globals: 11.12.0
       lodash: 4.17.20
+    transitivePeerDependencies:
+      - supports-color
     dev: false
 
   /@babel/types/7.12.11:
@@ -806,11 +808,18 @@ packages:
     resolution: {integrity: sha512-MDLb2aFeGjg46O5mLpdCzT5yOUDnXToJSrco2ShqGIXxNJaM8uJjX+4nd+hRYV4Vex8YJyDtOFEVBldQct6ndg==}
     engines: {node: '>=10'}
     dependencies:
-      fast-json-stringify: 2.7.3
+      fast-json-stringify: 2.7.4
     dev: false
 
   /@elastic/ecs-pino-format/1.1.1:
     resolution: {integrity: sha512-I7SzS0JYA8tdfsw4aTR+33HWWCaU7QY759kzt4sXm+O1waILaUWMzW3C2RL0ihQ66M99t+XMhRrA4cKStkHNXg==}
+    engines: {node: '>=10'}
+    dependencies:
+      '@elastic/ecs-helpers': 1.1.0
+    dev: false
+
+  /@elastic/ecs-pino-format/1.1.2:
+    resolution: {integrity: sha512-dnvY6mTo8c8njXbUcFEljbKw4hDaAI0hOVUZkwKMYV2kbKZFyFM5ynArZRGJDtk5VHs/5UbQdkTmOJprp0fgTg==}
     engines: {node: '>=10'}
     dependencies:
       '@elastic/ecs-helpers': 1.1.0
@@ -2438,6 +2447,8 @@ packages:
       regexpp: 3.1.0
       tsutils: 3.17.1_typescript@3.9.5
       typescript: 3.9.5
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /@typescript-eslint/experimental-utils/2.34.0_eslint@6.8.0+typescript@3.9.5:
@@ -2445,13 +2456,15 @@ packages:
     engines: {node: ^8.10.0 || ^10.13.0 || >=11.10.1}
     peerDependencies:
       eslint: '*'
-      typescript: '*'
     dependencies:
       '@types/json-schema': 7.0.6
       '@typescript-eslint/typescript-estree': 2.34.0_typescript@3.9.5
       eslint: 6.8.0
       eslint-scope: 5.1.1
       eslint-utils: 2.1.0
+    transitivePeerDependencies:
+      - supports-color
+      - typescript
     dev: true
 
   /@typescript-eslint/parser/2.34.0_eslint@6.8.0+typescript@3.9.5:
@@ -2470,6 +2483,8 @@ packages:
       eslint: 6.8.0
       eslint-visitor-keys: 1.3.0
       typescript: 3.9.5
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /@typescript-eslint/typescript-estree/2.34.0_typescript@3.9.5:
@@ -2489,6 +2504,8 @@ packages:
       semver: 7.3.4
       tsutils: 3.17.1_typescript@3.9.5
       typescript: 3.9.5
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /@ungap/global-this/0.4.3:
@@ -2576,6 +2593,8 @@ packages:
     engines: {node: '>= 6.0.0'}
     dependencies:
       debug: 4.3.1
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /ajv/6.12.6:
@@ -2768,12 +2787,13 @@ packages:
   /apollo-link-ws/1.0.20_1a57dc41c5bb360fc012030499aa0880:
     resolution: {integrity: sha512-mjSFPlQxmoLArpHBeUb2Xj+2HDYeTaJqFGOqQ+I8NVJxgL9lJe84PDWcPah/yMLv3rB7QgBDSuZ0xoRFBPlySw==}
     peerDependencies:
-      graphql: '*'
       subscriptions-transport-ws: ^0.9.0
     dependencies:
       apollo-link: 1.2.14_graphql@14.7.0
       subscriptions-transport-ws: 0.9.18_graphql@14.7.0
       tslib: 1.14.1
+    transitivePeerDependencies:
+      - graphql
     dev: false
 
   /apollo-link-ws/1.0.20_491719fd7f80adf32a3f94f9d5debb8e:
@@ -3014,6 +3034,8 @@ packages:
       eslint: 6.8.0
       eslint-visitor-keys: 1.3.0
       resolve: 1.19.0
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /babel-jest/26.6.3_@babel+core@7.12.10:
@@ -3155,12 +3177,14 @@ packages:
     resolution: {integrity: sha512-OOG3XnrcYRTPwQRoS+652bSiM9iLYMFOUE7KZIU+44WKbz8L+OaKMI+/lEEu3FK2QOLeOoDlNjiR/dFbF1x+6w==}
     peerDependencies:
       react: '>=16'
-      react-dom: '*'
     dependencies:
       final-form: 4.20.1
       react: 16.14.0
       react-final-form: 6.5.2_final-form@4.20.1+react@16.14.0
       styled-components: 5.2.1_react-dom@16.14.0+react@16.14.0
+    transitivePeerDependencies:
+      - react-dom
+      - react-is
     dev: false
 
   /bonde-core-tools/0.1.6:
@@ -3181,12 +3205,18 @@ packages:
       react-router: 5.2.0_react@16.14.0
       react-router-dom: 5.2.0_react@16.14.0
       styled-components: 5.2.1_react-dom@16.14.0+react@16.14.0
+    transitivePeerDependencies:
+      - bufferutil
+      - canvas
+      - react-is
+      - subscriptions-transport-ws
+      - supports-color
+      - ts-node
+      - utf-8-validate
     dev: false
 
   /bonde-core-tools/0.1.6_e402506cbc4cfe50edf63a0698a14451:
     resolution: {integrity: sha512-TEhsRKyuMGhmh1+3Hb52CWTT+df/j+GemrRx/hfra4hH4uKYY2PhhsI3zVB37akuqfBY5xrdUbh7Au0TAHnf/g==}
-    peerDependencies:
-      subscriptions-transport-ws: '*'
     dependencies:
       '@apollo/client': 3.3.6_7f7b2e3b73795d1ad7365d948d85a29e
       '@types/react': 16.14.2
@@ -3203,6 +3233,14 @@ packages:
       react-router: 5.2.0_react@16.14.0
       react-router-dom: 5.2.0_react@16.14.0
       styled-components: 5.2.1_react-dom@16.14.0+react@16.14.0
+    transitivePeerDependencies:
+      - bufferutil
+      - canvas
+      - react-is
+      - subscriptions-transport-ws
+      - supports-color
+      - ts-node
+      - utf-8-validate
     dev: false
 
   /bottleneck/2.19.5:
@@ -3470,6 +3508,8 @@ packages:
       js-yaml: 3.14.0
       teeny-request: 6.0.1
       urlgrey: 0.4.4
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /collect-v8-coverage/1.0.1:
@@ -4229,6 +4269,8 @@ packages:
       stackman: 4.0.1
       traceparent: 1.0.0
       unicode-byte-truncate: 1.0.0
+    transitivePeerDependencies:
+      - supports-color
     dev: false
 
   /emittery/0.7.2:
@@ -4378,10 +4420,12 @@ packages:
     engines: {node: '>=8'}
     peerDependencies:
       eslint: '>=5'
-      typescript: '*'
     dependencies:
       '@typescript-eslint/experimental-utils': 2.34.0_eslint@6.8.0+typescript@3.9.5
       eslint: 6.8.0
+    transitivePeerDependencies:
+      - supports-color
+      - typescript
     dev: true
 
   /eslint-plugin-jsx-a11y/6.4.1_eslint@6.8.0:
@@ -4519,6 +4563,8 @@ packages:
       table: 5.4.6
       text-table: 0.2.0
       v8-compile-cache: 2.2.0
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /espree/6.2.1:
@@ -4742,8 +4788,8 @@ packages:
   /fast-json-stable-stringify/2.1.0:
     resolution: {integrity: sha512-lhd/wF+Lk98HZoTCtlVraHtfh5XYijIjalXck7saUtuanSDyLMxnHhSXEDJqHxD7msR8D0uCmqlkwjCV8xvwHw==}
 
-  /fast-json-stringify/2.7.3:
-    resolution: {integrity: sha512-QNIh4CQ5S3D5vO7Bv88Si8TFQGZgxv15h2n/79TESr4lhZ8ptq3R9SCTteslr+pwrZQlvrAFgcXgFuUIgS3UQA==}
+  /fast-json-stringify/2.7.4:
+    resolution: {integrity: sha512-fc2bvaF7C6fa+Q/8D9SbjJC70F/PueIR9gaZPr/85WLjJjpUbwszm7vvK7fu+c/W6sCCeeEOMs+ry8/LV6xBPg==}
     engines: {node: '>= 10.0.0'}
     dependencies:
       ajv: 6.12.6
@@ -4975,6 +5021,7 @@ packages:
     resolution: {integrity: sha512-bTLYHSeC0UH/EFXS9KqWnXuOl/wHK5Z/d+ghd5AsFMYN7wIGkUCOJyzy88+wJKkZPGON8u4Z9f6U4FdgURE9qA==}
     engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
     os: [darwin]
+    requiresBuild: true
     optional: true
 
   /function-bind/1.1.1:
@@ -5334,6 +5381,8 @@ packages:
       '@tootallnate/once': 1.1.2
       agent-base: 6.0.2
       debug: 4.3.1
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /http-request-to-url/1.0.0:
@@ -5357,6 +5406,8 @@ packages:
     dependencies:
       agent-base: 5.1.1
       debug: 4.3.1
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /human-signals/1.1.1:
@@ -6319,6 +6370,12 @@ packages:
       '@jest/core': 26.6.3
       import-local: 3.0.2
       jest-cli: 26.6.3
+    transitivePeerDependencies:
+      - bufferutil
+      - canvas
+      - supports-color
+      - ts-node
+      - utf-8-validate
 
   /js-tokens/4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
@@ -6985,6 +7042,7 @@ packages:
 
   /node-notifier/8.0.1:
     resolution: {integrity: sha512-BvEXF+UmsnAfYfoapKM9nGxnP+Wn7P91YfXmrKnfcYCx6VBeoN5Ez5Ogck6I8Bi5k4RlpqRYaw75pAwzX9OphA==}
+    requiresBuild: true
     dependencies:
       growly: 1.3.0
       is-wsl: 2.2.0
@@ -8002,6 +8060,8 @@ packages:
       debug: 4.3.1
       module-details-from-path: 1.0.3
       resolve: 1.19.0
+    transitivePeerDependencies:
+      - supports-color
     dev: false
 
   /require-in-the-middle/5.1.0:
@@ -8843,6 +8903,8 @@ packages:
       node-fetch: 2.6.1
       stream-events: 1.0.5
       uuid: 3.4.0
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /terminal-link/2.1.1:
@@ -9051,7 +9113,7 @@ packages:
       tslib: 1.14.1
     dev: false
 
-  /ts-jest/26.4.4_jest@26.0.1:
+  /ts-jest/26.4.4_jest@26.0.1+typescript@3.9.5:
     resolution: {integrity: sha512-3lFWKbLxJm34QxyVNNCgXX1u4o/RV0myvA2y2Bxm46iGIjKlaY0own9gIckbjZJPn+WaJEnfPPJ20HHGpoq4yg==}
     engines: {node: '>= 10'}
     hasBin: true
@@ -9070,9 +9132,10 @@ packages:
       make-error: 1.3.6
       mkdirp: 1.0.4
       semver: 7.3.4
+      typescript: 3.9.5
       yargs-parser: 20.2.4
 
-  /ts-jest/26.4.4_jest@26.6.3:
+  /ts-jest/26.4.4_jest@26.6.3+typescript@3.9.5:
     resolution: {integrity: sha512-3lFWKbLxJm34QxyVNNCgXX1u4o/RV0myvA2y2Bxm46iGIjKlaY0own9gIckbjZJPn+WaJEnfPPJ20HHGpoq4yg==}
     engines: {node: '>= 10'}
     hasBin: true
@@ -9091,6 +9154,7 @@ packages:
       make-error: 1.3.6
       mkdirp: 1.0.4
       semver: 7.3.4
+      typescript: 3.9.5
       yargs-parser: 20.2.4
     dev: true
 
@@ -9191,6 +9255,7 @@ packages:
     resolution: {integrity: sha512-rWYleAvfJPjduYCt+ELvzybNah/zIkRteGXIBO8X0lteRZPGladF61hFi8tU7qKTsF7u6DUQCtT9k00VlFOgkg==}
     engines: {node: '>=0.8.0'}
     hasBin: true
+    requiresBuild: true
     dev: true
     optional: true
 
