@@ -49,6 +49,7 @@ wsClient.onConnected(() => {
 
 wsClient.onReconnecting(() => {
   console.log("reconnecting");
+  exit(1);
 });
 
 wsClient.onReconnected(() => {
@@ -57,7 +58,6 @@ wsClient.onReconnected(() => {
 
 wsClient.onDisconnected(() => {
   console.log("disconnected");
-  exit(1);
 });
 
 // Create a WebSocket link:

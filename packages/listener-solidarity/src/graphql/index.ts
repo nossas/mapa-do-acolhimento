@@ -53,13 +53,12 @@ wsClient.onReconnecting(() => {
 
 wsClient.onReconnected(() => {
   console.log("reconnected");
+  exit(1);
 });
 
 wsClient.onDisconnected(() => {
   console.log("disconnected");
-  exit(1);
 });
-
 
 // Create a WebSocket link:
 const wsLink = new WebSocketLink(wsClient);
