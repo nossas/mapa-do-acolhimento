@@ -79,10 +79,10 @@ const markAsMatchSyncronized = async (ids: number[]) => {
   return isSynced.map(s => s.ticket_id);
 };
 
-export const createMatch = async (ticket: IndividualTicket) => {
-  const transaction = apmAgent.startTransaction("createMatch");
+export const createMatch = async (ticket: IndividualTicket, apmAgent: any) => {
+  const transaction = apmAgent?.startTransaction("createMatch");
 
-  apmAgent.setUserContext({
+  apmAgent?.setUserContext({
     id: ticket.ticket_id,
     username: ticket.nome_msr,
     latitude: ticket.individual.latitude,
@@ -173,7 +173,7 @@ export const handleMatch = (lastTicketSynced?: number) => async ({
     Queue.size(data) > 0 &&
     oldFirst.ticket_id != Queue.first(data).ticket_id
   ) {
-    const resolvedMatchs = await createMatch(Queue.first(data));
+    const resolvedMatchs = await createMatch(Queue.first(data), apm);
     await markAsMatchSyncronized(resolvedMatchs);
 
     const response = {
