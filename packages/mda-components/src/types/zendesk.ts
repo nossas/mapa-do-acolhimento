@@ -17,7 +17,7 @@ export type StatusMulher =
   | "disponivel";
 
 export type User = {
-  role: "end-user";
+  role: string; //"end-user";
   organization_id: number;
   name: string;
   email: string;
@@ -32,11 +32,11 @@ export type User = {
     city: string;
     cep: string;
     address: string;
-    tipo_de_acolhimento:
-      | "jurídico"
-      | "psicológico"
-      | "psicológico_e_jurídico"
-      | null;
+    tipo_de_acolhimento: string | null;
+    // | "jurídico"
+    // | "psicológico"
+    // | "psicológico_e_jurídico"
+    // | null;
     whatsapp: string | null;
     registration_number: string | null;
     occupation_area: string | null;

@@ -43,7 +43,7 @@ export const newContact = async (user: User): Promise<Contact> => {
     });
 
     return validatedContact;
-  } catch (e) {
+  } catch (e: any) {
     log.error(e);
     return e;
   }
@@ -71,7 +71,7 @@ export default async (
       const create = await createOrUpdateContact(mauticId, contact);
 
       return create;
-    } catch (e) {
+    } catch (e: any) {
       if (e.name === "ValidationError") {
         log.error(`Failed to create new contact with email ${user.email}`);
       } else {

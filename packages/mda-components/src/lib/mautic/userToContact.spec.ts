@@ -1,6 +1,6 @@
 import { newContact } from "./userToContact";
 import { StatusMulher } from "../../types";
-import faker from "faker/locale/pt_BR";
+import faker from "faker";
 import * as yup from "yup";
 
 export const geolocation = {
@@ -16,7 +16,7 @@ describe("Check if user is correctly transformed into Mautic contact", () => {
   it("should be a valid contact", async () => {
     const user = {
       name: "Joana Lima",
-      role: "end-user" as "end-user",
+      role: "end-user",
       organization_id: 360269610652,
       email: "joana@email.com",
       external_id: "2000373",
@@ -63,7 +63,7 @@ describe("Check if user is correctly transformed into Mautic contact", () => {
   it("should be an invalid contact", async () => {
     const user = {
       name: "Igor",
-      role: "end-user" as "end-user",
+      role: "end-user",
       organization_id: 360273031591,
       email: "igor@nossas.org",
       external_id: "2000302",
@@ -77,7 +77,7 @@ describe("Check if user is correctly transformed into Mautic contact", () => {
         latitude: geolocation.latitude,
         longitude: geolocation.longitude,
         state: geolocation.state,
-        tipo_de_acolhimento: "psicológico" as "psicológico",
+        tipo_de_acolhimento: "psicológico",
         condition: "inscrita" as StatusMulher,
         whatsapp: null,
         registration_number: null,
@@ -92,6 +92,6 @@ describe("Check if user is correctly transformed into Mautic contact", () => {
 
     expect((contact as unknown as yup.ValidationError).name).toEqual("ValidationError");
     expect((contact as unknown as yup.ValidationError).message).toEqual("user_id is a required field");
-  
+
   });
 });

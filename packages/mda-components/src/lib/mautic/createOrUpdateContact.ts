@@ -33,7 +33,7 @@ export default async (
     );
     log.info("Successfully edited contact");
     return res && res.data;
-  } catch (e) {
+  } catch (e: any) {
     log.error(e.response.data.errors);
     return e.response.data.errors;
   }

@@ -28,7 +28,7 @@ export default async (email: string): Promise<ContactSearchRes | undefined> => {
     const data = await axios.get(MAUTIC_API_URL + "/contacts", config);
     log.info("Successfully returned a contact");
     return data && data.data;
-  } catch (e) {
+  } catch (e: any) {
     log.error(`${e.response.status}: ${e.response.statusText} %o`, e.config);
     return e;
   }
