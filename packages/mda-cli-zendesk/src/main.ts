@@ -49,9 +49,9 @@ const init = async () => {
     } else {
       signale.fatal(`'${program.mode}' is not a valid operation mode`);
     }
-  } catch (e) {
+  } catch (e: any) {
     dbg(e);
   }
 };
 
-init();
+export default init;

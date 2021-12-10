@@ -1,6 +1,6 @@
 import R from "ramda";
 
-export const stringify = (obj: unknown) => {
+export const stringify = (obj: any) => {
   let result = "";
   if (obj instanceof Array) {
     result += "[";

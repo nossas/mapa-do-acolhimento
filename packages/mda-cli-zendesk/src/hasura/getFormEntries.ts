@@ -43,7 +43,7 @@ const getFormEntries = async () => {
   ) {
     throw new Error("Invalid WIDGET_IDS env var");
   }
-  const data = await axios.post<DataType>(
+  const data: any = await axios.post<DataType>(
     HASURA_API_URL!,
     {
       query,
@@ -78,7 +78,7 @@ export const filterByEmail = (formEntries: FormEntry[], email) => {
         }
 
         return parsedFields[1].value === email;
-      } catch (e) {
+      } catch (e: any) {
         return false;
       }
     })

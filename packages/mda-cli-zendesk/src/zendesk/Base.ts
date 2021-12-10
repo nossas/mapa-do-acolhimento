@@ -17,7 +17,7 @@ const get = async <T>(url: string, log: Debugger, params?: unknown) => {
       },
       params
     });
-  } catch (e) {
+  } catch (e: any) {
     return log(e.response.data);
   }
 };
@@ -36,7 +36,7 @@ const put = async <T>(url: string, log: Debugger, data?: unknown) => {
         password: ZENDESK_API_TOKEN
       }
     });
-  } catch (e) {
+  } catch (e: any) {
     return log(e);
   }
 };
