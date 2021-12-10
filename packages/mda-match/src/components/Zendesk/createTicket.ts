@@ -79,7 +79,7 @@ export default async (ticket: Ticket): Promise<Ticket | undefined> => {
         }
       );
     });
-  } catch (e) {
+  } catch (e: any) {
     log.error("failed to create ticket: ".red, e);
     return undefined;
   }

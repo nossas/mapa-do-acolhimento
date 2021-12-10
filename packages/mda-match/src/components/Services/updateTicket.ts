@@ -34,7 +34,7 @@ export default async (ticket: UpdateTicket & { ticket_id: number }, schema) => {
     updateSolidarityTickets(validatedTicket, [validatedTicket.ticket_id]);
 
     return zendeskTicket.id;
-  } catch (e) {
+  } catch (e: any) {
     log.error("failed to create ticket in zendesk: ".red, e);
     return undefined;
   }

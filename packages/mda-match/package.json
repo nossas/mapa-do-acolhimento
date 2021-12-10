@@ -1,5 +1,5 @@
 {
-  "name": "listener-match",
+  "name": "mda-match",
   "description": "Minimalistic boilerplate to quick-start Node.js development in TypeScript.",
   "devDependencies": {
     "@types/debug": "^4.1.7",
@@ -18,14 +18,27 @@
     "subscriptions-transport-ws": "^0.9.19",
     "ts-jest": "^26.5.6"
   },
+  "main": "dist/tsc/main.js",
+  "types": "dist/tsc/main.d.ts",
+  "browser": "dist/esbuild/browser.js",
+  "bin": {
+    "my-cli-tool": "dist/esbuild/cli.js"
+  },
   "scripts": {
-    "start": "DEBUG=listener-match* node -r dotenv-safe/config dist/main.js",
-    "dev": "DEBUG=listener-match* tsc-watch --onSuccess \"node -r dotenv-safe/config dist/main.js\"",
-    "test": "jest --coverage",
-    "test:watch": "DEBUG=listener-match* jest --watch --runInBand --detectOpenHandles",
+    "cli": "ts-node src/cli.ts",
+    "lint": "eslint src/ --ext .js,.jsx,.ts,.tsx",
+    "test": "jest",
+    "clean": "rm -rf dist build package",
+    "ts-node": "ts-node",
+    "docs": "typedoc --entryPoints src/main.ts",
     "build": "tsc -p tsconfig.json",
-    "build:watch": "tsc -w -p tsconfig.json",
-    "clean": "rimraf coverage dist tmp"
+    "build-all": "yarn clean && yarn build && yarn esbuild-node",
+    "esbuild-browser": "esbuild src/browser.ts --bundle --minify --sourcemap=external --outfile=dist/esbuild/browser.js",
+    "esbuild-browser:dev": "esbuild src/browser.ts --bundle --outfile=dist/esbuild/browser.js",
+    "esbuild-browser:watch": "esbuild src/browser.ts --bundle --watch --outfile=dist/esbuild/browser.js",
+    "esbuild-node": "esbuild src/cli.ts --bundle --platform=node --minify --sourcemap=external --outfile=dist/esbuild/cli.js",
+    "esbuild-node:dev": "esbuild src/cli.ts --bundle --platform=node --sourcemap=external --outfile=dist/esbuild/cli.js",
+    "esbuild-node:watch": "esbuild src/cli.ts --bundle --platform=node --watch --sourcemap=external --outfile=dist/esbuild/cli.js"
   },
   "dependencies": {
     "@elastic/ecs-pino-format": "^1.1.1",
@@ -36,7 +49,7 @@
     "apollo-link-http": "^1.5.17",
     "apollo-link-ws": "^1.0.20",
     "apollo-utilities": "^1.3.4",
-    "axios": "^0.19.2",
+    "axios": "^0.24.0",
     "colors": "^1.4.0",
     "cross-fetch": "^3.1.4",
     "debug": "^4.3.2",

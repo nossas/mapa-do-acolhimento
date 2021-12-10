@@ -82,7 +82,7 @@ export default async (
         }
       );
     });
-  } catch (e) {
+  } catch (e: any) {
     log.error("failed to update msr ticket: ".red, e);
     return undefined;
   }

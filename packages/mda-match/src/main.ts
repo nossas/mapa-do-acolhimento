@@ -8,7 +8,7 @@ apmNode.start({
 
 const log = dbg.child({ module: "main" });
 
-throng({
+export default throng({
   workers: 1,
   start: async (id: number) => {
     log.info(`Started worker ${id}`);
@@ -20,7 +20,7 @@ throng({
       log.error("throng err: ".red, err);
     }
 
-    process.on("SIGTERM", function() {
+    process.on("SIGTERM", function () {
       log.info(`Worker ${id} exiting`);
       log.info("Cleanup here");
       process.exit();

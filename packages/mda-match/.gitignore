@@ -32,3 +32,5 @@ dist/
 tsconfig.tsbuildinfo
 
 .env
+dist
+coverage

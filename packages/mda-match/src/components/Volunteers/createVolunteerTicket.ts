@@ -59,9 +59,8 @@ export default async (
     submitter_id: agentSelectionDicio[agent],
     assignee_id: agentSelectionDicio[agent],
     status: "pending",
-    subject: `[${getVolunteerType(volunteer.organization_id).type}] ${
-      volunteer.name
-    }`,
+    subject: `[${getVolunteerType(volunteer.organization_id).type}] ${volunteer.name
+      }`,
     organization_id: volunteer.organization_id,
     comment: {
       body: `Voluntária recebeu um pedido de acolhimento de ${individual.nome_msr}`,
@@ -115,7 +114,7 @@ export default async (
 
     // log("Successfully saved volunteer ticket in Hasura");
     return zendeskTicket.id;
-  } catch (e) {
+  } catch (e: any) {
     log.error("failed to create ticket: ".red, e);
     return undefined;
   }
