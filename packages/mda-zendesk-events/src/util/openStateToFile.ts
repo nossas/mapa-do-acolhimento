@@ -13,7 +13,7 @@ const openStateFile = async (filename: string) => {
     );
     const state = buffer.toString();
     return JSON.parse(state);
-  } catch (e) {
+  } catch (e: any) {
     log.error(e + "");
     return null;
   }

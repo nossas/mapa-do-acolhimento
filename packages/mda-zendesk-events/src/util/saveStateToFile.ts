@@ -17,7 +17,7 @@ const saveStateToFile = async (
       JSON.stringify(state)
     );
     log.info(`saved to file '${filename}'.`);
-  } catch (e) {
+  } catch (e: any) {
     log.error(e);
   }
 };

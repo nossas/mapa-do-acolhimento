@@ -15,7 +15,7 @@ const get = async (url: string, params?) => {
       },
       params
     });
-  } catch (e) {
+  } catch (e: any) {
     log.error(e.response.data);
     return undefined;
   }
@@ -31,7 +31,7 @@ const put = async (url: string, data?) => {
         password: ZENDESK_API_TOKEN
       }
     });
-  } catch (e) {
+  } catch (e: any) {
     log.error(e);
     return undefined;
   }

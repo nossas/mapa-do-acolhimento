@@ -37,7 +37,7 @@ const getFormEntries = async () => {
     }
 
     return response.data.data.form_entries;
-  } catch (e) {
+  } catch (e: any) {
     return log.error(e);
   }
 };

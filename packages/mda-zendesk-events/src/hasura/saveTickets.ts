@@ -164,11 +164,11 @@ const saveTickets = async (tickets: Tickets[]) => {
     >(query, variables);
 
     if (isError(response.data)) {
-      return log.error(response.data.errors as object);
+      return log.error(response.data.errors);
     }
 
     return response.data.data.insert_solidarity_tickets.affected_rows;
-  } catch (e) {
+  } catch (e: any) {
     return log.error(e);
   }
 };

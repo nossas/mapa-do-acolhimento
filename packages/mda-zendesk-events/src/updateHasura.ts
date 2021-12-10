@@ -6,7 +6,7 @@ const updateHasura = async (ticket: TicketHasuraIn[]): Promise<boolean> => {
   try {
     const response = await saveTicket([ticket]);
     return typeof response === "number";
-  } catch (e) {
+  } catch (e: any) {
     dbg.child({ labels: { process: "updateHasura" } }).error(e);
   }
 

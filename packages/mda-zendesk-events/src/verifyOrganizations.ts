@@ -26,7 +26,7 @@ const verifyOrganization = async (ticket: TicketHasuraIn) => {
       default:
         return null;
     }
-  } catch (e) {
+  } catch (e: any) {
     dbg.child({ label: { process: "verifyOrganization" } }).error(e);
     return null;
   }

@@ -55,11 +55,11 @@ const updateUserTicketCount = async users => {
     >(query, variables);
 
     if (isError(response.data)) {
-      return log.error(response.data.errors as object);
+      return log.error(response.data.errors);
     }
 
     return response.data.data.insert_solidarity_users.affected_rows === 1;
-  } catch (e) {
+  } catch (e: any) {
     return log.error(e);
   }
 };
