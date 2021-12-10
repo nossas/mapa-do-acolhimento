@@ -1,5 +1,5 @@
-packages/**/node_modules
-packages/**/dist
-packages/**/*.js
-packages/cli-mautic
-packages/client-solidarity
+# packages/**/node_modules
+# packages/**/dist
+# packages/**/*.js
+# packages/cli-mautic
+# packages/client-solidarity

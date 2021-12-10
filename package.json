@@ -1,31 +1,24 @@
 {
-  "name": "bonde-microservices",
+  "name": "mapa-do-acolhimento",
   "version": "0.4.8",
   "description": "A monorepo that holds all the services used to maintain the project 'Mapa do Acolhimento'",
   "author": "Nossas <tech@nosssas.org>",
   "license": "AGPL-3.0",
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^2.34.0",
-    "@typescript-eslint/parser": "^2.34.0",
-    "babel-eslint": "^10.1.0",
-    "eslint": "^6.8.0",
-    "eslint-config-prettier": "^6.15.0",
-    "eslint-plugin-jest": "^23.20.0",
-    "eslint-plugin-jsx-a11y": "^6.4.1",
-    "eslint-plugin-prettier": "^3.4.1",
-    "eslint-plugin-react": "^7.26.0",
-    "eslint-plugin-react-hooks": "^2.5.1",
-    "prettier": "^1.19.1"
-  },
-  "scripts": {
-    "lint": "eslint packages/**/*.{ts,tsx} --fix",
-    "clean": "rm -rf **/*/dist && rm -rf **/*/tsconfig.tsbuildinfo"
-  },
-  "dependencies": {
-    "tsc-watch": "4.2.8",
-    "tslib": "^2.3.1",
-    "tsutils": "^3.21.0",
-    "typescript": "3.9.5"
+    "@types/jest": "^26.0.21",
+    "@types/node": "^15.0.1",
+    "@typescript-eslint/eslint-plugin": "^4.19.0",
+    "@typescript-eslint/parser": "^4.19.0",
+    "dotenv": "^10",
+    "esbuild": "^0.11.11",
+    "eslint": "^7.22.0",
+    "jest": "^26.6.3",
+    "ts-jest": "^26.5.4",
+    "ts-node": "^9.1.1",
+    "typedoc": "^0.20.35",
+    "typescript": "^4.2.3",
+    "codecov": "^3.5.0",
+    "tslib": "~2.3.1"
   },
   "homepage": "https://github.com/nossas/mapa-do-acolhimento#readme",
   "repository": {
@@ -36,7 +29,12 @@
     "url": "https://github.com/nossas/mapa-do-acolhimento/issues"
   },
   "engines": {
-    "pnpm": ">=5",
-    "node": ">=12"
+    "pnpm": ">=6",
+    "node": ">=16"
+  },
+  "dependencies": {
+  },
+  "scripts": {
+    "coverage": "jest --coverage && codecov"
   }
 }
