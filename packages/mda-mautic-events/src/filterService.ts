@@ -80,7 +80,7 @@ export const readMauticRequest = async (
 ): Promise<Mautic | any> => {
   try {
     return await mauticValidation.validate(req.body);
-  } catch (error) {
+  } catch (error: any) {
     log.error(error);
     apmAgent?.captureError(error);
     throw new Error("Mautic payload invalid!");
@@ -92,7 +92,7 @@ interface Payload {
     data: {
       new: {
         service_name: string;
-        data: object;
+        data: any;
         created_at: string;
       };
     };

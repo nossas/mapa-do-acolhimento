@@ -10,7 +10,7 @@ export enum FILTER_FORM_NAME_STATUS {
   INVALID_REQUEST
 }
 
-export const customFilterName = async (data: Mautic) => {
+export const customFilterName: any = async (data: Mautic) => {
   const validation = yup.object().shape({
     "mautic.form_on_submit": yup.array().of(
       yup.object().shape({
@@ -87,7 +87,7 @@ export const customFilterName = async (data: Mautic) => {
 import AdvogadaCreateUser from "./integrations/AdvogadaCreateUser";
 import PsicologaCreateUser from "./integrations/PsicologaCreateUser";
 
-export const filterFormName = async (data: object, apm: any) => {
+export const filterFormName: any = async (data: any, apm: any) => {
   const validation = yup.object().shape({
     "mautic.form_on_submit": yup.array().of(
       yup.object().shape({

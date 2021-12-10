@@ -4,8 +4,12 @@ import dbg from "./dbg";
 
 const log = dbg.child({ labels: { process: "base" } });
 
-const get = async (url: string, params?) => {
-  const { ZENDESK_API_URL, ZENDESK_API_TOKEN, ZENDESK_API_USER } = process.env;
+const get: any = async (url: string, params?) => {
+  const {
+    ZENDESK_API_URL = "",
+    ZENDESK_API_TOKEN = "",
+    ZENDESK_API_USER = ""
+  } = process.env;
   const endpoint = urljoin(ZENDESK_API_URL, url);
   try {
     return await axios.get(endpoint, {
@@ -21,8 +25,12 @@ const get = async (url: string, params?) => {
   }
 };
 
-const put = async (url: string, data?) => {
-  const { ZENDESK_API_URL, ZENDESK_API_TOKEN, ZENDESK_API_USER } = process.env;
+const put: any = async (url: string, data?: any) => {
+  const {
+    ZENDESK_API_URL = "",
+    ZENDESK_API_TOKEN = "",
+    ZENDESK_API_USER = ""
+  } = process.env;
   const endpoint = urljoin(ZENDESK_API_URL!, url);
   try {
     return await axios.put(endpoint, data, {

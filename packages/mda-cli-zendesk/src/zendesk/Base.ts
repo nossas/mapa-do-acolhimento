@@ -2,7 +2,7 @@ import urljoin from "url-join";
 import axios from "axios";
 import { Debugger } from "debug";
 
-const get = async <T>(url: string, log: Debugger, params?: unknown) => {
+const get: any = async <T>(url: string, log: Debugger, params?: unknown) => {
   const {
     ZENDESK_API_URL = "",
     ZENDESK_API_TOKEN = "",
@@ -22,7 +22,7 @@ const get = async <T>(url: string, log: Debugger, params?: unknown) => {
   }
 };
 
-const put = async <T>(url: string, log: Debugger, data?: unknown) => {
+const put: any = async <T>(url: string, log: Debugger, data?: unknown) => {
   const {
     ZENDESK_API_URL = "",
     ZENDESK_API_TOKEN = "",

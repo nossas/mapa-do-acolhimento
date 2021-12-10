@@ -26,7 +26,7 @@ interface DataType {
 export const customGetFormEntries = async (
   email: string
 ): Promise<FormEntry[]> => {
-  const { HASURA_API_URL, X_HASURA_ADMIN_SECRET, WIDGET_IDS } = process.env;
+  const { HASURA_API_URL = "", X_HASURA_ADMIN_SECRET = "", WIDGET_IDS = "" } = process.env;
   let widget_ids;
   try {
     widget_ids = await yup
@@ -116,7 +116,7 @@ interface DataType {
 const dbg = log.child({ labels: { process: "getFormEntries" } });
 
 export const getFormEntries = async (email: string, apm: any) => {
-  const { HASURA_API_URL, X_HASURA_ADMIN_SECRET, WIDGET_IDS } = process.env;
+  const { HASURA_API_URL = "", X_HASURA_ADMIN_SECRET = "", WIDGET_IDS = "" } = process.env;
   let widget_ids;
   try {
     widget_ids = WIDGET_IDS.split(",").map(Number);

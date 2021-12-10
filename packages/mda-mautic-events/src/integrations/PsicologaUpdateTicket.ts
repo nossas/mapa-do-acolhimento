@@ -15,7 +15,7 @@ class PsicologaUpdateTicket extends Base {
     this.apm = apm;
   }
 
-  start = async <T>(data: object) => {
+  start: any = async <T>(data: any) => {
     let newData = data;
     const validateTicket = yup
       .object()

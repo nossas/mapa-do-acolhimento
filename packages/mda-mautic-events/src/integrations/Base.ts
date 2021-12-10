@@ -33,15 +33,15 @@ abstract class Base {
     this.dbg = log.child({ label: { process: this.name } });
     this.url = url;
     this.res = res;
-    const { ZENDESK_ORGANIZATIONS } = process.env;
+    const { ZENDESK_ORGANIZATIONS = "" } = process.env;
     this.organizations = JSON.parse(ZENDESK_ORGANIZATIONS);
   }
 
-  protected send = async <T>(data?) => {
+  protected send: any = async <T>(data?) => {
     const {
-      ZENDESK_API_URL,
-      ZENDESK_API_TOKEN,
-      ZENDESK_API_USER
+      ZENDESK_API_URL = "",
+      ZENDESK_API_TOKEN = "",
+      ZENDESK_API_USER = ""
     } = process.env;
     const endpoint = urljoin(ZENDESK_API_URL!, this.url);
     try {
@@ -75,7 +75,7 @@ abstract class Base {
     }
   };
 
-  abstract start: Function;
+  abstract start: any;
 }
 
 export default Base;

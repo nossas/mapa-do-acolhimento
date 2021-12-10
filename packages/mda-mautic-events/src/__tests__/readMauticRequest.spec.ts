@@ -1,9 +1,9 @@
 import { mockMauticFormRequest } from "../mocks";
 
 describe("Validation of Mautic Form", () => {
-  let readMauticRequest;
-  let spyApm;
-  let spyLog;
+  let readMauticRequest: any;
+  let spyApm: any;
+  let spyLog: any;
 
   const OLD_ENV = process.env;
   beforeEach(() => {
@@ -13,9 +13,9 @@ describe("Validation of Mautic Form", () => {
     process.env.ELASTIC_APM_SERVER_URL = "https://localhost";
     process.env.ELASTIC_APM_SERVICE_NAME = "teste";
 
-    readMauticRequest = require("../filterService").readMauticRequest;
-    spyLog = jest.spyOn(require("../dbg").default, "error");
-    spyApm = jest.spyOn(require("../dbg").apmAgent, "captureError");
+    readMauticRequest = import("../filterService");
+    spyLog = jest.spyOn(import("../dbg"), "error");
+    spyApm = jest.spyOn(import("../dbg"), "captureError");
   });
   afterAll(() => {
     process.env = OLD_ENV; // Restore old environment
