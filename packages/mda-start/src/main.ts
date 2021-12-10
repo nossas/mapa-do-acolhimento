@@ -10,7 +10,7 @@ import logger from "./logger";
 
 const log = logger.child({ module: "main" });
 
-throng({
+export default throng({
   workers: 1,
   start: async (id: number) => {
     log.info(`Started worker ${id}`);
@@ -32,7 +32,7 @@ throng({
       log.error("throng err: %s", err);
     }
 
-    process.on("SIGTERM", function() {
+    process.on("SIGTERM", function () {
       log.fatal(`Worker ${id} exiting`);
       log.info("Cleanup here");
 
