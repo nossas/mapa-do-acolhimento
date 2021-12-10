@@ -155,8 +155,8 @@ const createQuery = (tickets: Tickets) => `mutation (${generateVariables(
   }
 }`;
 
-const saveTickets = async (tickets: Tickets) => {
-  const { HASURA_API_URL = "", X_HASURA_ADMIN_SECRET } = process.env;
+const saveTickets: any = async (tickets: Tickets) => {
+  const { HASURA_API_URL = "", X_HASURA_ADMIN_SECRET = "" } = process.env;
   const validatedTickets = await ticketsSchema.validate(tickets, {
     stripUnknown: true
   });

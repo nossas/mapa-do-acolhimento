@@ -37,6 +37,6 @@ export const stringifyVariables = R.pipe(
       )
     )(i)
   ),
-  R.unnest,
-  R.fromPairs
+  // R.unnest, TODO: 
+  // R.fromPairs
 );

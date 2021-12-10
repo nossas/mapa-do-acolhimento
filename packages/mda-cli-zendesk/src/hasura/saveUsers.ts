@@ -210,8 +210,8 @@ const createQuery = (users: User[]) => `mutation (${generateVariables(users)}) {
 }
 `;
 
-const saveUsers = async (users: User[]) => {
-  const { HASURA_API_URL = "", X_HASURA_ADMIN_SECRET } = process.env;
+const saveUsers: any = async (users: User[]) => {
+  const { HASURA_API_URL = "", X_HASURA_ADMIN_SECRET = "" } = process.env;
   const query = createQuery(users);
   const variables = stringifyVariables(users);
   const response = await axios.post(

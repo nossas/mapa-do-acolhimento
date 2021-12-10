@@ -24,10 +24,10 @@ type DataType = {
   };
 } & { errors: unknown };
 
-const getFormEntries = async () => {
+const getFormEntries: any = async () => {
   const {
-    HASURA_API_URL,
-    X_HASURA_ADMIN_SECRET,
+    HASURA_API_URL = "",
+    X_HASURA_ADMIN_SECRET = "",
     WIDGET_IDS = ""
   } = process.env;
   const widget_ids = JSON.parse(WIDGET_IDS);

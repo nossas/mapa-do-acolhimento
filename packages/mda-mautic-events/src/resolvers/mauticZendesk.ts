@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { userToContact } from "components";
+import { userToContact } from "mda-components";
 import log, { apmAgent } from "../dbg";
 import { readMauticRequest } from "../filterService";
 import { customFilterName, FILTER_FORM_NAME_STATUS } from "../filterFormName";

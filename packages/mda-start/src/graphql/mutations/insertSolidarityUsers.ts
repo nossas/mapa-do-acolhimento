@@ -144,7 +144,7 @@ const insertSolidarityUsers = async (
     } = res;
 
     return returning;
-  } catch (err) {
+  } catch (err: any) {
     log.error(`failed on insert solidarity users: ${ids} %o`, err);
     return err;
   }

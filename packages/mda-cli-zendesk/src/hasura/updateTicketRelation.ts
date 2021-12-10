@@ -19,11 +19,11 @@ const mutation = `mutation(
 }
 `;
 
-const updateTicketRelation = async (
+const updateTicketRelation: any = async (
   id: number,
   webhooks_registry_id: number
 ) => {
-  const { HASURA_API_URL = "", X_HASURA_ADMIN_SECRET } = process.env;
+  const { HASURA_API_URL = "", X_HASURA_ADMIN_SECRET = "" } = process.env;
   const response = await axios.post(
     HASURA_API_URL,
     {

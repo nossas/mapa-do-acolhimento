@@ -35,8 +35,8 @@ const createQuery = (matches: Match[]) => `mutation (${generateVariables(
   matches
 )}) {
   insert_solidarity_matches (objects: ${generateObjects(
-    matches
-  )}, on_conflict: {
+  matches
+)}, on_conflict: {
     constraint: solidarity_matches_individuals_ticket_id_volunteers_ticket__key, update_columns: [
       community_id
       created_at
@@ -49,8 +49,8 @@ const createQuery = (matches: Match[]) => `mutation (${generateVariables(
   }
 `;
 
-const saveMatches = async (matches: Match[]) => {
-  const { HASURA_API_URL = "", X_HASURA_ADMIN_SECRET } = process.env;
+const saveMatches: any = async (matches: Match[]) => {
+  const { HASURA_API_URL = "", X_HASURA_ADMIN_SECRET = "" } = process.env;
   const query = createQuery(matches);
   const variables = stringifyVariables(matches);
   const response = await axios.post(

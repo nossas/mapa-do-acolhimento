@@ -1,5 +1,5 @@
 import { Response, Request } from "express";
-import { userToContact } from "components";
+import { userToContact } from "mda-components";
 import AdvogadaCreateUser from "../integrations/AdvogadaCreateUser";
 import PsicologaCreateUser from "../integrations/PsicologaCreateUser";
 import ListTicketsFromUser from "../integrations/ListTicket";
@@ -21,7 +21,7 @@ const dictionary: { [s: string]: string } = {
   reprovada_diretrizes_do_mapa: "reprovada_-_diretrizes_do_mapa"
 };
 
-const createTicket = async (
+const createTicket: any = async (
   instance: AdvogadaCreateUser | PsicologaCreateUser,
   {
     id,

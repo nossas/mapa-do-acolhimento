@@ -165,6 +165,7 @@ export const handleIntegration = (widgets: Widget[], apm) => async (
     transaction.end();
     log.info("No items for integration.");
   }
+  return;
 };
 
 export default handleIntegration;

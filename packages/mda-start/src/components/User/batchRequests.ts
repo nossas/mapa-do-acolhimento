@@ -20,4 +20,5 @@ export default async (users: User[]) => {
     const batch = users.slice(start, start + step - 1);
     return await limiter.schedule(() => createZendeskUsers(batch));
   }
+  return;
 };
