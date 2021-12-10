@@ -1,20 +1,21 @@
 pipeline:
   unit-tests:
-    image: node:14-alpine
+    image: node:16-alpine
     environment:
       - COMMUNITY_ID=40
       - REACT_APP_ZENDESK_ORGANIZATIONS={"lawyer":360269610652,"individual":360273031591,"therapist":360282119532}
       - ELASTIC_APM_ACTIVE=false
     commands:
-      - yarn global add pnpm@6.7.6
+      - yarn global add pnpm
       - pnpm i
-      - pnpm run lint
+      - pnpm m run lint
       - pnpm m run test
+      - pnpm coverage
     when:
       event: [push, tag]
 
   build:
-    image: node:14-alpine
+    image: node:16-alpine
     environment:
       - COMMUNITY_ID=40
       - REACT_APP_ZENDESK_ORGANIZATIONS={"lawyer":360269610652,"individual":360273031591,"therapist":360282119532}
@@ -25,7 +26,7 @@ pipeline:
       - export REACT_APP_GOOGLE_CLIENT_KEY=$STAG_GOOGLE_CLIENT
       - export ZENDESK_API_TOKEN=$STGA_ZENDESK_API_TOKEN
       - export ZENDESK_API_USER=$STGA_ZENDESK_API_USER
-      - yarn global add pnpm@5.2.1
+      - yarn global add pnpm
       - pnpm i
       - pnpm m run build
     secrets: [stag_google_client, stag_zendesk_token, stag_zendesk_user]
@@ -33,7 +34,7 @@ pipeline:
       event: [push]
 
   production-build:
-    image: node:14-alpine
+    image: node:16-alpine
     environment:
       - COMMUNITY_ID=40
       - REACT_APP_ZENDESK_ORGANIZATIONS={"lawyer":360269610652,"individual":360273031591,"therapist":360282119532}
@@ -44,7 +45,7 @@ pipeline:
       - export REACT_APP_GOOGLE_CLIENT_KEY=$STAG_GOOGLE_CLIENT
       - export ZENDESK_API_TOKEN=$STGA_ZENDESK_API_TOKEN
       - export ZENDESK_API_USER=$STGA_ZENDESK_API_USER
-      - yarn global add pnpm@5.2.1
+      - yarn global add pnpm
       - pnpm i
       - pnpm m run build
     secrets: [stag_google_client, stag_zendesk_token, stag_zendesk_user]
@@ -56,14 +57,7 @@ pipeline:
     secrets: [codecov_token]
     group: build
     paths:
-      # - packages/cli-mautic/coverage
-      - packages/cli-zendesk/coverage
-      # - packages/client-solidarity/coverage
-      - packages/listener-match/coverage
-      - packages/listener-solidarity/coverage
-      - packages/webhooks-mautic-registry/coverage
-      - packages/webhooks-mautic-zendesk/coverage
-      - packages/webhooks-solidarity-count/coverage
+      - coverage
     when:
       status: success
       event: [push, tag]
