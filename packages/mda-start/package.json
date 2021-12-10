@@ -1,16 +1,17 @@
 {
+  "private": true,
   "name": "mda-start",
   "description": "Listener dos widgets dos formulários da comunidade do Mapa do Acolhimento",
   "devDependencies": {
     "@types/debug": "^4.1.7",
-    "@types/faker": "^4.1.12",
-    "@types/node-zendesk": "^1.4.0",
-    "@types/pino": "^6.3.11",
-    "@types/throng": "^4.0.2",
+    "@types/faker": "^5",
+    "@types/node-zendesk": "^2",
+    "@types/pino": "^7",
+    "@types/throng": "^5",
     "@types/url-join": "^4.0.1",
-    "@types/ws": "^7.4.7",
-    "faker": "^4.1.0",
-    "subscriptions-transport-ws": "^0.9.19"
+    "@types/ws": "^8",
+    "faker": "^5",
+    "subscriptions-transport-ws": "^0.11"
   },
   "main": "dist/tsc/main.js",
   "types": "dist/tsc/main.d.ts",
@@ -46,20 +47,17 @@
     "bonde-core-tools": "0.1.6",
     "bottleneck": "^2.19.5",
     "colors": "^1.4.0",
-    "mda-components": "workspace:^0.0.3",
     "cross-fetch": "^3.1.4",
-    "debug": "^4.3.2",
+    "debug": "^4.3.3",
     "dotenv-safe": "^8.2.0",
     "elastic-apm-node": "^3.21.1",
     "graphql": "^14.7.0",
-    "graphql-tag": "^2.12.5",
+    "graphql-tag": "^2.12.6",
+    "mda-components": "workspace:^0.0.3",
     "node-zendesk": "2.1.0",
-    "pino": "^6.13.3",
+    "pino": "^6",
     "throng": "^4.0.0",
-    "ws": "^7.5.5",
-    "yup": "^0.29.3"
-  },
-  "peerDependencies": {
-    "subscriptions-transport-ws": "^0.9.17"
+    "ws": "^7.5.6",
+    "yup": "^0.32"
   }
 }

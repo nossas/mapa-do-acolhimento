@@ -1,5 +1,6 @@
 {
   "name": "mda-components",
+  "private": true,
   "version": "0.0.3",
   "description": "Mapa do Acolhimento Components",
   "main": "./dist/tsc/main.js",

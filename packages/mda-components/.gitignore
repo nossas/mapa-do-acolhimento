@@ -12,3 +12,4 @@ coverage
 
 package-lock.json
 dist
+coverage
