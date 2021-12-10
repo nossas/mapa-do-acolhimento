@@ -38,7 +38,7 @@ class PsicologaUpdateTicket extends Base {
       newData = await validateTicket.validate(newData, {
         stripUnknown: true
       });
-    } catch (e) {
+    } catch (e: any) {
       this.apm.captureError(e);
       return this.dbg.error("Falhou ao validar ticket");
     }
@@ -48,7 +48,7 @@ class PsicologaUpdateTicket extends Base {
           ...newData
         }
       });
-    } catch (e) {
+    } catch (e: any) {
       this.apm.captureError(e);
       return this.dbg.error(e);
     }

@@ -228,7 +228,7 @@ export const hasuraZendeskHandle = async (req: Request, res: Response) => {
 
   if (formNameStatus === FILTER_FORM_NAME_STATUS.INVALID_REQUEST) {
     log.error("Invalid request.");
-    log.error(errorData as object);
+    log.error(errorData);
     return res.status(400).json("Invalid request, see logs.");
   }
 

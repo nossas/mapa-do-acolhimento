@@ -73,9 +73,8 @@ const createOrUpdateTicket = async (
     organization_id: user.organization_id,
     description: "-",
     status_inscricao: "aprovada",
-    subject: `[${
-      organization === "ADVOGADA" ? "Advogada" : "Psicóloga"
-    }] ${name} - ${registration_number}`,
+    subject: `[${organization === "ADVOGADA" ? "Advogada" : "Psicóloga"
+      }] ${name} - ${registration_number}`,
     custom_fields: [
       { id: 360021665652, value: Status[condition] },
       { id: 360016631592, value: name },
@@ -100,7 +99,7 @@ const createOrUpdateTicket = async (
     return await requestZendeskApi("PUT", `/tickets/${tickets[0].id}`, {
       ticket: data
     });
-  } catch (e) {
+  } catch (e: any) {
     apmAgent?.captureError(e);
     throw new Error(e);
   }

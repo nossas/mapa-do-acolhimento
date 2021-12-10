@@ -126,7 +126,7 @@ export const filterService = (payload: Payload) => {
       status: FILTER_SERVICE_STATUS.SUCCESS,
       data
     };
-  } catch (e) {
+  } catch (e: any) {
     dbg.error(e);
     return {
       status: FILTER_SERVICE_STATUS.INVALID_REQUEST

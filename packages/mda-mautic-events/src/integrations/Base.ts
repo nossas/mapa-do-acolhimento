@@ -70,7 +70,7 @@ abstract class Base {
         }
       });
       return result;
-    } catch (e) {
+    } catch (e: any) {
       return this.dbg.error(e);
     }
   };

@@ -30,7 +30,7 @@ export const mauticZendeskHandle = async (req: Request, res: Response) => {
 
   if (formNameStatus === FILTER_FORM_NAME_STATUS.INVALID_REQUEST) {
     log.error("Invalid request.");
-    log.error(errorData as object);
+    log.error(errorData);
     return res.status(404).json({ error: "Invalid request, see logs." });
   }
 
@@ -68,7 +68,7 @@ export const mauticZendeskHandle = async (req: Request, res: Response) => {
 
     log.info(`Success create or updated ticket ${result.data.ticket.id}.`);
     return res.status(200).json({ user, ticket: result.data.ticket });
-  } catch (e) {
+  } catch (e: any) {
     apmAgent?.captureError(e);
     log.error(e);
     return res

@@ -2,15 +2,15 @@ import { Response } from "express";
 import * as yup from "yup";
 import Base from "./Base";
 
-class AdvogadaCreateTicket extends Base {
+class PsicologaCreateTicket extends Base {
   private apm: any;
 
   constructor(res: Response, apm: any) {
-    super("AdvogadaCreateTicket", "tickets", res);
+    super("PsicólogaCreateTicket", "tickets", res);
     this.apm = apm;
   }
 
-  start = async <T>(data) => {
+  start = async <T>(data: object) => {
     let newData = data;
     const validateTicket = yup
       .object()
@@ -34,7 +34,7 @@ class AdvogadaCreateTicket extends Base {
       newData = await validateTicket.validate(newData, {
         stripUnknown: true
       });
-    } catch (e) {
+    } catch (e: any) {
       this.apm.captureError(e);
       return this.dbg.error("Falhou ao validar ticket");
     }
@@ -44,11 +44,11 @@ class AdvogadaCreateTicket extends Base {
           ...newData
         }
       });
-    } catch (e) {
+    } catch (e: any) {
       this.apm.captureError(e);
       return this.dbg.error(e);
     }
   };
 }
 
-export default AdvogadaCreateTicket;
+export default PsicologaCreateTicket;

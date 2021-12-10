@@ -82,7 +82,7 @@ class BondeCreatedDate {
         }
       });
       return aux;
-    } catch (e) {
+    } catch (e: any) {
       this.dbg.error(e);
       this.apm.captureError(e);
       this.apm.setUserContext({

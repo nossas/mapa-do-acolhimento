@@ -43,7 +43,7 @@ export const verificaDiretrizesAtendimento = async <T>(
     await verificaCamposDiretrizesAtendimento.validate(newData, {
       strict: true
     });
-  } catch (e) {
+  } catch (e: any) {
     setCondition(condition, CONDITION.REPROVADA_REGISTRO_INVÁLIDO);
   }
 
@@ -97,7 +97,7 @@ export const verificaEstudoDeCaso = async <T>(
     await verificaCamposEstudoDeCaso.validate(newData, {
       strict: true
     });
-  } catch (e) {
+  } catch (e: any) {
     setCondition(condition, CONDITION.REPROVADA_REGISTRO_INVÁLIDO);
   }
 
@@ -212,7 +212,7 @@ export const customFilterByEmail = (
           };
         }, {})
       };
-    } catch (e) {
+    } catch (e: any) {
       console.log(e);
       return [];
     }
@@ -224,15 +224,15 @@ export const filterByEmail = (
   formEntries: FormEntry[]
 ):
   | {
-      name: string | null;
-      lastname: string | null;
-      cep: string | null;
-      created_at: string;
-      widget_id: number;
-      registration_number: string;
-      whatsapp: string | null;
-      phone: string;
-    }
+    name: string | null;
+    lastname: string | null;
+    cep: string | null;
+    created_at: string;
+    widget_id: number;
+    registration_number: string;
+    whatsapp: string | null;
+    phone: string;
+  }
   | undefined => {
   const getFieldsValue = formEntries.map(i => {
     try {
@@ -248,7 +248,7 @@ export const filterByEmail = (
         ...i,
         ...translateFieldsIntoObject
       };
-    } catch (e) {
+    } catch (e: any) {
       console.log(e);
       return [];
     }

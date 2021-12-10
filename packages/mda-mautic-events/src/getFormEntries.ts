@@ -34,7 +34,7 @@ export const customGetFormEntries = async (
       .of(yup.number())
       .min(6)
       .validate(WIDGET_IDS.split(",").map(Number));
-  } catch (e) {
+  } catch (e: any) {
     apmAgent?.captureError(e);
     throw new Error("Invalid WIDGET_IDS env var");
   }
@@ -57,7 +57,7 @@ export const customGetFormEntries = async (
     );
 
     return res.data.data.form_entries;
-  } catch (e) {
+  } catch (e: any) {
     apmAgent?.captureError(e);
     throw new Error("Failed request to GraphQL API");
   }
@@ -95,7 +95,7 @@ export const getFormEntryByEmail = async (
       )
       .notRequired()
       .validate(await customGetFormEntries(email));
-  } catch (e) {
+  } catch (e: any) {
     apmAgent?.captureError(e);
     throw new Error(`form_entry is invalid`);
   }
@@ -129,7 +129,7 @@ export const getFormEntries = async (email: string, apm: any) => {
     ) {
       throw new Error("Invalid WIDGET_IDS env var");
     }
-  } catch (e) {
+  } catch (e: any) {
     apm.captureError(e);
     return dbg.error(e);
   }
@@ -150,7 +150,7 @@ export const getFormEntries = async (email: string, apm: any) => {
       }
     );
     return data.data.data.form_entries;
-  } catch (e) {
+  } catch (e: any) {
     apm.captureError(e);
     return dbg.error(e);
   }

@@ -35,7 +35,7 @@ export const customFilterName = async (data: Mautic) => {
 
   try {
     validationResult = await validation.validate(data);
-  } catch (e) {
+  } catch (e: any) {
     dbg.error(e);
     apmAgent?.captureError(e);
     return {
@@ -110,7 +110,7 @@ export const filterFormName = async (data: object, apm: any) => {
   let validationResult;
   try {
     validationResult = await validation.validate(data);
-  } catch (e) {
+  } catch (e: any) {
     dbg.error(e);
     apm.captureError(e);
     return {

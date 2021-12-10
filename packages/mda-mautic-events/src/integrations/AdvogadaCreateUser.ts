@@ -160,7 +160,7 @@ class AdvogadaCreateUser extends Base {
       return {
         response: await this.send(dataToBeSent)
       };
-    } catch (e) {
+    } catch (e: any) {
       this.apm.captureError(e);
       return this.dbg.error("validation failed", e);
     }
