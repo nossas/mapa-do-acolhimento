@@ -1,7 +1,7 @@
 import * as yup from "yup";
 import { CONDITION, FormEntry, FormEntryFields } from "./types";
 
-export const setCondition = (condition: [CONDITION], value: CONDITION) => {
+export const setCondition: any = (condition: [CONDITION], value: CONDITION) => {
   const newCondition = condition;
   if (newCondition[0] === CONDITION.UNSET) {
     newCondition[0] = value;
@@ -11,7 +11,7 @@ export const setCondition = (condition: [CONDITION], value: CONDITION) => {
 /**
  * TODO: adicionar tag cep_incorreto
  */
-export const verifyLocation = async (data, getGeolocation) => {
+export const verifyLocation: any = async (data: any, getGeolocation: any) => {
   const geolocationData = await getGeolocation({
     cep: data.cep,
     email: data.email
@@ -23,9 +23,9 @@ export const verifyLocation = async (data, getGeolocation) => {
   };
 };
 
-export const verificaDiretrizesAtendimento = async <T>(
+export const verificaDiretrizesAtendimento: any = async (
   condition: [CONDITION],
-  data: T
+  data: any
 ) => {
   let newData = data;
   const verificaCamposDiretrizesAtendimento = yup
@@ -78,9 +78,9 @@ export const verificaDiretrizesAtendimento = async <T>(
   return newData;
 };
 
-export const verificaEstudoDeCaso = async <T>(
+export const verificaEstudoDeCaso: any = async (
   condition: [CONDITION],
-  data: T
+  data: any
 ) => {
   let newData = data;
   const verificaCamposEstudoDeCaso = yup
@@ -130,8 +130,8 @@ export const verificaEstudoDeCaso = async <T>(
   return newData;
 };
 
-export const removeFalsyValues = obj =>
-  Object.entries(obj).reduce((a, [k, v]) => (v ? ((a[k] = v), a) : a), {});
+export const removeFalsyValues: any = (obj: any) =>
+  Object.entries(obj).reduce((a: any, [k, v]) => (v ? ((a[k] = v), a) : a), {});
 
 export const checkNames = ({
   primeiro_nome,
@@ -150,13 +150,18 @@ export const checkNames = ({
   }
 
   if (aux.length > 0) return aux;
+  return undefined;
 };
 
-export const checkCep = (cep?: string) => {
-  if (cep && cep.length > 0) return cep.toString();
+export const checkCep: any = (cep?: string) => {
+  if (cep && cep.length > 0) {
+    return cep.toString();
+  }
+
+  return false;
 };
 
-const dicio = {
+const dicio: any = {
   "field-1533735738039-59": "name",
   "field-1464961964463-91": "name",
   "field-1497368661426-82": "name",
@@ -237,7 +242,7 @@ export const filterByEmail = (
   const getFieldsValue = formEntries.map(i => {
     try {
       const parsedFields = JSON.parse(i.fields.toString());
-      const translateFieldsIntoObject = parsedFields.reduce((newObj, old) => {
+      const translateFieldsIntoObject = parsedFields.reduce((newObj: any, old: any) => {
         const key = (dicio[old.uid] && dicio[old.uid]) || old.kind;
         return {
           ...newObj,

@@ -10,7 +10,7 @@ class AdvogadaUpdateTicket extends Base {
     this.apm = apm;
   }
 
-  start = async <T>(data) => {
+  start: any = async (data: any) => {
     let newData = data;
     const validateTicket = yup
       .object()
@@ -38,7 +38,7 @@ class AdvogadaUpdateTicket extends Base {
       return this.dbg.error("Falhou ao validar ticket");
     }
     try {
-      return this.send<T>({
+      return this.send({
         ticket: {
           ...newData
         }

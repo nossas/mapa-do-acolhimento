@@ -10,7 +10,7 @@ class PsicologaCreateTicket extends Base {
     this.apm = apm;
   }
 
-  start: any = async <T>(data: any) => {
+  start: any = async (data: any) => {
     let newData = data;
     const validateTicket = yup
       .object()
@@ -39,7 +39,7 @@ class PsicologaCreateTicket extends Base {
       return this.dbg.error("Falhou ao validar ticket");
     }
     try {
-      return this.send<T>({
+      return this.send({
         ticket: {
           ...newData
         }
