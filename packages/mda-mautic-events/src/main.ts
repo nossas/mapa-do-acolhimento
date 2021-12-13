@@ -9,4 +9,5 @@ const apm = apmNode.start({
 import Server from "./Server";
 
 const app = new Server(apm);
-app.start();
+
+export default app;

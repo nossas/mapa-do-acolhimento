@@ -1,7 +1,7 @@
 import urljoin from "url-join";
 import axios from "axios";
 
-const requestZendeskApi = async <T>(
+const requestZendeskApi: any = async <T>(
   method: "POST" | "PUT" | "GET" = "POST",
   path: string,
   data?: unknown

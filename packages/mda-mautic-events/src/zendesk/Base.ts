@@ -4,7 +4,7 @@ import dbg from "./dbg";
 
 const log = dbg.child({ labels: { process: "base" } });
 
-const get = async <T>(url: string, params?: any) => {
+const get: any = async <T>(url: string, params?: any) => {
   const {
     ZENDESK_API_URL = "",
     ZENDESK_API_TOKEN = "",
@@ -24,7 +24,7 @@ const get = async <T>(url: string, params?: any) => {
   }
 };
 
-const put = async <T>(url: string, data?: any) => {
+const put: any = async <T>(url: string, data?: any) => {
   const {
     ZENDESK_API_URL = "",
     ZENDESK_API_TOKEN = "",

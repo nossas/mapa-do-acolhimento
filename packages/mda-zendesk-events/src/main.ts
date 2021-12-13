@@ -1,8 +1,6 @@
 import dotenv from "dotenv";
-import { install } from "source-map-support";
 import apmNode from "elastic-apm-node";
 
-install();
 const apm = apmNode.start({
   captureBody: 'all'
 });

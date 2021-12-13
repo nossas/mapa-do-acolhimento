@@ -12,8 +12,8 @@ const generateRequestVariables = R.pipe(
       )
     )(i)
   ),
-  R.unnest,
-  R.fromPairs
+  // R.unnest,
+  // R.fromPairs
 );
 
 export default generateRequestVariables;

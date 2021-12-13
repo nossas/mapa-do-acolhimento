@@ -1,6 +1,6 @@
 import Bottleneck from "bottleneck";
 import { getGeolocation } from "bonde-core-tools";
-import { userToContact } from "components/dist";
+import { userToContact } from "mda-components";
 import { makeBatchRequests, composeUsers } from "./User";
 import createZendeskTickets, { composeTickets } from "./Ticket";
 import { insertSolidarityUsers, updateFormEntries } from "../graphql/mutations";
@@ -17,7 +17,7 @@ const limiter = new Bottleneck({
 
 let cache: FormEntry[] = [];
 
-export const handleIntegration = (widgets: Widget[], apm) => async (
+export const handleIntegration: any = (widgets: Widget[], apm) => async (
   response: FormEntriesResponse
 ) => {
   const transaction = apm.startTransaction("integration");

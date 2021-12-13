@@ -152,14 +152,14 @@ interface Response {
   affected_rows: number;
 }
 
-const saveTickets = async (tickets: Tickets[]) => {
+const saveTickets: any = async (tickets: Tickets[]) => {
   try {
     const validatedTickets = await ticketsSchema.validate(tickets, {
       stripUnknown: true
     });
     const query = createQuery(validatedTickets);
     const variables = generateRequestVariables(validatedTickets);
-    const response = await HasuraBase<
+    const response: any = await HasuraBase<
       HasuraResponse<"insert_solidarity_tickets", Response>
     >(query, variables);
 

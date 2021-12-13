@@ -46,11 +46,11 @@ interface Response {
 
 const log = dbg.child({ labels: { process: "updateUserTicketCount" } });
 
-const updateUserTicketCount = async users => {
+const updateUserTicketCount: any = async users => {
   try {
     const query = createQuery(users);
     const variables = generateRequestVariables(users);
-    const response = await HasuraBase<
+    const response: any = await HasuraBase<
       HasuraResponse<"insert_solidarity_users", Response>
     >(query, variables);
 

@@ -1,1 +1,1 @@
-declare module "components/dist";
+declare module "mda-components";

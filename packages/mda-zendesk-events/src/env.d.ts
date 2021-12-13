@@ -1,3 +1,4 @@
+declare module "mda-components"
 declare namespace NodeJS {
   export interface ProcessEnv {
     ZENDESK_API_URL: string;

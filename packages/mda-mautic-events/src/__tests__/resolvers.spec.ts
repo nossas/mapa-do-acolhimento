@@ -3,18 +3,18 @@ import * as filterService from "../filterService";
 import * as createUser from "../integration-functions/create-user";
 import { mockMauticFormRequest } from "../mocks";
 
-jest.mock("components");
+jest.mock("mda-components");
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const components = require("components");
-const userToContactSpy = jest.spyOn(components, "userToContact");
+const mdaComponents = require("mda-components");
+const userToContactSpy = jest.spyOn(mdaComponents, "userToContact");
 
 const createUserSpy = jest.spyOn(createUser, "default");
 const readMauticRequestSpy = jest.spyOn(filterService, "readMauticRequest");
 
 describe("Express resolvers functions", () => {
   describe("/mautic-zendesk", () => {
-    it("call components/userToContact when resolve createZendeskUser", async done => {
+    it("call mda-components/userToContact when resolve createZendeskUser", async done => {
       const resultUser: createUser.User = {
         role: "end-user",
         organization_id: 123,

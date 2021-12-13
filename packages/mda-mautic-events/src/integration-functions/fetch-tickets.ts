@@ -22,10 +22,10 @@ const validationTickets = yup.array().of(
     .required()
 );
 
-const fetchTickets = async (
+const fetchTickets: any = async (
   input: FetchTicketsInput
-): Promise<Ticket[] | undefined> => {
-  const resp = await requestZendeskApi<{ tickets: Ticket[] }>(
+) => {
+  const resp: any = await requestZendeskApi(
     "GET",
     `users/${input.userId}/tickets/requested`
   );

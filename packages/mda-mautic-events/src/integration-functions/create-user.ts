@@ -33,9 +33,9 @@ export interface User extends Base {
   user_id: number;
 }
 
-interface EndUser extends Base {
-  id: number;
-}
+// interface EndUser extends Base {
+//   id: number;
+// }
 
 const schema = yup.object().shape({
   organization_id: yup.number().required(),
@@ -49,7 +49,7 @@ const schema = yup.object().shape({
   user_id: yup.number().required()
 });
 
-export default async (input: CreateUserInput): Promise<User | undefined> => {
+const createUser: any = async (input: CreateUserInput) => {
   const { results } = input;
 
   const subscribe = await verifySubscribe({
@@ -67,7 +67,7 @@ export default async (input: CreateUserInput): Promise<User | undefined> => {
   );
   log.info(`input zendesk api ${JSON.stringify(data, null, 2)}`);
 
-  const response = await requestZendeskApi<{ user: EndUser }>(
+  const response: any = await requestZendeskApi(
     "POST",
     "users/create_or_update",
     data
@@ -84,5 +84,7 @@ export default async (input: CreateUserInput): Promise<User | undefined> => {
 
   if (!user) throw new Error("User not created.");
 
-  return user;
+  // return user;
 };
+
+export default createUser;

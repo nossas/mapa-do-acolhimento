@@ -1,4 +1,4 @@
-import { userToContact } from "components/dist";
+import { userToContact } from "mda-components";
 import { getGeolocation } from "bonde-core-tools";
 import handleUserFields from "./interfaces/User/handleUserFields";
 import getTicket from "./zendesk/getTicket";
@@ -21,7 +21,7 @@ const log = dbg.child({ module: "app" });
 /**
  * @param ticket_id ID do ticket
  */
-const App = async (ticket_id: string, apm: any) => {
+const App: any = async (ticket_id: string, apm: any) => {
   // Busca o ticket no zendesk
   const response = await getTicket(ticket_id);
   if (!response) {

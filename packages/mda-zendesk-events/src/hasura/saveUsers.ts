@@ -214,11 +214,11 @@ interface Response {
   affected_rows: number;
 }
 
-const saveUsers = async (users: User[]) => {
+const saveUsers: any = async (users: User[]) => {
   try {
     const query = createQuery(users);
     const variables = generateRequestVariables(users);
-    const response = await HasuraBase<
+    const response: any = await HasuraBase<
       HasuraResponse<"insert_solidarity_users", Response>
     >(query, variables);
 
