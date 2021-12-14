@@ -1,9 +1,9 @@
-// import { readMauticRequest } from "../filterService";
-import dbg from "../dbg"
+import readMauticRequest from "../filterService";
+import dbg, { apmAgent } from "../dbg"
 import { mockMauticFormRequest } from "../mocks";
 
 describe("Validation of Mautic Form", () => {
-  let readMauticRequest: any;
+  // let readMauticRequest: any;
   let spyApm: any;
   let spyLog: any;
 
@@ -16,14 +16,14 @@ describe("Validation of Mautic Form", () => {
     process.env.ELASTIC_APM_SERVICE_NAME = "teste";
 
     spyLog = jest.spyOn(dbg, "error");
-    spyApm = jest.spyOn(dbg, "captureError");
+    spyApm = jest.spyOn(apmAgent, "captureError");
   });
   afterAll(() => {
     process.env = OLD_ENV; // Restore old environment
   });
 
   it("Correct mautic form", async done => {
-    await expect(readMauticRequest(mockMauticFormRequest)).resolves.toEqual(
+    await expect(await readMauticRequest(mockMauticFormRequest)).resolves.toEqual(
       mockMauticFormRequest.body
     );
     return done();
@@ -34,7 +34,7 @@ describe("Validation of Mautic Form", () => {
       body: undefined
     };
 
-    await expect(readMauticRequest(mockRequest)).rejects.toThrow(
+    await expect(await readMauticRequest(mockRequest)).rejects.toThrow(
       "Mautic payload invalid!"
     );
     expect(spyApm).toBeCalledTimes(1);

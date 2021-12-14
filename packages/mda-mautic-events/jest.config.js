@@ -1,4 +1,7 @@
 module.exports = {
+  // moduleNameMapper: {
+  //   "mda-components/(.*)": "<rootDir>/packages/mda-components/src/$1"
+  // },
   testEnvironment: "node",
   transform: {
     "^.+\\.tsx?$": "ts-jest"

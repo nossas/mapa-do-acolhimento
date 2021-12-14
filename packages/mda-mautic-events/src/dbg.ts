@@ -10,16 +10,16 @@ const {
   ELASTIC_APM_SERVICE_NAME: serviceName
 } = process.env;
 
-export let apmAgent;
+// if (secretToken && serverUrl && serviceName) {
+const apmAgent = apm.start({
+  secretToken,
+  serverUrl,
+  serviceName,
+  environment: process.env.NODE_ENV,
+  captureBody: "errors"
+});
 
-if (secretToken && serverUrl && serviceName) {
-  apmAgent = apm.start({
-    secretToken,
-    serverUrl,
-    serviceName,
-    environment: process.env.NODE_ENV,
-    captureBody: "errors"
-  });
-}
+// }
 
 export default log;
+export { apmAgent };
