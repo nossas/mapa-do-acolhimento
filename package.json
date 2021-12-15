@@ -33,6 +33,6 @@
     "node": ">=16"
   },
   "scripts": {
-    "coverage": "jest --coverage && codecov"
+    "coverage": "pnpm m run test -- --coverage"
   }
 }

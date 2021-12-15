@@ -57,7 +57,7 @@ pipeline:
     secrets: [codecov_token]
     group: build
     paths:
-      - coverage
+      - packages/**/coverage/*
     when:
       status: success
       event: [push, tag]

@@ -7,7 +7,7 @@ import AdvogadaCreateTicket from "../integrations/AdvogadaCreateTicket";
 import AdvogadaUpdateTicket from "../integrations/AdvogadaUpdateTicket";
 import PsicologaCreateTicket from "../integrations/PsicologaCreateTicket";
 import PsicologaUpdateTicket from "../integrations/PsicologaUpdateTicket";
-import { FILTER_SERVICE_STATUS, filterService } from "../filterService";
+import filterService, { FILTER_SERVICE_STATUS } from "../filterService";
 import { FILTER_FORM_NAME_STATUS, filterFormName } from "../filterFormName";
 import log, { apmAgent } from "../dbg";
 import { getFormEntries } from "../getFormEntries";
