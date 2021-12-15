@@ -24,7 +24,7 @@ describe("users/create_or_update", () => {
     process.env = OLD_ENV; // Restore old environment
   });
 
-  it("return parsed user", async (done: any) => {
+  it("return parsed user", async () => {
     const email = "roge@example.org";
     const name = "Roger Wilco";
     const external_id = "1234";
@@ -49,16 +49,17 @@ describe("users/create_or_update", () => {
       }
     } as any);
 
-    await expect(
-      createUser({ results: { email, name }, organization: "ADVOGADA" })
-    ).resolves.toEqual({
-      email,
-      user_id: 9873843,
-      name,
-      organization_id: 57542,
-      role: "end-user"
-    });
-    expect(spyZendesk).toBeCalledWith("POST","users/create_or_update",data);
-    return done();
+    return createUser({ results: { email, name }, organization: "ADVOGADA" })
+      .then((result) => {
+        expect(result).toEqual({
+          email,
+          user_id: 9873843,
+          name,
+          organization_id: 57542,
+          role: "end-user"
+        });
+
+        expect(spyZendesk).toBeCalledWith("POST","users/create_or_update",data);
+      });
   });
 });

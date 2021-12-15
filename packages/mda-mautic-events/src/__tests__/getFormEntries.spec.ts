@@ -24,6 +24,7 @@ describe("form entries", () => {
     jest.resetModules(); // Most important - it clears the cache
     process.env = {
       ...OLD_ENV,
+      X_HASURA_ADMIN_SECRET: "123-secret",
       WIDGET_IDS: "12,45,55,23,12,34",
       HASURA_API_URL: "http://localhost:8080/graphql"
     }; // Make a copy
@@ -84,7 +85,7 @@ describe("form entries", () => {
       },
       {
         headers: {
-          "x-hasura-admin-secret": process.env.X_HASURA_ADMIN_SECRET
+          "x-hasura-admin-secret": "123-secret"
         }
       }
     );

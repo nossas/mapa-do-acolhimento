@@ -49,7 +49,7 @@ const schema = yup.object().shape({
   user_id: yup.number().required()
 });
 
-const createUser: any = async (input: CreateUserInput) => {
+const createUser = async (input: CreateUserInput): Promise<any> => {
   const { results } = input;
 
   const subscribe = await verifySubscribe({
@@ -74,7 +74,7 @@ const createUser: any = async (input: CreateUserInput) => {
   );
 
   log.info("response data", { response });
-  const user = schema
+  const user = await schema
     .transform(obj => {
       const user_id = obj.id;
       delete obj.id;
@@ -84,7 +84,7 @@ const createUser: any = async (input: CreateUserInput) => {
 
   if (!user) throw new Error("User not created.");
 
-  // return user;
+  return user;
 };
 
 export default createUser;

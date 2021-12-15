@@ -75,7 +75,7 @@ export type Mautic = {
   "mautic.form_on_submit": FormSubmit[];
 };
 
-const readMauticRequest: any = async (
+export const readMauticRequest: any = async (
   req: Request<unknown, unknown, Mautic>
 ): Promise<Mautic | any> => {
   try {
@@ -86,8 +86,6 @@ const readMauticRequest: any = async (
     throw new Error("Mautic payload invalid!");
   }
 };
-
-export default readMauticRequest;
 
 interface Payload {
   event: {
@@ -107,7 +105,7 @@ export enum FILTER_SERVICE_STATUS {
   INVALID_REQUEST
 }
 
-export const filterService: any = (payload: Payload) => {
+const filterService: any = (payload: Payload) => {
   try {
     const {
       event: {
@@ -135,3 +133,5 @@ export const filterService: any = (payload: Payload) => {
     };
   }
 };
+
+export default filterService;

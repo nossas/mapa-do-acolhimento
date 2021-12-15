@@ -1,4 +1,4 @@
-import readMauticRequest from "../filterService";
+import { readMauticRequest } from "../filterService";
 import dbg, { apmAgent } from "../dbg"
 import { mockMauticFormRequest } from "../mocks";
 
@@ -22,23 +22,22 @@ describe("Validation of Mautic Form", () => {
     process.env = OLD_ENV; // Restore old environment
   });
 
-  it("Correct mautic form", async done => {
-    await expect(await readMauticRequest(mockMauticFormRequest)).resolves.toEqual(
-      mockMauticFormRequest.body
-    );
-    return done();
+  it("Correct mautic form", async () => {
+    return readMauticRequest(mockMauticFormRequest).then((data) => {
+      expect(data).toEqual(mockMauticFormRequest.body);
+    })
   });
 
-  it("Capture error validation schema", async done => {
+  it("Capture error validation schema", async () => {
     const mockRequest: any = {
       body: undefined
     };
 
-    await expect(await readMauticRequest(mockRequest)).rejects.toThrow(
-      "Mautic payload invalid!"
-    );
-    expect(spyApm).toBeCalledTimes(1);
-    expect(spyLog).toBeCalledTimes(1);
-    return done();
+    return readMauticRequest(mockRequest)
+      .catch((err) => {
+        expect(err.message).toEqual("Mautic payload invalid!");
+        expect(spyApm).toBeCalledTimes(1);
+        expect(spyLog).toBeCalledTimes(1);
+      });
   });
 });
