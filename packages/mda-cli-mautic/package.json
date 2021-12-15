@@ -14,6 +14,7 @@
     "my-cli-tool": "./dist/esbuild/cli.js"
   },
   "scripts": {
+    "start":"node ./dist/esbuild/cli.js",
     "cli": "ts-node src/cli.ts",
     "lint": "eslint src/ --ext .js,.jsx,.ts,.tsx",
     "test": "jest",

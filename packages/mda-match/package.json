@@ -7,7 +7,7 @@
     "@types/faker": "^4.1.12",
     "@types/jest": "~26.0.24",
     "@types/node": "~12.12.70",
-    "@types/node-zendesk": "^1.4.0",
+    "@types/node-zendesk": "^2",
     "@types/throng": "^4.0.2",
     "@types/url-join": "^4.0.1",
     "@types/ws": "^7.4.7",
@@ -26,6 +26,7 @@
     "my-cli-tool": "dist/esbuild/cli.js"
   },
   "scripts": {
+    "start": "node ./dist/esbuild/cli.js",
     "cli": "ts-node src/cli.ts",
     "lint": "eslint src/ --ext .js,.jsx,.ts,.tsx",
     "test": "jest",
@@ -58,7 +59,8 @@
     "elastic-apm-node": "^3.21.1",
     "graphql": "^15.6.0",
     "graphql-tag": "^2.12.5",
-    "node-zendesk": "1.4.0",
+    "nconf": "indexzero/nconf#master",
+    "node-zendesk": "2.1.0",
     "pino": "^6.11.3",
     "throng": "^4.0.0",
     "ws": "^7.5.5",

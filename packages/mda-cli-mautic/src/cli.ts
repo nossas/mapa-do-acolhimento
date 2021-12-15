@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import dotenv from "dotenv";
 import prompts, { PromptObject } from "prompts";
 import { Signale } from "signale";

@@ -1,13 +1,9 @@
 import dotenv from "dotenv";
-import apmNode from "elastic-apm-node";
 
 dotenv.config();
-const apm = apmNode.start({
-    captureBody: 'all'
-});
 
 import Server from "./Server";
 
-const app = new Server(apm);
+const app = new Server();
 
 export default app;

@@ -1,3 +1,4 @@
+import apmNode from "elastic-apm-node";
 import Express from "express";
 import { Logger } from "pino";
 import log from "./dbg";
@@ -10,8 +11,8 @@ class Server {
   private dbg: Logger;
   private apm: any;
 
-  constructor(apm) {
-    this.apm = apm;
+  constructor() {
+    this.apm = apmNode;
     this.dbg = log;
   }
 
