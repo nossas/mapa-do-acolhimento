@@ -20,7 +20,7 @@ import createOrUpdateMany from '../createOrUpdateMany';
 
 describe("Create or Update Many Users", () => {
 
-    jest.setTimeout(30000); 
+   jest.setTimeout(300000); 
   
     const role: 'end-user' = 'end-user'; 
     const condition: "inscrita" | "desabilitada" = 'desabilitada';
@@ -50,7 +50,7 @@ describe("Create or Update Many Users", () => {
       }
     }]
   
-    const result = {
+    const jobStatus = {
       "job_status": {
         "id": "a20228d9f081c4dd37fb64871e0f6ead", 
         "message": "Completed at 2021-12-17 18:28:10 +0000", 
@@ -65,14 +65,13 @@ describe("Create or Update Many Users", () => {
         "url": "https://mapadoacolhimento.zendesk.com/api/v2/job_statuses/d01228d9f081c4dd37fb64871e0f6eac.json"
       }
     }
-    
-    mockedFetch.mockResolvedValueOnce(new Response(JSON.stringify(result), { status: 200 }));
-    mockedFetch.mockResolvedValueOnce(new Response(JSON.stringify(result), { status: 200 }));
-  
+
+    mockedFetch.mockResolvedValueOnce(new Response(JSON.stringify(jobStatus), { status: 200 }));
+    mockedFetch.mockResolvedValueOnce(new Response(JSON.stringify(jobStatus), { status: 200 }));
+   
     it("Create a User", async () => {
       const data = await createOrUpdateMany(users);
-      console.log('Aqui',data);
-      expect(data).toStrictEqual(result);
+      expect(data).toStrictEqual(jobStatus.job_status.results);
     });
   
   });

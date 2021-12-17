@@ -33,7 +33,10 @@ const createOrUpdateMany = (users: User[]): Promise <ZendeskUserCreationResponse
   })
   .then((result) => {
     const jobID = result["job_status"].id;
-    return jobStatuses(jobID, 5000).then((data) => data as ZendeskUserCreationResponse); 
+   
+    return jobStatuses(jobID, 5000).then((data: any) => {
+       
+      return data["job_status"]["results"] as ZendeskUserCreationResponse}); 
   })
   .catch((err)=>{
     log.error(err);
