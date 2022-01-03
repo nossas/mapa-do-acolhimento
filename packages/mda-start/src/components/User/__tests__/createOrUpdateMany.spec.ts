@@ -22,57 +22,57 @@ describe("Create or Update Many Users", () => {
 
    jest.setTimeout(300000); 
   
-    const role: 'end-user' = 'end-user'; 
-    const condition: "inscrita" | "desabilitada" = 'desabilitada';
-    const users = [{
-      name: "Teste",
-      role: role,
-      organization_id: 360269610652,
-      email: "teste@email.com",
-      external_id: "00001",
-      phone: "99999999999",
-      verified: false,
-      user_fields: {
-        cor: null,
-        address: "",
-        cep: '',
-        city: '',
-        latitude: '',
-        longitude: '',
-        state: '',
-        tipo_de_acolhimento: null,
-        condition: condition,
-        whatsapp: "",
-        registration_number: "21312312",
-        occupation_area: null,
-        disponibilidade_de_atendimentos: "1",
-        data_de_inscricao_no_bonde: "2020-05-29T00:28:29.55569"
-      }
-    }]
+  const role = "end-user"; 
+  const condition:"desabilitada" = 'desabilitada';
+  const users = [{
+    name: "Teste",
+    role: role as "end-user",
+    organization_id: 360269610652,
+    email: "teste@email.com",
+    external_id: "00001",
+    phone: "99999999999",
+    verified: false,
+    user_fields: {
+      cor: null,
+      address: "",
+      cep: '',
+      city: '',
+      latitude: '',
+      longitude: '',
+      state: '',
+      tipo_de_acolhimento: null,
+      condition: condition,
+      whatsapp: "",
+      registration_number: "21312312",
+      occupation_area: null,
+      disponibilidade_de_atendimentos: "1",
+      data_de_inscricao_no_bonde: "2020-05-29T00:28:29.55569"
+     }
+  }]
   
-    const jobStatus = {
-      "job_status": {
-        "id": "a20228d9f081c4dd37fb64871e0f6ead", 
-        "message": "Completed at 2021-12-17 18:28:10 +0000", 
-        "progress": 1, 
-        "results": [{
-          "email": "teste@email.com", 
-          "external_id": "00001", 
-          "id": 389327067551, "status": "Updated"
-        }],
-        "status": "completed", 
-        "total": 1, 
-        "url": "https://mapadoacolhimento.zendesk.com/api/v2/job_statuses/d01228d9f081c4dd37fb64871e0f6eac.json"
-      }
+  const jobStatus = {
+    "job_status": {
+      "id": "a20228d9f081c4dd37fb64871e0f6ead", 
+      "message": "Completed at 2021-12-17 18:28:10 +0000", 
+      "progress": 1, 
+      "results": [{
+        "email": "teste@email.com", 
+        "external_id": "00001", 
+        "id": 389327067551, "status": "Updated"
+      }],
+      "status": "completed", 
+      "total": 1, 
+      "url": "https://mapadoacolhimento.zendesk.com/api/v2/job_statuses/d01228d9f081c4dd37fb64871e0f6eac.json"
     }
+  }
 
-    mockedFetch.mockResolvedValueOnce(new Response(JSON.stringify(jobStatus), { status: 200 }));
-    mockedFetch.mockResolvedValueOnce(new Response(JSON.stringify(jobStatus), { status: 200 }));
-   
-    it("Create a User", async () => {
-      const data = await createOrUpdateMany(users);
-      expect(data).toStrictEqual(jobStatus.job_status.results);
-    });
+  mockedFetch.mockResolvedValueOnce(new Response(JSON.stringify(jobStatus), { status: 200 }));
+  mockedFetch.mockResolvedValueOnce(new Response(JSON.stringify(jobStatus), { status: 200 }));
   
+  it("Create a User", async () => {
+    const data = await createOrUpdateMany(users);
+    expect(data).toStrictEqual(jobStatus.job_status.results);
   });
+  
+});
 
