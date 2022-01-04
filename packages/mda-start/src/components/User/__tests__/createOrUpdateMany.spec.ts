@@ -6,21 +6,17 @@
 
 //3. Resolve requisição quando o status é igual a 'completed'
 
-const mockedFetch = jest.fn() as jest.MockedFunction<typeof fetch>;
+import crossFetch from "cross-fetch";
+import createOrUpdateMany from '../createOrUpdateMany';
 
 jest.mock("cross-fetch", () => ({
-  ...jest.requireActual("cross-fetch"),
   __esModule: true,
-  fetch: mockedFetch,
-  default: mockedFetch,
+  default: jest.fn()
 }));
-
-import fetch, { Response } from "cross-fetch";
-import createOrUpdateMany from '../createOrUpdateMany';
 
 describe("Create or Update Many Users", () => {
 
-   jest.setTimeout(300000); 
+  jest.setTimeout(5001);
   
   const role = "end-user"; 
   const condition:"desabilitada" = 'desabilitada';
@@ -52,7 +48,7 @@ describe("Create or Update Many Users", () => {
   
   const jobStatus = {
     "job_status": {
-      "id": "a20228d9f081c4dd37fb64871e0f6ead", 
+      "id": "d01228d9f081c4dd37fb64871e0f6eac", 
       "message": "Completed at 2021-12-17 18:28:10 +0000", 
       "progress": 1, 
       "results": [{
@@ -62,16 +58,17 @@ describe("Create or Update Many Users", () => {
       }],
       "status": "completed", 
       "total": 1, 
-      "url": "https://mapadoacolhimento.zendesk.com/api/v2/job_statuses/d01228d9f081c4dd37fb64871e0f6eac.json"
+      "url": "https://teste.zendesk.com/api/v2/job_statuses/d01228d9f081c4dd37fb64871e0f6eac.json"
     }
   }
 
-  mockedFetch.mockResolvedValueOnce(new Response(JSON.stringify(jobStatus), { status: 200 }));
-  mockedFetch.mockResolvedValueOnce(new Response(JSON.stringify(jobStatus), { status: 200 }));
-  
   it("Create a User", async () => {
+    (crossFetch  as any).mockResolvedValueOnce({json: () => jobStatus, status: 200 });
+    (crossFetch  as any).mockResolvedValueOnce({json: () => jobStatus, status: 200 });
+   
     const data = await createOrUpdateMany(users);
     expect(data).toStrictEqual(jobStatus.job_status.results);
+    
   });
   
 });
