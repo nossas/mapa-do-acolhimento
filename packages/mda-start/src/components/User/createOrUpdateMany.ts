@@ -18,7 +18,7 @@ const getAuth = () => ({
   }                     
 })
 
-const createOrUpdateMany = (users: User[]): Promise <ZendeskUserCreationResponse> => {
+const createOrUpdateMany = (users: User[]): Promise <ZendeskUserCreationResponse[]> => {
   
   return fetch(`${parameters.remoteUri}users/create_or_update_many.json`, {
     method: 'POST',

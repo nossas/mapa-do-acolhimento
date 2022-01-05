@@ -1,6 +1,7 @@
-import client from "../../zendesk";
+//import client from "../../zendesk";
 import { User, ZendeskUserCreationResponse } from "../../types";
 import logger from "../../logger";
+import createOrUpdateMany from "./createOrUpdateMany";
 
 const log = logger.child({ labels: { process: "createZendeskUsers" } });
 
@@ -10,7 +11,22 @@ export default async (
   log.info(`Entering createZendeskUser`);
   // ADD YUP VALIDATION
   return new Promise(resolve => {
-    return client.users.createOrUpdateMany({ users }, (err, _req, result) => {
+
+    createOrUpdateMany(users)
+    .then((results)=>{
+      if (
+        results &&
+        results["job_status"] &&
+        results["job_status"]["status"] === "completed"
+      ) {
+        return resolve(results["job_status"]["results"]);
+      }
+    })
+    .catch( (err) => {
+      log.error(err);
+      return resolve(undefined);
+    });
+   /* return client.users.createOrUpdateMany({ users }, (err, _req, result) => {
       if (err) {
         log.error(err);
         return resolve(undefined);
@@ -35,6 +51,6 @@ export default async (
           }
         }
       );
-    });
+    });*/
   });
 };
