@@ -16,7 +16,7 @@ jest.mock("cross-fetch", () => ({
 
 describe("Create or Update Many Users", () => {
 
-  jest.setTimeout(5001);
+  jest.setTimeout(6000);
   
   const role = "end-user"; 
   const condition:"desabilitada" = 'desabilitada';
