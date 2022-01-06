@@ -1,5 +1,6 @@
 import dbg from "../../dbg";
-import client from "./";
+//import client from "./";
+import createOneTicket from "./createOneTicket";
 import { agentSelectionDicio } from "../../utils";
 import { Ticket } from "../../types";
 import * as yup from "yup";
@@ -57,7 +58,19 @@ export default async (ticket: Ticket): Promise<Ticket | undefined> => {
       stripUnknown: true
     });
     return new Promise(resolve => {
-      return client.tickets.create(
+      createOneTicket({ ticket: validatedTicket } as { ticket },)
+      .then((result) =>{
+        log.info("Zendesk ticket created successfully!");
+        return resolve(result as Ticket);
+      })
+     .catch((err)=>{
+        log.error(
+          `Failed to create ticket for user '${ticket.requester_id}' %o`,
+           err
+        );
+        return resolve(undefined);
+      });
+      /*return client.tickets.create(
         { ticket: validatedTicket } as { ticket },
         (err, _req, result) => {
           if (err) {
@@ -77,7 +90,7 @@ export default async (ticket: Ticket): Promise<Ticket | undefined> => {
           // log("Zendesk ticket created successfully!");
           return resolve(result as Ticket);
         }
-      );
+      );*/
     });
   } catch (e: any) {
     log.error("failed to create ticket: ".red, e);
