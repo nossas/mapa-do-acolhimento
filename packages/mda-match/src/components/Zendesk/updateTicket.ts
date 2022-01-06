@@ -1,5 +1,4 @@
 import dbg from "../../dbg";
-//import client from "./";
 import { UpdateTicket, Ticket } from "../../types";
 import { agentSelectionDicio } from "../../utils";
 import * as yup from "yup";
@@ -71,25 +70,6 @@ export default async (
         log.error(`Failed to update ticket '${ticketId}'`, err);
         return resolve(undefined);
       })
-      /*return client.tickets.update(
-        ticketId,
-        { ticket: validatedTicket } as { ticket },
-        (err, _req, result) => {
-          if (err) {
-            log.error(`Failed to update ticket '${ticketId}'`.red, err);
-            return resolve(undefined);
-          }
-          // log(
-          //   `Results from zendesk ticket update ${JSON.stringify(
-          //     result,
-          //     null,
-          //     2
-          //   )}`
-          // );
-          // log("Zendesk ticket updated successfully!");
-          return resolve(result as Ticket);
-        }
-      );*/
     });
   } catch (e: any) {
     log.error("failed to update msr ticket: ", e);

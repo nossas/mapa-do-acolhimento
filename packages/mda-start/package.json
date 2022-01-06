@@ -20,9 +20,8 @@
     "my-cli-tool": "dist/esbuild/cli.js"
   },
   "scripts": {
-    "start":"node ./dist/esbuild/cli.js",
+    "start": "node ./dist/esbuild/cli.js",
     "cli": "ts-node src/cli.ts",
-    "job": "ts-node src/job.ts",
     "lint": "eslint src/ --ext .js,.jsx,.ts,.tsx",
     "test": "jest",
     "clean": "rm -rf dist build package",
@@ -56,7 +55,6 @@
     "graphql": "^15.6.0",
     "graphql-tag": "^2.12.6",
     "mda-components": "workspace:^0.0.3",
-    "node-zendesk": "2.1.0",
     "pino": "^6",
     "throng": "^4.0.0",
     "ws": "^7.5.6",

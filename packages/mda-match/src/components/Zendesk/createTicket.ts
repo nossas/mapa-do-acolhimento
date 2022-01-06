@@ -70,27 +70,6 @@ export default async (ticket: Ticket): Promise<Ticket | undefined> => {
         );
         return resolve(undefined);
       });
-      /*return client.tickets.create(
-        { ticket: validatedTicket } as { ticket },
-        (err, _req, result) => {
-          if (err) {
-            log.error(
-              `Failed to create ticket for user '${ticket.requester_id}'`.red,
-              err
-            );
-            return resolve(undefined);
-          }
-          // log(
-          //   `Results from zendesk ticket creation ${JSON.stringify(
-          //     result,
-          //     null,
-          //     2
-          //   )}`
-          // );
-          // log("Zendesk ticket created successfully!");
-          return resolve(result as Ticket);
-        }
-      );*/
     });
   } catch (e: any) {
     log.error("failed to create ticket: ".red, e);
