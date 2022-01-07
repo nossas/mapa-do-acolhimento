@@ -4,8 +4,7 @@ import { handleTicketError } from "../../utils";
 import { Ticket, CustomFields, PartialTicket } from "../../types";
 import Bottleneck from "bottleneck";
 import logger from "../../logger";
-import createOneTicket from "./createOneTicket";
-import listTicketsByUserRequested from "./listTicketsByUserRequested";
+import zendeskRequest from "../zendeskRequest";
 
 const limiter = new Bottleneck({
   maxConcurrent: 1,
@@ -64,18 +63,18 @@ const createTicket = (ticket): Promise<boolean | undefined> => {
   createTicketLog.info("CREATE TICKET");
   // ADD YUP VALIDATION
   return new Promise(resolve => {
-    createOneTicket(ticket)
-      .then((result) =>{
-        createTicketLog.info("Zendesk ticket created successfully!");
-        saveTicketInHasura(result as Ticket);
-        return resolve(true);
-      })
-      .catch((err)=>{
-        createTicketLog.error(
-          `Failed to create ticket for user '${ticket.requester_id}' %o`,
-          err
-        );
-        return resolve(undefined);
+    zendeskRequest('tickets.json','POST',JSON.stringify({ticket}),201)
+    .then((result) =>{
+      createTicketLog.info("Zendesk ticket created successfully!");
+      saveTicketInHasura(result as Ticket);
+      return resolve(true);
+    })
+    .catch((err)=>{
+      createTicketLog.error(
+        `Failed to create ticket for user '${ticket.requester_id}' %o`,
+        err
+      );
+      return resolve(undefined);
     });
   });
 };
@@ -85,7 +84,7 @@ export const fetchUserTickets = async ({
 }): Promise<Ticket[] | undefined> => {
   fetchUserTicketsLog.info("LIST USER TICKETS");
   return new Promise(resolve => {
-    listTicketsByUserRequested(requester_id)
+    zendeskRequest(`users/${requester_id}/tickets/requested`,'GET')
     .then((result)=>{
       return resolve(result as Ticket[]);
     })

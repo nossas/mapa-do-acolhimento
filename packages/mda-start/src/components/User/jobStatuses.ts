@@ -1,32 +1,14 @@
-import fetch from "cross-fetch";
 import logger from "../../logger";
+import zendeskRequest from "../zendeskRequest";
 
 const log = logger.child({ labels: { process: "jobStatuses" } });
-
-const parameters = {
-  username: process.env.ZENDESK_API_USER || "",
-  token: process.env.ZENDESK_API_TOKEN || "",
-  remoteUri: process.env.ZENDESK_API_URL || ""
-}
-
-const getAuth = () => ({          
-  headers: {
-    Authorization: 'Basic ' + Buffer.from(parameters.username + "/token:" + parameters.token).toString('base64')
-  }                     
-})
 
 const jobStatuses = (job_status_id: string, interval?: number) => new Promise((resolve, reject)=>{
   const nIntervId = setInterval(function getJobStatusUntilComplete() { getJobStatus(); },(interval || 5000)); 
   
   //controla ciclo de atualização do status
   const getJobStatus = () => {
-    fetch(`${parameters.remoteUri}job_statuses/${job_status_id}.json`, getAuth())
-    .then((response) => { 
-      if(response.status === 200){
-        return response.json()
-      }
-      throw new Error(response.statusText);
-    })
+    zendeskRequest(`job_statuses/${job_status_id}.json`,'POST')
     .then((result)=> {
       if(result["job_status"].status === "completed" ||
       result["job_status"].status === "failed" || 

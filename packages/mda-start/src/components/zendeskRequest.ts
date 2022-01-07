@@ -16,7 +16,7 @@ const getAuth = () => ({
 const zendeskRequest = (
   input: string, 
   method: string,
-  body: any,
+  body?: any,
   status: number = 200 as number) => {
   
   return fetch(`${parameters.remoteUri}${input}`, {
