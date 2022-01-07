@@ -1,9 +1,8 @@
 import dbg from "../../dbg";
-//import client from "./";
-import createOneTicket from "./createOneTicket";
 import { agentSelectionDicio } from "../../utils";
 import { Ticket } from "../../types";
 import * as yup from "yup";
+import zendeskRequest from "./zendeskRequest";
 
 const log = dbg.child({
   module: "zendesk",
@@ -58,7 +57,7 @@ export default async (ticket: Ticket): Promise<Ticket | undefined> => {
       stripUnknown: true
     });
     return new Promise(resolve => {
-      createOneTicket({ ticket: validatedTicket } as { ticket },)
+      zendeskRequest(`tickets.json`,'POST',JSON.stringify({ ticket: validatedTicket } as { ticket }),201)
       .then((result) =>{
         log.info("Zendesk ticket created successfully!");
         return resolve(result as Ticket);

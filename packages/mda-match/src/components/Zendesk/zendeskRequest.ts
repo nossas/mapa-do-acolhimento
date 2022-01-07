@@ -13,19 +13,23 @@ const getAuth = () => ({
   }                     
 });
 
-const createOneTicket = (ticket) => {
+const zendeskRequest = (
+  input: string, 
+  method: string,
+  body: any,
+  status: number = 200) => {
   
-  return fetch(`${parameters.remoteUri}tickets.json`, {
-    method: 'POST',
-    body: JSON.stringify({ ticket }),
+  return fetch(`${parameters.remoteUri}${input}`, {
+    method: method,
+    body: body,
     ...getAuth()
   })
   .then((response) => { 
-    if(response.status === 201){
+    if(response.status === status){
       return response.json()
     }
     throw new Error(response.statusText);
   })
 }  
 
-export default createOneTicket;
+export default zendeskRequest;

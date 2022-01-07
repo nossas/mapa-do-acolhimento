@@ -2,7 +2,8 @@ import dbg from "../../dbg";
 import { UpdateTicket, Ticket } from "../../types";
 import { agentSelectionDicio } from "../../utils";
 import * as yup from "yup";
-import updateOneTicket from "./updateOneTicket";
+//import updateOneTicket from "./updateOneTicket";
+import zendeskRequest from "./zendeskRequest";
 
 const log = dbg.child({
   module: "zendesk",
@@ -62,7 +63,7 @@ export default async (
       stripUnknown: true
     }); 
     return new Promise(resolve => {
-      return updateOneTicket({ ticket: validatedTicket } as { ticket }, ticketId)
+      return zendeskRequest(`tickets/${ticketId}`,'PUT', JSON.stringify({ ticket: validatedTicket } as { ticket }))
       .then((result)=>{
         return resolve(result as Ticket);
       })
