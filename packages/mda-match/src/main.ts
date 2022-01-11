@@ -10,9 +10,11 @@ const log = dbg.child({ module: "main" });
 
 export default throng({
   workers: 0,
-  start: () => { },
-  master: async (id: number) => {
+  start: (id: number) => { 
     log.info(`Started worker ${id}`)
+  },
+  master: async () => {
+    log.info(`Started master`)
 
     try {
       log.info("Fetching solidarity tickets for match...");
@@ -22,7 +24,7 @@ export default throng({
     }
 
     process.on("SIGTERM", function () {
-     log.info(`Worker ${id} exiting`);
+     log.info(`Master exiting`);
       log.info("Cleanup here");
       process.exit();
     });
