@@ -8,7 +8,7 @@ const jobStatuses = (job_status_id: string, interval?: number) => new Promise((r
   
   //controla ciclo de atualização do status
   const getJobStatus = () => {
-    zendeskRequest(`job_statuses/${job_status_id}.json`,'POST')
+    zendeskRequest(`job_statuses/${job_status_id}.json`,'GET')
     .then((result)=> {
       if(result["job_status"].status === "completed" ||
       result["job_status"].status === "failed" || 
