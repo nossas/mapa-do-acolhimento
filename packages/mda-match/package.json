@@ -29,7 +29,6 @@
     "start": "node ./dist/esbuild/cli.js",
     "cli": "ts-node src/cli.ts",
     "lint": "eslint src/ --ext .js,.jsx,.ts,.tsx",
-    "job": "ts-node src/job.ts",
     "test": "jest",
     "clean": "rm -rf dist build package",
     "ts-node": "ts-node",

@@ -52,7 +52,7 @@ const error = err => {
   log.error("Receiving error on subscription GraphQL API: ", err);
 };
 
-export default async (): Promise<unknown> => {
+export default async (apm:any): Promise<unknown> => {
   try {
     const observable = GraphQLAPI.subscribe({
       query: SOLIDARITY_USERS_SUBSCRIPTION,
@@ -60,7 +60,7 @@ export default async (): Promise<unknown> => {
         organization_id: 360273031591
       },
       fetchPolicy: "network-only"
-    }).subscribe({ next: handleMatch(), error });
+    }).subscribe({ next: handleMatch(apm), error });
 
     return observable;
   } catch (err) {

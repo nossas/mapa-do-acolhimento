@@ -15,7 +15,7 @@ export default throng({
 
     try {
       log.info("Fetching solidarity tickets for match...");
-      await subscriptionSolidarityTickets();
+      await subscriptionSolidarityTickets(apmNode);
     } catch (err) {
       log.error("throng err: ".red, err);
     }
