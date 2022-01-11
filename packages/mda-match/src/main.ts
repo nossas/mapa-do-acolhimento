@@ -9,9 +9,10 @@ apmNode.start({
 const log = dbg.child({ module: "main" });
 
 export default throng({
-  workers: 1,
-  start: async (id: number) => {
-    log.info(`Started worker ${id}`);
+  workers: 0,
+  start: () => { },
+  master: async (id: number) => {
+    log.info(`Started worker ${id}`)
 
     try {
       log.info("Fetching solidarity tickets for match...");
@@ -21,7 +22,7 @@ export default throng({
     }
 
     process.on("SIGTERM", function () {
-      log.info(`Worker ${id} exiting`);
+     log.info(`Worker ${id} exiting`);
       log.info("Cleanup here");
       process.exit();
     });
