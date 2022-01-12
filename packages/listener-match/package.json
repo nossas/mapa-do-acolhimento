@@ -7,7 +7,6 @@
     "@types/jest": "~26.0.24",
     "@types/node": "~12.12.70",
     "@types/node-zendesk": "^1.4.0",
-    "@types/throng": "^4.0.2",
     "@types/url-join": "^4.0.1",
     "@types/ws": "^7.4.7",
     "@types/yup": "^0.29.13",
@@ -44,7 +43,6 @@
     "graphql": "^15.6.0",
     "graphql-tag": "^2.12.5",
     "node-zendesk": "1.4.0",
-    "throng": "^4.0.0",
     "ws": "^7.5.5",
     "yup": "^0.29.3"
   },
