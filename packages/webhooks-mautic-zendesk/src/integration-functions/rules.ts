@@ -125,7 +125,7 @@ export const businessRules = async (
 
   const zendeskData = await zendeskValidation({
     condition: condition[0],
-    cep: data.cep,
+    cep: data.cep?.replace(".", "").replace("/", ""),
     createdAt: subscribe.created_at,
     organizationId,
     phone: data.phone,
