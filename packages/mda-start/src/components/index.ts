@@ -1,6 +1,5 @@
 import Bottleneck from "bottleneck";
-import { getGeolocation } from "bonde-core-tools";
-import { userToContact } from "mda-components";
+import { userToContact, getGeolocation } from "mda-components";
 import { makeBatchRequests, composeUsers } from "./User";
 import createZendeskTickets, { composeTickets } from "./Ticket";
 import { insertSolidarityUsers, updateFormEntries } from "../graphql/mutations";
