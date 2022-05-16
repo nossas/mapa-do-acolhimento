@@ -1,5 +1,4 @@
-import { userToContact } from "components/dist";
-import { getGeolocation } from "bonde-core-tools";
+import { userToContact, getGeolocation } from "components/dist";
 import handleUserFields from "./interfaces/User/handleUserFields";
 import getTicket from "./zendesk/getTicket";
 import dbg from "./dbg";

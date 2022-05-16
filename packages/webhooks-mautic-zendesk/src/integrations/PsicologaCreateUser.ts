@@ -1,6 +1,6 @@
 import * as yup from "yup";
 import { Response } from "express";
-import { getGeolocation } from "bonde-core-tools";
+import { getGeolocation } from "components";
 import Base from "./Base";
 import { CONDITION } from "../types";
 import {

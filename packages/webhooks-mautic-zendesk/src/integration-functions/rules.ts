@@ -1,5 +1,5 @@
 import * as yup from "yup";
-import { getGeolocation } from "bonde-core-tools";
+import { getGeolocation } from "components";
 import log from "../dbg";
 import { CONDITION, Results, Subscribe } from "./types";
 import {
@@ -55,7 +55,7 @@ const zendeskValidation = (input: ValidationInput) =>
         email,
         phone: mauticPhone || input.phone,
         organization_id: input.organizationId,
-        external_id : input.external_id,
+        external_id: input.external_id,
         user_fields: {
           ...removeFalsyValues(userFields),
           whatsapp: userFields.whatsapp || input.whatsapp,
@@ -125,7 +125,7 @@ export const businessRules = async (
 
   const zendeskData = await zendeskValidation({
     condition: condition[0],
-    cep: data.cep?.replace(".", "").replace("/", ""),
+    cep: data.cep,
     createdAt: subscribe.created_at,
     organizationId,
     phone: data.phone,
