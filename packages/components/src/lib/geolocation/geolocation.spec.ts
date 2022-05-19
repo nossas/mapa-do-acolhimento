@@ -1,5 +1,10 @@
-import { processGoogleResponse } from "./index";
+import { processGoogleResponse, default as getGeolocation } from "./index";
 import faker from "faker/locale/pt_BR";
+import axios from "axios";
+
+jest.mock("axios");
+const mockedAxios = axios as jest.Mocked<typeof axios>;
+process.env.GEOCODING_API_KEY = "a1111";
 
 describe("geolocation tests", () => {
   const validOutput = {
@@ -86,5 +91,76 @@ describe("geolocation tests", () => {
       undefined
     );
     expect(failure).toStrictEqual(invalidOutput);
+  });
+
+  const validOutput2 = {
+    latitude: Number(faker.address.latitude()).toFixed(3),
+    longitude: Number(faker.address.longitude()).toFixed(3),
+    address: faker.address.streetAddress(true),
+    state: faker.address.state(true),
+    city: faker.address.city(),
+    cep: faker.address.zipCode()
+  };
+
+  const input = {
+    email: faker.internet.email(),
+    cep: validOutput2.cep
+  };
+
+  it("should return output with BrasilAPI", async () => {
+    mockedAxios.get.mockResolvedValueOnce({
+      data: {
+        cep: validOutput2.cep,
+        state: validOutput2.state,
+        city: validOutput2.city,
+        neighborhood: "",
+        street: "",
+        service: "correios"
+      },
+      statusText: "OK"
+    });
+    mockedAxios.get.mockResolvedValueOnce({
+      data: {
+        documentation: "https://opencagedata.com/api",
+        licenses: [
+          {
+            name: "see attribution guide",
+            url: "https://opencagedata.com/credits"
+          }
+        ],
+        rate: {
+          limit: 2500,
+          remaining: 2496,
+          reset: 1652918400
+        },
+        results: [
+          {
+            geometry: {
+              lat: validOutput2.latitude,
+              lng: validOutput2.longitude
+            },
+            formatted: validOutput2.address
+          }
+        ],
+        status: {
+          code: 200,
+          message: "OK"
+        },
+        stay_informed: {
+          blog: "https://blog.opencagedata.com",
+          twitter: "https://twitter.com/OpenCage"
+        },
+        thanks: "For using an OpenCage API",
+        timestamp: {
+          created_http: "Wed, 18 May 2022 21:43:18 GMT",
+          created_unix: 1652910198
+        },
+        total_results: 0
+      }
+    });
+
+    const result = await getGeolocation(input);
+    expect(mockedAxios.get).toBeCalledTimes(2);
+    expect(result).toStrictEqual(validOutput2);
   });
 });
