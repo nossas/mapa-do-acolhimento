@@ -1,5 +1,4 @@
 import apmNode from "elastic-apm-node";
-import throng from "throng";
 import { subscriptionSolidarityTickets } from "./graphql/subscriptions";
 import dbg from "./dbg";
 apmNode.start({
@@ -8,19 +7,15 @@ apmNode.start({
 
 const log = dbg.child({ module: "main" });
 
-export default throng({
-  workers: 0,
-  start: (id: number) => { 
-    log.info(`Started worker ${id}`)
-  },
-  master: async () => {
+const start = async () => {
+
     log.info(`Started master`)
 
     try {
       log.info("Fetching solidarity tickets for match...");
       await subscriptionSolidarityTickets(apmNode);
     } catch (err) {
-      log.error("throng err: ".red, err);
+      log.error("err: ".red, err);
     }
 
     process.on("SIGTERM", function () {
@@ -28,5 +23,6 @@ export default throng({
       log.info("Cleanup here");
       process.exit();
     });
-  }
-});
+  };
+
+start();
