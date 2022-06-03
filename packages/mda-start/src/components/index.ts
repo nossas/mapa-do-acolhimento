@@ -123,7 +123,7 @@ export const handleIntegration: any = (widgets: Widget[], apm) => async (
     });
 
     // Save users in Mautic
-    userToContact(withoutDuplicates).catch(e => {
+    userToContact(withoutDuplicates as any).catch(e => {
       log.error(`Couldn't update/create users in Mautic: ${e}`);
       apm.captureError(e);
     });

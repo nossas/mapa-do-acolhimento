@@ -6,6 +6,11 @@ const requestZendeskApi: any = async <T>(
   path: string,
   data?: unknown
 ) => {
+
+  if(!process.env.ZENDESK_API_URL || !process.env.ZENDESK_API_USER || !process.env.ZENDESK_API_TOKEN){
+    throw new Error(`zendesk API information is not valid`);
+  }
+
   const endpoint = urljoin(process.env.ZENDESK_API_URL!, path);
   const auth = {
     username: process.env.ZENDESK_API_USER,

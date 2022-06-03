@@ -267,7 +267,7 @@ export default async ({
   const s = state ? `${state},` : "";
   const z = cep ? parseZipcode(cep) + ",BR" : "";
   const composeSearchAddress = a + n + c + s + z;
-  console.log(z);
+  
   if (cep) {
     const geolocationFromCep = await getBrasilApiLocation(cep, email);
 

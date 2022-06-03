@@ -1,6 +1,6 @@
 import User from ".";
 
-const handleUserFields = (user: User) => {
+const handleUserFields = (user: User): any => {
   const { id, user_fields, ...otherFields } = user;
   return {
     user_fields,
