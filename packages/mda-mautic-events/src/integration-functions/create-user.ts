@@ -50,6 +50,11 @@ const schema = yup.object().shape({
 });
 
 const createUser = async (input: CreateUserInput): Promise<any> => {
+
+  if(!process.env.ZENDESK_ORGANIZATIONS) {
+    log.error("invalid ZENDESK_ORGANIZATIONS!")
+    throw new Error("invalid ZENDESK_ORGANIZATIONS!")
+  }
   const { results } = input;
 
   const subscribe = await verifySubscribe({

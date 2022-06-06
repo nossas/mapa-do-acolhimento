@@ -60,7 +60,6 @@
     "graphql": "^15.6.0",
     "graphql-tag": "^2.12.5",
     "nconf": "indexzero/nconf#master",
-    "node-zendesk": "2.1.0",
     "pino": "^6.11.3",
     "throng": "^4.0.0",
     "ws": "^7.5.5",

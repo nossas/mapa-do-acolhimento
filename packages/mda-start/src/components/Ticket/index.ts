@@ -1,10 +1,10 @@
 import { checkOldTickets } from "./";
-import client from "../../zendesk";
 import { insertSolidarityTickets } from "../../graphql/mutations";
 import { handleTicketError } from "../../utils";
 import { Ticket, CustomFields, PartialTicket } from "../../types";
 import Bottleneck from "bottleneck";
 import logger from "../../logger";
+import zendeskRequest from "../zendeskRequest";
 
 const limiter = new Bottleneck({
   maxConcurrent: 1,
@@ -63,24 +63,18 @@ const createTicket = (ticket): Promise<boolean | undefined> => {
   createTicketLog.info("CREATE TICKET");
   // ADD YUP VALIDATION
   return new Promise(resolve => {
-    return client.tickets.create({ ticket }, (err, _req, result) => {
-      if (err) {
-        createTicketLog.error(
-          `Failed to create ticket for user '${ticket.requester_id}' %o`,
-          err
-        );
-        return resolve(undefined);
-      }
-      // createTicketLog(
-      //   `Results from zendesk ticket creation ${JSON.stringify(
-      //     result,
-      //     null,
-      //     2
-      //   )}`
-      // );
+    zendeskRequest('tickets.json','POST',JSON.stringify({ticket}),201)
+    .then((result) =>{
       createTicketLog.info("Zendesk ticket created successfully!");
       saveTicketInHasura(result as Ticket);
       return resolve(true);
+    })
+    .catch((err)=>{
+      createTicketLog.error(
+        `Failed to create ticket for user '${ticket.requester_id}' %o`,
+        err
+      );
+      return resolve(undefined);
     });
   });
 };
@@ -90,20 +84,17 @@ export const fetchUserTickets = async ({
 }): Promise<Ticket[] | undefined> => {
   fetchUserTicketsLog.info("LIST USER TICKETS");
   return new Promise(resolve => {
-    return client.tickets.listByUserRequested(
-      requester_id,
-      (err, _req, result) => {
-        if (err) {
-          fetchUserTicketsLog.error(
-            `Failed to fetch tickets from user '${requester_id}' %o`,
-            err
-          );
-          return resolve(undefined);
-        }
-        // fetchUserTicketsLog(JSON.stringify(result, null, 2));
-        return resolve(result as Ticket[]);
-      }
-    );
+    zendeskRequest(`users/${requester_id}/tickets/requested`,'GET')
+    .then((result)=>{
+      return resolve(result as Ticket[]);
+    })
+    .catch((err)=>{
+      fetchUserTicketsLog.error(
+        `Failed to fetch tickets from user '${requester_id}' %o`,
+        err
+      );
+      return resolve(undefined);
+    });
   });
 };
 

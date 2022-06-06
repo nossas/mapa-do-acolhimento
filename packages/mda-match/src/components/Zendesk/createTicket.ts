@@ -1,8 +1,8 @@
 import dbg from "../../dbg";
-import client from "./";
 import { agentSelectionDicio } from "../../utils";
 import { Ticket } from "../../types";
 import * as yup from "yup";
+import zendeskRequest from "./zendeskRequest";
 
 const log = dbg.child({
   module: "zendesk",
@@ -57,27 +57,18 @@ export default async (ticket: Ticket): Promise<Ticket | undefined> => {
       stripUnknown: true
     });
     return new Promise(resolve => {
-      return client.tickets.create(
-        { ticket: validatedTicket } as { ticket },
-        (err, _req, result) => {
-          if (err) {
-            log.error(
-              `Failed to create ticket for user '${ticket.requester_id}'`.red,
-              err
-            );
-            return resolve(undefined);
-          }
-          // log(
-          //   `Results from zendesk ticket creation ${JSON.stringify(
-          //     result,
-          //     null,
-          //     2
-          //   )}`
-          // );
-          // log("Zendesk ticket created successfully!");
-          return resolve(result as Ticket);
-        }
-      );
+      zendeskRequest(`tickets.json`,'POST',JSON.stringify({ ticket: validatedTicket } as { ticket }),201)
+      .then((result) =>{
+        log.info("Zendesk ticket created successfully!");
+        return resolve(result as Ticket);
+      })
+     .catch((err)=>{
+        log.error(
+          `Failed to create ticket for user '${ticket.requester_id}' %o`,
+           err
+        );
+        return resolve(undefined);
+      });
     });
   } catch (e: any) {
     log.error("failed to create ticket: ".red, e);

@@ -1,25 +1,10 @@
-import apm from "elastic-apm-node";
+
 import { proccessMatch } from "./Services";
 import { fetchVolunteersAvailable, getClosestVolunteer } from "./Volunteers";
 import { updateSolidarityTickets } from "../graphql/mutations";
 import { getDifference, getVolunteerOrganizationId } from "../utils";
 import { SubscriptionResponse, IndividualTicket } from "../types";
 import dbg from "../dbg";
-
-const {
-  ELASTIC_APM_SECRET_TOKEN: secretToken,
-  ELASTIC_APM_SERVER_URL: serverUrl,
-  ELASTIC_APM_SERVICE_NAME: serviceName
-} = process.env;
-
-let apmAgent;
-if (secretToken && serverUrl && serviceName) {
-  apmAgent = apm.start({
-    secretToken,
-    serverUrl,
-    serviceName
-  });
-}
 
 const log = dbg.child({ module: "match" });
 const syncLog = log.child({ labels: { process: "syncTickets" } });
@@ -41,10 +26,10 @@ export const Queue = {
   size: (data: IndividualTicket[]) => data.length
 };
 
-const markAsMatchSyncronized = async (ids: number[]) => {
-  const transaction = apmAgent.startTransaction("markAsMatchSyncronized");
+const markAsMatchSyncronized = async (ids: number[], apm: any) => {
+  const transaction = apm?.startTransaction("markAsMatchSyncronized");
 
-  apmAgent.setCustomContext({
+  apm?.setCustomContext({
     idsToSyncronize: ids
   });
 
@@ -79,10 +64,10 @@ const markAsMatchSyncronized = async (ids: number[]) => {
   return isSynced.map(s => s.ticket_id);
 };
 
-export const createMatch = async (ticket: IndividualTicket, apmAgent: any) => {
-  const transaction = apmAgent?.startTransaction("createMatch");
+export const createMatch = async (ticket: IndividualTicket, apm: any) => {
+  const transaction = apm?.startTransaction("createMatch");
 
-  apmAgent?.setUserContext({
+  apm?.setUserContext({
     id: ticket.ticket_id,
     username: ticket.nome_msr,
     latitude: ticket.individual.latitude,
@@ -117,7 +102,7 @@ export const createMatch = async (ticket: IndividualTicket, apmAgent: any) => {
       individualTicket: ticket,
       AGENT,
       closestVolunteer,
-      apm: apmAgent
+      apm: apm
     });
   }
 
@@ -161,7 +146,7 @@ export const setRecursionLogic = (
   }
 };
 
-export const handleMatch = (lastTicketSynced?: number) => async ({
+export const handleMatch = (apm: any, lastTicketSynced?: number) => async ({
   data: { solidarity_tickets: tickets }
 }: SubscriptionResponse) => {
   if (tickets.length > 0)
@@ -174,12 +159,12 @@ export const handleMatch = (lastTicketSynced?: number) => async ({
     oldFirst.ticket_id != Queue.first(data).ticket_id
   ) {
     const resolvedMatchs = await createMatch(Queue.first(data), apm);
-    await markAsMatchSyncronized(resolvedMatchs);
+    await markAsMatchSyncronized(resolvedMatchs,apm);
 
     const response = {
       data: { solidarity_tickets: [] }
     };
-    return handleMatch(Queue.first(data).ticket_id)(response);
+    return handleMatch(Queue.first(data).ticket_id,apm)(response);
   } else {
     log.info("No tickets to sync");
     return undefined;

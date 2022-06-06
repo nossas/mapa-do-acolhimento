@@ -1,6 +1,5 @@
 import Bottleneck from "bottleneck";
-import { getGeolocation } from "bonde-core-tools";
-import { userToContact } from "mda-components";
+import { userToContact, getGeolocation } from "mda-components";
 import { makeBatchRequests, composeUsers } from "./User";
 import createZendeskTickets, { composeTickets } from "./Ticket";
 import { insertSolidarityUsers, updateFormEntries } from "../graphql/mutations";
@@ -124,7 +123,7 @@ export const handleIntegration: any = (widgets: Widget[], apm) => async (
     });
 
     // Save users in Mautic
-    userToContact(withoutDuplicates).catch(e => {
+    userToContact(withoutDuplicates as any).catch(e => {
       log.error(`Couldn't update/create users in Mautic: ${e}`);
       apm.captureError(e);
     });

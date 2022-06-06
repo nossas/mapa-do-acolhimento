@@ -1,8 +1,9 @@
 import dbg from "../../dbg";
-import client from "./";
 import { UpdateTicket, Ticket } from "../../types";
 import { agentSelectionDicio } from "../../utils";
 import * as yup from "yup";
+//import updateOneTicket from "./updateOneTicket";
+import zendeskRequest from "./zendeskRequest";
 
 const log = dbg.child({
   module: "zendesk",
@@ -60,30 +61,19 @@ export default async (
   try {
     const validatedTicket = await schema.validate(ticket, {
       stripUnknown: true
-    });
+    }); 
     return new Promise(resolve => {
-      return client.tickets.update(
-        ticketId,
-        { ticket: validatedTicket } as { ticket },
-        (err, _req, result) => {
-          if (err) {
-            log.error(`Failed to update ticket '${ticketId}'`.red, err);
-            return resolve(undefined);
-          }
-          // log(
-          //   `Results from zendesk ticket update ${JSON.stringify(
-          //     result,
-          //     null,
-          //     2
-          //   )}`
-          // );
-          // log("Zendesk ticket updated successfully!");
-          return resolve(result as Ticket);
-        }
-      );
+      return zendeskRequest(`tickets/${ticketId}`,'PUT', JSON.stringify({ ticket: validatedTicket } as { ticket }))
+      .then((result)=>{
+        return resolve(result as Ticket);
+      })
+      .catch((err)=>{
+        log.error(`Failed to update ticket '${ticketId}'`, err);
+        return resolve(undefined);
+      })
     });
   } catch (e: any) {
-    log.error("failed to update msr ticket: ".red, e);
+    log.error("failed to update msr ticket: ", e);
     return undefined;
   }
 };

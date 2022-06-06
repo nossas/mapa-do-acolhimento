@@ -1,5 +1,5 @@
 import apmNode from "elastic-apm-node";
-import throng from "throng";
+
 const apm = apmNode.start({
   captureBody: 'all'
 });
@@ -10,10 +10,8 @@ import logger from "./logger";
 
 const log = logger.child({ module: "main" });
 
-export default throng({
-  workers: 1,
-  start: async (id: number) => {
-    log.info(`Started worker ${id}`);
+const start = async () => {
+
     const transaction: any = apm.startTransaction("worker");
 
     try {
@@ -33,7 +31,7 @@ export default throng({
     }
 
     process.on("SIGTERM", function () {
-      log.fatal(`Worker ${id} exiting`);
+      log.fatal(`Exiting`);
       log.info("Cleanup here");
 
       transaction.result = 503;
@@ -41,5 +39,6 @@ export default throng({
 
       process.exit();
     });
-  }
-});
+};
+
+start();  

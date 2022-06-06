@@ -1,5 +1,5 @@
 import * as yup from "yup";
-import { getGeolocation } from "bonde-core-tools";
+import { getGeolocation } from "mda-components";
 import log from "../dbg";
 import { CONDITION, Results, Subscribe } from "./types";
 import {
