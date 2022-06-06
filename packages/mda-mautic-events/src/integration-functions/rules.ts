@@ -55,7 +55,7 @@ const zendeskValidation = (input: ValidationInput) =>
         email,
         phone: mauticPhone || input.phone,
         organization_id: input.organizationId,
-        external_id : input.external_id,
+        external_id: input.external_id,
         user_fields: {
           ...removeFalsyValues(userFields),
           whatsapp: userFields.whatsapp || input.whatsapp,

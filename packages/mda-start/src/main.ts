@@ -1,7 +1,7 @@
 import apmNode from "elastic-apm-node";
 
 const apm = apmNode.start({
-  captureBody: 'all'
+  captureBody: "all"
 });
 
 import { subscriptionFormEntries } from "./graphql/subscriptions";
@@ -11,21 +11,25 @@ import logger from "./logger";
 const log = logger.child({ module: "main" });
 
 const start = async () => {
+<<<<<<< HEAD:packages/mda-start/src/main.ts
 
     const transaction: any = apm.startTransaction("worker");
+=======
+  const transaction: any = apm.startTransaction("worker");
+>>>>>>> main:packages/listener-solidarity/src/main.ts
 
-    try {
-      log.info("Fetching solidarity users...");
-      log.info(
-        "Call subscriptions to form_entries... %s",
-        widgets.map(w => w.id)
-      );
-      await subscriptionFormEntries(widgets, apm);
-    } catch (err) {
-      apm.captureError(err + "");
+  try {
+    log.info("Fetching solidarity users...");
+    log.info(
+      "Call subscriptions to form_entries... %s",
+      widgets.map(w => w.id)
+    );
+    await subscriptionFormEntries(widgets, apm);
+  } catch (err) {
+    apm.captureError(err + "");
 
-      transaction.result = 500;
-      transaction.end();
+    transaction.result = 500;
+    transaction.end();
 
       log.error("throng err: %s", err);
     }
@@ -41,4 +45,4 @@ const start = async () => {
     });
 };
 
-start();  
+start();
