@@ -11,12 +11,7 @@ import logger from "./logger";
 const log = logger.child({ module: "main" });
 
 const start = async () => {
-<<<<<<< HEAD:packages/mda-start/src/main.ts
-
-    const transaction: any = apm.startTransaction("worker");
-=======
   const transaction: any = apm.startTransaction("worker");
->>>>>>> main:packages/listener-solidarity/src/main.ts
 
   try {
     log.info("Fetching solidarity users...");
