@@ -1,0 +1,20 @@
+name: Publish MDA images
+on:
+  push:
+    branches:
+      - "release/*"
+      - "feature/*"
+      - "hotfix/*"
+    tags:
+      - v*
+jobs:
+  tests:
+    name: Tests
+    uses: ./.github/workflows/tests.yml
+
+  build:
+    name: Build services
+    uses: ./.github/workflows/build.yml
+    secrets:
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
