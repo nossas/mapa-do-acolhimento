@@ -31,16 +31,19 @@ jobs:
 
       - name: Check code style
         run: pnpm m run lint
-
-      - name: Build packages
-        run: pnpm m run build-all
  
       - name: Run tests      
         run: pnpm m run test          
         
       - name: Run coverage        
         run: pnpm coverage
-      
+
+      - name: Build packages
+        run: |
+          yarn global add pnpm
+          pnpm i
+          pnpm m run build-all
+
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v2
         with:
