@@ -1,7 +1,10 @@
+jest.mock('subscriptions-transport-ws');
+
 import { Queue } from "../src/components";
 import { IndividualTicket } from "../src/types";
 
 describe("Test queue operations", () => {
+ 
   let data: IndividualTicket[] = [];
   const tickets = [
     {

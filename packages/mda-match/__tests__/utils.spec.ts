@@ -9,6 +9,7 @@ import {
 } from "../src/utils";
 
 describe("Utils", () => {
+  
   it('should return "therapist" if support type is "psicológico"', () => {
     const subject = "[Psicológico] Lilian, Paranapanema - SP";
     expect(getVolunteerOrganizationId(subject)).toStrictEqual(360282119532);

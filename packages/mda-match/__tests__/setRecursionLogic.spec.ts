@@ -1,8 +1,11 @@
+jest.mock('subscriptions-transport-ws');
+
 import { setRecursionLogic } from "../src/components";
 
 // How can I test the else condition? It depends heavily in the Queue and data values
 
 describe("Test handleMatch recursion logic", () => {
+
   it("should returns an object with ticket_id", () => {
     const recursion = setRecursionLogic([], 22626);
     expect(recursion).toStrictEqual({ ticket_id: 22626 });

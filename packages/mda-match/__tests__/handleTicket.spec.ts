@@ -1,7 +1,10 @@
+jest.mock('subscriptions-transport-ws');
+
 import { proccessMatch, createMatch } from "../src/components";
 import apm from "elastic-apm-node";
 
 describe("Handle Ticket", () => {
+  
   it("should return early if 'solicitação_repetida' and field 'atrelado_ao_ticket' is null", async () => {
     const ticket = {
       subject: "[Psicológico] teste nova msr, São Paulo - SP",

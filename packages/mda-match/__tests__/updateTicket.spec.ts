@@ -11,6 +11,7 @@ jest.mock("cross-fetch", () => ({
 }));
 
 describe("Create one Ticket", () => {
+
   const ticket: UpdateTicket =  {
     comment: {
       body: "TESTE Importado pelo BONDE.",
