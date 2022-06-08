@@ -18,7 +18,7 @@
     "my-cli-tool": "./dist/esbuild/cli.js"
   },
   "scripts": {
-    "start":"node ./dist/esbuild/cli.js",
+    "start": "node ./dist/esbuild/cli.js",
     "cli": "ts-node src/cli.ts",
     "lint": "eslint src/ --ext .js,.jsx,.ts,.tsx",
     "test": "jest",
@@ -36,6 +36,7 @@
     "@types/express": "^4.17.6",
     "@types/ramda": "^0.27.60",
     "@types/signale": "^1.4.1",
+    "@types/source-map-support": "^0.5.4",
     "@types/url-join": "^4.0.0",
     "@types/yup": "^0.29.3"
   }
