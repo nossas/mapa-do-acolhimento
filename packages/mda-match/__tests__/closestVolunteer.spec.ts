@@ -3,6 +3,9 @@ import { Volunteer } from "../src/types";
 import faker from "faker/locale/pt_BR";
 
 describe("Get closest volunteer", () => {
+
+  afterAll(() => jest.setTimeout(500))
+
   const geolocation = {
     latitude: "-106.66751859701958",
     longitude: "39.24940851428889"
