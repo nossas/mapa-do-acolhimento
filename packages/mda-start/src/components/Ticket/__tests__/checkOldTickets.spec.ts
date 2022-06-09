@@ -1,3 +1,5 @@
+jest.mock('subscriptions-transport-ws');
+
 import { checkOldTickets } from "../.";
 import data from "../__mocks__/tickets";
 
