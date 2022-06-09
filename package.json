@@ -33,6 +33,6 @@
     "node": ">=16"
   },
   "scripts": {
-    "coverage": "pnpm m run test -- --coverage"
+    "coverage": "pnpm m run test --coverage"
   }
 }

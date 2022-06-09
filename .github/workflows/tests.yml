@@ -41,12 +41,12 @@ jobs:
       - name: Run coverage        
         run: pnpm coverage
 
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v2
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          fail_ci_if_error: true
-          directory: ./coverage
-          flags: unittests
-          verbose: true
+      # - name: Upload coverage to Codecov
+      #   uses: codecov/codecov-action@v2
+      #   with:
+      #     token: ${{ secrets.CODECOV_TOKEN }}
+      #     fail_ci_if_error: true
+      #     directory: ./packages/*/coverage
+      #     flags: unittests
+      #     verbose: true
 
