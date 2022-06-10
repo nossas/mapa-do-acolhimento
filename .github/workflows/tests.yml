@@ -46,6 +46,6 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           fail_ci_if_error: true
-          directory: ./packages/*/coverage
+          directory: ./packages/**/coverage/*
           flags: unittests
           verbose: true
