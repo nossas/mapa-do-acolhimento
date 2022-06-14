@@ -46,6 +46,7 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           fail_ci_if_error: true
-          directory: ./packages/**/coverage/*
+          files: ./packages/mda-cli-mautic/coverage/coverage-final.json,./packages/mda-cli-zendesk/coverage/coverage-final.json,./packages/mda-components/coverage/coverage-final.json,./packages/mda-match/coverage/coverage-final.json,./packages/mda-mautic-events/coverage/coverage-final.json,./packages/mda-start/coverage/coverage-final.json,./packages/mda-zendesk-events/coverage/coverage-final.json
+          #directory: ./packages/**/coverage/*
           flags: unittests
           verbose: true
