@@ -18,8 +18,10 @@
     "my-cli-tool": "./dist/esbuild/cli.js"
   },
   "scripts": {
-    "start": "node ./dist/esbuild/cli.js",
-    "cli": "ts-node src/cli.ts",
+    "start:user": "DEBUG=cli-zendesk* node --inspect ./dist/esbuild/cli.js -m user",
+    "start:ticket": "DEBUG=cli-zendesk* node --inspect ./dist/esbuild/cli.js -m ticket",
+    "cli:user": "ts-node src/cli.ts -m user",
+    "cli:ticket": "ts-node src/cli.ts -m ticket",
     "lint": "eslint src/ --ext .js,.jsx,.ts,.tsx",
     "test": "jest",
     "clean": "rm -rf dist build package",
