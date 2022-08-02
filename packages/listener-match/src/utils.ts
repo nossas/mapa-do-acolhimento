@@ -75,15 +75,13 @@ export const composeCustomFields = custom_fields =>
   }, {});
 
 export const agentSelectionDicio = {
-  1: 377510044432,
-  2: 377511446392,
-  3: 377577169651
+  1: 377511446392,
+  2: 377577169651
 };
 
 export const agentDicio = {
-  377510044432: "Larissa",
+  377511446392: "Gabriela",
   377577169651: "Ana",
-  377511446392: "Gabriela"
 };
 
 export const calcDistance = (pointA: number[], pointB: number[]) => {
