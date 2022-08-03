@@ -1,3 +1,5 @@
+jest.mock("subscriptions-transport-ws");
+
 import { composeTickets } from "../.";
 import data from "../__mocks__/tickets";
 
