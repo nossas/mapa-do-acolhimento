@@ -39,7 +39,7 @@ const markAsMatchSyncronized = async (ids: number[]) => {
 
   log("Tickets that passed through match:", isSynced);
 
-  if (AGENT < 3) {
+  if (AGENT < 2) {
     AGENT++;
   } else {
     AGENT = 1;
