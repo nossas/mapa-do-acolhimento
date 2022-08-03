@@ -1,3 +1,5 @@
+jest.mock("subscriptions-transport-ws");
+
 import { getClosestVolunteer } from "../src/components/Volunteers";
 import { Volunteer } from "../src/types";
 import faker from "faker/locale/pt_BR";

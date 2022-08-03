@@ -1,3 +1,5 @@
+jest.mock("subscriptions-transport-ws");
+
 import { setRecursionLogic } from "../src/components";
 
 // How can I test the else condition? It depends heavily in the Queue and data values

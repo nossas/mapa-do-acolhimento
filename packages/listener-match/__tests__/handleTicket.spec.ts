@@ -1,3 +1,5 @@
+jest.mock("subscriptions-transport-ws");
+
 import { proccessMatch, createMatch } from "../src/components";
 
 describe("Handle Ticket", () => {
