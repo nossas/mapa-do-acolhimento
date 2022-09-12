@@ -142,7 +142,7 @@ describe("Submit Advogadas Form", () => {
       }
 
       // 10
-      if (i === 5){
+      if (i === 5) {
         cy.get(
           "#mauticform_input_instrumentaldetriagem2advogadas_10_a_acolhida_esta_gravid"
         )
@@ -217,7 +217,7 @@ describe("Submit Advogadas Form", () => {
       ).click();
 
       // 14
-      if (i === 6){
+      if (i === 6) {
         cy.get(
           "#mauticform_instrumentaldetriagem2advogadas_15_oa_autora_da_violencia > .mauticform-label"
         ).should("be.visible");
@@ -327,7 +327,7 @@ describe("Submit Advogadas Form", () => {
           .should("be.visible")
           .select("Sim");
         testDescribe = "Teste 8: questão 20 risco Grave";
-      } else{
+      } else {
         cy.get(
           "#mauticform_input_instrumentaldetriagem2advogadas_21_caso_se_aplique_a_acol1"
         )
@@ -519,28 +519,38 @@ describe("Submit Advogadas Form", () => {
         .click();
 
       //32
-      cy.get(
-        "#mauticform_input_instrumentaldetriagem2advogadas_33_a_demanda_da_acolhida1"
-      )
-        .should("be.visible")
-        .select("Sim");
+      if (i === 0) {
+        cy.get(
+          "#mauticform_input_instrumentaldetriagem2advogadas_33_a_demanda_da_acolhida1"
+        )
+          .should("be.visible")
+          .select("Não");
 
-      //32.1 sim
-      cy.get(
-        "#mauticform_instrumentaldetriagem2advogadas_continuar6 > .mautic-pagebreak-next"
-      ).should("be.visible");
+        //33.1 não
+        cy.get(
+          "#mauticform_input_instrumentaldetriagem2advogadas_331_entao_em_qualis_outra"
+        )
+          .should("be.visible")
+          .type("Alugma lei aqui");
+        testDescribe = "Teste 0: nenhum risco e não se enquadra na Lei Maria da Penha";
+      } else {
+        cy.get(
+          "#mauticform_input_instrumentaldetriagem2advogadas_33_a_demanda_da_acolhida1"
+        )
+          .should("be.visible")
+          .select("Sim");
 
-      cy.get(
-        "#mauticform_checkboxgrp_label_331_em_qual_forma_de_viol1_ViolenciaPatrimonial0"
-      )
-        .should("be.visible")
-        .click();
+        //32.1 sim
+        cy.get(
+          "#mauticform_instrumentaldetriagem2advogadas_continuar6 > .mautic-pagebreak-next"
+        ).should("be.visible");
 
-      //33.1 não
-      /*cy.get('#mauticform_input_instrumentaldetriagem2advogadas_331_entao_em_qualis_outra')
-        .should('be.visible')
-        .type('Alugma lei aqui')
-      */
+        cy.get(
+          "#mauticform_checkboxgrp_label_331_em_qual_forma_de_viol1_ViolenciaPatrimonial0"
+        )
+          .should("be.visible")
+          .click();
+      }
 
       //33
       cy.get(
@@ -549,7 +559,7 @@ describe("Submit Advogadas Form", () => {
         .should("be.visible")
         .type(`${testDescribe}`);
 
-     /* //34
+      //34
       cy.get(
         "#mauticform_instrumentaldetriagem2advogadas_35_encaminhamento_do_caso > .mauticform-label"
       ).should("be.visible");
@@ -646,7 +656,7 @@ describe("Submit Advogadas Form", () => {
       // Button
       cy.get("#mauticform_input_instrumentaldetriagem2advogadas_submit")
         .should("be.visible")
-        .click();*/
+        .click();
     });
   });
 });
