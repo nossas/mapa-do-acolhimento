@@ -48,29 +48,50 @@ describe('Submit Psicólogas Form', () => {
         .should('be.visible').select('Prefere não responder')
 
       // 7
-      cy.get('#mauticform_input_instrumentaldetriagem2psicologas_a_acolhida_tem_alguma_def')
-        .should('be.visible').select('Não')
-      //TODO: select SIM
+      if (i == 3) {
+        testDescribe = 'Teste 3: questão 7 com risco Grave'
+        cy.get('#mauticform_input_instrumentaldetriagem2psicologas_a_acolhida_tem_alguma_def')
+          .should('be.visible').select('Sim')
+      } else {
+        cy.get('#mauticform_input_instrumentaldetriagem2psicologas_a_acolhida_tem_alguma_def')
+          .should('be.visible').select('Não')
+      }
 
       // 8
       cy.get('#mauticform_input_instrumentaldetriagem2psicologas_qual_o_estado_civil_da_ac')
         .should('be.visible').select('Solteira')
 
       // 9
-      cy.get('#mauticform_input_instrumentaldetriagem2psicologas_a_acolhida_tem_filhasos')
-        .should('be.visible').select('Sim')
+      if (i == 4) {
+        cy.get('#mauticform_input_instrumentaldetriagem2psicologas_a_acolhida_tem_filhasos')
+          .should('be.visible').select('Sim')
+      } else {
+        cy.get('#mauticform_input_instrumentaldetriagem2psicologas_a_acolhida_tem_filhasos')
+          .should('be.visible').select('Não')
+      }
 
       // 9.1
-      cy.get('#mauticform_instrumentaldetriagem2psicologas_selecione_em_qual_faixa_e > .mauticform-label').should('be.visible')
-      cy.get('#mauticform_checkboxgrp_checkbox_selecione_em_qual_faixa_e_7a11anos2').click()
+      if (i == 4) {
+        cy.get('#mauticform_instrumentaldetriagem2psicologas_selecione_em_qual_faixa_e > .mauticform-label').should('be.visible')
+        cy.get('#mauticform_checkboxgrp_checkbox_selecione_em_qual_faixa_e_7a11anos2').click()
+      }
 
       // 9.2
-      cy.get('#mauticform_input_instrumentaldetriagem2psicologas_algum_dos_filhos_e_pessoa')
-        .should('be.visible').select('Não')
+      if (i == 4) {
+        testDescribe = 'Teste 4: questão 9.2 com risco Grave'
+        cy.get('#mauticform_input_instrumentaldetriagem2psicologas_algum_dos_filhos_e_pessoa')
+          .should('be.visible').select('Sim')
+      }
 
       // 10
-      cy.get('#mauticform_input_instrumentaldetriagem2psicologas_a_acolhida_esta_gravida_o')
-        .should('be.visible').select('Não')
+      if (i == 5) {
+        testDescribe = 'Teste 5: questão 10 com risco Grave'
+        cy.get('#mauticform_input_instrumentaldetriagem2psicologas_a_acolhida_esta_gravida_o')
+          .should('be.visible').select('Sim')
+      } else {
+        cy.get('#mauticform_input_instrumentaldetriagem2psicologas_a_acolhida_esta_gravida_o')
+          .should('be.visible').select('Não')
+      }
 
       // Button
       cy.get('#mauticform_instrumentaldetriagem2psicologas_continuar1 > .mautic-pagebreak-next')
@@ -121,52 +142,119 @@ describe('Submit Psicólogas Form', () => {
         .should('be.visible').click()
 
       // 15
-      cy.get('#mauticform_instrumentaldetriagem2psicologas_oa_autora_da_violencia_ja > .mauticform-label')
-        .should('be.visible')
-      cy.get('#mauticform_checkboxgrp_checkbox_oa_autora_da_violencia_ja_Chute1')
-        .should('be.visible').click()
+      if (i == 6) {
+        testDescribe = 'Teste 6: questão 15 com risco Moderado'
+        cy.get('#mauticform_instrumentaldetriagem2psicologas_oa_autora_da_violencia_ja > .mauticform-label')
+          .should('be.visible')
+        cy.get('#mauticform_checkboxgrp_checkbox_oa_autora_da_violencia_ja_Chute1')
+          .should('be.visible').click()
+      } else {
+        cy.get('#mauticform_instrumentaldetriagem2psicologas_oa_autora_da_violencia_ja > .mauticform-label')
+          .should('be.visible')
+        cy.get('#mauticform_checkboxgrp_checkbox_oa_autora_da_violencia_ja_Nenhumaagressaofisica6')
+          .should('be.visible').click()
+      }
 
       // 16
-      cy.get('#mauticform_instrumentaldetriagem2psicologas_oa_autora_da_violencia_ja1 > .mauticform-label')
-        .should('be.visible')
-      cy.get('#mauticform_checkboxgrp_checkbox_oa_autora_da_violencia_ja1_Enforcamento1')
-        .should('be.visible').click()
+      if (i == 14) {
+        testDescribe = 'Teste 14: questão 16 com risco Extremo'
+        cy.get('#mauticform_instrumentaldetriagem2psicologas_oa_autora_da_violencia_ja1 > .mauticform-label')
+          .should('be.visible')
+        cy.get('#mauticform_checkboxgrp_checkbox_oa_autora_da_violencia_ja1_Enforcamento1')
+          .should('be.visible').click()
+      } else {
+        cy.get('#mauticform_checkboxgrp_checkbox_oa_autora_da_violencia_ja1_Nenhumaagressaofisica9')
+          .should('be.visible').click()
+      }
 
       // 17
       cy.get('#mauticform_input_instrumentaldetriagem2psicologas_a_acolhida_se_sente_isola')
         .should('be.visible').select('Sim')
 
       // 18
-      cy.get('#mauticform_input_instrumentaldetriagem2psicologas_oa_autora_da_violencia_te')
-        .should('be.visible').select('Sim')
+      if (i == 13) {
+        testDescribe = 'Teste 13: questão 18 com risco Extremo'
+        cy.get('#mauticform_input_instrumentaldetriagem2psicologas_oa_autora_da_violencia_te')
+          .should('be.visible').select('Sim')
+      } else {
+        cy.get('#mauticform_input_instrumentaldetriagem2psicologas_oa_autora_da_violencia_te')
+          .should('be.visible').select('Não')
+      }
 
       // 19
-      cy.get('#mauticform_input_instrumentaldetriagem2psicologas_oa_autora_da_violencia_ja2')
-        .should('be.visible').select('Sim')
+      if (i == 15) {
+        testDescribe = 'Teste 15: questão 19 com risco Extremo'
+        cy.get('#mauticform_input_instrumentaldetriagem2psicologas_oa_autora_da_violencia_ja2')
+          .should('be.visible').select('Sim')
+      } else {
+        cy.get('#mauticform_input_instrumentaldetriagem2psicologas_oa_autora_da_violencia_ja2')
+          .should('be.visible').select('Não')
+      }
 
       // 20
-      cy.get('#mauticform_input_instrumentaldetriagem2psicologas_oa_autora_da_violencia_ja3')
-        .should('be.visible').select('Não')
+      if (i == 7) {
+        testDescribe = 'Teste 7: questão 20 com risco Moderado'
+        cy.get('#mauticform_input_instrumentaldetriagem2psicologas_oa_autora_da_violencia_ja3')
+          .should('be.visible').select('Sim')
+      } else {
+        cy.get('#mauticform_input_instrumentaldetriagem2psicologas_oa_autora_da_violencia_ja3')
+          .should('be.visible').select('Não')
+      }
+
+      // 21
+      if (i == 8) {
+        testDescribe = 'Teste 8: questão 21 com risco Moderado'
+        cy.get('#mauticform_input_instrumentaldetriagem2psicologas_caso_se_aplique_a_acolhid')
+          .should('be.visible').select('Sim')
+      } else {
+        cy.get('#mauticform_input_instrumentaldetriagem2psicologas_caso_se_aplique_a_acolhid')
+          .should('be.visible').select('Não')
+      }
 
       // 22
-      cy.get('#mauticform_checkboxgrp_checkbox_27_oa_autora_da_violencia_Perturbouperseguiuouvigiouapessoaacolhidanoslocaisquefrequenta1')
-        .should('be.visible').click()
+      if (i == 16) {
+        testDescribe = 'Teste 16: questão 22 com risco Extremo'
+        cy.get('#mauticform_checkboxgrp_checkbox_27_oa_autora_da_violencia_Perturbouperseguiuouvigiouapessoaacolhidanoslocaisquefrequenta1')
+          .should('be.visible').click()
+      } else {
+        cy.get('#mauticform_checkboxgrp_checkbox_27_oa_autora_da_violencia_Perturbouperseguiuouvigiouapessoaacolhidanoslocaisquefrequenta1')
+      }
+
 
       // 23
-      cy.get('#mauticform_input_instrumentaldetriagem2psicologas_25_a_acolhida_necessitou')
-        .should('be.visible').select('Não')
+      if (i == 9) {
+        testDescribe = 'Teste 9: questão 23 com risco Moderado'
+        cy.get('#mauticform_input_instrumentaldetriagem2psicologas_25_a_acolhida_necessitou')
+          .should('be.visible').select('Sim, internação')
+      } else {
+        cy.get('#mauticform_input_instrumentaldetriagem2psicologas_25_a_acolhida_necessitou')
+          .should('be.visible').select('Não')
+      }
 
       // 25
       cy.get('#mauticform_input_instrumentaldetriagem2psicologas_a_acolhida_apresenta_depe')
         .should('be.visible').select('Não')
 
       // 26
-      cy.get('#mauticform_input_instrumentaldetriagem2psicologas_as_agressoes_ou_ameacas_d')
-        .should('be.visible').select('Não')
+      if (i == 10) {
+        testDescribe = 'Teste 10: questão 26 com risco Moderado'
+        cy.get('#mauticform_input_instrumentaldetriagem2psicologas_as_agressoes_ou_ameacas_d')
+          .should('be.visible').select('Sim')
+      } else {
+        cy.get('#mauticform_input_instrumentaldetriagem2psicologas_as_agressoes_ou_ameacas_d')
+          .should('be.visible').select('Não')
+      }
 
       // 27
-      cy.get('#mauticform_checkboxgrp_checkbox_oa_autora_da_violencia_ja4_Simamigos2')
-        .should('be.visible').click()
+      if (i == 17) {
+        testDescribe = 'Teste 17: questão 27 com risco Extremo'
+        cy.get('#mauticform_checkboxgrp_checkbox_oa_autora_da_violencia_ja4_Simamigos2')
+          .should('be.visible').click()
+      } else {
+        cy.get('#mauticform_checkboxgrp_checkbox_oa_autora_da_violencia_ja4_Nao6')
+          .should('be.visible').click()
+      }
+
 
       // Button
       cy.get('#mauticform_instrumentaldetriagem2psicologas_continuar6 > .mautic-pagebreak-next')
@@ -175,16 +263,34 @@ describe('Submit Psicólogas Form', () => {
       // Section 8
 
       // 28
-      cy.get('#mauticform_input_instrumentaldetriagem2psicologas_oa_autora_da_violencia_te1')
-        .should('be.visible').select('Não')
+      if (i === 2) {
+        testDescribe = 'Teste 2: questão 28 com risco Moderado'
+        cy.get('#mauticform_input_instrumentaldetriagem2psicologas_oa_autora_da_violencia_te1')
+          .should('be.visible').select('Não')
+      } else {
+        cy.get('#mauticform_input_instrumentaldetriagem2psicologas_oa_autora_da_violencia_te1')
+          .should('be.visible').select('Não')
+      }
 
       // 29
-      cy.get('#mauticform_input_instrumentaldetriagem2psicologas_oa_autora_da_violencia_fa')
-        .should('be.visible').select('Não')
+      if (i == 11) {
+        testDescribe = 'Teste 11: questão 29 com risco Moderado'
+        cy.get('#mauticform_input_instrumentaldetriagem2psicologas_oa_autora_da_violencia_fa')
+          .should('be.visible').select('Sim')
+      } else {
+        cy.get('#mauticform_input_instrumentaldetriagem2psicologas_oa_autora_da_violencia_fa')
+          .should('be.visible').select('Não')
+      }
 
       // 30
-      cy.get('#mauticform_input_instrumentaldetriagem2psicologas_oa_autora_da_violencia_te2')
-        .should('be.visible').select('Não')
+      if (i == 12) {
+        testDescribe = 'Teste 12: questão 30 com risco Moderado'
+        cy.get('#mauticform_input_instrumentaldetriagem2psicologas_oa_autora_da_violencia_te2')
+          .should('be.visible').select('Sim')
+      } else {
+        cy.get('#mauticform_input_instrumentaldetriagem2psicologas_oa_autora_da_violencia_te2')
+          .should('be.visible').select('Não')
+      }
 
       // Button
       cy.get('#mauticform_instrumentaldetriagem2psicologas_continuarr > .mautic-pagebreak-next')
