@@ -113,9 +113,8 @@ describe("Submit Advogadas Form", () => {
         "#mauticform_instrumentaldetriagem2advogadas_91_selecione_em_qual_faix1 > .mauticform-label"
       ).should("be.visible");
 
-      cy.get(
-        "#mauticform_instrumentaldetriagem2advogadas_91_selecione_em_qual_faix1 > :nth-child(4)"
-      ).click();
+      cy.get('#mauticform_checkboxgrp_checkbox_91_selecione_em_qual_faix1_12a15anos3')
+        .should("be.visible").click();
 
       // 9.2
       if (i === 4) {
@@ -129,9 +128,8 @@ describe("Submit Advogadas Form", () => {
         cy.get(
           "#mauticform_input_instrumentaldetriagem2advogadas_92_algum_dos_filhos_e_pes"
         ).should("be.visible");
-        cy.get(
-          "#mauticform_instrumentaldetriagem2advogadas_93_caso_tenha_respondido > :nth-child(6)"
-        ).click();
+        cy.get('#mauticform_checkboxgrp_checkbox_93_caso_tenha_respondido_Deficienciamotora2')
+          .click();
         testDescribe = "Teste 4: questão 9.2 risco grave";
       } else {
         cy.get(
