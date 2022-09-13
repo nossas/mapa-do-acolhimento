@@ -57,6 +57,12 @@ describe('Submit Psicólogas Form', () => {
           .should('be.visible').select('Não')
       }
 
+      // 7.1
+      if (i == 3) {
+        cy.get('#mauticform_checkboxgrp_checkbox_informe_aqui_qual_ou_quai_Deficienciamentalcognitiva3')
+          .should('be.visible').click();
+      }
+
       // 8
       cy.get('#mauticform_input_instrumentaldetriagem2psicologas_qual_o_estado_civil_da_ac')
         .should('be.visible').select('Solteira')
@@ -81,6 +87,12 @@ describe('Submit Psicólogas Form', () => {
         testDescribe = 'Teste 4: questão 9.2 com risco Grave'
         cy.get('#mauticform_input_instrumentaldetriagem2psicologas_algum_dos_filhos_e_pessoa')
           .should('be.visible').select('Sim')
+      }
+
+      // 9.3
+      if (i == 4) {
+        cy.get('#mauticform_checkboxgrp_checkbox_caso_tenha_respondido_sim1_Deficienciamotora2')
+          .should('be.visible').click();
       }
 
       // 10
@@ -143,7 +155,7 @@ describe('Submit Psicólogas Form', () => {
 
       // 15
       if (i == 6) {
-        testDescribe = 'Teste 6: questão 15 com risco Moderado'
+        testDescribe = 'Teste 6: questão 15 com risco Grave'
         cy.get('#mauticform_instrumentaldetriagem2psicologas_oa_autora_da_violencia_ja > .mauticform-label')
           .should('be.visible')
         cy.get('#mauticform_checkboxgrp_checkbox_oa_autora_da_violencia_ja_Chute1')
@@ -191,9 +203,15 @@ describe('Submit Psicólogas Form', () => {
           .should('be.visible').select('Não')
       }
 
+      // 19.1
+      if (i == 15) {
+        cy.get('#mauticform_input_instrumentaldetriagem2psicologas_como')
+          .should('be.visible').select('Utilizando faca')
+      }
+
       // 20
       if (i == 7) {
-        testDescribe = 'Teste 7: questão 20 com risco Moderado'
+        testDescribe = 'Teste 7: questão 20 com risco Grave'
         cy.get('#mauticform_input_instrumentaldetriagem2psicologas_oa_autora_da_violencia_ja3')
           .should('be.visible').select('Sim')
       } else {
@@ -203,7 +221,7 @@ describe('Submit Psicólogas Form', () => {
 
       // 21
       if (i == 8) {
-        testDescribe = 'Teste 8: questão 21 com risco Moderado'
+        testDescribe = 'Teste 8: questão 21 com risco Grave'
         cy.get('#mauticform_input_instrumentaldetriagem2psicologas_caso_se_aplique_a_acolhid')
           .should('be.visible').select('Sim')
       } else {
@@ -223,7 +241,7 @@ describe('Submit Psicólogas Form', () => {
 
       // 23
       if (i == 9) {
-        testDescribe = 'Teste 9: questão 23 com risco Moderado'
+        testDescribe = 'Teste 9: questão 23 com risco Grave'
         cy.get('#mauticform_input_instrumentaldetriagem2psicologas_25_a_acolhida_necessitou')
           .should('be.visible').select('Sim, internação')
       } else {
@@ -237,7 +255,7 @@ describe('Submit Psicólogas Form', () => {
 
       // 26
       if (i == 10) {
-        testDescribe = 'Teste 10: questão 26 com risco Moderado'
+        testDescribe = 'Teste 10: questão 26 com risco Grave'
         cy.get('#mauticform_input_instrumentaldetriagem2psicologas_as_agressoes_ou_ameacas_d')
           .should('be.visible').select('Sim')
       } else {
@@ -266,7 +284,7 @@ describe('Submit Psicólogas Form', () => {
       if (i === 2) {
         testDescribe = 'Teste 2: questão 28 com risco Moderado'
         cy.get('#mauticform_input_instrumentaldetriagem2psicologas_oa_autora_da_violencia_te1')
-          .should('be.visible').select('Não')
+          .should('be.visible').select('Sim')
       } else {
         cy.get('#mauticform_input_instrumentaldetriagem2psicologas_oa_autora_da_violencia_te1')
           .should('be.visible').select('Não')
@@ -274,7 +292,7 @@ describe('Submit Psicólogas Form', () => {
 
       // 29
       if (i == 11) {
-        testDescribe = 'Teste 11: questão 29 com risco Moderado'
+        testDescribe = 'Teste 11: questão 29 com risco Grave'
         cy.get('#mauticform_input_instrumentaldetriagem2psicologas_oa_autora_da_violencia_fa')
           .should('be.visible').select('Sim')
       } else {
@@ -282,9 +300,15 @@ describe('Submit Psicólogas Form', () => {
           .should('be.visible').select('Não')
       }
 
+      // 29.1
+      if (i == 11) {
+        cy.get('#mauticform_checkboxgrp_checkbox_caso_tenha_respondido_sim5_Cocaina2')
+          .should('be.visible').click()
+      }
+
       // 30
       if (i == 12) {
-        testDescribe = 'Teste 12: questão 30 com risco Moderado'
+        testDescribe = 'Teste 12: questão 30 com risco Grave'
         cy.get('#mauticform_input_instrumentaldetriagem2psicologas_oa_autora_da_violencia_te2')
           .should('be.visible').select('Sim')
       } else {
