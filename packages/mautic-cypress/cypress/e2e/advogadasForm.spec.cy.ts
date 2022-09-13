@@ -9,8 +9,7 @@ describe("Submit Advogadas Form", () => {
     return false;
   });
 
-  Cypress._.times(17, i => {
-    i = 4
+  Cypress._.times(18, i => {
     let testDescribe = "Nenhum risco";
     it("Fill form", () => {
       //send section 1 button
@@ -82,7 +81,7 @@ describe("Submit Advogadas Form", () => {
           "#mauticform_instrumentaldetriagem2advogadas_informe_aqui_qual_ou_quai > .mauticform-label"
         ).should("be.visible");
         cy.get(
-          "#mauticform_instrumentaldetriagem2advogadas_informe_aqui_qual_ou_quai > .mauticform-label"
+          "#mauticform_checkboxgrp_checkbox_informe_aqui_qual_ou_quai_Deficienciafisica0"
         )
           .should("be.visible")
           .click();
@@ -114,8 +113,11 @@ describe("Submit Advogadas Form", () => {
         "#mauticform_instrumentaldetriagem2advogadas_91_selecione_em_qual_faix1 > .mauticform-label"
       ).should("be.visible");
 
-      cy.get('#mauticform_checkboxgrp_checkbox_91_selecione_em_qual_faix1_12a15anos3')
-        .should("be.visible").click();
+      cy.get(
+        "#mauticform_checkboxgrp_checkbox_91_selecione_em_qual_faix1_12a15anos3"
+      )
+        .should("be.visible")
+        .click();
 
       // 9.2
       if (i === 4) {
@@ -129,8 +131,9 @@ describe("Submit Advogadas Form", () => {
         cy.get(
           "#mauticform_input_instrumentaldetriagem2advogadas_92_algum_dos_filhos_e_pes"
         ).should("be.visible");
-        cy.get('#mauticform_checkboxgrp_checkbox_93_caso_tenha_respondido_Deficienciamotora2')
-          .click();
+        cy.get(
+          "#mauticform_checkboxgrp_checkbox_93_caso_tenha_respondido_Deficienciamotora2"
+        ).click();
         testDescribe = "Teste 4: questão 9.2 risco grave";
       } else {
         cy.get(
@@ -531,7 +534,8 @@ describe("Submit Advogadas Form", () => {
         )
           .should("be.visible")
           .type("Alugma lei aqui");
-        testDescribe = "Teste 0: nenhum risco e não se enquadra na Lei Maria da Penha";
+        testDescribe =
+          "Teste 0: nenhum risco e não se enquadra na Lei Maria da Penha";
       } else {
         cy.get(
           "#mauticform_input_instrumentaldetriagem2advogadas_33_a_demanda_da_acolhida1"
