@@ -10,6 +10,7 @@ describe("Submit Advogadas Form", () => {
   });
 
   Cypress._.times(17, i => {
+    i = 4
     let testDescribe = "Nenhum risco";
     it("Fill form", () => {
       //send section 1 button
