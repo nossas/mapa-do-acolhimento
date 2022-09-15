@@ -1,7 +1,7 @@
 describe('Submit Psicólogas Form', () => {
 
   beforeEach(() => {
-    cy.visit('/')
+    cy.visit('/triagem-psicologico-2')
   });
 
   Cypress.on('uncaught:exception', () => {

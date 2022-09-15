@@ -1,6 +1,6 @@
 describe("Submit Advogadas Form", () => {
   beforeEach(() => {
-    cy.visit("https://mautic-nossas.staging.bonde.org/triagem-juridico-2");
+    cy.visit("/triagem-juridico-2");
   });
 
   Cypress.on("uncaught:exception", () => {
