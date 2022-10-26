@@ -11,8 +11,8 @@ describe("Submit Advogadas Form", () => {
     return false;
   });
   //12
-  Cypress._.times(1, i => {
-    const testDescribe = "Nenhum risco";
+  Cypress._.times(13, i => {
+    let testDescribe = "Nenhum risco";
     it("Fill form", () => {
       //send section 1 button
       cy.get(
@@ -44,7 +44,7 @@ describe("Submit Advogadas Form", () => {
         .click();
 
       //Section 3
-      //4 nome acolhida
+      //3 nome acolhida
       cy.get(
         "#mauticform_input_instrumentaldeacompanhamento1advogadas_3_nome_da_acolhida"
       )
@@ -60,28 +60,45 @@ describe("Submit Advogadas Form", () => {
 
       //Section 4
       //4
-      cy.get(
-        "#mauticform_input_instrumentaldeacompanhamento1advogadas_4_a_acolhida_respeita_o_c"
-      )
-        .should("be.visible")
-        .select(
-          "Não (Caso responda não, por favor, entre em contato imediatamente com a equipe)"
-        );
+      if (i === 1) {
+        cy.get(
+          "#mauticform_input_instrumentaldeacompanhamento1advogadas_4_a_acolhida_respeita_o_c"
+        )
+          .should("be.visible")
+          .select(
+            "Não (Caso responda não, por favor, entre em contato imediatamente com a equipe)"
+          );
 
-      //4.1
-      cy.get(
-        "#mauticform_input_instrumentaldeacompanhamento1advogadas_41_com_qual_frequencia_te"
-      )
-        .should("be.visible")
-        .select("Uma vez na semana");
+        //4.1
+        cy.get(
+          "#mauticform_input_instrumentaldeacompanhamento1advogadas_41_com_qual_frequencia_te"
+        )
+          .should("be.visible")
+          .select("Uma vez na semana");
+        testDescribe = "Questão 4 risco Moderado";
+      } else {
+        cy.get(
+          "#mauticform_input_instrumentaldeacompanhamento1advogadas_4_a_acolhida_respeita_o_c"
+        )
+          .should("be.visible")
+          .select("Sim");
+      }
 
       //5
-      cy.get(
-        "#mauticform_input_instrumentaldeacompanhamento1advogadas_5_quantas_horas_de_atendi"
-      )
-        .should("be.visible")
-        .select("1h");
-
+      if (i === 2) {
+        cy.get(
+          "#mauticform_input_instrumentaldeacompanhamento1advogadas_5_quantas_horas_de_atendi"
+        )
+          .should("be.visible")
+          .select("Mais de 5h");
+        testDescribe = "Questão 5 risco Moderado";
+      } else {
+        cy.get(
+          "#mauticform_input_instrumentaldeacompanhamento1advogadas_5_quantas_horas_de_atendi"
+        )
+          .should("be.visible")
+          .select("1h");
+      }
       //continue
       cy.get(
         "#mauticform_instrumentaldeacompanhamento1advogadas_continuar3 > .mautic-pagebreak-next"
@@ -92,18 +109,20 @@ describe("Submit Advogadas Form", () => {
       //section 5
 
       //6
-      cy.get(
-        "#mauticform_checkboxgrp_checkbox_6_a_acolhida_foi_submetid_Fisica0"
-      )
-        .should("be.visible")
-        .click();
-
-      //7
-      cy.get(
-        "#mauticform_input_instrumentaldeacompanhamento1advogadas_7_caso_queira_comentar_so"
-      )
-        .should("be.visible")
-        .type("Questão 7");
+      if (i === 12) {
+        cy.get(
+          "#mauticform_checkboxgrp_checkbox_6_a_acolhida_foi_submetid_Fisica0"
+        )
+          .should("be.visible")
+          .click();
+        testDescribe = "Questão 6 risco extremo";
+        //7
+        cy.get(
+          "#mauticform_input_instrumentaldeacompanhamento1advogadas_7_caso_queira_comentar_so"
+        )
+          .should("be.visible")
+          .type("Questão 7");
+      }
 
       //8
       cy.get(
@@ -194,18 +213,27 @@ describe("Submit Advogadas Form", () => {
         .select("Sim");
 
       //16
-      cy.get(
-        "#mauticform_input_instrumentaldeacompanhamento1advogadas_16_durante_o_atendimento"
-      )
-        .should("be.visible")
-        .select("Sim");
+      if (i === 3) {
+        cy.get(
+          "#mauticform_input_instrumentaldeacompanhamento1advogadas_16_durante_o_atendimento"
+        )
+          .should("be.visible")
+          .select("Sim");
 
-      //16.1
-      cy.get(
-        "#mauticform_input_instrumentaldeacompanhamento1advogadas_161_por_que"
-      )
-        .should("be.visible")
-        .type("Questão 16.1");
+        //16.1
+        cy.get(
+          "#mauticform_input_instrumentaldeacompanhamento1advogadas_161_por_que"
+        )
+          .should("be.visible")
+          .type("Questão 16.1");
+        testDescribe = "Questão 16 risco Moderado";
+      } else {
+        cy.get(
+          "#mauticform_input_instrumentaldeacompanhamento1advogadas_16_durante_o_atendimento"
+        )
+          .should("be.visible")
+          .select("Não");
+      }
 
       //continue
       cy.get(
@@ -247,11 +275,20 @@ describe("Submit Advogadas Form", () => {
         .select("Não");
 
       //19
-      cy.get(
-        "#mauticform_input_instrumentaldeacompanhamento1advogadas_19_a_acolhida_tem_apoio_d"
-      )
-        .should("be.visible")
-        .select("Sim");
+      if (i === 7) {
+        cy.get(
+          "#mauticform_input_instrumentaldeacompanhamento1advogadas_19_a_acolhida_tem_apoio_d"
+        )
+          .should("be.visible")
+          .select("Não");
+        testDescribe = "Questão 19 risco grave";
+      } else {
+        cy.get(
+          "#mauticform_input_instrumentaldeacompanhamento1advogadas_19_a_acolhida_tem_apoio_d"
+        )
+          .should("be.visible")
+          .select("Sim");
+      }
 
       //continue
       cy.get(
@@ -260,17 +297,23 @@ describe("Submit Advogadas Form", () => {
         .should("be.visible")
         .click();
 
-      //Section 8
-
       //20
-      cy.get(
-        "#mauticform_input_instrumentaldeacompanhamento1advogadas_20_como_e_a_relacao_da_ac"
-      )
-        .should("be.visible")
-        .select(
-          "Boa (sempre pode contar com os familiares, caso precise de apoio)"
-        );
-
+      if (i === 4) {
+        cy.get(
+          "#mauticform_input_instrumentaldeacompanhamento1advogadas_20_como_e_a_relacao_da_ac"
+        )
+          .should("be.visible")
+          .select("Ruim (não tem relação com os familiares)");
+        testDescribe = "Questão 20 risco Moderado";
+      } else {
+        cy.get(
+          "#mauticform_input_instrumentaldeacompanhamento1advogadas_20_como_e_a_relacao_da_ac"
+        )
+          .should("be.visible")
+          .select(
+            "Boa (sempre pode contar com os familiares, caso precise de apoio)"
+          );
+      }
       //21
       cy.get(
         "#mauticform_input_instrumentaldeacompanhamento1advogadas_21_como_e_a_relacao_da_ac"
@@ -287,205 +330,304 @@ describe("Submit Advogadas Form", () => {
         .should("be.visible")
         .click();
 
-      //Section 9
+      //Section 8
+      if (i === 8) {
+        //22
+        cy.get(
+          "#mauticform_input_instrumentaldeacompanhamento1advogadas_22_a_acolhida_tem_algum_d"
+        )
+          .should("be.visible")
+          .select("Sim");
 
-      //22
-      cy.get(
-        "#mauticform_input_instrumentaldeacompanhamento1advogadas_22_a_acolhida_tem_algum_d"
-      )
-        .should("be.visible")
-        .select("Sim");
+        testDescribe = "Questão 22 risco grave";
+        //22.1
+        cy.get(
+          "#mauticform_input_instrumentaldeacompanhamento1advogadas_221_qualis"
+        )
+          .should("be.visible")
+          .type("Questão 22.1");
 
-      //22.1
-      cy.get(
-        "#mauticform_input_instrumentaldeacompanhamento1advogadas_221_qualis"
-      )
-        .should("be.visible")
-        .type("Questão 22.1");
+        //22.2
+        cy.get(
+          "#mauticform_input_instrumentaldeacompanhamento1advogadas_222_ha_quanto_tempo"
+        )
+          .should("be.visible")
+          .select("Mais de 10 anos");
 
-      //22.2
-      cy.get(
-        "#mauticform_input_instrumentaldeacompanhamento1advogadas_222_ha_quanto_tempo"
-      )
-        .should("be.visible")
-        .select("Mais de 10 anos");
+        //23
+        cy.get(
+          "#mauticform_input_instrumentaldeacompanhamento1advogadas_23_se_sim_a_acolhida_faz"
+        )
+          .should("be.visible")
+          .select("Sim");
 
-      //23
-      cy.get(
-        "#mauticform_input_instrumentaldeacompanhamento1advogadas_23_se_sim_a_acolhida_faz"
-      )
-        .should("be.visible")
-        .select("Sim");
+        //23.1
+        cy.get(
+          "#mauticform_input_instrumentaldeacompanhamento1advogadas_231_onde"
+        )
+          .should("be.visible")
+          .select("Unidade Básica de Saúde (UBS)");
 
-      //23.1
-      cy.get(
-        "#mauticform_input_instrumentaldeacompanhamento1advogadas_231_onde"
-      )
-        .should("be.visible")
-        .select("Unidade Básica de Saúde (UBS)");
+        //23.2
+        cy.get(
+          "#mauticform_input_instrumentaldeacompanhamento1advogadas_232_ha_quanto_tempo"
+        )
+          .should("be.visible")
+          .select("Entre 1 e 2 anos");
 
-      //23.2
-      cy.get(
-        "#mauticform_input_instrumentaldeacompanhamento1advogadas_232_ha_quanto_tempo"
-      )
-        .should("be.visible")
-        .select("Entre 1 e 2 anos");
-      
-      //24
-      cy.get('#mauticform_input_instrumentaldeacompanhamento1advogadas_24__se_sim_a_acolhida_faz1')
-        .should("be.visible")
-        .select("Sim");
-       
-       //24.1
-       cy.get('#mauticform_input_instrumentaldeacompanhamento1advogadas_242_ha_quanto_tempo')
-       .should("be.visible")
-       .select("Entre 1 e 2 anos");
+        //24
+        cy.get(
+          "#mauticform_input_instrumentaldeacompanhamento1advogadas_24__se_sim_a_acolhida_faz1"
+        )
+          .should("be.visible")
+          .select("Sim");
 
-      //24.2
-      cy.get('#mauticform_input_instrumentaldeacompanhamento1advogadas_241_qualis')
-        .should("be.visible")
-        .type("Questão 24.2");
+        //24.1
+        cy.get(
+          "#mauticform_input_instrumentaldeacompanhamento1advogadas_242_ha_quanto_tempo"
+        )
+          .should("be.visible")
+          .select("Entre 1 e 2 anos");
 
+        //24.2
+        cy.get(
+          "#mauticform_input_instrumentaldeacompanhamento1advogadas_241_qualis"
+        )
+          .should("be.visible")
+          .type("Questão 24.2");
+      } else {
+        cy.get(
+          "#mauticform_input_instrumentaldeacompanhamento1advogadas_22_a_acolhida_tem_algum_d"
+        )
+          .should("be.visible")
+          .select("Não");
+      }
       //25
-      cy.get('#mauticform_input_instrumentaldeacompanhamento1advogadas_23_caso_seja_pessoa_com_d')
-      .should("be.visible")
-      .select("Não");
+      if (i === 5) {
+        cy.get(
+          "#mauticform_input_instrumentaldeacompanhamento1advogadas_23_caso_seja_pessoa_com_d"
+        )
+          .should("be.visible")
+          .select("Não");
+        testDescribe = "Questão 25 risco moderado";
+      }
 
       //continue
-      cy.get('#mauticform_instrumentaldeacompanhamento1advogadas_continuar7 > .mautic-pagebreak-next')
-      .should("be.visible")
-      .click();
+      cy.get(
+        "#mauticform_instrumentaldeacompanhamento1advogadas_continuar7 > .mautic-pagebreak-next"
+      )
+        .should("be.visible")
+        .click();
 
       //Section 9
+      if (i === 9) {
+        //26
+        cy.get(
+          "#mauticform_input_instrumentaldeacompanhamento1advogadas_24_a_acolhida_tem_algum_d"
+        )
+          .should("be.visible")
+          .select("Sim");
+        testDescribe = "Questão 26 risco Grave";
+        //26.1
+        cy.get(
+          "#mauticform_input_instrumentaldeacompanhamento1advogadas_261_quais"
+        )
+          .should("be.visible")
+          .type("Questão 26.1");
 
-      //26
-      cy.get('#mauticform_input_instrumentaldeacompanhamento1advogadas_24_a_acolhida_tem_algum_d')
-      .should("be.visible")
-      .select("Sim");
+        //26.2
+        cy.get(
+          "#mauticform_input_instrumentaldeacompanhamento1advogadas_262_ha_quanto_tempo"
+        )
+          .should("be.visible")
+          .select("Entre 1 e 2 anos");
 
-      //26.1
-      cy.get('#mauticform_input_instrumentaldeacompanhamento1advogadas_261_quais')
-      .should("be.visible")
-      .type("Questão 26.1");
+        //27
+        cy.get(
+          "#mauticform_input_instrumentaldeacompanhamento1advogadas_27__se_sim_a_acolhida_faz"
+        )
+          .should("be.visible")
+          .select("Sim");
 
-      //26.2
-      cy.get('#mauticform_input_instrumentaldeacompanhamento1advogadas_262_ha_quanto_tempo')
-      .should("be.visible")
-      .select("Entre 1 e 2 anos");
+        //27.1
+        cy.get(
+          "#mauticform_input_instrumentaldeacompanhamento1advogadas_271_onde"
+        )
+          .should("be.visible")
+          .select("Centro de Atenção Psicossocial (CAPS)");
 
+        //27.2
+        cy.get(
+          "#mauticform_input_instrumentaldeacompanhamento1advogadas_272_ha_quanto_tempo"
+        )
+          .should("be.visible")
+          .select("Entre 1 e 2 anos");
+
+        //28
+        cy.get(
+          "#mauticform_input_instrumentaldeacompanhamento1advogadas_28_se_sim_a_acolhida_faz"
+        )
+          .should("be.visible")
+          .select("Sim");
+
+        //28.1
+        cy.get(
+          "#mauticform_input_instrumentaldeacompanhamento1advogadas_281_quais1"
+        )
+          .should("be.visible")
+          .type("Questão 28.1");
+
+        //28.2
+        cy.get(
+          "#mauticform_input_instrumentaldeacompanhamento1advogadas_282_ha_quanto_tempo"
+        )
+          .should("be.visible")
+          .select("Entre 1 e 2 anos");
+      } else {
+        cy.get(
+          "#mauticform_input_instrumentaldeacompanhamento1advogadas_24_a_acolhida_tem_algum_d"
+        )
+          .should("be.visible")
+          .select("Não");
+      }
       //27
-      cy.get('#mauticform_input_instrumentaldeacompanhamento1advogadas_27__se_sim_a_acolhida_faz')
-      .should("be.visible")
-      .select("Sim");
-      
-      //27.1
-      cy.get('#mauticform_input_instrumentaldeacompanhamento1advogadas_271_onde')
-      .should("be.visible")
-      .select("Centro de Atenção Psicossocial (CAPS)");
-
-      //27.2
-      cy.get('#mauticform_input_instrumentaldeacompanhamento1advogadas_272_ha_quanto_tempo')
-      .should("be.visible")
-      .select("Entre 1 e 2 anos");
-
-      //28
-      cy.get('#mauticform_input_instrumentaldeacompanhamento1advogadas_28_se_sim_a_acolhida_faz')
-      .should("be.visible")
-      .select("Sim");
-
-      //28.1
-      cy.get('#mauticform_input_instrumentaldeacompanhamento1advogadas_281_quais')
-      .should("be.visible")
-      .type("Questão 28.1");
-
-      //28.2
-      cy.get('#mauticform_input_instrumentaldeacompanhamento1advogadas_282_ha_quanto_tempo1')
-      .should("be.visible")
-      .select("Entre 1 e 2 anos");
-
+      if (i === 10) {
+        cy.get(
+          "#mauticform_input_instrumentaldeacompanhamento1advogadas_27__se_sim_a_acolhida_faz"
+        )
+          .should("be.visible")
+          .select("Não");
+        testDescribe = "Questão 27 risco grave";
+      }
       //continue
-      cy.get('#mauticform_instrumentaldeacompanhamento1advogadas_continuar9 > .mautic-pagebreak-next')
-      .should("be.visible")
-      .click();
+      cy.get(
+        "#mauticform_instrumentaldeacompanhamento1advogadas_continuar9 > .mautic-pagebreak-next"
+      )
+        .should("be.visible")
+        .click();
 
       //Section 10
 
       //29
-      cy.get('#mauticform_input_instrumentaldeacompanhamento1advogadas_25__a_acolhida_faz_uso_de')
-      .should("be.visible")
-      .select("Sim");
-      
-      //29.1
-      cy.get('#mauticform_checkboxgrp_checkbox_291_quais1_Alcool0')
-      .should("be.visible")
-      .click();
-      
-      //29.2
-      cy.get('#mauticform_input_instrumentaldeacompanhamento1advogadas_292_ha_quanto_tempo1')
-      .should("be.visible")
-      .select("Entre 1 e 2 anos");
+      if (i === 11) {
+        cy.get(
+          "#mauticform_input_instrumentaldeacompanhamento1advogadas_25__a_acolhida_faz_uso_de"
+        )
+          .should("be.visible")
+          .select("Sim");
+        testDescribe = "Questão 29 risco Grave";
+        //29.1
+        cy.get("#mauticform_checkboxgrp_checkbox_291_quais1_Alcool0")
+          .should("be.visible")
+          .click();
+
+        //29.2
+        cy.get(
+          "#mauticform_input_instrumentaldeacompanhamento1advogadas_292_ha_quanto_tempo1"
+        )
+          .should("be.visible")
+          .select("Entre 1 e 2 anos");
+
+        //30
+        cy.get(
+          "#mauticform_input_instrumentaldeacompanhamento1advogadas_30_se_sim_a_acolhida_e_as"
+        )
+          .should("be.visible")
+          .select("Sim");
+
+        //30.1
+        cy.get(
+          "#mauticform_input_instrumentaldeacompanhamento1advogadas_301_onde"
+        )
+          .should("be.visible")
+          .select("Centro de Atenção Psicossocial (CAPS)");
+
+        //30.2
+        cy.get(
+          "#mauticform_input_instrumentaldeacompanhamento1advogadas_302_ha_quanto_tempo"
+        )
+          .should("be.visible")
+          .select("Entre 3 e 6 meses");
+      } else {
+        cy.get(
+          "#mauticform_input_instrumentaldeacompanhamento1advogadas_25__a_acolhida_faz_uso_de"
+        )
+          .should("be.visible")
+          .select("Não");
+      }
 
       //30
-      cy.get('#mauticform_input_instrumentaldeacompanhamento1advogadas_30_se_sim_a_acolhida_e_as')
-      .should("be.visible")
-      .select("Sim");
-
-      //30.1
-      cy.get('#mauticform_input_instrumentaldeacompanhamento1advogadas_301_onde')
-      .should("be.visible")
-      .select("Centro de Atenção Psicossocial (CAPS)");
-
-      //30.2
-      cy.get('#mauticform_input_instrumentaldeacompanhamento1advogadas_302_ha_quanto_tempo')
-      .should("be.visible")
-      .select("Entre 3 e 6 meses");
+      if (i === 6) {
+        cy.get(
+          "#mauticform_input_instrumentaldeacompanhamento1advogadas_30_se_sim_a_acolhida_e_as"
+        )
+          .should("be.visible")
+          .select("Não");
+        testDescribe = "Questão 30 risco Moderado";
+      }
 
       //continue
-      cy.get('#mauticform_instrumentaldeacompanhamento1advogadas_continuar10 > .mautic-pagebreak-next')
-      .should("be.visible")
-      .click();
+      cy.get(
+        "#mauticform_instrumentaldeacompanhamento1advogadas_continuar10 > .mautic-pagebreak-next"
+      )
+        .should("be.visible")
+        .click();
 
       //Section 11
 
       //31
-      cy.get('#mauticform_input_instrumentaldeacompanhamento1advogadas_26_caso_a_acolhida_esteja')
-      .should("be.visible")
-      .select("Sim");
-      
+      cy.get(
+        "#mauticform_input_instrumentaldeacompanhamento1advogadas_26_caso_a_acolhida_esteja"
+      )
+        .should("be.visible")
+        .select("Sim");
+
       //32
-      cy.get('#mauticform_input_instrumentaldeacompanhamento1advogadas_27_voce_solicitou_ajuda_d')
-      .should("be.visible")
-      .select("Sim");
-      
+      cy.get(
+        "#mauticform_input_instrumentaldeacompanhamento1advogadas_27_voce_solicitou_ajuda_d"
+      )
+        .should("be.visible")
+        .select("Sim");
+
       //32.1
-      cy.get('#mauticform_input_instrumentaldeacompanhamento1advogadas_271_sentiuse_orientada')
-      .should("be.visible")
-      .select("Sim");
+      cy.get(
+        "#mauticform_input_instrumentaldeacompanhamento1advogadas_271_sentiuse_orientada"
+      )
+        .should("be.visible")
+        .select("Sim");
 
       //32.2
-      cy.get('#mauticform_input_instrumentaldeacompanhamento1advogadas_272_sentiuse_acolhida_pel')
-      .should("be.visible")
-      .select("Sim");
+      cy.get(
+        "#mauticform_input_instrumentaldeacompanhamento1advogadas_272_sentiuse_acolhida_pel"
+      )
+        .should("be.visible")
+        .select("Sim");
 
       //33
-      cy.get('#mauticform_input_instrumentaldeacompanhamento1advogadas_28__voce_participa_dos_en')
-      .should("be.visible")
-      .select("Sim");
+      cy.get(
+        "#mauticform_input_instrumentaldeacompanhamento1advogadas_28__voce_participa_dos_en"
+      )
+        .should("be.visible")
+        .select("Sim");
 
       //34
-      cy.get('#mauticform_input_instrumentaldeacompanhamento1advogadas_29_voce_participa_do_grup')
-      .should("be.visible")
-      .select("Sim");
-      
+      cy.get(
+        "#mauticform_input_instrumentaldeacompanhamento1advogadas_29_voce_participa_do_grup"
+      )
+        .should("be.visible")
+        .select("Sim");
+
       //35
-      cy.get('#mauticform_input_instrumentaldeacompanhamento1advogadas_35_se_desejar_relate_como')
-      .should("be.visible")
-      .type("Questão 35");
+      cy.get(
+        "#mauticform_input_instrumentaldeacompanhamento1advogadas_35_se_desejar_relate_como"
+      )
+        .should("be.visible")
+        .type(testDescribe);
 
       //Send
-      cy.get('#mauticform_input_instrumentaldeacompanhamento1advogadas_submit')
-      .should("be.visible")
-      .click();
+      cy.get("#mauticform_input_instrumentaldeacompanhamento1advogadas_submit")
+        .should("be.visible")
+        .click();
     });
   });
 });
