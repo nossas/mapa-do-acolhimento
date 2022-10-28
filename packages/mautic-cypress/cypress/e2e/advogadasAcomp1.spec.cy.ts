@@ -1,5 +1,3 @@
-import { should } from "chai";
-
 describe("Submit Advogadas Form", () => {
   beforeEach(() => {
     cy.visit("//acompanhamento-jur-1");
@@ -10,7 +8,7 @@ describe("Submit Advogadas Form", () => {
     // failing the test
     return false;
   });
-  //12
+
   Cypress._.times(13, i => {
     let testDescribe = "Nenhum risco";
     it("Fill form", () => {
