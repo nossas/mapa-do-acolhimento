@@ -224,6 +224,9 @@ describe("Submit Advogadas Form", () => {
         )
           .should("be.visible")
           .type("Questão 16.1");
+        cy.get("#mauticform_checkboxgrp_label_162_para_qualis_instituic_CREAS0")
+          .should("be.visible")
+          .click();
         testDescribe = "Questão 16 risco Moderado";
       } else {
         cy.get(
@@ -250,11 +253,11 @@ describe("Submit Advogadas Form", () => {
         .select("Sim");
 
       //17.1
-      cy.get(
+      /*cy.get(
         "#mauticform_input_instrumentaldeacompanhamento1advogadas_171_caso_tenha_respondido"
       )
         .should("be.visible")
-        .type("Questão 17.1");
+        .type("Questão 17.1");*/
 
       //continue
       cy.get(
@@ -287,13 +290,6 @@ describe("Submit Advogadas Form", () => {
           .should("be.visible")
           .select("Sim");
       }
-
-      //continue
-      cy.get(
-        "#mauticform_instrumentaldeacompanhamento1advogadas_continuar8 > .mautic-pagebreak-next"
-      )
-        .should("be.visible")
-        .click();
 
       //20
       if (i === 4) {
