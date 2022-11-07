@@ -9,8 +9,8 @@ describe("Submit Advogadas Form", () => {
     return false;
   });
 
-  Cypress._.times(1, i => {
-    const testDescribe = "Nenhum risco";
+  Cypress._.times(5, i => {
+    let testDescribe = "Nenhum risco";
     it("Fill form", () => {
       //send section 1 button
       cy.get(
@@ -32,7 +32,7 @@ describe("Submit Advogadas Form", () => {
         "#mauticform_input_instrumentaldeacompanhamento2advogadas_2_email_de_cadastro1"
       )
         .should("be.visible")
-        .type("teste@teste.br");
+        .type("teste@teste.com");
 
       //continue
       cy.get(
@@ -66,19 +66,38 @@ describe("Submit Advogadas Form", () => {
         .select("Sim");
 
       //5
-      cy.get(
-        "#mauticform_input_instrumentaldeacompanhamento2advogadas_5_a_acolhida_respeita_o_c"
-      )
-        .should("be.visible")
-        .select("Sim");
+      if (i === 1) {
+        cy.get(
+          "#mauticform_input_instrumentaldeacompanhamento2advogadas_5_a_acolhida_respeita_o_c"
+        )
+          .should("be.visible")
+          .select(
+            "Não (Caso responda não, por favor, entre em contato imediatamente com a equipe)"
+          );
+        testDescribe = "questão 5 Risco moderado";
+      } else {
+        cy.get(
+          "#mauticform_input_instrumentaldeacompanhamento2advogadas_5_a_acolhida_respeita_o_c"
+        )
+          .should("be.visible")
+          .select("Sim");
+      }
 
       //6
-      cy.get(
-        "#mauticform_input_instrumentaldeacompanhamento2advogadas_6_quantas_horas_de_atendi"
-      )
-        .should("be.visible")
-        .select("Mais de 5h");
-
+      if (i === 2) {
+        cy.get(
+          "#mauticform_input_instrumentaldeacompanhamento2advogadas_6_quantas_horas_de_atendi"
+        )
+          .should("be.visible")
+          .select("Mais de 5h");
+        testDescribe = "questão 6 Risco Moderado";
+      } else {
+        cy.get(
+          "#mauticform_input_instrumentaldeacompanhamento2advogadas_6_quantas_horas_de_atendi"
+        )
+          .should("be.visible")
+          .select("1h");
+      }
       //continue
       cy.get(
         "#mauticform_instrumentaldeacompanhamento2advogadas_continuar2 > .mautic-pagebreak-next"
@@ -88,19 +107,21 @@ describe("Submit Advogadas Form", () => {
 
       //section 5
 
-      //7
-      cy.get(
-        "#mauticform_checkboxgrp_checkbox_7_a_acolhida_foi_submetid_Psicologica1"
-      )
-        .should("be.visible")
-        .click();
-
-      //7.1
-      cy.get(
-        "#mauticform_input_instrumentaldeacompanhamento2advogadas_71_caso_queira_comentar_s"
-      )
-        .should("be.visible")
-        .type("Questão 7.1");
+      if (i === 4) {
+        //7
+        cy.get(
+          "#mauticform_checkboxgrp_checkbox_7_a_acolhida_foi_submetid_Psicologica1"
+        )
+          .should("be.visible")
+          .click();
+        testDescribe = "questão 7 risco extremo";
+        //7.1
+        cy.get(
+          "#mauticform_input_instrumentaldeacompanhamento2advogadas_71_caso_queira_comentar_s"
+        )
+          .should("be.visible")
+          .type("Questão 7.1");
+      }
 
       //civel
       cy.get("#mauticform_checkboxgrp_checkbox_civel_PeticaoInicial1")
@@ -121,25 +142,36 @@ describe("Submit Advogadas Form", () => {
         .should("be.visible")
         .type("questão 9");
 
-      //10
-      cy.get(
-        "#mauticform_input_instrumentaldeacompanhamento2advogadas_10_durante_o_atendimento"
-      )
-        .should("be.visible")
-        .select("Sim");
+      if (i === 3) {
+        //10
+        cy.get(
+          "#mauticform_input_instrumentaldeacompanhamento2advogadas_10_durante_o_atendimento"
+        )
+          .should("be.visible")
+          .select("Sim");
 
-      //10.1
-      cy.get(
-        "#mauticform_input_instrumentaldeacompanhamento2advogadas_101_por_que"
-      )
-        .should("be.visible")
-        .type("questão 10");
+        testDescribe = "Questão 10 risco Moderado";
 
-      //10.2
-      cy.get("#mauticform_checkboxgrp_checkbox_102_para_qualis_instituic_UBS2")
-        .should("be.visible")
-        .click();
+        //10.1
+        cy.get(
+          "#mauticform_input_instrumentaldeacompanhamento2advogadas_101_por_que"
+        )
+          .should("be.visible")
+          .type("questão 10");
 
+        //10.2
+        cy.get(
+          "#mauticform_checkboxgrp_checkbox_102_para_qualis_instituic_UBS2"
+        )
+          .should("be.visible")
+          .click();
+      } else {
+        cy.get(
+          "#mauticform_input_instrumentaldeacompanhamento2advogadas_10_durante_o_atendimento"
+        )
+          .should("be.visible")
+          .select("Não");
+      }
       //continue
       cy.get(
         "#mauticform_instrumentaldeacompanhamento2advogadas_continuar4 > .mautic-pagebreak-next"
@@ -214,7 +246,7 @@ describe("Submit Advogadas Form", () => {
         "#mauticform_input_instrumentaldeacompanhamento2advogadas_17_se_desejar_relate_como"
       )
         .should("be.visible")
-        .type("questão 16");
+        .type(testDescribe);
 
       //send
       cy.get("#mauticform_input_instrumentaldeacompanhamento2advogadas_submit")
