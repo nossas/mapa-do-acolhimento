@@ -153,7 +153,7 @@ export default async (tickets: PartialTicket[], fitTheProfile: boolean) => {
       return await limiter.schedule(() =>
         createTicket({
           ...ticket,
-          status: "resolved",
+          status: "solved",
           tags: ["fora-do-perfil"]
         })
       );
