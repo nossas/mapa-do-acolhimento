@@ -3,7 +3,11 @@ import { userToContact, getGeolocation } from "components/dist";
 import { makeBatchRequests, composeUsers } from "./User";
 import createZendeskTickets, { composeTickets } from "./Ticket";
 import { insertSolidarityUsers, updateFormEntries } from "../graphql/mutations";
-import { handleUserError, removeDuplicatesBy } from "../utils";
+import {
+  handleUserError,
+  organizationsIds,
+  removeDuplicatesBy
+} from "../utils";
 import { Widget, FormEntry, User, FormEntriesResponse } from "../types";
 import logger from "../logger";
 
@@ -103,17 +107,37 @@ export const handleIntegration = (widgets: Widget[], apm) => async (
 
     const withoutDuplicates = removeDuplicatesBy(x => x.user_id, hasuraUsers);
 
-    // Create users tickets if they're not "desabilitada"
-    // approved MSRs and not a volunteer
-    const removeDesabilitadedUsers = (withoutDuplicates as User[]).filter(
-      user => user["condition"] && user["condition"] !== "desabilitada"
+    // Create users tickets if they're not Volunteers
+    const fitTheProfileUsers = (withoutDuplicates as User[]).filter(
+      user =>
+        user["condition"] &&
+        user["condition"] !== "desabilitada" &&
+        user["organization_id"] == organizationsIds["MSR"]
     );
+    const notFitTheProfileUsers = (withoutDuplicates as User[]).filter(
+      user =>
+        user["condition"] &&
+        user["condition"] == "desabilitada" &&
+        user["organization_id"] == organizationsIds["MSR"]
+    );
+    let fitTheProfile = true;
 
-    if (removeDesabilitadedUsers.length > 0) {
-      const tickets = composeTickets(removeDesabilitadedUsers);
-      await limiter.schedule(() => createZendeskTickets(tickets));
+    //MSR condition "inscrita"
+    if (fitTheProfileUsers.length > 0) {
+      const tickets = composeTickets(fitTheProfileUsers);
+      await limiter.schedule(() =>
+        createZendeskTickets(tickets, fitTheProfile)
+      );
     }
 
+    //MSR condition "desabilitada"
+    if (notFitTheProfileUsers.length > 0) {
+      fitTheProfile = false;
+      const tickets = composeTickets(notFitTheProfileUsers);
+      await limiter.schedule(() =>
+        createZendeskTickets(tickets, fitTheProfile)
+      );
+    }
     // Save users in Hasura
     insertSolidarityUsers(withoutDuplicates as never).catch(e => {
       log.error(`Couldn't insert users in Hasura: ${e}`);

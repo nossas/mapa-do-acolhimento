@@ -107,43 +107,57 @@ export const fetchUserTickets = async ({
   });
 };
 
-export default async (tickets: PartialTicket[]) => {
+export default async (tickets: PartialTicket[], fitTheProfile: boolean) => {
   log.info("Entering createZendeskTickets");
   const createTickets = tickets.map(async ticket => {
     const userTickets = await limiter.schedule(() => fetchUserTickets(ticket));
     if (!userTickets) return undefined;
 
-    const relatableTickets = checkOldTickets(ticket.subject, userTickets);
+    //MSR has the requirements to the attendance
+    if (fitTheProfile) {
+      const relatableTickets = checkOldTickets(ticket.subject, userTickets);
 
-    if (relatableTickets) {
+      if (relatableTickets) {
+        return await limiter.schedule(() =>
+          createTicket({
+            ...ticket,
+            status: "pending",
+            assignee_id: relatableTickets.agent,
+            custom_fields: [
+              ...ticket.custom_fields,
+              {
+                id: 360014379412,
+                value: "solicitação_repetida"
+              },
+              {
+                id: 360032229831,
+                value:
+                  typeof relatableTickets.relatedTickets === "number"
+                    ? relatableTickets.relatedTickets
+                    : null
+              }
+            ],
+            comment: {
+              body: `MSR já possui uma solicitação com o mesmo tipo de pedido de acolhimento nos seguintes tickets: ${relatableTickets.relatedTickets}`,
+              public: false
+            }
+          })
+        );
+      }
+
+      return await limiter.schedule(() => createTicket(ticket));
+    }
+
+    //MSR does not have the requirements to the attendance
+    else {
       return await limiter.schedule(() =>
         createTicket({
           ...ticket,
-          status: "pending",
-          assignee_id: relatableTickets.agent,
-          custom_fields: [
-            ...ticket.custom_fields,
-            {
-              id: 360014379412,
-              value: "solicitação_repetida"
-            },
-            {
-              id: 360032229831,
-              value:
-                typeof relatableTickets.relatedTickets === "number"
-                  ? relatableTickets.relatedTickets
-                  : null
-            }
-          ],
-          comment: {
-            body: `MSR já possui uma solicitação com o mesmo tipo de pedido de acolhimento nos seguintes tickets: ${relatableTickets.relatedTickets}`,
-            public: false
-          }
+          status: "resolved",
+          tags: ["fora-do-perfil"]
         })
       );
     }
-
-    return await limiter.schedule(() => createTicket(ticket));
   });
   return Promise.all(createTickets);
 };
