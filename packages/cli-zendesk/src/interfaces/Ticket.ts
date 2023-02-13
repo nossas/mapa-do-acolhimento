@@ -27,6 +27,10 @@ export const dicio: {
 type status_acolhimento_values =
   | "atendimento__concluído"
   | "atendimento__iniciado"
+  | "atendimento_triagem_1"
+  | "atendimento_triagem_2"
+  | "atendimento_acompanhamento_1"
+  | "atendimento_acompanhamento_2"
   | "atendimento__interrompido"
   | "encaminhamento__aguardando_confirmação"
   | "encaminhamento__confirmou_disponibilidade"

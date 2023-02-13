@@ -4,7 +4,7 @@ import { Ticket } from "./interfaces/Ticket";
 // import updateTicketRelation from "./updateTicketRelation";
 
 /*
-  Initiates a requester entry if none was already initiated, then adds to their calculated fields accordingly. 
+  Initiates a requester entry if none was already initiated, then adds to their calculated fields accordingly.
   Each ticket has a requester, but the fields "calculado" are in the user fields. That's why we need to initiate the requesters object, and add to the "calculado" field according to the requester_id.
 */
 const countTickets = async (tickets: Ticket[]): Promise<Requesters> => {
@@ -30,9 +30,20 @@ const countTickets = async (tickets: Ticket[]): Promise<Requesters> => {
       i.status !== "solved" &&
       i.status !== "closed"
     ) {
-      // Atualiza os atendimentos em andamento:
       switch (i.status_acolhimento) {
         case "atendimento__iniciado":
+          requester.atendimentos_em_andamento_calculado_ += 1;
+          break;
+        case "atendimento_triagem_1":
+          requester.atendimentos_em_andamento_calculado_ += 1;
+          break;
+        case "atendimento_triagem_2":
+          requester.atendimentos_em_andamento_calculado_ += 1;
+          break;
+        case "atendimento_acompanhamento_1":
+          requester.atendimentos_em_andamento_calculado_ += 1;
+          break;
+        case "atendimento_acompanhamento_2":
           requester.atendimentos_em_andamento_calculado_ += 1;
           break;
         case "atendimento__concluído":
