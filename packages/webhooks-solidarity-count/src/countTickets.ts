@@ -17,11 +17,23 @@ const countTickets = (tickets: Array<TicketZendesk & customFields>) => {
         case "atendimento__iniciado":
           userCount.atendimentos_em_andamento_calculado_ += 1;
           break;
-        case "atendimento__concluído":
-          userCount.atendimentos_concludos_calculado_ += 1;
+        case "atendimento_triagem_1":
+          userCount.atendimentos_em_andamento_calculado_ += 1;
+          break;
+        case "atendimento_triagem_2":
+          userCount.atendimentos_em_andamento_calculado_ += 1;
+          break;
+        case "atendimento_acompanhamento_1":
+          userCount.atendimentos_em_andamento_calculado_ += 1;
+          break;
+        case "atendimento_acompanhamento_2":
+          userCount.atendimentos_em_andamento_calculado_ += 1;
           break;
         case "encaminhamento__realizado":
           userCount.encaminhamentos_realizados_calculado_ += 1;
+          break;
+        case "atendimento__concluído":
+          userCount.atendimentos_concludos_calculado_ += 1;
           break;
         default:
           return false;

@@ -8,6 +8,10 @@ describe("check if countTickets calculate fields correctly", () => {
         status: "pending"
       },
       {
+        status_acolhimento: "atendimento_triagem_2",
+        status: "pending"
+      },
+      {
         status_acolhimento: "atendimento__iniciado",
         status: "pending"
       },
@@ -29,7 +33,7 @@ describe("check if countTickets calculate fields correctly", () => {
       }
     ];
     const expectedResult = {
-      atendimentos_em_andamento_calculado_: 1,
+      atendimentos_em_andamento_calculado_: 2,
       atendimentos_concludos_calculado_: 0,
       encaminhamentos_realizados_calculado_: 3
     };
