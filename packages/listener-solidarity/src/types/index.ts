@@ -207,15 +207,3 @@ export type CustomFields = {
   cidade?: null;
   atrelado_ao_ticket?: string | null;
 };
-
-export type status_acolhimento_values =
-  | "atendimento__concluído"
-  | "atendimento__iniciado"
-  | "atendimento__interrompido"
-  | "encaminhamento__aguardando_confirmação"
-  | "encaminhamento__confirmou_disponibilidade"
-  | "encaminhamento__negado"
-  | "encaminhamento__realizado"
-  | "encaminhamento__realizado_para_serviço_público"
-  | "solicitação_recebida"
-  | "solicitação_repetida";

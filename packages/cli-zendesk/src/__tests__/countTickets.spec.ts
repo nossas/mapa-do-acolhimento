@@ -17,6 +17,30 @@ describe("check if countTickets calculate fields correctly", () => {
       },
       {
         requester_id: 396650460752,
+        status_acolhimento: "atendimento_triagem_1",
+        status: "pending",
+        organization_id: 360282119532
+      },
+      {
+        requester_id: 396650460752,
+        status_acolhimento: "atendimento_triagem_2",
+        status: "pending",
+        organization_id: 360282119532
+      },
+      {
+        requester_id: 396650460752,
+        status_acolhimento: "atendimento_acompanhamento_1",
+        status: "pending",
+        organization_id: 360282119532
+      },
+      {
+        requester_id: 396650460752,
+        status_acolhimento: "atendimento_acompanhamento_2",
+        status: "pending",
+        organization_id: 360282119532
+      },
+      {
+        requester_id: 396650460752,
         status_acolhimento: "encaminhamento__negado",
         status: "solved",
         organization_id: 360282119532
@@ -43,7 +67,7 @@ describe("check if countTickets calculate fields correctly", () => {
     const expectedResult = {
       "396650460752": {
         id: 396650460752,
-        atendimentos_em_andamento_calculado_: 1,
+        atendimentos_em_andamento_calculado_: 5,
         atendimentos_concludos_calculado_: 0,
         encaminhamentos_realizados_calculado_: 1
       },
