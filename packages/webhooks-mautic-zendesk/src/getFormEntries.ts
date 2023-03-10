@@ -7,7 +7,7 @@ import { customFilterByEmail } from "./utils";
 export const query = `query($widgets: [Int!]!, $email: String!) {
   form_entries(where: {
     widget_id: {_in: $widgets}
-    fields: { _like: $email }
+    fields: { _ilike: $email }
   }) 
   {
     fields
