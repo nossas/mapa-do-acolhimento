@@ -20,11 +20,13 @@ interface Response {
 
 const getFormEntries = async () => {
   try {
-    const widget_ids: {
-      advogadaId: number;
-      psicologaId: number;
-    } = JSON.parse(process.env.WIDGET_IDS);
-    const { advogadaId, psicologaId } = widget_ids;
+    const widget_ids = JSON.parse(
+      process.env.WIDGET_IDS.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    );
+
+    const advogadaId = widget_ids.ADVOGADA;
+    const psicologaId = widget_ids.PSICOLOGA;
+
     const response = await HasuraBase<
       HasuraResponse<"form_entries", Response[]>
     >(query, {
