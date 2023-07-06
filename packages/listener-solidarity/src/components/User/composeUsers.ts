@@ -39,7 +39,13 @@ const createUser = (): User => ({
     disponibilidade_de_atendimentos: null,
     data_de_inscricao_no_bonde: "",
     latitude: null,
-    longitude: null
+    longitude: null,
+    fields_of_work: null,
+    years_of_experience: null,
+    libra: null,
+    birth_date: null,
+    modality: null,
+    approach: null
   }
 });
 
@@ -135,13 +141,16 @@ export default async (
     Object.keys(geocoding).map(g => {
       register["user_fields"][g] = geocoding[g];
     });
-
-    register["user_fields"]["condition"] = changeCondition(
-      formEntry.created_at,
-      widget.id,
-      instance["accept_terms"]
-    );
-
+    //status das voluntaria do cadastro novo
+    if (widget.id in [17628, 17633]) {
+      register["user_fields"]["condition"] = instance["status"];
+    } else {
+      register["user_fields"]["condition"] = changeCondition(
+        formEntry.created_at,
+        widget.id,
+        instance["accept_terms"]
+      );
+    }
     register["user_fields"]["tipo_de_acolhimento"] = setType(
       instance.tipo_de_acolhimento
     );
