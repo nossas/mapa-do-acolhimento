@@ -337,7 +337,7 @@ export default [
           uid: "field-1533734495315-40"
         },
         {
-          name: "color",
+          name: "cor",
           uid: "extra_field_color"
         },
         {
@@ -362,12 +362,12 @@ export default [
           uid: "extra_field_years_of_experience"
         },
         {
-          name: "fields_of_work",
+          name: "occupation_area",
           uid: "extra_field_fields_of_work"
         },
         {
           name: "approach",
-          uid: "extra_approach"
+          uid: "extra_field_approach"
         },
         {
           name: "status",
@@ -413,7 +413,7 @@ export default [
           uid: "field-1533735888966-20"
         },
         {
-          name: "color",
+          name: "cor",
           uid: "extra_field_color"
         },
         {
@@ -438,7 +438,7 @@ export default [
           uid: "extra_field_years_of_experience"
         },
         {
-          name: "fields_of_work",
+          name: "occupation_area",
           uid: "extra_field_fields_of_work"
         },
         {

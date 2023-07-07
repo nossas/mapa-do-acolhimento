@@ -36,6 +36,7 @@ export type User = {
   verified: boolean;
   user_fields: {
     cor: string | null;
+    gender: string | null;
     condition: "inscrita" | "desabilitada";
     state: string;
     city: string;
@@ -53,9 +54,8 @@ export type User = {
     data_de_inscricao_no_bonde: string;
     latitude: string | null;
     longitude: string | null;
-    fields_of_work: string | null;
     years_of_experience: string | null;
-    libra: boolean | null;
+    libras: string | null;
     birth_date: string | null;
     modality: string | null;
     approach: string | null;

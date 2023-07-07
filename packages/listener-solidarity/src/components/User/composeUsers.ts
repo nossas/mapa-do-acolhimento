@@ -33,6 +33,7 @@ const createUser = (): User => ({
     cep: "",
     address: "",
     cor: null,
+    gender:null,
     whatsapp: null,
     registration_number: null,
     occupation_area: null,
@@ -40,9 +41,8 @@ const createUser = (): User => ({
     data_de_inscricao_no_bonde: "",
     latitude: null,
     longitude: null,
-    fields_of_work: null,
     years_of_experience: null,
-    libra: null,
+    libras: null,
     birth_date: null,
     modality: null,
     approach: null
@@ -142,9 +142,10 @@ export default async (
       register["user_fields"][g] = geocoding[g];
     });
     //status das voluntaria do cadastro novo
-    if (widget.id in [17628, 17633]) {
+    if (instance["status"]) {
+      
       register["user_fields"]["condition"] = instance["status"];
-    } else {
+     } else {
       register["user_fields"]["condition"] = changeCondition(
         formEntry.created_at,
         widget.id,
