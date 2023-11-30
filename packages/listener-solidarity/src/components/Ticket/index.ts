@@ -107,57 +107,48 @@ export const fetchUserTickets = async ({
   });
 };
 
-export default async (tickets: PartialTicket[], fitTheProfile: boolean) => {
+export default async (tickets: PartialTicket[]) => {
   log.info("Entering createZendeskTickets");
   const createTickets = tickets.map(async ticket => {
-    const userTickets = await limiter.schedule(() => fetchUserTickets(ticket));
-    if (!userTickets) return undefined;
-
-    //MSR has the requirements to the attendance
-    if (fitTheProfile) {
-      const relatableTickets = checkOldTickets(ticket.subject, userTickets);
-
-      if (relatableTickets) {
-        return await limiter.schedule(() =>
-          createTicket({
-            ...ticket,
-            status: "pending",
-            assignee_id: relatableTickets.agent,
-            custom_fields: [
-              ...ticket.custom_fields,
-              {
-                id: 360014379412,
-                value: "solicitação_repetida"
-              },
-              {
-                id: 360032229831,
-                value:
-                  typeof relatableTickets.relatedTickets === "number"
-                    ? relatableTickets.relatedTickets
-                    : null
-              }
-            ],
-            comment: {
-              body: `MSR já possui uma solicitação com o mesmo tipo de pedido de acolhimento nos seguintes tickets: ${relatableTickets.relatedTickets}`,
-              public: false
-            }
-          })
-        );
-      }
-
+    //MSR does not have the requirements to the attendance
+    if (ticket.status === "solved") {
       return await limiter.schedule(() => createTicket(ticket));
     }
 
-    //MSR does not have the requirements to the attendance
-    else {
+    //MSR has the requirements to the attendance
+    const userTickets = await limiter.schedule(() => fetchUserTickets(ticket));
+    if (!userTickets) return undefined;
+
+    const relatableTickets = checkOldTickets(ticket.subject, userTickets);
+    if (relatableTickets) {
       return await limiter.schedule(() =>
         createTicket({
           ...ticket,
-          status: "solved",
-          tags: ["fora-do-perfil"]
+          status: "pending",
+          assignee_id: relatableTickets.agent,
+          custom_fields: [
+            ...ticket.custom_fields,
+            {
+              id: 360014379412,
+              value: "solicitação_repetida"
+            },
+            {
+              id: 360032229831,
+              value:
+                typeof relatableTickets.relatedTickets === "number"
+                  ? relatableTickets.relatedTickets
+                  : null
+            }
+          ],
+          comment: {
+            body: `MSR já possui uma solicitação com o mesmo tipo de pedido de acolhimento nos seguintes tickets: ${relatableTickets.relatedTickets}`,
+            public: false
+          }
         })
       );
     }
+
+    return await limiter.schedule(() => createTicket(ticket));
   });
   return Promise.all(createTickets);
 };

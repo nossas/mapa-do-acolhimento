@@ -4,20 +4,16 @@ import logger from "../../logger";
 
 const log = logger.child({ labels: { process: "composeTickets" } });
 
-interface HasuraUser extends User {
-  community_id: number;
-  user_id: number;
-}
-
 export default (users): PartialTicket[] => {
   log.info("Entering tickets creation logic");
-  const tickets: PartialTicket[] = users.map((user: HasuraUser) => {
+  const tickets: PartialTicket[] = users.map((user: User) => {
     const {
       user_fields: {
         data_de_inscricao_no_bonde,
         tipo_de_acolhimento,
         city,
-        state
+        state,
+        condition
       },
       external_id,
       name,
@@ -53,10 +49,22 @@ export default (users): PartialTicket[] => {
       }));
     }
 
-    return {
+    const defaultTicket = {
       ...ticket,
       subject: subject(tipo_de_acolhimento || "Sem tipo de acolhimento")
     };
+
+    //MSR condition "desabilitada"
+    if (condition === "desabilitada") {
+      return {
+        ...defaultTicket,
+        status: "solved",
+        tags: ["fora-do-perfil"]
+      };
+    }
+
+    //MSR condition "inscrita"
+    return defaultTicket;
   });
   return tickets.flat(2);
 };
