@@ -7,18 +7,13 @@
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^2.34.0",
     "@typescript-eslint/parser": "^2.34.0",
-    "babel-eslint": "^10.1.0",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.15.0",
     "eslint-plugin-jest": "^23.20.0",
-    "eslint-plugin-jsx-a11y": "^6.4.1",
-    "eslint-plugin-prettier": "^3.4.1",
-    "eslint-plugin-react": "^7.26.0",
-    "eslint-plugin-react-hooks": "^2.5.1",
     "prettier": "^1.19.1"
   },
   "scripts": {
-    "lint": "eslint packages/**/*.{ts,tsx} --fix",
+    "lint": "eslint packages/**/*.ts --fix",
     "clean": "rm -rf **/*/dist && rm -rf **/*/tsconfig.tsbuildinfo"
   },
   "dependencies": {
