@@ -13,8 +13,9 @@
     "prettier": "^1.19.1"
   },
   "scripts": {
-    "lint": "eslint packages/**/*.ts --fix",
-    "clean": "rm -rf **/*/dist && rm -rf **/*/tsconfig.tsbuildinfo"
+    "lint": "eslint packages/**/*.ts",
+    "lint:fix": "pnpm lint --fix",
+    "clean": "rm -rf **/*/dist && rm -rf **/*/tsconfig.tsbuildinfo && rm -rf **/*/node_modules && rm -rf ./node_modules"
   },
   "dependencies": {
     "tsc-watch": "4.2.8",
