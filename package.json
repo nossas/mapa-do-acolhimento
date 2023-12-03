@@ -11,17 +11,15 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-jest": "^27.6.0",
     "prettier": "^1.19.1",
-    "typescript": "5.3.2"
+    "tsc-watch": "4.2.8",
+    "tslib": "^2.4.0",
+    "tsutils": "^3.21.0",
+    "typescript": "3.9.5"
   },
   "scripts": {
     "lint": "eslint packages/**/*.ts",
     "lint:fix": "pnpm lint --fix",
     "clean": "rm -rf **/*/dist && rm -rf **/*/tsconfig.tsbuildinfo && rm -rf **/*/node_modules && rm -rf ./node_modules"
-  },
-  "dependencies": {
-    "tsc-watch": "4.2.8",
-    "tslib": "^2.3.1",
-    "tsutils": "^3.21.0"
   },
   "homepage": "https://github.com/nossas/mapa-do-acolhimento#readme",
   "repository": {
