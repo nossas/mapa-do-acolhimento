@@ -32,7 +32,7 @@ export default async (email: string): Promise<ContactSearchRes | undefined> => {
     const error = e as AxiosError;
     log.error(
       `${error?.response?.status}: ${error?.response?.statusText} %o`,
-      error.config
+      error?.config
     );
     return undefined;
   }
