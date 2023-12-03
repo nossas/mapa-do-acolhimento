@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { getToken } from "../../utils";
 import { Contact, FullContact } from "../../types";
 import logger from "./childLogger";
@@ -15,14 +15,14 @@ export default async (
   const {
     MAUTIC_API_URL,
     MAUTIC_USERNAME = "",
-    MAUTIC_PASSWORD = ""
+    MAUTIC_PASSWORD = "",
   } = process.env;
 
   const config = {
     headers: {
       Authorization: "Basic " + getToken(MAUTIC_USERNAME, MAUTIC_PASSWORD),
-      "Content-Type": "application/json"
-    }
+      "Content-Type": "application/json",
+    },
   };
 
   try {
@@ -34,7 +34,8 @@ export default async (
     log.info("Successfully edited contact");
     return res && res.data;
   } catch (e) {
-    log.error(e.response.data.errors);
+    const error = e as AxiosError;
+    log.error(error?.response?.data.errors);
     return undefined;
   }
 };
