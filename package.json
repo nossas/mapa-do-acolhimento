@@ -30,7 +30,7 @@
     "url": "https://github.com/nossas/mapa-do-acolhimento/issues"
   },
   "engines": {
-    "pnpm": ">=5",
-    "node": ">=12"
+    "pnpm": ">=8",
+    "node": ">=18"
   }
 }
