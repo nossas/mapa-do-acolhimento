@@ -29,7 +29,7 @@
     "@bitjson/npm-scripts-info": "^1.0.0",
     "@types/faker": "^4.1.12",
     "@types/jest": "^26.0.5",
-    "@types/node": "^20.10.2",
+    "@types/node": "^14.0.24",
     "@types/node-zendesk": "^1.4.0",
     "@types/yup": "^0.29.3",
     "codecov": "^3.5.0",
