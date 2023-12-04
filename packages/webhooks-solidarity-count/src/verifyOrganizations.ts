@@ -13,7 +13,7 @@ const verifyOrganization = async (ticket: TicketHasuraIn) => {
         PSICOLOGA: yup.number().required()
       })
       .required()
-      .validate(JSON.parse(ZENDESK_ORGANIZATIONS));
+      .validate(JSON.parse(ZENDESK_ORGANIZATIONS.normalize('NFD').replace(/[\u0300-\u036f]/g, "")));
 
     const { organization_id } = ticket;
     switch (organization_id) {
