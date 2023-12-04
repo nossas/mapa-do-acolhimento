@@ -34,10 +34,11 @@ const Router = (apm): Express.Express =>
         });
         const response = await App(id, apm);
         return res.status(200).json(response);
-      } catch (e: any) {
-        log.error(e.msg);
+      } catch (e) {
+        const error = e as { msg: string, status: number }
+        log.error(error.msg);
         // apm.captureError(new Error(e.msg));
-        return res.status(e.status).json(e.msg);
+        return res.status(error.status).json(error.msg);
       }
     });
 

@@ -18,7 +18,7 @@ try {
   Router(apm).listen(Number(PORT), "0.0.0.0", () => {
     log.info(`Server listen on PORT ${PORT}`);
   });
-} catch (e: any) {
+} catch (e) {
   log.error(e);
-  apm.captureError(e);
+  apm.captureError(e as string);
 }

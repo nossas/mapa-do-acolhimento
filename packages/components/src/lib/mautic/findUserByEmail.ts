@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { getToken } from "../../utils";
 import { ContactSearchRes } from "../../types";
 import logger from "./childLogger";
@@ -12,16 +12,16 @@ export default async (email: string): Promise<ContactSearchRes | undefined> => {
   const {
     MAUTIC_API_URL,
     MAUTIC_USERNAME = "",
-    MAUTIC_PASSWORD = ""
+    MAUTIC_PASSWORD = "",
   } = process.env;
 
   const config = {
     headers: {
-      Authorization: "Basic " + getToken(MAUTIC_USERNAME, MAUTIC_PASSWORD)
+      Authorization: "Basic " + getToken(MAUTIC_USERNAME, MAUTIC_PASSWORD),
     },
     params: {
-      search: `email:${email}`
-    }
+      search: `email:${email}`,
+    },
   };
 
   try {
@@ -29,7 +29,11 @@ export default async (email: string): Promise<ContactSearchRes | undefined> => {
     log.info("Successfully returned a contact");
     return data && data.data;
   } catch (e) {
-    log.error(`${e.response.status}: ${e.response.statusText} %o`, e.config);
+    const error = e as AxiosError;
+    log.error(
+      `${error?.response?.status}: ${error?.response?.statusText} %o`,
+      error?.config
+    );
     return undefined;
   }
 };

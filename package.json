@@ -7,20 +7,19 @@
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^2.34.0",
     "@typescript-eslint/parser": "^2.34.0",
-    "eslint": "^6.8.0",
+    "eslint": "^6.0.0",
     "eslint-config-prettier": "^6.15.0",
     "eslint-plugin-jest": "^23.20.0",
-    "prettier": "^1.19.1"
-  },
-  "scripts": {
-    "lint": "eslint packages/**/*.ts --fix",
-    "clean": "rm -rf **/*/dist && rm -rf **/*/tsconfig.tsbuildinfo"
-  },
-  "dependencies": {
+    "prettier": "^1.19.1",
     "tsc-watch": "4.2.8",
-    "tslib": "^2.3.1",
+    "tslib": "^2.4.0",
     "tsutils": "^3.21.0",
     "typescript": "3.9.5"
+  },
+  "scripts": {
+    "lint": "eslint packages/**/*.ts",
+    "lint:fix": "pnpm lint --fix",
+    "clean": "rm -rf **/*/dist && rm -rf **/*/tsconfig.tsbuildinfo && rm -rf **/*/node_modules && rm -rf ./node_modules"
   },
   "homepage": "https://github.com/nossas/mapa-do-acolhimento#readme",
   "repository": {
@@ -31,7 +30,7 @@
     "url": "https://github.com/nossas/mapa-do-acolhimento/issues"
   },
   "engines": {
-    "pnpm": ">=5",
-    "node": ">=12"
+    "pnpm": ">=8",
+    "node": ">=18"
   }
 }
