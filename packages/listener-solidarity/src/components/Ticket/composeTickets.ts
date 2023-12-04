@@ -28,43 +28,40 @@ export default (users): PartialTicket[] => {
     const subject = (type: string) =>
       `[${capitalize(type)}] ${name}, ${city} - ${state}`;
 
+    const msrDoesNotFitProfile =
+      condition === "desabilitada"
+        ? {
+            status: "solved",
+            tags: ["fora-do-perfil"],
+          }
+        : {};
+
     const ticket = {
       external_id,
       comment: {
         body: "Importado pelo BONDE.",
-        public: false
+        public: false,
       },
       requester_id: user_id,
       custom_fields: [
         { id: 360017056851, value: formatDate(data_de_inscricao_no_bonde) },
         { id: 360014379412, value: "solicitação_recebida" },
-        { id: 360016681971, value: name }
-      ]
+        { id: 360016681971, value: name },
+      ],
+      ...msrDoesNotFitProfile,
     };
 
     if (tipo_de_acolhimento === "psicológico_e_jurídico") {
-      return ["psicológico", "jurídico"].map(i => ({
+      return ["psicológico", "jurídico"].map((i) => ({
         ...ticket,
-        subject: subject(i)
+        subject: subject(i),
       }));
     }
 
-    const defaultTicket = {
+    return {
       ...ticket,
-      subject: subject(tipo_de_acolhimento || "Sem tipo de acolhimento")
+      subject: subject(tipo_de_acolhimento || "Sem tipo de acolhimento"),
     };
-
-    //MSR condition "desabilitada"
-    if (condition === "desabilitada") {
-      return {
-        ...defaultTicket,
-        status: "solved",
-        tags: ["fora-do-perfil"]
-      };
-    }
-
-    //MSR condition "inscrita"
-    return defaultTicket;
   });
   return tickets.flat(2);
 };
