@@ -38,7 +38,16 @@ export default {
         widget_id: 17633,
         created_at: "2020-05-29T00:28:29.55569",
         __typename: "form_entries"
+      },
+      {
+        id: 2000376,
+        fields: '[ { "uid": "field-1533735738039-59", "kind": "text", "label": "NOME", "placeholder": "", "required": "true", "value": "Margarida" }, { "uid": "field-1533735745400-14", "kind": "text", "label": "SOBRENOME", "placeholder": "", "required": "true", "value": "Silva" }, { "uid": "field-1533735752669-39", "kind": "email", "label": "SEU MELHOR EMAIL", "placeholder": "", "required": "true", "value": "ma.silva@email.com" }, { "uid": "field-1533735761357-93", "kind": "text", "label": "OAB (Só números)", "placeholder": "", "required": "true", "value": "1130833" }, { "uid": "field-1533735803691-45", "kind": "text", "label": "CEP DE ATENDIMENTO (Só números)", "placeholder": "", "required": "true", "value": "12050-181" }, { "uid": "field-1533735813563-2", "kind": "text", "label": "TELEFONE PARA ATENDIMENTO (COM DDD)", "placeholder": "", "required": "true", "value": "129293453999" }, { "uid": "field-1533735832329-53", "kind": "text", "label": "WHATSAPP (COM DDD)", "placeholder": "", "required": "true", "value": "129293453999" }, { "uid": "field-1533735888966-20", "kind": "dropdown", "label": "Como voluntária do Mapa do Acolhimento, você se dispõe a atender, pelo menos, uma (1) mulher que precisa de ajuda. Caso você tenha mais tempo disponível, você pode atender mais de uma (1) mulher, de maneira concomitante. Quantas vagas você pode oferecer para atender, simultaneamente, mulheres do Mapa do Acolhimento (lembrando que isso pode incluir o acompanhamento de processos do início ao fim) ?", "placeholder": "1, 2, 3, 4, 5 ou mais", "required": "true", "value": " 2" }, { "uid": "extra_field_color", "label": "color", "kind": "text", "placeholder": "", "required": false, "value": "Preta" }, { "uid": "extra_field_gender", "label": "gender", "kind": "text", "placeholder": "", "required": false, "value": "mulher cisgênero" }, { "uid": "extra_field_birth_date", "label": "birth_date", "kind": "text", "placeholder": "", "required": false, "value": "1978-03-12" }, { "uid": "extra_field_libras", "label": "libras", "kind": "text", "placeholder": "", "required": false, "value": "Não" }, { "uid": "extra_field_modality", "label": "modality", "kind": "text", "placeholder": "", "required": false, "value": "online" }, { "uid": "extra_field_years_of_experience", "label": "years_of_experience", "kind": "text", "placeholder": "", "required": false, "value": "Menos de 5 anos" }, { "uid": "extra_field_fields_of_work", "label": "fields_of_work", "kind": "text", "placeholder": "", "required": false, "value": "Tributário,Digital" }, { "uid": "extra_field_status", "label": "status", "kind": "text", "placeholder": "", "required": false, "value": "cadastrada" } ]',
+        cached_community_id: 40,
+        widget_id: 17633,
+        created_at: "2023-07-07T00:28:29.55569",
+        __typename: "form_entries"
       }
+
     ],
     results: [
       {
@@ -63,7 +72,13 @@ export default {
           registration_number: "21312312",
           occupation_area: null,
           disponibilidade_de_atendimentos: "4",
-          data_de_inscricao_no_bonde: "2020-05-29T00:25:28.593533"
+          data_de_inscricao_no_bonde: "2020-05-29T00:25:28.593533",
+          years_of_experience: null,
+          libras: null,
+          birth_date: null,
+          modality: null,
+          approach: null, 
+             gender: null
         }
       },
       {
@@ -88,7 +103,13 @@ export default {
           registration_number: "21312312",
           occupation_area: null,
           disponibilidade_de_atendimentos: "5",
-          data_de_inscricao_no_bonde: "2020-05-29T00:27:23.780153"
+          data_de_inscricao_no_bonde: "2020-05-29T00:27:23.780153",
+          years_of_experience: null,
+          libras: null,
+          birth_date: null,
+          modality: null,
+          approach: null, 
+            gender: null
         }
       },
       {
@@ -113,7 +134,45 @@ export default {
           registration_number: "21312312",
           occupation_area: null,
           disponibilidade_de_atendimentos: "2",
-          data_de_inscricao_no_bonde: "2020-05-29T00:28:29.55569"
+          data_de_inscricao_no_bonde: "2020-05-29T00:28:29.55569",
+          years_of_experience: null,
+          libras: null,
+          birth_date: null,
+          modality: null,
+          approach: null, 
+             gender: null
+        }
+      },
+
+      {
+        name: "Margarida Silva",
+        role: "end-user",
+        organization_id: 360269610652,
+        email: "ma.silva@email.com",
+        external_id: "2000376",
+        phone: "129293453999",
+        verified: true,
+        user_fields: {
+          cor: "preta",
+          address: geolocation.address,
+          cep: geolocation.cep,
+          city: geolocation.city,
+          latitude: geolocation.latitude,
+          longitude: geolocation.longitude,
+          state: geolocation.state,
+          tipo_de_acolhimento: null,
+          condition: "cadastrada",
+          whatsapp: "129293453999",
+          registration_number: "1130833",
+          occupation_area: "Tributário,Digital",
+          disponibilidade_de_atendimentos: "2",
+          data_de_inscricao_no_bonde: "2023-07-07T00:28:29.55569",
+          years_of_experience: "Menos de 5 anos",
+          libras: "Não",
+          birth_date: "1978-03-12",
+          modality: "online",
+          approach: null,
+          gender: "mulher cisgênero"
         }
       }
     ]
@@ -127,6 +186,14 @@ export default {
         cached_community_id: 40,
         widget_id: 17628,
         created_at: "2020-05-29T00:16:24.283085",
+        __typename: "form_entries"
+      },
+      {
+        id: 2000368,
+        fields: '[ { "uid": "field-1533733461113-5", "kind": "text", "label": "NOME", "placeholder": "", "required": "true", "value": "Orquidea" }, { "uid": "field-1533733485653-99", "kind": "text", "label": "SOBRENOME", "placeholder": "", "required": "true", "value": "Rios" }, { "uid": "field-1533733493037-11", "kind": "email", "label": "SEU MELHOR EMAIL", "placeholder": "", "required": "true", "value": "orios@email.com" }, { "uid": "field-1533733501716-34", "kind": "text", "label": "CRP (Só números)", "placeholder": "", "required": "true", "value": "123123" }, { "uid": "field-1533733650118-7", "kind": "text", "label": "CEP DE ATENDIMENTO (Só números)", "placeholder": "", "required": "true", "value": "12070620" }, { "uid": "field-1533734419113-13", "kind": "text", "label": "TELEFONE PARA ATENDIMENTO (COM DDD)", "placeholder": "", "required": "true", "value": "12988801144" }, { "uid": "field-1533734468460-38", "kind": "text", "label": "WHATSAPP (COM DDD)", "placeholder": "Obrigatório para contato com a equipe", "required": "true", "value": "12988801144" }, { "uid": "field-1533734495315-40", "kind": "dropdown", "label": "Como voluntária do Mapa do Acolhimento, você se dispõe a atender, pelo menos, uma (1) mulher que precisa de ajuda. Caso você tenha mais tempo disponível, você pode atender mais de uma (1) mulher, de maneira concomitante. Lembrando que os atendimentos devem ser sempre individuais. Quantas vagas você pode oferecer para atender, simultaneamente, mulheres do Mapa do Acolhimento?", "placeholder": "1, 2, 3, 4, 5 ou mais", "required": "true", "value": "3" }, { "uid": "extra_field_color", "label": "color", "kind": "text", "placeholder": "", "required": false, "value": "Preta" }, { "uid": "extra_field_gender", "label": "gender", "kind": "text", "placeholder": "", "required": false, "value": "mulher cisgênero" }, { "uid": "extra_field_birth_date", "label": "birth_date", "kind": "text", "placeholder": "", "required": false, "value": "1990-08-20" }, { "uid": "extra_field_libras", "label": "libras", "kind": "text", "placeholder": "", "required": false, "value": "Sim" }, { "uid": "extra_field_modality", "label": "modality", "kind": "text", "placeholder": "", "required": false, "value": "Deixo à escolha da acolhida" }, { "uid": "extra_field_years_of_experience", "label": "years_of_experience", "kind": "text", "placeholder": "", "required": false, "value": "Menos de 3 anos" }, { "uid": "extra_field_fields_of_work", "label": "fields_of_work", "kind": "text", "placeholder": "", "required": false, "value": "Assistência social" }, { "uid": "extra_field_approach", "label": "approach", "kind": "text", "placeholder": "", "required": false, "value": "Psicanálise" }, { "uid": "extra_field_status", "label": "status", "kind": "text", "placeholder": "", "required": false, "value": "reprovada_diretrizes_do_mapa" } ]',
+        cached_community_id: 40,
+        widget_id: 17628,
+        created_at: "2023-07-07T00:28:29.55569",
         __typename: "form_entries"
       }
     ],
@@ -152,7 +219,45 @@ export default {
           registration_number: "123123",
           state: geolocation.state,
           tipo_de_acolhimento: null,
-          whatsapp: "12988801144"
+          whatsapp: "12988801144",
+          years_of_experience: null,
+          libras: null,
+          birth_date: null,
+          modality: null,
+          approach: null, 
+          gender: null
+        },
+        verified: true
+      },
+
+      {
+        email: "orios@email.com",
+        external_id: "2000368",
+        name: "Orquidea Rios",
+        organization_id: 360282119532,
+        phone: "12988801144",
+        role: "end-user",
+        user_fields: {
+          cor: "preta",
+          address: geolocation.address,
+          cep: geolocation.cep,
+          city: geolocation.city,
+          condition: "reprovada_diretrizes_do_mapa",
+          data_de_inscricao_no_bonde: "2023-07-07T00:28:29.55569",
+          disponibilidade_de_atendimentos: "3",
+          latitude: geolocation.latitude,
+          longitude: geolocation.longitude,
+          occupation_area: "Assistência social",
+          registration_number: "123123",
+          state: geolocation.state,
+          tipo_de_acolhimento: null,
+          whatsapp: "12988801144",
+          years_of_experience: "Menos de 3 anos",
+          libras: "Sim",
+          birth_date: "1990-08-20",
+          modality: "Deixo à escolha da acolhida",
+          approach: "Psicanálise",
+          gender: "mulher cisgênero"
         },
         verified: true
       }
@@ -220,7 +325,13 @@ export default {
           registration_number: null,
           occupation_area: null,
           disponibilidade_de_atendimentos: null,
-          data_de_inscricao_no_bonde: "2020-05-08T12:37:01.553574"
+          data_de_inscricao_no_bonde: "2020-05-08T12:37:01.553574",
+          years_of_experience: null,
+          libras: null,
+          birth_date: null,
+          modality: null,
+          approach: null, 
+          gender: null
         }
       },
       {
@@ -245,7 +356,13 @@ export default {
           registration_number: null,
           occupation_area: null,
           disponibilidade_de_atendimentos: null,
-          data_de_inscricao_no_bonde: "2020-05-27T13:14:24.678628"
+          data_de_inscricao_no_bonde: "2020-05-27T13:14:24.678628",
+          years_of_experience: null,
+          libras: null,
+          birth_date: null,
+          modality: null,
+          approach: null, 
+          gender: null
         }
       },
       {
@@ -270,7 +387,13 @@ export default {
           registration_number: null,
           occupation_area: null,
           disponibilidade_de_atendimentos: null,
-          data_de_inscricao_no_bonde: "2020-05-27T13:15:47.93393"
+          data_de_inscricao_no_bonde: "2020-05-27T13:15:47.93393",
+          years_of_experience: null,
+          libras: null,
+          birth_date: null,
+          modality: null,
+          approach: null, 
+          gender: null
         }
       },
       {
@@ -295,7 +418,13 @@ export default {
           registration_number: null,
           occupation_area: null,
           disponibilidade_de_atendimentos: null,
-          data_de_inscricao_no_bonde: "2018-07-11T17:05:15.218893"
+          data_de_inscricao_no_bonde: "2018-07-11T17:05:15.218893",
+          years_of_experience: null,
+          libras: null,
+          birth_date: null,
+          modality: null,
+          approach: null, 
+          gender: null
         }
       }
     ]
@@ -335,7 +464,13 @@ export default {
           registration_number: "tese",
           occupation_area: "nao tenho",
           disponibilidade_de_atendimentos: "2",
-          data_de_inscricao_no_bonde: "2016-06-06T22:18:29.35002"
+          data_de_inscricao_no_bonde: "2016-06-06T22:18:29.35002",
+          years_of_experience: null,
+          libras: null,
+          birth_date: null,
+          modality: null,
+          approach: null, 
+          gender: null
         }
       }
     ]
@@ -375,7 +510,13 @@ export default {
           registration_number: null,
           occupation_area: null,
           disponibilidade_de_atendimentos: null,
-          data_de_inscricao_no_bonde: "2016-07-28T23:24:46.472049"
+          data_de_inscricao_no_bonde: "2016-07-28T23:24:46.472049",
+          years_of_experience: null,
+          libras: null,
+          birth_date: null,
+          modality: null,
+          approach: null, 
+          gender: null
         }
       }
     ]
@@ -424,7 +565,13 @@ export default {
           registration_number: "123123",
           occupation_area: "Saúde Mental",
           disponibilidade_de_atendimentos: "5",
-          data_de_inscricao_no_bonde: "2018-07-09T14:25:11.741693"
+          data_de_inscricao_no_bonde: "2018-07-09T14:25:11.741693",
+          years_of_experience: null,
+          libras: null,
+          birth_date: null,
+          modality: null,
+          approach: null,
+          gender: null
         }
       },
       {
@@ -449,7 +596,13 @@ export default {
           registration_number: "123123",
           occupation_area: "Psicologia Clínica ",
           disponibilidade_de_atendimentos: "1",
-          data_de_inscricao_no_bonde: "2018-08-08T12:39:01.286056"
+          data_de_inscricao_no_bonde: "2018-08-08T12:39:01.286056",
+          years_of_experience: null,
+          libras: null,
+          birth_date: null,
+          modality: null,
+          approach: null,
+          gender: null
         }
       }
     ]
@@ -498,7 +651,13 @@ export default {
           registration_number: "123123",
           occupation_area: "Indicações",
           disponibilidade_de_atendimentos: "2",
-          data_de_inscricao_no_bonde: "2017-06-20T00:47:07.442283"
+          data_de_inscricao_no_bonde: "2017-06-20T00:47:07.442283",
+          years_of_experience: null,
+          libras: null,
+          birth_date: null,
+          modality: null,
+          approach: null,
+          gender: null
         }
       },
       {
@@ -523,7 +682,13 @@ export default {
           registration_number: "123123 RJ",
           occupation_area: "família, cível, inventário",
           disponibilidade_de_atendimentos: "5_ou_mais",
-          data_de_inscricao_no_bonde: "2018-04-08T16:25:23.955426"
+          data_de_inscricao_no_bonde: "2018-04-08T16:25:23.955426",
+          years_of_experience: null,
+          libras: null,
+          birth_date: null,
+          modality: null,
+          approach: null,
+          gender: null
         }
       }
     ]
@@ -572,7 +737,13 @@ export default {
           registration_number: "158157",
           occupation_area: "Direito de família, civil e trabalhista",
           disponibilidade_de_atendimentos: "3",
-          data_de_inscricao_no_bonde: "2018-08-08T13:00:16.991663"
+          data_de_inscricao_no_bonde: "2018-08-08T13:00:16.991663",
+          years_of_experience: null,
+          libras: null,
+          birth_date: null,
+          modality: null,
+          approach: null,
+          gender: null
         }
       },
       {
@@ -597,7 +768,13 @@ export default {
           registration_number: "123123",
           occupation_area: "Família e Consumidor",
           disponibilidade_de_atendimentos: "1",
-          data_de_inscricao_no_bonde: "2018-07-09T21:25:55.801691"
+          data_de_inscricao_no_bonde: "2018-07-09T21:25:55.801691",
+          years_of_experience: null,
+          libras: null,
+          birth_date: null,
+          modality: null,
+          approach: null,
+          gender: null
         }
       }
     ]
