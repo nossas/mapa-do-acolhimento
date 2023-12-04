@@ -59,7 +59,7 @@ const saveTicketInHasura = async (ticket: Ticket) => {
   return createTicketLog.info("Ticket integration is done.");
 };
 
-const createTicket = (ticket): Promise<boolean | undefined> => {
+const createTicket = (ticket): Promise<Ticket | undefined> => {
   createTicketLog.info("CREATE TICKET");
   // ADD YUP VALIDATION
   return new Promise(resolve => {
@@ -80,7 +80,7 @@ const createTicket = (ticket): Promise<boolean | undefined> => {
       // );
       createTicketLog.info("Zendesk ticket created successfully!");
       saveTicketInHasura(result as Ticket);
-      return resolve(true);
+      return resolve(result as Ticket);
     });
   });
 };

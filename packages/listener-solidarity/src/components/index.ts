@@ -10,6 +10,7 @@ import {
 } from "../utils";
 import { Widget, FormEntry, User, FormEntriesResponse } from "../types";
 import logger from "../logger";
+import createSupportRequests from "./SupportRequest";
 
 const log = logger.child({ labels: { process: "handleIntegration" } });
 
@@ -112,7 +113,13 @@ export const handleIntegration = (widgets: Widget[], apm) => async (
       user => user["organization_id"] === organizationsIds["MSR"]
     );
     const tickets = composeTickets(msrUsers);
-    await limiter.schedule(() => createZendeskTickets(tickets));
+    const zendeskTickets = await limiter.schedule(() =>
+      createZendeskTickets(tickets)
+    );
+    createSupportRequests(zendeskTickets, msrUsers).catch(e => {
+      log.error(`Couldn't create support requests: ${e}`);
+      apm.captureError(e);
+    });
 
     // Save users in Hasura
     insertSolidarityUsers(withoutDuplicates as never).catch(e => {
