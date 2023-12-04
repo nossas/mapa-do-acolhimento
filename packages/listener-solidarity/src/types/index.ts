@@ -181,6 +181,7 @@ export type PartialTicket = Pick<
   | "custom_fields"
   | "subject"
   | "status"
+  | "tags"
 >;
 
 export type Fields = Array<{

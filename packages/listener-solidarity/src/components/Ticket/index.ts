@@ -87,7 +87,7 @@ const createTicket = (ticket): Promise<boolean | undefined> => {
 
 export const fetchUserTickets = async ({
   requester_id,
-}): Promise<Ticket[] | null> => {
+}): Promise<Ticket[] | undefined> => {
   fetchUserTicketsLog.info("LIST USER TICKETS");
   return new Promise((resolve) => {
     return client.tickets.listByUserRequested(
@@ -98,7 +98,7 @@ export const fetchUserTickets = async ({
             `Failed to fetch tickets from user '${requester_id}' %o`,
             err
           );
-          return resolve(null);
+          return resolve(undefined);
         }
         // fetchUserTicketsLog(JSON.stringify(result, null, 2));
         return resolve(result as Ticket[]);
@@ -111,7 +111,9 @@ export default async (tickets: PartialTicket[]) => {
   log.info("Entering createZendeskTickets");
   const createTickets = tickets.map(async (ticket) => {
     //MSR does not have the requirements to the attendance
-    if (ticket.status === "solved") {
+    const msrDoesNotFitTheProfile =
+      ticket.status === "solved" && ticket.tags.includes("fora-do-perfil");
+    if (msrDoesNotFitTheProfile) {
       return await limiter.schedule(() => createTicket(ticket));
     }
 
