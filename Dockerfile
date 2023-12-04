@@ -1,6 +1,6 @@
-FROM node:14-alpine
+FROM node:18-alpine
 
-RUN yarn global add pnpm@6
+RUN yarn global add pnpm
 
 WORKDIR /usr/src/app
 
