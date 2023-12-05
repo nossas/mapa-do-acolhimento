@@ -116,10 +116,17 @@ export const handleIntegration = (widgets: Widget[], apm) => async (
     const zendeskTickets = await limiter.schedule(() =>
       createZendeskTickets(tickets)
     );
-    createSupportRequests(zendeskTickets, msrUsers).catch(e => {
-      log.error(`Couldn't create support requests: ${e}`);
-      apm.captureError(e);
-    });
+    createSupportRequests(zendeskTickets, msrUsers)
+      .then(() => log.info("Success creating support requests for tickets!"))
+      .catch((e) => {
+        if (e.response) {
+          log.error(
+            `Couldnt create support requests: ${
+              e.response.status
+            } - ${JSON.stringify(e.response.data)}`
+          );
+        }
+      });
 
     // Save users in Hasura
     insertSolidarityUsers(withoutDuplicates as never).catch(e => {
