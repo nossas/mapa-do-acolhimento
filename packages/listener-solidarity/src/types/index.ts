@@ -175,7 +175,13 @@ export type Ticket = {
 
 export type PartialTicket = Pick<
   Ticket,
-  "external_id" | "comment" | "requester_id" | "custom_fields" | "subject"
+  | "external_id"
+  | "comment"
+  | "requester_id"
+  | "custom_fields"
+  | "subject"
+  | "status"
+  | "tags"
 >;
 
 export type Fields = Array<{
