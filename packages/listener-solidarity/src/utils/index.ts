@@ -101,3 +101,5 @@ export const getStatusAcolhimento = (
   const status = ticket.custom_fields.find(field => field.id === 360014379412);
   return status && status.value;
 };
+
+export { default as getSupportRequests } from "./getSupportRequests";

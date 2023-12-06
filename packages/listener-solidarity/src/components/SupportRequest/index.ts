@@ -2,30 +2,7 @@ import axios, { AxiosError } from "axios";
 import { sign } from "jsonwebtoken";
 import { Ticket, User } from "../../types";
 import logger from "../../logger";
-
-function getSupportType(subject: string) {
-  return subject.includes("Psicológico") ? "psychological" : "legal";
-}
-
-function getSupportRequests(ticket: Ticket, msrs: User[]) {
-  const user = msrs.find((user) => user.user_id === ticket.requester_id);
-  if (!user) throw new Error(`Didn't find a user for this ticket ${ticket.id}`);
-
-  return {
-    msrId: ticket.requester_id,
-    zendeskTicketId: ticket.id,
-    supportType: getSupportType(ticket.subject),
-    priority: null,
-    supportExpertise: null,
-    hasDisability: false,
-    requiresLibras: false,
-    acceptsOnlineSupport: true,
-    lat: Number(user.user_fields.latitude),
-    lng: Number(user.user_fields.longitude),
-    city: user.user_fields.city,
-    state: user.user_fields.state,
-  };
-}
+import { getSupportRequests } from "../../utils";
 
 type Response = {
   message: Array<{
