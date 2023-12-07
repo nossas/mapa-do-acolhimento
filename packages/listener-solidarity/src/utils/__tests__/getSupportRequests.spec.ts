@@ -8,7 +8,7 @@ describe("getSupportRequests", () => {
         { requester_id: 1, id: 1 } as Ticket,
         [{ user_id: 2 }, { user_id: 3 }] as User[]
       )
-    ).toThrow(new Error("Didn't find a user for this ticket 1"));
+    ).toThrow(new Error("Didn't find a user for this ticket"));
   });
 
   it("should return the correct payload for psychological support req", () => {

@@ -11,7 +11,27 @@ describe("createSupportRequests", () => {
       "No valid tickets to save as support requests"
     );
   });
-  it("should throw an error if axios post returns an error", async () => {
+  it("should return error res when no user is found for the ticket", async () => {
+    expect(
+      await createSupportRequests(
+        [{ requester_id: 1, id: 1 }] as Ticket[],
+        [{ user_id: 2 }, { user_id: 3 }] as User[]
+      )
+    ).toStrictEqual(
+      "Couldnt create support requests for these tickets: 1 and got this error: Didn't find a user for this ticket"
+    );
+  });
+  it("should return error res when ticket has unsupported support type", async () => {
+    expect(
+      await createSupportRequests(
+        [{ requester_id: 1, id: 1, subject: "foo bar" }] as Ticket[],
+        [{ user_id: 1 }] as User[]
+      )
+    ).toStrictEqual(
+      "Couldnt create support requests for these tickets: 1 and got this error: Unsupported support type"
+    );
+  });
+  it("should return an error res if axios post is rejected", async () => {
     axios.post = jest.fn().mockRejectedValueOnce({
       response: {
         status: 400,
@@ -35,7 +55,7 @@ describe("createSupportRequests", () => {
       'Couldnt create support requests for these tickets: 1 and got this error: 400 - "foo bar"'
     );
   });
-  it("should return resolved value from axios", async () => {
+  it("should call axios with expected payload and return the resolved value", async () => {
     axios.post = jest.fn().mockResolvedValue({
       response: {
         status: 200,
