@@ -1,28 +1,18 @@
 import axios, { AxiosError } from "axios";
 import { sign } from "jsonwebtoken";
-import { Ticket, User } from "../../types";
+import { SupportRequestPayload, Ticket, User } from "../../types";
 import logger from "../../logger";
 import { getSupportRequests } from "../../utils";
 
-type Response = {
-  message: Array<{
-    msrId: string;
-    zendeskTicketId: string;
-    supportRequestId: number;
-    supportType: string;
-    supportExpertise: string | null;
-    priority: number | null;
-    hasDisability: boolean;
-    requiresLibras: boolean;
-    acceptsOnlineSupport: boolean;
-    lat: string;
-    lng: string;
-    city: string;
-    state: string;
-    status: string;
-    createdAt: string;
-    updatedAt: string;
-  }>;
+type SupportRequestResponse = {
+  message: Array<
+    {
+      createdAt: string;
+      updatedAt: string;
+      supportRequestId: number;
+      status: string;
+    } & SupportRequestPayload
+  >;
 };
 
 const log = logger.child({ labels: { process: "createSupportRequests" } });
@@ -47,7 +37,7 @@ export default async function createSupportRequests(
     const supportRequests = msrZendeskTickets.map((ticket) =>
       getSupportRequests(ticket as Ticket, msrs)
     );
-    const createSupportRequest = await axios.post<Response>(
+    const createSupportRequest = await axios.post<SupportRequestResponse>(
       endpoint,
       supportRequests,
       {
