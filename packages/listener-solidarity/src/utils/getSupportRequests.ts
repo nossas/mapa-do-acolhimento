@@ -1,3 +1,4 @@
+import { getStatusAcolhimento } from ".";
 import { SupportRequestPayload, Ticket, User } from "../types";
 
 export function getSupportType(subject: string) {
@@ -17,6 +18,22 @@ export function sanitizeCity(city: string) {
   if (city === "ZERO_RESULTS") return "NOT_FOUND";
   if (!city) return "NOT_FOUND";
   return city;
+}
+
+export function getStatus(zendeskStatus: string) {
+  if (!zendeskStatus) return "open";
+
+  const newStatus = {
+    solicitação_repetida: "duplicated",
+    solicitação_recebida: "open",
+  };
+
+  const unsupportedStatus = Object.keys(newStatus).find(
+    (key) => zendeskStatus === key
+  );
+  if (!unsupportedStatus) return "open";
+
+  return newStatus[zendeskStatus];
 }
 
 export default function getSupportRequests(
