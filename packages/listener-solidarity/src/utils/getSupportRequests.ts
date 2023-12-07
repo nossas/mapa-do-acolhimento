@@ -10,7 +10,7 @@ export function getSupportType(subject: string) {
 export function isValidNumber(georef: string | number | null) {
   if (!georef) return false;
   const num = Number(georef);
-  return typeof num === "number" && !isNaN(num);
+  return !isNaN(num);
 }
 
 export function sanitizeCity(city: string) {
