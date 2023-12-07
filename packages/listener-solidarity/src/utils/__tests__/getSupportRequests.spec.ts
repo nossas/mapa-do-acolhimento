@@ -2,107 +2,170 @@ import { Ticket, User } from "../../types";
 import getSupportRequests from "../getSupportRequests";
 
 describe("getSupportRequests", () => {
-  it("should throw an error if there are no users related to ticket", () => {
-    expect(() =>
-      getSupportRequests(
-        { requester_id: 1, id: 1 } as Ticket,
-        [{ user_id: 2 }, { user_id: 3 }] as User[]
-      )
-    ).toThrow(new Error("Didn't find a user for this ticket"));
-  });
+  describe("Unhappy path", () => {
+    it("should throw an error if there are no users related to ticket", () => {
+      expect(() =>
+        getSupportRequests(
+          { requester_id: 1, id: 1 } as Ticket,
+          [{ user_id: 2 }, { user_id: 3 }] as User[]
+        )
+      ).toThrow(new Error("Didn't find a user for this ticket"));
+    });
 
-  it("should return the correct payload for psychological support req", () => {
-    expect(
-      getSupportRequests(
-        {
-          requester_id: 1,
-          id: 1,
-          subject: "Psicológico",
-        } as Ticket,
-        [
+    it("should throw an error if invalid support type", () => {
+      expect(() =>
+        getSupportRequests(
           {
-            user_id: 1,
-            user_fields: {
-              latitude: "12.12",
-              longitude: "13.13",
-              city: "São Paulo",
-              state: "SP",
-            },
-          } as unknown,
-        ] as User[]
-      )
-    ).toStrictEqual({
-      msrId: 1,
-      zendeskTicketId: 1,
-      supportType: "psychological",
-      priority: null,
-      supportExpertise: null,
-      hasDisability: false,
-      requiresLibras: false,
-      acceptsOnlineSupport: true,
-      lat: 12.12,
-      lng: 13.13,
-      city: "São Paulo",
-      state: "SP",
+            requester_id: 1,
+            id: 1,
+            subject: "jurdico",
+          } as Ticket,
+          [
+            {
+              user_id: 1,
+              user_fields: {
+                latitude: "12.12",
+                longitude: "13.13",
+                city: "São Paulo",
+                state: "SP",
+              },
+            } as unknown,
+          ] as User[]
+        )
+      ).toThrow(new Error("Unsupported support type"));
     });
   });
 
-  it("should return the correct payload for psychological support req", () => {
-    expect(
-      getSupportRequests(
-        {
-          requester_id: 1,
-          id: 1,
-          subject: "Jurídico",
-        } as Ticket,
-        [
-          {
-            user_id: 1,
-            user_fields: {
-              latitude: "12.12",
-              longitude: "13.13",
-              city: "São Paulo",
-              state: "SP",
-            },
-          } as unknown,
-        ] as User[]
-      )
-    ).toStrictEqual({
-      msrId: 1,
-      zendeskTicketId: 1,
-      supportType: "legal",
-      priority: null,
-      supportExpertise: null,
-      hasDisability: false,
-      requiresLibras: false,
-      acceptsOnlineSupport: true,
-      lat: 12.12,
-      lng: 13.13,
-      city: "São Paulo",
-      state: "SP",
-    });
-  });
+  describe("Happy path", () => {
+    const defaultMsrTicket = {
+      requester_id: 1,
+      id: 1,
+      subject: "Psicológico",
+    } as Ticket;
+    const defaultMsr = [
+      {
+        user_id: 1,
+        user_fields: {
+          latitude: "12.12",
+          longitude: "13.13",
+          city: "São Paulo",
+          state: "SP",
+        },
+      } as unknown,
+    ] as User[];
 
-  it("should throw an error if invalid support type", () => {
-    expect(() =>
-      getSupportRequests(
-        {
-          requester_id: 1,
-          id: 1,
-          subject: "jurdico",
-        } as Ticket,
-        [
+    it("should return the correct payload for psychological support req", () => {
+      expect(getSupportRequests(defaultMsrTicket, defaultMsr)).toStrictEqual({
+        msrId: 1,
+        zendeskTicketId: 1,
+        supportType: "psychological",
+        priority: null,
+        supportExpertise: null,
+        hasDisability: false,
+        requiresLibras: false,
+        acceptsOnlineSupport: true,
+        lat: 12.12,
+        lng: 13.13,
+        city: "São Paulo",
+        state: "SP",
+      });
+    });
+
+    it("should return the correct payload for legal support req", () => {
+      expect(
+        getSupportRequests(
           {
-            user_id: 1,
+            ...defaultMsrTicket,
+            subject: "Jurídico",
+          },
+          defaultMsr
+        )
+      ).toStrictEqual({
+        msrId: 1,
+        zendeskTicketId: 1,
+        supportType: "legal",
+        priority: null,
+        supportExpertise: null,
+        hasDisability: false,
+        requiresLibras: false,
+        acceptsOnlineSupport: true,
+        lat: 12.12,
+        lng: 13.13,
+        city: "São Paulo",
+        state: "SP",
+      });
+    });
+
+    it("should return a null value if lat is not a valid number", () => {
+      expect(
+        getSupportRequests(defaultMsrTicket, [
+          {
+            ...defaultMsr[0],
             user_fields: {
-              latitude: "12.12",
-              longitude: "13.13",
-              city: "São Paulo",
-              state: "SP",
+              ...defaultMsr[0].user_fields,
+              latitude: null,
             },
-          } as unknown,
-        ] as User[]
-      )
-    ).toThrow(new Error("Unsupported support type"));
+          },
+        ])
+      ).toStrictEqual(
+        expect.objectContaining({
+          lat: null,
+        })
+      );
+    });
+
+    it("should return a null value if lng is not a valid number", () => {
+      expect(
+        getSupportRequests(defaultMsrTicket, [
+          {
+            ...defaultMsr[0],
+            user_fields: {
+              ...defaultMsr[0].user_fields,
+              longitude: "foobar",
+            },
+          },
+        ])
+      ).toStrictEqual(
+        expect.objectContaining({
+          lng: null,
+        })
+      );
+    });
+
+    it("should return 'NOT_FOUND' if city is 'ZERO_RESULTS'", () => {
+      expect(
+        getSupportRequests(defaultMsrTicket, [
+          {
+            ...defaultMsr[0],
+            user_fields: {
+              ...defaultMsr[0].user_fields,
+              city: "ZERO_RESULTS",
+            },
+          },
+        ])
+      ).toStrictEqual(
+        expect.objectContaining({
+          city: "NOT_FOUND",
+        })
+      );
+    });
+
+    it("should return 'NOT_FOUND' if state is falsy", () => {
+      expect(
+        getSupportRequests(defaultMsrTicket, [
+          {
+            ...defaultMsr[0],
+            user_fields: {
+              ...defaultMsr[0].user_fields,
+              state: null,
+            },
+          },
+        ])
+      ).toStrictEqual(
+        expect.objectContaining({
+          state: "NOT_FOUND",
+        })
+      );
+    });
   });
 });
