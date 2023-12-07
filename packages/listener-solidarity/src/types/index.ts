@@ -37,7 +37,7 @@ export type User = {
   user_fields: {
     cor: string | null;
     condition: "inscrita" | "desabilitada";
-    state: string;
+    state: string | null;
     city: string;
     cep: string;
     address: string;
@@ -136,7 +136,7 @@ export const dicio: {
   360021812712: "telefone",
   360021879791: "estado",
   360021879811: "cidade",
-  360032229831: "atrelado_ao_ticket"
+  360032229831: "atrelado_ao_ticket",
 };
 
 export type Ticket = {
@@ -212,4 +212,22 @@ export type CustomFields = {
   estado?: null;
   cidade?: null;
   atrelado_ao_ticket?: string | null;
+};
+
+export type SupportRequestPayload = {
+  msrId: number;
+  zendeskTicketId: number;
+  supportType: string;
+  // these null values are always `null` here, bc of the MSR bonde form that doesnt include these questions
+  supportExpertise: null;
+  priority: null;
+  hasDisability: null;
+  requiresLibras: null;
+  //
+  acceptsOnlineSupport: boolean;
+  lat: number | null;
+  lng: number | null;
+  city: string;
+  state: string;
+  status: "open" | "duplicated";
 };

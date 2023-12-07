@@ -13,6 +13,8 @@ on:
     branches:
       - "main"
 
+  workflow_call:
+
 jobs:
   tests:
     runs-on: ubuntu-20.04

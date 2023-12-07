@@ -10,6 +10,7 @@ import {
 } from "../utils";
 import { Widget, FormEntry, User, FormEntriesResponse } from "../types";
 import logger from "../logger";
+import createSupportRequests from "./SupportRequest";
 
 const log = logger.child({ labels: { process: "handleIntegration" } });
 
@@ -112,7 +113,12 @@ export const handleIntegration = (widgets: Widget[], apm) => async (
       user => user["organization_id"] === organizationsIds["MSR"]
     );
     const tickets = composeTickets(msrUsers);
-    await limiter.schedule(() => createZendeskTickets(tickets));
+    const zendeskTickets = await limiter.schedule(() =>
+      createZendeskTickets(tickets)
+    );
+
+    // Creates support requests on lambda-pedido-acolhimento
+    createSupportRequests(zendeskTickets, msrUsers);
 
     // Save users in Hasura
     insertSolidarityUsers(withoutDuplicates as never).catch(e => {
