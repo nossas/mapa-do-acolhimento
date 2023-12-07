@@ -41,7 +41,14 @@ describe("getSupportRequests", () => {
       requester_id: 1,
       id: 1,
       subject: "Psicológico",
+      custom_fields: [
+        {
+          id: 360014379412, // status_acolhimento
+          value: "solicitação_recebida",
+        },
+      ],
     } as Ticket;
+
     const defaultMsr = [
       {
         user_id: 1,
@@ -61,13 +68,14 @@ describe("getSupportRequests", () => {
         supportType: "psychological",
         priority: null,
         supportExpertise: null,
-        hasDisability: false,
-        requiresLibras: false,
+        hasDisability: null,
+        requiresLibras: null,
         acceptsOnlineSupport: true,
         lat: 12.12,
         lng: 13.13,
         city: "São Paulo",
         state: "SP",
+        status: "open",
       });
     });
 
@@ -77,6 +85,12 @@ describe("getSupportRequests", () => {
           {
             ...defaultMsrTicket,
             subject: "Jurídico",
+            custom_fields: [
+              {
+                id: 360014379412, // status_acolhimento
+                value: "solicitação_repetida",
+              },
+            ],
           },
           defaultMsr
         )
@@ -86,13 +100,14 @@ describe("getSupportRequests", () => {
         supportType: "legal",
         priority: null,
         supportExpertise: null,
-        hasDisability: false,
-        requiresLibras: false,
+        hasDisability: null,
+        requiresLibras: null,
         acceptsOnlineSupport: true,
         lat: 12.12,
         lng: 13.13,
         city: "São Paulo",
         state: "SP",
+        status: "duplicated",
       });
     });
 
@@ -164,6 +179,30 @@ describe("getSupportRequests", () => {
       ).toStrictEqual(
         expect.objectContaining({
           state: "NOT_FOUND",
+        })
+      );
+    });
+
+    it("should return an 'open' status if status_acolhimento is not found on custom_fields", () => {
+      expect(
+        getSupportRequests(
+          {
+            ...defaultMsrTicket,
+            custom_fields: [],
+          },
+          [
+            {
+              ...defaultMsr[0],
+              user_fields: {
+                ...defaultMsr[0].user_fields,
+                state: null,
+              },
+            },
+          ]
+        )
+      ).toStrictEqual(
+        expect.objectContaining({
+          status: "open",
         })
       );
     });

@@ -99,6 +99,7 @@ describe("createSupportRequests", () => {
           supportExpertise: null,
           supportType: "psychological",
           zendeskTicketId: 1,
+          status: "open",
         },
       ],
       {

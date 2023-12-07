@@ -229,4 +229,5 @@ export type SupportRequestPayload = {
   lng: number | null;
   city: string;
   state: string;
+  status: "open" | "duplicated";
 };

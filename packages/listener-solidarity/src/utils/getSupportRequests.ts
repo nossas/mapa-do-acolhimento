@@ -43,6 +43,8 @@ export default function getSupportRequests(
   const user = msrs.find((user) => user.user_id === ticket.requester_id);
   if (!user) throw new Error(`Didn't find a user for this ticket`);
 
+  const statusAcolhimento = getStatusAcolhimento(ticket);
+
   return {
     msrId: ticket.requester_id,
     zendeskTicketId: ticket.id,
@@ -60,5 +62,6 @@ export default function getSupportRequests(
       : null,
     city: sanitizeCity(user.user_fields.city),
     state: user.user_fields.state || "NOT_FOUND",
+    status: getStatus(statusAcolhimento || ""),
   };
 }

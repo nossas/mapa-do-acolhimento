@@ -98,7 +98,9 @@ export const removeDuplicatesBy = (keyFn, array: Array<unknown>) => {
 export const getStatusAcolhimento = (
   ticket: Ticket
 ): string | undefined | null => {
-  const status = ticket.custom_fields.find(field => field.id === 360014379412);
+  const status = (ticket?.custom_fields || []).find(
+    (field) => field.id === 360014379412
+  );
   return status && status.value;
 };
 
