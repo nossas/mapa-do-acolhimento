@@ -147,7 +147,7 @@ describe("getSupportRequests", () => {
       );
     });
 
-    it("should return 'NOT_FOUND' if city is 'ZERO_RESULTS'", () => {
+    it("should return 'not_found' if city is 'ZERO_RESULTS'", () => {
       expect(
         getSupportRequests(defaultMsrTicket, [
           {
@@ -160,12 +160,12 @@ describe("getSupportRequests", () => {
         ])
       ).toStrictEqual(
         expect.objectContaining({
-          city: "NOT_FOUND",
+          city: "not_found",
         })
       );
     });
 
-    it("should return 'NOT_FOUND' if state is falsy", () => {
+    it("should return 'not_found' if state is falsy", () => {
       expect(
         getSupportRequests(defaultMsrTicket, [
           {
@@ -178,7 +178,7 @@ describe("getSupportRequests", () => {
         ])
       ).toStrictEqual(
         expect.objectContaining({
-          state: "NOT_FOUND",
+          state: "not_found",
         })
       );
     });

@@ -15,8 +15,8 @@ export function isValidNumber(georef: string | number | null) {
 }
 
 export function sanitizeCity(city: string) {
-  if (city === "ZERO_RESULTS") return "NOT_FOUND";
-  if (!city) return "NOT_FOUND";
+  if (city === "ZERO_RESULTS") return "not_found";
+  if (!city) return "not_found";
   return city;
 }
 
@@ -61,7 +61,7 @@ export default function getSupportRequests(
       ? Number(user.user_fields.longitude)
       : null,
     city: sanitizeCity(user.user_fields.city),
-    state: user.user_fields.state || "NOT_FOUND",
+    state: user.user_fields.state || "not_found",
     status: getStatus(statusAcolhimento || ""),
   };
 }
