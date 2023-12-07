@@ -61,11 +61,19 @@ export default async function createSupportRequests(
     );
     return createSupportRequest;
   } catch (e) {
-    const error = e as AxiosError;
-    const errorMsg = `Couldnt create support requests for these tickets: ${ticketIds} and got this error: ${
-      error?.response?.status
-    } - ${JSON.stringify(error?.response?.data)}`;
+    const axiosError = e as AxiosError;
+    if (axiosError.response) {
+      const axiosErrorMsg = `Couldnt create support requests for these tickets: ${ticketIds} and got this error: ${
+        axiosError?.response?.status
+      } - ${JSON.stringify(axiosError?.response?.data)}`;
+      log.error(axiosErrorMsg);
+      return axiosErrorMsg;
+    }
+
+    const error = e as Error;
+    const errorMsg = `Couldnt create support requests for these tickets: ${ticketIds} and got this error: ${error.message}`;
     log.error(errorMsg);
+
     return errorMsg;
   }
 }

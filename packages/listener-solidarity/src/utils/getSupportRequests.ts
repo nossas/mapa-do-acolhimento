@@ -9,7 +9,7 @@ export function getSupportType(subject: string) {
 
 export default function getSupportRequests(ticket: Ticket, msrs: User[]) {
   const user = msrs.find((user) => user.user_id === ticket.requester_id);
-  if (!user) throw new Error(`Didn't find a user for this ticket ${ticket.id}`);
+  if (!user) throw new Error(`Didn't find a user for this ticket`);
 
   return {
     msrId: ticket.requester_id,
