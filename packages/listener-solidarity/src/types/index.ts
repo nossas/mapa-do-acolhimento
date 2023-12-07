@@ -218,10 +218,12 @@ export type SupportRequestPayload = {
   msrId: number;
   zendeskTicketId: number;
   supportType: string;
-  supportExpertise: string | null;
-  priority: number | null;
-  hasDisability: boolean;
-  requiresLibras: boolean;
+  // these null values are always `null` here, bc of the MSR bonde form that doesnt include these questions
+  supportExpertise: null;
+  priority: null;
+  hasDisability: null;
+  requiresLibras: null;
+  //
   acceptsOnlineSupport: boolean;
   lat: number | null;
   lng: number | null;

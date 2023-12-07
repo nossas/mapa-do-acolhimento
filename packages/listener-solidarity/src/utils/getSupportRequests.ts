@@ -32,8 +32,8 @@ export default function getSupportRequests(
     supportType: getSupportType(ticket.subject),
     priority: null,
     supportExpertise: null,
-    hasDisability: false,
-    requiresLibras: false,
+    hasDisability: null,
+    requiresLibras: null,
     acceptsOnlineSupport: true,
     lat: isValidNumber(user.user_fields.latitude)
       ? Number(user.user_fields.latitude)
