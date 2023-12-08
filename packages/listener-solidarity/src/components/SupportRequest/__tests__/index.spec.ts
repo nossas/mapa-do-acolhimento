@@ -11,10 +11,18 @@ describe("createSupportRequests", () => {
       "No valid tickets to save as support requests"
     );
   });
+  it("should throw an error if there are no 'open' tickets", async () => {
+    await expect(
+      createSupportRequests(
+        [{ requester_id: 1, id: 1, status: "closed" }] as Ticket[],
+        [{ user_id: 1 }] as User[]
+      )
+    ).rejects.toThrow("No valid tickets to save as support requests");
+  });
   it("should return error res when no user is found for the ticket", async () => {
     expect(
       await createSupportRequests(
-        [{ requester_id: 1, id: 1 }] as Ticket[],
+        [{ requester_id: 1, id: 1, status: "open" }] as Ticket[],
         [{ user_id: 2 }, { user_id: 3 }] as User[]
       )
     ).toStrictEqual(
@@ -24,7 +32,9 @@ describe("createSupportRequests", () => {
   it("should return error res when ticket has unsupported support type", async () => {
     expect(
       await createSupportRequests(
-        [{ requester_id: 1, id: 1, subject: "foo bar" }] as Ticket[],
+        [
+          { requester_id: 1, id: 1, subject: "foo bar", status: "open" },
+        ] as Ticket[],
         [{ user_id: 1 }] as User[]
       )
     ).toStrictEqual(
@@ -40,7 +50,14 @@ describe("createSupportRequests", () => {
     });
     expect(
       await createSupportRequests(
-        [{ id: 1, requester_id: 1, subject: "psicológico" } as Ticket],
+        [
+          {
+            id: 1,
+            requester_id: 1,
+            subject: "psicológico",
+            status: "open",
+          } as Ticket,
+        ],
         [
           {
             user_id: 1,
@@ -64,7 +81,14 @@ describe("createSupportRequests", () => {
     });
     expect(
       await createSupportRequests(
-        [{ id: 1, requester_id: 1, subject: "psicológico" } as Ticket],
+        [
+          {
+            id: 1,
+            requester_id: 1,
+            subject: "psicológico",
+            status: "open",
+          } as Ticket,
+        ],
         [
           {
             user_id: 1,
