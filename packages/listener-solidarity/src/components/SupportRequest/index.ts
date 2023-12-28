@@ -32,7 +32,6 @@ export default async function createSupportRequests(
     log.info(`Starting createSupportRequests for these tickets: ${ticketIds}`);
     const lambdaUrl = process.env["NEW_MATCH_LAMBDA_URL"];
     const jwtSecret = process.env["JWT_SECRET"];
-    const endpoint = `${lambdaUrl}/create`;
     const authToken = sign({ sub: "listener-solidarity" }, jwtSecret!, {
       expiresIn: 300, // expires in 5 minutes
     });
@@ -40,7 +39,7 @@ export default async function createSupportRequests(
       getSupportRequests(ticket as Ticket, msrs)
     );
     const createSupportRequest = await axios.post<SupportRequestResponse>(
-      endpoint,
+      lambdaUrl!,
       supportRequests,
       {
         headers: {
