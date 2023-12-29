@@ -108,7 +108,7 @@ describe("createSupportRequests", () => {
       },
     });
     expect(axios.post).toHaveBeenCalledWith(
-      "http://localhost:5000/create",
+      "http://localhost:5000/compose",
       [
         {
           acceptsOnlineSupport: true,
