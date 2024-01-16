@@ -24,8 +24,10 @@ export default async function createSupportRequests(
   const validTickets = (msrZendeskTickets || [])
     .filter(Boolean)
     .filter((ticket) => ticket?.status === "open" || ticket?.status === "new");
+
   if (validTickets.length < 1)
-    throw new Error("No valid tickets to save as support requests");
+    return "No valid tickets to save as support requests";
+
   const ticketIds = validTickets.map((ticket) => (ticket ? ticket.id : ""));
 
   try {
@@ -58,13 +60,13 @@ export default async function createSupportRequests(
         axiosError?.response?.status
       } - ${JSON.stringify(axiosError?.response?.data)}`;
       log.error(axiosErrorMsg);
-      return axiosErrorMsg;
+      throw new Error(axiosErrorMsg);
     }
 
     const error = e as Error;
     const errorMsg = `Couldnt create support requests for these tickets: ${ticketIds} and got this error: ${error.message}`;
     log.error(errorMsg);
 
-    return errorMsg;
+    throw new Error(errorMsg);
   }
 }
