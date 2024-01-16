@@ -23,7 +23,7 @@ export default async function createSupportRequests(
 ) {
   const validTickets = (msrZendeskTickets || [])
     .filter(Boolean)
-    .filter((ticket) => ticket?.status === "open");
+    .filter((ticket) => ticket?.status === "open" || ticket?.status === "new");
   if (validTickets.length < 1)
     throw new Error("No valid tickets to save as support requests");
   const ticketIds = validTickets.map((ticket) => (ticket ? ticket.id : ""));
