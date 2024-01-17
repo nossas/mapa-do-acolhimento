@@ -196,7 +196,8 @@ export type Fields = Array<{
 export type ZendeskUserCreationResponse = {
   id: number;
   status: string;
-  external_id: string;
+  external_id?: string;
+  email: string;
   error?: string | undefined;
 };
 
