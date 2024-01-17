@@ -7,37 +7,39 @@ jest.mock("jsonwebtoken");
 
 describe("createSupportRequests", () => {
   it("should throw an error if there are only 'undefined' tickets", async () => {
-    await expect(createSupportRequests([undefined], [])).rejects.toThrow(
+    const invalidTickets = await createSupportRequests([undefined], []);
+    expect(invalidTickets).toStrictEqual(
       "No valid tickets to save as support requests"
     );
   });
   it("should throw an error if there are no 'open' tickets", async () => {
-    await expect(
-      createSupportRequests(
-        [{ requester_id: 1, id: 1, status: "closed" }] as Ticket[],
-        [{ user_id: 1 }] as User[]
-      )
-    ).rejects.toThrow("No valid tickets to save as support requests");
+    const invalidTickets = await createSupportRequests(
+      [{ requester_id: 1, id: 1, status: "closed" }] as Ticket[],
+      [{ user_id: 1 }] as User[]
+    );
+    expect(invalidTickets).toStrictEqual(
+      "No valid tickets to save as support requests"
+    );
   });
   it("should return error res when no user is found for the ticket", async () => {
-    expect(
-      await createSupportRequests(
+    await expect(
+      createSupportRequests(
         [{ requester_id: 1, id: 1, status: "open" }] as Ticket[],
         [{ user_id: 2 }, { user_id: 3 }] as User[]
       )
-    ).toStrictEqual(
+    ).rejects.toThrow(
       "Couldnt create support requests for these tickets: 1 and got this error: Didn't find a user for this ticket"
     );
   });
   it("should return error res when ticket has unsupported support type", async () => {
-    expect(
-      await createSupportRequests(
+    await expect(
+      createSupportRequests(
         [
           { requester_id: 1, id: 1, subject: "foo bar", status: "open" },
         ] as Ticket[],
         [{ user_id: 1 }] as User[]
       )
-    ).toStrictEqual(
+    ).rejects.toThrow(
       "Couldnt create support requests for these tickets: 1 and got this error: Unsupported support type"
     );
   });
@@ -48,8 +50,8 @@ describe("createSupportRequests", () => {
         data: "foo bar",
       },
     });
-    expect(
-      await createSupportRequests(
+    await expect(
+      createSupportRequests(
         [
           {
             id: 1,
@@ -68,7 +70,7 @@ describe("createSupportRequests", () => {
           },
         ] as User[]
       )
-    ).toStrictEqual(
+    ).rejects.toThrow(
       'Couldnt create support requests for these tickets: 1 and got this error: 400 - "foo bar"'
     );
   });

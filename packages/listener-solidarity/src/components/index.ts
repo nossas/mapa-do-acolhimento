@@ -118,7 +118,9 @@ export const handleIntegration = (widgets: Widget[], apm) => async (
     );
 
     // Creates support requests on lambda-pedido-acolhimento
-    createSupportRequests(zendeskTickets, msrUsers);
+    createSupportRequests(zendeskTickets, msrUsers).catch((e) => {
+      log.error(`Couldn't createSupportRequests: ${e.message}`);
+    });
 
     // Save users in Hasura
     insertSolidarityUsers(withoutDuplicates as never).catch(e => {
