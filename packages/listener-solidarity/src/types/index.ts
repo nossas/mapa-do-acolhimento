@@ -30,7 +30,7 @@ export type User = {
   organization_id: number;
   name: string;
   email: string;
-  external_id: string;
+  external_id?: string;
   phone: string;
   user_id?: number;
   verified: boolean;

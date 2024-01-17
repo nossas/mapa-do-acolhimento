@@ -105,3 +105,5 @@ export const getStatusAcolhimento = (
 };
 
 export { default as getSupportRequests } from "./getSupportRequests";
+
+export const isProduction = () => process.env.NODE_ENV === "production";
