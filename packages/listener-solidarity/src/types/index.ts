@@ -30,7 +30,7 @@ export type User = {
   organization_id: number;
   name: string;
   email: string;
-  external_id: string;
+  external_id?: string;
   phone: string;
   user_id?: number;
   verified: boolean;
@@ -196,7 +196,8 @@ export type Fields = Array<{
 export type ZendeskUserCreationResponse = {
   id: number;
   status: string;
-  external_id: string;
+  external_id?: string;
+  email: string;
   error?: string | undefined;
 };
 

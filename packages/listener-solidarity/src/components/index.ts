@@ -97,7 +97,9 @@ export const handleIntegration = (widgets: Widget[], apm) => async (
     const hasuraUsers = userBatches
       .filter(r => !(r.error && r.error.match(/permissiondenied/i)))
       .map(r => {
-        const user = usersToRegister.find(u => u.external_id === r.external_id);
+        const user = usersToRegister.find(
+          (u) => u.email === r.email || u.external_id === r.external_id
+        );
         return {
           ...user,
           ...((user && user.user_fields) || {}),
