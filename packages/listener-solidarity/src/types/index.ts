@@ -36,7 +36,7 @@ export type User = {
   verified: boolean;
   user_fields: {
     cor: string | null;
-    condition: "inscrita" | "desabilitada";
+    condition: "inscrita" | "desabilitada" | "cadastrada";
     state: string | null;
     city: string;
     cep: string;
