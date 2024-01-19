@@ -66,7 +66,7 @@ const changeCondition = (
   if (widget_id === 3297) {
     return "inscrita";
   }
-  return "desabilitada";
+  return "cadastrada";
 };
 
 export default async (
