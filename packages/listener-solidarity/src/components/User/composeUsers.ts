@@ -94,6 +94,7 @@ export default async (
     });
 
     const register = createUser();
+    const isMsr = getOrganizationType(widget.id) === "MSR";
 
     register["email"] = instance.email;
     if (instance.phone) register["phone"] = instance.phone;
@@ -136,11 +137,15 @@ export default async (
       register["user_fields"][g] = geocoding[g];
     });
 
-    register["user_fields"]["condition"] = changeCondition(
-      formEntry.created_at,
-      widget.id,
-      instance["accept_terms"]
-    );
+    if (isMsr) {
+      register["user_fields"]["condition"] = changeCondition(
+        formEntry.created_at,
+        widget.id,
+        instance["accept_terms"]
+      );
+    } else {
+      register["user_fields"]["condition"] = "cadastrada";
+    }
 
     register["user_fields"]["tipo_de_acolhimento"] = setType(
       instance.tipo_de_acolhimento
