@@ -33,12 +33,12 @@ export default {
       {
         id: 2000375,
         fields:
-          '[{"uid":"field-1533735738039-59","kind":"text","label":"NOME","placeholder":"","required":"true","value":"Maoela"},{"uid":"field-1533735745400-14","kind":"text","label":"SOBRENOME","placeholder":"","required":"true","value":"Coelho"},{"uid":"field-1533735752669-39","kind":"email","label":"SEU MELHOR EMAIL","placeholder":"","required":"true","value":"manoela@email.com"},{"uid":"field-1533735761357-93","kind":"text","label":"OAB (Só números)","placeholder":"","required":"true","value":"21312312"},{"uid":"field-1533735803691-45","kind":"text","label":"CEP DE ATENDIMENTO (Só números)","placeholder":"","required":"true","value":"12050-181"},{"uid":"field-1533735813563-2","kind":"text","label":"TELEFONE PARA ATENDIMENTO (COM DDD)","placeholder":"","required":"true","value":"12988805543"},{"uid":"field-1533735832329-53","kind":"text","label":"WHATSAPP (COM DDD)","placeholder":"","required":"true","value":"12988805543"},{"uid":"field-1533735888966-20","kind":"dropdown","label":"Como voluntária do Mapa do Acolhimento, você se dispõe a atender, pelo menos, uma (1) mulher que precisa de ajuda. Caso você tenha mais tempo disponível, você pode atender mais de uma (1) mulher, de maneira concomitante. Quantas vagas você pode oferecer para atender, simultaneamente, mulheres do Mapa do Acolhimento (lembrando que isso pode incluir o acompanhamento de processos do início ao fim) ?","placeholder":"1, 2, 3, 4, 5 ou mais","required":"true","value":" 2"}]',
+          '[{"uid":"field-1533735738039-59","kind":"text","label":"NOME","placeholder":"","required":"true","value":"Maoela"},{"uid":"field-1533735745400-14","kind":"text","label":"SOBRENOME","placeholder":"","required":"true","value":"Coelho"},{"uid":"field-1533735752669-39","kind":"email","label":"SEU MELHOR EMAIL","placeholder":"","required":"true","value":"manoela@email.com"},{"uid":"field-1533735761357-93","kind":"text","label":"OAB (Só números)","placeholder":"","required":"true","value":"21312312"},{"uid":"field-1533735803691-45","kind":"text","label":"CEP DE ATENDIMENTO (Só números)","placeholder":"","required":"true","value":"12050-181"},{"uid":"field-1533735813563-2","kind":"text","label":"TELEFONE PARA ATENDIMENTO (COM DDD)","placeholder":"","required":"true","value":"12988805543"},{"uid":"field-1533735832329-53","kind":"text","label":"WHATSAPP (COM DDD)","placeholder":"","required":"true","value":"12988805543"},{"uid":"field-1533735888966-20","kind":"dropdown","label":"Como voluntária do Mapa do Acolhimento, você se dispõe a atender, pelo menos, uma (1) mulher que precisa de ajuda. Caso você tenha mais tempo disponível, você pode atender mais de uma (1) mulher, de maneira concomitante. Quantas vagas você pode oferecer para atender, simultaneamente, mulheres do Mapa do Acolhimento (lembrando que isso pode incluir o acompanhamento de processos do início ao fim) ?","placeholder":"1, 2, 3, 4, 5 ou mais","required":"true","value":" 2"}, {"uid": "extra_field_color", "label": "color", "kind": "text", "placeholder": "", "required": false, "value": "brown"}, {"uid": "extra_field_gender", "label": "gender", "kind": "text", "placeholder": "", "required": false, "value": "cis_woman"}, {"uid": "extra_field_birth_date", "label": "birth_date", "kind": "text", "placeholder": "", "required": false, "value": "1999-11-11"}, {"uid": "extra_field_libras", "label": "libras", "kind": "text", "placeholder": "", "required": false, "value": "True"}, {"uid": "extra_field_modality", "label": "modality", "kind": "text", "placeholder": "", "required": false, "value": "online"}, {"uid": "extra_field_years_of_experience", "label": "years_of_experience", "kind": "text", "placeholder": "", "required": false, "value": "Menos de 6 meses"}, {"uid": "extra_field_fields_of_work", "label": "fields_of_work", "kind": "text", "placeholder": "", "required": false, "value": ["Penal"]}, {"uid": "extra_field_status", "label": "status", "kind": "text", "placeholder": "", "required": false, "value": "reprovada_diretrizes_do_mapa"}]',
         cached_community_id: 40,
         widget_id: 17633,
         created_at: "2020-05-29T00:28:29.55569",
         __typename: "form_entries"
-      }
+      },
     ],
     results: [
       {
@@ -108,14 +108,14 @@ export default {
           longitude: geolocation.longitude,
           state: geolocation.state,
           tipo_de_acolhimento: null,
-          condition: "cadastrada",
+          condition: "reprovada_diretrizes_do_mapa",
           whatsapp: "12988805543",
           registration_number: "21312312",
           occupation_area: null,
           disponibilidade_de_atendimentos: "2",
           data_de_inscricao_no_bonde: "2020-05-29T00:28:29.55569"
         }
-      }
+      },
     ]
   },
   "17628": {
@@ -123,12 +123,12 @@ export default {
       {
         id: 2000367,
         fields:
-          '[{"uid":"field-1533733461113-5","kind":"text","label":"NOME","placeholder":"","required":"true","value":"Carla"},{"uid":"field-1533733485653-99","kind":"text","label":"SOBRENOME","placeholder":"","required":"true","value":"Santos"},{"uid":"field-1533733493037-11","kind":"email","label":"SEU MELHOR EMAIL","placeholder":"","required":"true","value":"carla@email.com"},{"uid":"field-1533733501716-34","kind":"text","label":"CRP (Só números)","placeholder":"","required":"true","value":"123123"},{"uid":"field-1533733650118-7","kind":"text","label":"CEP DE ATENDIMENTO (Só números)","placeholder":"","required":"true","value":"12070620"},{"uid":"field-1533734419113-13","kind":"text","label":"TELEFONE PARA ATENDIMENTO (COM DDD)","placeholder":"","required":"true","value":"12988801144"},{"uid":"field-1533734468460-38","kind":"text","label":"WHATSAPP (COM DDD)","placeholder":"Obrigatório para contato com a equipe","required":"true","value":"12988801144"},{"uid":"field-1533734495315-40","kind":"dropdown","label":"Como voluntária do Mapa do Acolhimento, você se dispõe a atender, pelo menos, uma (1) mulher que precisa de ajuda. Caso você tenha mais tempo disponível, você pode atender mais de uma (1) mulher, de maneira concomitante. Lembrando que os atendimentos devem ser sempre individuais. Quantas vagas você pode oferecer para atender, simultaneamente, mulheres do Mapa do Acolhimento?","placeholder":"1, 2, 3, 4, 5 ou mais","required":"true","value":"1"}]',
+          '[{"uid":"field-1533733461113-5","kind":"text","label":"NOME","placeholder":"","required":"true","value":"Carla"},{"uid":"field-1533733485653-99","kind":"text","label":"SOBRENOME","placeholder":"","required":"true","value":"Santos"},{"uid":"field-1533733493037-11","kind":"email","label":"SEU MELHOR EMAIL","placeholder":"","required":"true","value":"carla@email.com"},{"uid":"field-1533733501716-34","kind":"text","label":"CRP (Só números)","placeholder":"","required":"true","value":"123123"},{"uid":"field-1533733650118-7","kind":"text","label":"CEP DE ATENDIMENTO (Só números)","placeholder":"","required":"true","value":"12070620"},{"uid":"field-1533734419113-13","kind":"text","label":"TELEFONE PARA ATENDIMENTO (COM DDD)","placeholder":"","required":"true","value":"12988801144"},{"uid":"field-1533734468460-38","kind":"text","label":"WHATSAPP (COM DDD)","placeholder":"Obrigatório para contato com a equipe","required":"true","value":"12988801144"},{"uid":"field-1533734495315-40","kind":"dropdown","label":"Como voluntária do Mapa do Acolhimento, você se dispõe a atender, pelo menos, uma (1) mulher que precisa de ajuda. Caso você tenha mais tempo disponível, você pode atender mais de uma (1) mulher, de maneira concomitante. Lembrando que os atendimentos devem ser sempre individuais. Quantas vagas você pode oferecer para atender, simultaneamente, mulheres do Mapa do Acolhimento?","placeholder":"1, 2, 3, 4, 5 ou mais","required":"true","value":"1"}, {"uid": "extra_field_color", "label": "color", "kind": "text", "placeholder": "", "required": false, "value": "black"}, {"uid": "extra_field_gender", "label": "gender", "kind": "text", "placeholder": "", "required": false, "value": "cis_woman"}, {"uid": "extra_field_birth_date", "label": "birth_date", "kind": "text", "placeholder": "", "required": false, "value": "1111-11-11"}, {"uid": "extra_field_libras", "label": "libras", "kind": "text", "placeholder": "", "required": false, "value": "True"}, {"uid": "extra_field_years_of_experience", "label": "years_of_experience", "kind": "text", "placeholder": "", "required": false, "value": "Menos de 1 ano"}, {"uid": "extra_field_approach", "label": "approach", "kind": "text", "placeholder": "", "required": false, "value": "Humanismo"}, {"uid": "extra_field_modality", "label": "modality", "kind": "text", "placeholder": "", "required": false, "value": "on_site"}, {"uid": "extra_field_fields_of_work", "label": "fields_of_work", "kind": "text", "placeholder": "", "required": false, "value": ["Outros"]}, {"uid": "extra_field_status", "label": "status", "kind": "text", "placeholder": "", "required": false, "value": "cadastrada"}]',
         cached_community_id: 40,
         widget_id: 17628,
         created_at: "2020-05-29T00:16:24.283085",
         __typename: "form_entries"
-      }
+      },
     ],
     results: [
       {
