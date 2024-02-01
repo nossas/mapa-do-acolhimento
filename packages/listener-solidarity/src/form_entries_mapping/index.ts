@@ -335,7 +335,44 @@ export default [
         {
           name: "disponibilidade_de_atendimentos",
           uid: "field-1533734495315-40"
-        }
+        },
+        {
+          uid: "extra_field_approach",
+          name: "approach",
+        },
+        {
+          name: "color",
+          uid: "extra_field_color", 
+        },
+        {
+          name: "gender",  
+          uid: "extra_field_gender",    
+        },
+        {
+          name: "birth_date",
+          uid: "extra_field_birth_date",  
+        },
+        {
+          name: "libras",
+          uid: "extra_field_libras",
+        },
+        {
+          name: "years_of_experience",
+          uid: "extra_field_years_of_experience",
+        },
+        {
+          name: "modality",
+          uid: "extra_field_modality",
+        },
+        {
+          name: "fields_of_work",
+          uid: "extra_field_fields_of_work",
+        },
+        {
+          name: "condition",
+          uid: "extra_field_status",
+        },
+        
       ]
     }
   },
@@ -374,7 +411,39 @@ export default [
         {
           name: "disponibilidade_de_atendimentos",
           uid: "field-1533735888966-20"
-        }
+        },
+        {
+          name: "color",
+          uid: "extra_field_color", 
+        },
+        {
+          name: "gender",  
+          uid: "extra_field_gender",    
+        },
+        {
+          name: "birth_date",
+          uid: "extra_field_birth_date",
+        },
+        {
+          name: "libras",
+          uid: "extra_field_libras",
+        },
+        {
+          name: "years_of_experience",
+          uid: "extra_field_years_of_experience",
+        },
+        {
+          name: "modality",
+          uid: "extra_field_modality",
+        },
+        {
+          name: "fields_of_work",
+          uid: "extra_field_fields_of_work",
+        },
+        {
+          name: "condition",
+          uid: "extra_field_status",
+        },
       ]
     }
   }

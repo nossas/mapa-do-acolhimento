@@ -143,6 +143,8 @@ export default async (
         widget.id,
         instance["accept_terms"]
       );
+    } else if (instance["condition"]) {
+      register["user_fields"]["condition"] = instance["condition"];  
     } else {
       register["user_fields"]["condition"] = "cadastrada";
     }
