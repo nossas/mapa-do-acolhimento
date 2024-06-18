@@ -43,7 +43,7 @@
     "graphql": "^15.6.0",
     "graphql-tag": "^2.12.5",
     "node-zendesk": "1.4.0",
-    "ws": "^7.5.5",
+    "ws": "^8.17.1",
     "yup": "^0.29.3"
   },
   "peerDependencies": {
