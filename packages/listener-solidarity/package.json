@@ -45,7 +45,7 @@
     "graphql": "^14.7.0",
     "graphql-tag": "^2.12.5",
     "jsonwebtoken": "^9.0.2",
-    "node-zendesk": "1.4.0",
+    "node-zendesk": "4.0.0",
     "pino": "^6.13.3",
     "ws": "^7.5.5",
     "yup": "^0.29.3"
