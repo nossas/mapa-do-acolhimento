@@ -1,7 +1,9 @@
 //import axios from "axios";
-//import { createMsrs } from "..";
+
+import { createMsrs } from "..";
 
 import faker from "faker/locale/pt_BR";
+import { getRaceColor, getStatus } from "../../../utils";
 
 export const geolocation = {
   latitude: Number(faker.address.latitude()).toFixed(2),
@@ -51,7 +53,7 @@ const mockMsrUsers  = [
     phone: "11984328888",
     verified: true,
     user_fields: {
-      cor: null,
+      cor: "branca",
       address: geolocation.address,
       cep: geolocation.cep,
       city: geolocation.city,
@@ -77,7 +79,7 @@ const mockMsrUsers  = [
     phone: "32994329912",
     verified: true,
     user_fields: {
-      cor: null,
+      cor: "preta",
       address: geolocation.address,
       cep: geolocation.cep,
       city: geolocation.city,
@@ -95,12 +97,33 @@ const mockMsrUsers  = [
   },
 ]
 
+let mockMsrPayloads: any = [];
 
+mockMsrUsers.forEach((msr) => {  
+  return mockMsrPayloads.push({
+    msrZendeskUserId: msr.user_id,
+    email: msr.email,
+    phone: msr.phone,
+    firstName: msr.name,
+    city: msr.user_fields.city,
+    state: msr.user_fields.state ? msr.user_fields.state : "", //nao pode ser nulo 
+    neighborhood: msr.user_fields.address,
+    zipcode: msr.user_fields.cep,
+    color: msr.user_fields.cor ? getRaceColor(msr.user_fields.cor) : "not_found", //pmapear DEPARA
+    gender: 'not_found',
+    status: getStatus(msr.user_fields.condition), //mapear DEPARA
+    dateOfBirth: null,
+    hasDisability: null,
+    acceptsOnlineSupport: true
+  });
+
+} )
+  
 describe("createMsrs", () => {
   it("should return a array de msrPayloads", async () => {
 
 
-   // expect(createMsrs(mockMsrUsers)).toEqual(mockMsrUsers)
+    expect(createMsrs(mockMsrUsers)).toEqual(mockMsrPayloads)
    
   });
 

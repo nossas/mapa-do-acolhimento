@@ -107,3 +107,32 @@ export const getStatusAcolhimento = (
 export { default as getSupportRequests } from "./getSupportRequests";
 
 export const isProduction = () => process.env.NODE_ENV === "production";
+
+export const getRaceColor = (color: string | null) => {
+
+  if (!color)
+    return "not_found"
+
+  const options = {
+    parda: "brown",
+    branca: "white",
+    indigena: "indigenous",
+    amarela: "yellow",
+    preta: "black"
+  };
+
+  return options[color]
+
+}
+
+export const getStatus = (condition: string) => {
+
+  const options = {
+    inscrita: "registered",
+    desabilitada: "unregistered",
+
+  };
+
+  return options[condition]
+
+}

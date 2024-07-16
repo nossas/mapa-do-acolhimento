@@ -1,4 +1,5 @@
 import { User } from "../../types";
+import { getRaceColor, getStatus } from "../../utils";
 
 type msrPayload = {
 	msrZendeskUserId: bigint;
@@ -30,12 +31,12 @@ export function createMsrs(msrComposeUsers : User[] ) {
         phone: msr.phone,
         firstName: msr.name,
         city: msr.user_fields.city,
-        state: msr.user_fields.state?msr.user_fields.state:"", //nao pode ser nulo 
+        state: msr.user_fields.state?msr.user_fields.state:"", 
         neighborhood: msr.user_fields.address,
         zipcode: msr.user_fields.cep,
-        color: msr.user_fields.cor? msr.user_fields.cor: "not_found" , //pmapear DEPARA
+        color: getRaceColor(msr.user_fields.cor) , 
+        status: getStatus(msr.user_fields.condition), 
         gender: 'not_found',
-        status: msr.user_fields.condition, //mapear DEPARA
         dateOfBirth: null,
         hasDisability: null,
         acceptsOnlineSupport: true

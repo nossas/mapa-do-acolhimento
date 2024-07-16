@@ -84,6 +84,7 @@ export type IndividualGeolocation = {
   address: string;
   state: string | null;
   city: string;
+  neighborhood?: string | null;
   latitude: string | null;
   longitude: string | null;
 };
