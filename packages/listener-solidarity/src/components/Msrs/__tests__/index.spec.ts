@@ -1,6 +1,6 @@
 //import axios from "axios";
 
-import { createMsrs } from "..";
+import  createMsrs  from "..";
 
 import faker from "faker/locale/pt_BR";
 import { getRaceColor, getStatus } from "../../../utils";
@@ -123,7 +123,7 @@ describe("createMsrs", () => {
   it("should return a array de msrPayloads", async () => {
 
 
-    expect(createMsrs(mockMsrUsers)).toEqual(mockMsrPayloads)
+    expect(await createMsrs(mockMsrUsers)).toEqual(mockMsrPayloads)
 
   });
 
