@@ -138,11 +138,6 @@ export const handleIntegration = (widgets: Widget[], apm) => async (
       apm.captureError(e);
     });
 
-    //Save Msrs on DB
-    //createMsrs(msrUsers).catch(e) => {
-    //log.error(`Couldn't createMsrs: ${e.message}`);
-    //}
-
     // Batch update syncronized forms
     syncronizedForms = [
       ...syncronizedForms,

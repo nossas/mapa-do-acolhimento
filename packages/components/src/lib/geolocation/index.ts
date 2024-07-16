@@ -91,13 +91,12 @@ export const processGoogleResponse = (
       ]
     } = data;
 
-    const [state, city, zipcode,neighborhood] = getCityStateAndZipcode(addressComponents);
+    const [state, city, zipcode] = getCityStateAndZipcode(addressComponents);
     const latitude = typeof lat === "string" ? lat : lat.toFixed(3);
     const longitude = typeof lng === "string" ? lng : lng.toFixed(3);
     const i: IndividualGeolocation = {
       latitude,
       longitude,
-      neighborhood,
       address,
       state,
       city,
@@ -225,7 +224,7 @@ const getBrasilApiLocation = async (
     );
     log.info("BrasilAPI responded!");
 
-    const { state, city, cep, neighborhood } = response.data;
+    const { state, city, cep } = response.data;
 
     const { latitude, longitude, address } = await getLatLngAddressWithOpenCage(
       response.data,
@@ -236,7 +235,6 @@ const getBrasilApiLocation = async (
       return {
         latitude,
         longitude,
-        neighborhood,
         address,
         state,
         city,

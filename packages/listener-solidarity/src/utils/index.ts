@@ -120,7 +120,6 @@ export const getRaceColor = (color: string | null) => {
     amarela: "yellow",
     preta: "black"
   };
-
   return options[color]
 
 }
@@ -130,9 +129,6 @@ export const getStatus = (condition: string) => {
   const options = {
     inscrita: "registered",
     desabilitada: "unregistered",
-
   };
-
   return options[condition]
-
 }

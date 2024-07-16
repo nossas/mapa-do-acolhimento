@@ -22,8 +22,8 @@ export function createMsrs(msrComposeUsers : User[] ) {
     //pecorrer objetos montando os payload
     let msrPayloads: msrPayload[] = [];
     msrComposeUsers.forEach((msr) => {
-        
-    
+
+
         //verifica informacòes de endereço
         msrPayloads.push( {
         msrZendeskUserId: msr.user_id as unknown as bigint,
@@ -43,7 +43,7 @@ export function createMsrs(msrComposeUsers : User[] ) {
     })
 
     })
-  
+
     //verificar se o cep e estaddo foram  preenchidos, se não chamar geolocation 
 
     return msrPayloads;
