@@ -3,9 +3,9 @@ import { getRaceColor, getStatus } from "../../utils";
 import logger from "../../logger";
 import axios, { AxiosError } from "axios";
 
-
+//verificar se tá correto o tipo 
 type CreateMsrResponse = {
-    message: 
+    data: 
       {
         msrId: number;
       } ;
@@ -19,18 +19,16 @@ export default async function createMsrs(msrComposeUsers : User[] ) {
     try {
      
        const msrPayloads =  msrComposeUsers.map((msr) => {
-
-
-            //verifica informacòes de endereço
+        
         return {
             msrZendeskUserId: msr.user_id as unknown as bigint,
             email: msr.email,
             phone: msr.phone,
             firstName: msr.name,
             city: msr.user_fields.city,
-            state: msr.user_fields.state?msr.user_fields.state:"", 
-            neighborhood: msr.user_fields.address, //pegar bairro form_entrie ou geolocation? 
-            zipcode: msr.user_fields.cep,
+            state: msr.user_fields.state,
+            neighborhood: "", //pegar bairro form_entrie ou geolocation? 
+            zipcode: msr.user_fields.cep?msr.user_fields.cep: "not_found",
             color: getRaceColor(msr.user_fields.cor) , 
             status: getStatus(msr.user_fields.condition), 
             gender: 'not_found',
@@ -41,16 +39,19 @@ export default async function createMsrs(msrComposeUsers : User[] ) {
 
         })
 
-   
         log.info(`Starting create Msrs registers: `);
-        const createMsrUrl = process.env["CREAT_MSR_URL"];
-        const msrResults = msrPayloads.map(async (msr) => { 
-            return await axios.post<CreateMsrResponse>(createMsrUrl!,msr);
-        })
-        
-        log.info(
-          `Success creating support requests for these msrs: ${msrResults}`
-        );
+        const createMsrUrl = process.env["CREATE_MSR_URL"];
+        let  msrResults:any = []
+     
+        while(msrPayloads.length > 0 ){
+          const msr = msrPayloads.shift();
+          const response = await  axios.post<CreateMsrResponse>(createMsrUrl!, msr);
+          log.info(
+            `Success creating support requests for this msr: ${response.data}`
+          );
+          msrResults.push(msr?.msrZendeskUserId)
+        }
+      
         return msrResults
       } catch (e) {
         const axiosError = e as AxiosError;

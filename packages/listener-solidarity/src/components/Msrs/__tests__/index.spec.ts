@@ -1,7 +1,5 @@
-//import axios from "axios";
-
+import axios from "axios";
 import  createMsrs  from "..";
-
 import faker from "faker/locale/pt_BR";
 import { getRaceColor, getStatus } from "../../../utils";
 
@@ -106,8 +104,8 @@ mockMsrUsers.forEach((msr) => {
     phone: msr.phone,
     firstName: msr.name,
     city: msr.user_fields.city,
-    state: msr.user_fields.state ? msr.user_fields.state : "", //nao pode ser nulo 
-    neighborhood: msr.user_fields.address,
+    state: msr.user_fields.state,
+    neighborhood: "",
     zipcode: msr.user_fields.cep,
     color: msr.user_fields.cor ? getRaceColor(msr.user_fields.cor) : "not_found", //pmapear DEPARA
     gender: 'not_found',
@@ -119,11 +117,47 @@ mockMsrUsers.forEach((msr) => {
 
 } )
 
+const mockResult = mockMsrUsers.map((user) => {return  user.user_id})
+
 describe("createMsrs", () => {
-  it("should return a array de msrPayloads", async () => {
+  it("should create one msr ", async () => {
+    axios.post = jest.fn().mockResolvedValue({
+      response: {
+        status: 200,
+        data: "foo bar",
+      },
+    });
+    const response = await createMsrs([mockMsrUsers[0]])
+    expect(axios.post).toHaveBeenCalledWith("http://localhost:3000/create",mockMsrPayloads[0])
+    expect(response).toEqual([mockResult[0]])
+    
 
+  });
+  it("should create three msr ", async () => {
+    axios.post = jest.fn().mockResolvedValue({
+      response: {
+        status: 200,
+        data: "foo bar",
+      },
+    });
+    const response = await createMsrs(mockMsrUsers)
+    expect(axios.post).toHaveBeenCalledWith("http://localhost:3000/create",mockMsrPayloads[0])
+    expect(axios.post).toHaveBeenCalledWith("http://localhost:3000/create",mockMsrPayloads[1])
+    expect(axios.post).toHaveBeenCalledWith("http://localhost:3000/create",mockMsrPayloads[2])
+    expect(response).toEqual(mockResult)
+    
 
-    expect(await createMsrs(mockMsrUsers)).toEqual(mockMsrPayloads)
+  });
+
+  it("should throw error", async () => {
+    axios.post = jest.fn().mockRejectedValue({
+      response: {
+        status: 400,
+        data: "foo bar",
+      },
+    });
+  
+    
 
   });
 
