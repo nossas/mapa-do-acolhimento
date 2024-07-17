@@ -40,8 +40,6 @@ describe("createMsrs", () => {
     const response = await createMsrs([mockMsrUsers[0]])
     expect(axios.post).toHaveBeenCalledWith("http://localhost:3000/create",mockMsrPayloads[0])
     expect(response).toEqual([mockResult[0]])
-    
-
   });
   it("should create three msr ", async () => {
     axios.post = jest.fn().mockResolvedValue({
@@ -55,8 +53,6 @@ describe("createMsrs", () => {
     expect(axios.post).toHaveBeenCalledWith("http://localhost:3000/create",mockMsrPayloads[1])
     expect(axios.post).toHaveBeenCalledWith("http://localhost:3000/create",mockMsrPayloads[2])
     expect(response).toEqual(mockResult)
-    
-
   });
 
   it("should throw error", async () => {
@@ -67,8 +63,9 @@ describe("createMsrs", () => {
       },
     });
   
-    
-
-  });
+    await expect(
+      createMsrs([mockMsrUsers[0]])
+    ).rejects.toThrow('Couldnt create msrs and got this error: 400 - "foo bar"');
+  });   
 
 });
