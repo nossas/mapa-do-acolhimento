@@ -27,7 +27,7 @@ export default async function createMsrs(msrComposeUsers : User[] ) {
             firstName: msr.name,
             city: msr.user_fields.city,
             state: msr.user_fields.state,
-            neighborhood: "", //pegar bairro form_entrie ou geolocation? 
+            neighborhood: msr.user_fields.neighborhood, 
             zipcode: msr.user_fields.cep?msr.user_fields.cep: "not_found",
             color: getRaceColor(msr.user_fields.cor) , 
             status: getStatus(msr.user_fields.condition), 

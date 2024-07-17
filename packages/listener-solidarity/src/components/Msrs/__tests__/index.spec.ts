@@ -1,6 +1,6 @@
 import axios from "axios";
 import  createMsrs  from "..";
-import mockMsrUsers from "./__mocks__/msrUsers";
+import mockMsrUsers from "../__mocks__/msrUsers";
 import { getRaceColor, getStatus } from "../../../utils";
 
 jest.mock("axios");
@@ -15,7 +15,7 @@ mockMsrUsers.forEach((msr) => {
     firstName: msr.name,
     city: msr.user_fields.city,
     state: msr.user_fields.state,
-    neighborhood: "",
+    neighborhood: msr.user_fields.neighborhood,
     zipcode: msr.user_fields.cep,
     color: msr.user_fields.cor ? getRaceColor(msr.user_fields.cor) : "not_found",
     gender: 'not_found',
