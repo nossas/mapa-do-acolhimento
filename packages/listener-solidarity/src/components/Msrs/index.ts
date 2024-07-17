@@ -15,11 +15,7 @@ const log = logger.child({ labels: { process: "createMsrs" } });
 
 export default async function createMsrs(msrComposeUsers : User[] ) {
 
-    //pecorrer objetos montando os payload
-    try {
-     
-       const msrPayloads =  msrComposeUsers.map((msr) => {
-        
+  const msrPayloads =  msrComposeUsers.map((msr) => {
         return {
             msrZendeskUserId: msr.user_id as unknown as bigint,
             email: msr.email,
@@ -37,37 +33,39 @@ export default async function createMsrs(msrComposeUsers : User[] ) {
             acceptsOnlineSupport: true
         }
 
-        })
+    })
 
-        log.info(`Starting create Msrs registers: `);
-        const createMsrUrl = process.env["CREATE_MSR_URL"];
-        let  msrResults:any = []
+    log.info(`Starting create Msrs registers: `);
+    const createMsrUrl = process.env["CREATE_MSR_URL"];
+    let  msrResults:any = []
      
-        while(msrPayloads.length > 0 ){
-          const msr = msrPayloads.shift();
+    while(msrPayloads.length > 0 ){
+        const msr = msrPayloads.shift();
+        try {
           const response = await  axios.post<CreateMsrResponse>(createMsrUrl!, msr);
           log.info(
-            `Success creating support requests for this msr: ${response.data}`
+            `Success creating register for this msr: ${response.data}`
           );
           msrResults.push(msr?.msrZendeskUserId)
         }
+        catch (e) {
+          const axiosError = e as AxiosError;
+          if (axiosError.response) {
+            const axiosErrorMsg = `Couldnt create msrs and got this error: ${
+              axiosError?.response?.status
+            } - ${JSON.stringify(axiosError?.response?.data)}`;
+            log.error(axiosErrorMsg);
+            throw new Error(axiosErrorMsg);
+          }
       
-        return msrResults
-      } catch (e) {
-        const axiosError = e as AxiosError;
-        if (axiosError.response) {
-          const axiosErrorMsg = `Couldnt create msrs and got this error: ${
-            axiosError?.response?.status
-          } - ${JSON.stringify(axiosError?.response?.data)}`;
-          log.error(axiosErrorMsg);
-          throw new Error(axiosErrorMsg);
+          const error = e as Error;
+          const errorMsg = `Couldnt create msrs got this error: ${error.message}`;
+          log.error(errorMsg);
+      
+          throw new Error(errorMsg);
         }
-    
-        const error = e as Error;
-        const errorMsg = `Couldnt create msrs got this error: ${error.message}`;
-        log.error(errorMsg);
-    
-        throw new Error(errorMsg);
-      }
+    }
+    return msrResults
+      
 
 }

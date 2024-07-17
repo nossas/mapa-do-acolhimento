@@ -67,5 +67,4 @@ describe("createMsrs", () => {
       createMsrs([mockMsrUsers[0]])
     ).rejects.toThrow('Couldnt create msrs and got this error: 400 - "foo bar"');
   });   
-
 });
