@@ -3,7 +3,6 @@ import { getRaceColor } from "../../utils";
 import logger from "../../logger";
 import axios, { AxiosError } from "axios";
 
-//verificar se tá correto o tipo 
 type CreateMsrResponse = {
     data: 
       {
