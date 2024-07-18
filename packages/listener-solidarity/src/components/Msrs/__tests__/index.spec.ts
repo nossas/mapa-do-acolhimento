@@ -17,7 +17,7 @@ mockMsrUsers.forEach((msr) => {
     state: msr.user_fields.state,
     neighborhood: msr.user_fields.neighborhood,
     zipcode: msr.user_fields.cep,
-    color: msr.user_fields.cor ? getRaceColor(msr.user_fields.cor) : "not_found",
+    color: getRaceColor(msr.user_fields.cor),
     gender: 'not_found',
     status: "registered",
     dateOfBirth: null,
@@ -39,7 +39,7 @@ describe("createMsrs", () => {
   
     await expect(
       createMsr(mockMsrUsers[0])
-    ).rejects.toThrow('Couldnt create msrs and got this error: 400 - "foo bar"');
+    ).rejects.toThrow('Couldnt create msr and got this error: 400 - "foo bar"');
   });   
 
   it("should create one msr ", async () => {

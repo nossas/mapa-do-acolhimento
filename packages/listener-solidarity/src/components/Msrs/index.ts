@@ -36,8 +36,8 @@ function getMsrPayload(msr : User) {
 export async function createMsr(msrComposeUser : User ) {
 
   try {
-    
-    log.info(`Start create Msrs register:${msrComposeUser.user_id} `);
+
+    log.info(`Start create msr register:${msrComposeUser.user_id}`);
     const msrPayload = getMsrPayload(msrComposeUser);
     const createMsrUrl = process.env["CREATE_MSR_URL"];
     const response = await  axios.post<CreateMsrResponse>(createMsrUrl!, msrPayload);
@@ -47,7 +47,7 @@ export async function createMsr(msrComposeUser : User ) {
 
     const axiosError = e as AxiosError;
     if (axiosError.response) {
-      const axiosErrorMsg = `Couldnt create msrs and got this error: ${
+      const axiosErrorMsg = `Couldnt create msr and got this error: ${
       axiosError?.response?.status
         } - ${JSON.stringify(axiosError?.response?.data)}`;
           log.error(axiosErrorMsg);
@@ -55,7 +55,7 @@ export async function createMsr(msrComposeUser : User ) {
     }
       
     const error = e as Error;
-    const errorMsg = `Couldnt create msrs got this error: ${error.message}`;
+    const errorMsg = `Couldnt create msr got this error: ${error.message}`;
     log.error(errorMsg);
     throw new Error(errorMsg);
     }
@@ -63,7 +63,7 @@ export async function createMsr(msrComposeUser : User ) {
 
 export default async function createManyMsrs(msrComposeUsers : User[]) {
 
-  log.info(`Starting create Msrs registers: `);
+  log.info(`Starting create msrs registers:`);
   while(msrComposeUsers.length > 0 ){
     const msr = msrComposeUsers.shift()
     if(msr)
