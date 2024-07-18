@@ -63,11 +63,7 @@ export async function createMsr(msrComposeUser : User ) {
 export default async function createManyMsrs(msrComposeUsers : User[]) {
 
   log.info(`Starting create msrs registers:`);
-  while(msrComposeUsers.length > 0 ){
-    const msr = msrComposeUsers.shift()
-    if(msr)
-      await createMsr(msr).catch((e) => {
-          log.error(`Couldn't createMsr: ${e.message}`);
-        });
+  for (let i = 0; i < msrComposeUsers.length; i++) {
+      await createMsr(msrComposeUsers[i])
   }
 }

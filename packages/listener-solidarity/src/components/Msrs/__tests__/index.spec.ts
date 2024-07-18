@@ -8,7 +8,7 @@ jest.mock("axios");
 let mockMsrPayloads: any = [];
 
 mockMsrUsers.forEach((msr) => {  
-  return mockMsrPayloads.push({
+    mockMsrPayloads.push({
     msrZendeskUserId: msr.user_id,
     email: msr.email,
     phone: msr.user_fields.whatsapp,
