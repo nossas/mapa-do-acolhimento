@@ -4,10 +4,10 @@ export const geolocation = {
   latitude: Number(faker.address.latitude()).toFixed(2),
   longitude: Number(faker.address.longitude()).toFixed(2),
   address: faker.address.streetAddress(true),
-  state: faker.address.state(true),
+  state: faker.address.stateAbbr(),
   city: faker.address.city(),
   cep: faker.address.zipCode(),
-  neighborhood: "Bairro"
+  neighborhood: "bairro"
 };
 
 const mockMsrUsers = [

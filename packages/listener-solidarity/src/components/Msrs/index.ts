@@ -1,5 +1,5 @@
 import { User } from "../../types";
-import { getRaceColor } from "../../utils";
+import { getMsrPayload } from "../../utils";
 import logger from "../../logger";
 import axios, { AxiosError } from "axios";
 
@@ -10,25 +10,6 @@ type CreateMsrResponse = {
 };
 
 const log = logger.child({ labels: { process: "createMsrs" } });
-
-function getMsrPayload(msr: User) {
-  return {
-    msrZendeskUserId: (msr.user_id as unknown) as bigint,
-    email: msr.email,
-    phone: msr.user_fields.whatsapp,
-    firstName: msr.name,
-    city: msr.user_fields.city,
-    state: msr.user_fields.state,
-    neighborhood: msr.user_fields.neighborhood,
-    zipcode: msr.user_fields.cep ? msr.user_fields.cep : "not_found",
-    color: getRaceColor(msr.user_fields.cor),
-    status: "registered",
-    gender: "not_found",
-    dateOfBirth: null,
-    hasDisability: null,
-    acceptsOnlineSupport: true
-  };
-}
 
 export async function createMsr(msrComposeUser: User) {
   try {

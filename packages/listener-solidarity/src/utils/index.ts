@@ -1,4 +1,4 @@
-import { Ticket, ZendeskOrganizations } from "../types";
+import { Ticket, User, ZendeskOrganizations } from "../types";
 import log from "../logger";
 
 const zendeskOrganizations: ZendeskOrganizations = JSON.parse(
@@ -99,7 +99,7 @@ export const getStatusAcolhimento = (
   ticket: Ticket
 ): string | undefined | null => {
   const status = (ticket?.custom_fields || []).find(
-    (field) => field.id === 360014379412
+    field => field.id === 360014379412
   );
   return status && status.value;
 };
@@ -109,9 +109,7 @@ export { default as getSupportRequests } from "./getSupportRequests";
 export const isProduction = () => process.env.NODE_ENV === "production";
 
 export const getRaceColor = (color: string | null) => {
-
-  if (!color)
-    return "not_found"
+  if (!color) return "not_found";
 
   const options = {
     parda: "brown",
@@ -120,6 +118,34 @@ export const getRaceColor = (color: string | null) => {
     amarela: "yellow",
     preta: "black"
   };
-  return options[color]
+  return options[color];
+};
 
-}
+export const getMsrPayload = (msr: User) => {
+  const zipcode = msr.user_fields.cep.replace(/\D/g, "");
+  const phone = msr.user_fields.whatsapp?.replace(/\D/g, "");
+  const city = msr.user_fields.city
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace("'", " ")
+    .replace(/ *\([^)]*\) */g, "");
+  const neighborhood = msr.user_fields.neighborhood
+    ? capitalize(msr.user_fields.neighborhood)
+    : "";
+  return {
+    msrZendeskUserId: (msr.user_id as unknown) as bigint,
+    email: msr.email,
+    phone: phone,
+    firstName: msr.name,
+    city: city,
+    state: msr.user_fields.state?.toUpperCase(),
+    neighborhood: neighborhood,
+    zipcode: zipcode ? zipcode : "not_found",
+    color: getRaceColor(msr.user_fields.cor),
+    status: "registered",
+    gender: "not_found",
+    dateOfBirth: null,
+    hasDisability: null,
+    acceptsOnlineSupport: true
+  };
+};

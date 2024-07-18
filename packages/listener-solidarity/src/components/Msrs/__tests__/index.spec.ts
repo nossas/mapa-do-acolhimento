@@ -1,29 +1,14 @@
 import axios from "axios";
 import createManyMsrs, { createMsr } from "..";
 import mockMsrUsers from "../__mocks__/msrUsers";
-import { getRaceColor } from "../../../utils";
+import { getMsrPayload } from "../../../utils";
 
 jest.mock("axios");
 
 let mockMsrPayloads: any = [];
 
 mockMsrUsers.forEach(msr => {
-  mockMsrPayloads.push({
-    msrZendeskUserId: msr.user_id,
-    email: msr.email,
-    phone: msr.user_fields.whatsapp,
-    firstName: msr.name,
-    city: msr.user_fields.city,
-    state: msr.user_fields.state,
-    neighborhood: msr.user_fields.neighborhood,
-    zipcode: msr.user_fields.cep,
-    color: getRaceColor(msr.user_fields.cor),
-    gender: "not_found",
-    status: "registered",
-    dateOfBirth: null,
-    hasDisability: null,
-    acceptsOnlineSupport: true
-  });
+  mockMsrPayloads.push(getMsrPayload(msr));
 });
 
 describe("createMsrs", () => {
