@@ -14,6 +14,7 @@ type CreateMsrResponse = {
 const log = logger.child({ labels: { process: "createMsrs" } }); 
 
 function getMsrPayload(msr : User) { 
+
   return {
     msrZendeskUserId: msr.user_id as unknown as bigint,
     email: msr.email,
@@ -34,13 +35,14 @@ function getMsrPayload(msr : User) {
 
 export async function createMsr(msrComposeUsers : User ) {
   try {
+
     const msrPayload = getMsrPayload(msrComposeUsers)
     const createMsrUrl = process.env["CREATE_MSR_URL"];
     const response = await  axios.post<CreateMsrResponse>(createMsrUrl!, msrPayload);
     log.info(`Success creating register for this msr: ${JSON.stringify(response.data)}`);
-    //return msrComposeUsers.user_id
   }
   catch (e) {
+
     const axiosError = e as AxiosError;
     if (axiosError.response) {
       const axiosErrorMsg = `Couldnt create msrs and got this error: ${
@@ -58,6 +60,7 @@ export async function createMsr(msrComposeUsers : User ) {
 }
 
 export default async function createManyMsrs(msrComposeUsers : User[]) {
+
   log.info(`Starting create Msrs registers: `);
   while(msrComposeUsers.length > 0 ){
     const msr = msrComposeUsers.shift()
