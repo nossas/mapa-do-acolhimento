@@ -11,7 +11,7 @@ import {
 import { Widget, FormEntry, User, FormEntriesResponse } from "../types";
 import logger from "../logger";
 import createSupportRequests from "./SupportRequest";
-import createMsrs from "./Msrs";
+import createManyMsrs from "./Msrs";
 
 const log = logger.child({ labels: { process: "handleIntegration" } });
 
@@ -121,7 +121,7 @@ export const handleIntegration = (widgets: Widget[], apm) => async (
     );
 
     //Create Msrs
-    createMsrs(msrUsers).catch((e) => {
+    createManyMsrs(msrUsers).catch((e) => {
       log.error(`Couldn't createMsrs: ${e.message}`);
     });
     

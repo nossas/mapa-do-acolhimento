@@ -13,59 +13,57 @@ type CreateMsrResponse = {
 
 const log = logger.child({ labels: { process: "createMsrs" } }); 
 
-export default async function createMsrs(msrComposeUsers : User[] ) {
-  
-  const msrPayloads =  msrComposeUsers.map((msr) => {
-        return {
-            msrZendeskUserId: msr.user_id as unknown as bigint,
-            email: msr.email,
-            phone: msr.user_fields.whatsapp,
-            firstName: msr.name,
-            city: msr.user_fields.city,
-            state: msr.user_fields.state,
-            neighborhood: msr.user_fields.neighborhood, 
-            zipcode: msr.user_fields.cep?msr.user_fields.cep: "not_found",
-            color: getRaceColor(msr.user_fields.cor) , 
-            status: getStatus(msr.user_fields.condition), 
-            gender: 'not_found',
-            dateOfBirth: null,
-            hasDisability: null,
-            acceptsOnlineSupport: true
-        }
+function getMsrPayload(msr : User) { 
+  return {
+    msrZendeskUserId: msr.user_id as unknown as bigint,
+    email: msr.email,
+    phone: msr.user_fields.whatsapp,
+    firstName: msr.name,
+    city: msr.user_fields.city,
+    state: msr.user_fields.state,
+    neighborhood: msr.user_fields.neighborhood, 
+    zipcode: msr.user_fields.cep?msr.user_fields.cep: "not_found",
+    color: getRaceColor(msr.user_fields.cor) , 
+    status: getStatus(msr.user_fields.condition), 
+    gender: 'not_found',
+    dateOfBirth: null,
+    hasDisability: null,
+    acceptsOnlineSupport: true
+  }
+}
 
-    })
- 
-    log.info(`Starting create Msrs registers: `);
+export async function createMsr(msrComposeUsers : User ) {
+  try {
+    const msrPayload = getMsrPayload(msrComposeUsers)
     const createMsrUrl = process.env["CREATE_MSR_URL"];
-    let  msrResults:any = []
-     
-    while(msrPayloads.length > 0 ){
-        const msr = msrPayloads.shift();
-        try {
-          const response = await  axios.post<CreateMsrResponse>(createMsrUrl!, msr);
-          log.info(
-            `Success creating register for this msr: ${response.data}`
-          );
-          msrResults.push(msr?.msrZendeskUserId)
-        }
-        catch (e) {
-          const axiosError = e as AxiosError;
-          if (axiosError.response) {
-            const axiosErrorMsg = `Couldnt create msrs and got this error: ${
-              axiosError?.response?.status
-            } - ${JSON.stringify(axiosError?.response?.data)}`;
-            log.error(axiosErrorMsg);
-            throw new Error(axiosErrorMsg);
-          }
-      
-          const error = e as Error;
-          const errorMsg = `Couldnt create msrs got this error: ${error.message}`;
-          log.error(errorMsg);
-      
-          throw new Error(errorMsg);
-        }
+    const response = await  axios.post<CreateMsrResponse>(createMsrUrl!, msrPayload);
+    log.info(`Success creating register for this msr: ${JSON.stringify(response.data)}`);
+    //return msrComposeUsers.user_id
+  }
+  catch (e) {
+    const axiosError = e as AxiosError;
+    if (axiosError.response) {
+      const axiosErrorMsg = `Couldnt create msrs and got this error: ${
+      axiosError?.response?.status
+        } - ${JSON.stringify(axiosError?.response?.data)}`;
+          log.error(axiosErrorMsg);
+          throw new Error(axiosErrorMsg);
     }
-    return msrResults
       
+    const error = e as Error;
+    const errorMsg = `Couldnt create msrs got this error: ${error.message}`;
+    log.error(errorMsg);
+    throw new Error(errorMsg);
+    }
+}
 
+export default async function createManyMsrs(msrComposeUsers : User[]) {
+  log.info(`Starting create Msrs registers: `);
+  while(msrComposeUsers.length > 0 ){
+    const msr = msrComposeUsers.shift()
+    if(msr)
+      await createMsr(msr).catch((e) => {
+          log.error(`Couldn't createMsr: ${e.message}`);
+        });
+  }
 }

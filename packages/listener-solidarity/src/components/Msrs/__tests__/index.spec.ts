@@ -1,5 +1,5 @@
 import axios from "axios";
-import  createMsrs  from "..";
+import  createManyMsrs, { createMsr }  from "..";
 import mockMsrUsers from "../__mocks__/msrUsers";
 import { getRaceColor, getStatus } from "../../../utils";
 
@@ -27,33 +27,7 @@ mockMsrUsers.forEach((msr) => {
 
 } )
 
-const mockResult = mockMsrUsers.map((user) => {return  user.user_id})
-
 describe("createMsrs", () => {
-  it("should create one msr ", async () => {
-    axios.post = jest.fn().mockResolvedValue({
-      response: {
-        status: 200,
-        data: "foo bar",
-      },
-    });
-    const response = await createMsrs([mockMsrUsers[0]])
-    expect(axios.post).toHaveBeenCalledWith("http://localhost:3000/create",mockMsrPayloads[0])
-    expect(response).toEqual([mockResult[0]])
-  });
-  it("should create three msr ", async () => {
-    axios.post = jest.fn().mockResolvedValue({
-      response: {
-        status: 200,
-        data: "foo bar",
-      },
-    });
-    const response = await createMsrs(mockMsrUsers)
-    expect(axios.post).toHaveBeenCalledWith("http://localhost:3000/create",mockMsrPayloads[0])
-    expect(axios.post).toHaveBeenCalledWith("http://localhost:3000/create",mockMsrPayloads[1])
-    expect(axios.post).toHaveBeenCalledWith("http://localhost:3000/create",mockMsrPayloads[2])
-    expect(response).toEqual(mockResult)
-  });
 
   it("should throw error", async () => {
     axios.post = jest.fn().mockRejectedValue({
@@ -64,7 +38,32 @@ describe("createMsrs", () => {
     });
   
     await expect(
-      createMsrs([mockMsrUsers[0]])
+      createMsr(mockMsrUsers[0])
     ).rejects.toThrow('Couldnt create msrs and got this error: 400 - "foo bar"');
   });   
+  
+  it("should create one msr ", async () => {
+    axios.post = jest.fn().mockResolvedValue({
+      response: {
+        status: 200,
+        data: "foo bar",
+      },
+    });
+    createManyMsrs([mockMsrUsers[0]])
+    expect(axios.post).toHaveBeenCalledWith("http://localhost:3000/create",mockMsrPayloads[0])
+  });
+  it("should create three msr ", async () => {
+    axios.post = jest.fn().mockResolvedValue({
+      response: {
+        status: 200,
+        data: "foo bar",
+      },
+    });
+    await createManyMsrs(mockMsrUsers)
+    expect(axios.post).toHaveBeenCalledWith("http://localhost:3000/create",mockMsrPayloads[0])
+    expect(axios.post).toHaveBeenCalledWith("http://localhost:3000/create",mockMsrPayloads[1])
+    expect(axios.post).toHaveBeenCalledWith("http://localhost:3000/create",mockMsrPayloads[2])
+  });
+
+  
 });
