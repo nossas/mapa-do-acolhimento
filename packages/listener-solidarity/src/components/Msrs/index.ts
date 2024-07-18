@@ -14,12 +14,12 @@ type CreateMsrResponse = {
 const log = logger.child({ labels: { process: "createMsrs" } }); 
 
 export default async function createMsrs(msrComposeUsers : User[] ) {
-
+  
   const msrPayloads =  msrComposeUsers.map((msr) => {
         return {
             msrZendeskUserId: msr.user_id as unknown as bigint,
             email: msr.email,
-            phone: msr.phone,
+            phone: msr.user_fields.whatsapp,
             firstName: msr.name,
             city: msr.user_fields.city,
             state: msr.user_fields.state,
@@ -34,7 +34,7 @@ export default async function createMsrs(msrComposeUsers : User[] ) {
         }
 
     })
-
+ 
     log.info(`Starting create Msrs registers: `);
     const createMsrUrl = process.env["CREATE_MSR_URL"];
     let  msrResults:any = []

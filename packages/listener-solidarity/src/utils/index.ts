@@ -116,7 +116,7 @@ export const getRaceColor = (color: string | null) => {
   const options = {
     parda: "brown",
     branca: "white",
-    indigena: "indigenous",
+    indígena: "indigenous",
     amarela: "yellow",
     preta: "black"
   };
