@@ -123,12 +123,3 @@ export const getRaceColor = (color: string | null) => {
   return options[color]
 
 }
-
-export const getStatus = (condition: string) => {
-
-  const options = {
-    inscrita: "registered",
-    desabilitada: "unregistered",
-  };
-  return options[condition]
-}

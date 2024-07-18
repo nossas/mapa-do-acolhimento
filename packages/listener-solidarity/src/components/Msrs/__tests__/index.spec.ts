@@ -1,7 +1,7 @@
 import axios from "axios";
 import  createManyMsrs, { createMsr }  from "..";
 import mockMsrUsers from "../__mocks__/msrUsers";
-import { getRaceColor, getStatus } from "../../../utils";
+import { getRaceColor } from "../../../utils";
 
 jest.mock("axios");
 
@@ -19,7 +19,7 @@ mockMsrUsers.forEach((msr) => {
     zipcode: msr.user_fields.cep,
     color: msr.user_fields.cor ? getRaceColor(msr.user_fields.cor) : "not_found",
     gender: 'not_found',
-    status: getStatus(msr.user_fields.condition),
+    status: "registered",
     dateOfBirth: null,
     hasDisability: null,
     acceptsOnlineSupport: true
@@ -41,7 +41,7 @@ describe("createMsrs", () => {
       createMsr(mockMsrUsers[0])
     ).rejects.toThrow('Couldnt create msrs and got this error: 400 - "foo bar"');
   });   
-  
+
   it("should create one msr ", async () => {
     axios.post = jest.fn().mockResolvedValue({
       response: {

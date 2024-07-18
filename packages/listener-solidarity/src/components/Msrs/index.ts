@@ -1,5 +1,5 @@
 import { User } from "../../types";
-import { getRaceColor, getStatus } from "../../utils";
+import { getRaceColor } from "../../utils";
 import logger from "../../logger";
 import axios, { AxiosError } from "axios";
 
@@ -25,7 +25,7 @@ function getMsrPayload(msr : User) {
     neighborhood: msr.user_fields.neighborhood, 
     zipcode: msr.user_fields.cep?msr.user_fields.cep: "not_found",
     color: getRaceColor(msr.user_fields.cor) , 
-    status: getStatus(msr.user_fields.condition), 
+    status: "registered", 
     gender: 'not_found',
     dateOfBirth: null,
     hasDisability: null,
@@ -33,10 +33,12 @@ function getMsrPayload(msr : User) {
   }
 }
 
-export async function createMsr(msrComposeUsers : User ) {
-  try {
+export async function createMsr(msrComposeUser : User ) {
 
-    const msrPayload = getMsrPayload(msrComposeUsers)
+  try {
+    
+    log.info(`Start create Msrs register:${msrComposeUser.user_id} `);
+    const msrPayload = getMsrPayload(msrComposeUser);
     const createMsrUrl = process.env["CREATE_MSR_URL"];
     const response = await  axios.post<CreateMsrResponse>(createMsrUrl!, msrPayload);
     log.info(`Success creating register for this msr: ${JSON.stringify(response.data)}`);
