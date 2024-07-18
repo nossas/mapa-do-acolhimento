@@ -121,8 +121,8 @@ export const handleIntegration = (widgets: Widget[], apm) => async (
     );
 
     //Create Msrs
-    const registeredMsrUsers = msrUsers.filter((
-      msr) => msr.user_fields.condition == 'inscrita'
+    const registeredMsrUsers = msrUsers.filter(
+      msr => msr.user_fields.condition === 'inscrita'
     );
     createManyMsrs(registeredMsrUsers).catch((e) => {
       log.error(`Couldn't createMsrs: ${e.message}`);
