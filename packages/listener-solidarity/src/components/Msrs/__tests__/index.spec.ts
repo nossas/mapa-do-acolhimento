@@ -11,7 +11,7 @@ mockMsrUsers.forEach((msr) => {
   return mockMsrPayloads.push({
     msrZendeskUserId: msr.user_id,
     email: msr.email,
-    phone: msr.phone,
+    phone: msr.user_fields.whatsapp,
     firstName: msr.name,
     city: msr.user_fields.city,
     state: msr.user_fields.state,
