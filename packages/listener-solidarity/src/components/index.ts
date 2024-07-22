@@ -11,6 +11,7 @@ import {
 import { Widget, FormEntry, User, FormEntriesResponse } from "../types";
 import logger from "../logger";
 import createSupportRequests from "./SupportRequest";
+import createManyMsrs from "./Msrs";
 
 const log = logger.child({ labels: { process: "handleIntegration" } });
 
@@ -119,6 +120,14 @@ export const handleIntegration = (widgets: Widget[], apm) => async (
       createZendeskTickets(tickets)
     );
 
+    //Create Msrs
+    const registeredMsrUsers = msrUsers.filter(
+      msr => msr.user_fields.condition === 'inscrita'
+    );
+    createManyMsrs(registeredMsrUsers).catch((e) => {
+      log.error(`Couldn't createMsrs: ${e.message}`);
+    });
+    
     // Creates support requests on lambda-pedido-acolhimento
     createSupportRequests(zendeskTickets, msrUsers).catch((e) => {
       log.error(`Couldn't createSupportRequests: ${e.message}`);

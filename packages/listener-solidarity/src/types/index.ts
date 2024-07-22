@@ -53,6 +53,7 @@ export type User = {
     data_de_inscricao_no_bonde: string;
     latitude: string | null;
     longitude: string | null;
+    neighborhood?: string;
   };
 };
 
@@ -111,6 +112,7 @@ export type Instance = {
   occupation_area?: string;
   disponibilidade_de_atendimentos?: string;
   cor?: string;
+  neighborhood?: string;
 };
 
 export const dicio: {

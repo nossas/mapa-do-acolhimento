@@ -3,7 +3,8 @@ import {
   getOrganizationType,
   capitalize,
   formatDate,
-  getStatusAcolhimento
+  getStatusAcolhimento,
+  getMsrPayload
 } from "../";
 
 describe("Utils", () => {
@@ -77,5 +78,50 @@ describe("Utils", () => {
         ]
       } as never)
     ).toEqual("atendimento__interrompido");
+  });
+  describe("getMsrPayload", () => {
+    const mockMsrUser = {
+      user_id: 67891234,
+      name: "venus da Silva",
+      role: "end-user" as "end-user",
+      organization_id: 360273031591,
+      email: "venus@email.com",
+      external_id: "2000365",
+      phone: "32994329912",
+      verified: true,
+      user_fields: {
+        cor: "preta",
+        address: "",
+        cep: "36085-200",
+        city: "Juiz de Fora",
+        latitude: "-21.700",
+        longitude: "-43.300",
+        state: "MG",
+        neighborhood: "cidade do sol",
+        tipo_de_acolhimento: "psicológico" as "psicológico",
+        condition: "inscrita" as "inscrita",
+        whatsapp: "(32)99432-9912",
+        registration_number: null,
+        occupation_area: null,
+        disponibilidade_de_atendimentos: null,
+        data_de_inscricao_no_bonde: "2020-05-27T13:15:47.93393"
+      }
+    };
+    const mockMsrPayload = getMsrPayload(mockMsrUser);
+    it("should first name be captalize and just first word", () => {
+      expect(mockMsrPayload.firstName).toEqual("Venus");
+    });
+    it("should zipocode be just numbers", () => {
+      expect(mockMsrPayload.zipcode).toEqual("36085200");
+    });
+    it("should phone be just numbers", () => {
+      expect(mockMsrPayload.phone).toEqual("32994329912");
+    });
+    it("should city be format", () => {
+      expect(mockMsrPayload.city).toEqual("JUIZ DE FORA");
+    });
+    it("should neighborhood be captalize", () => {
+      expect(mockMsrPayload.neighborhood).toEqual("Cidade do sol");
+    });
   });
 });

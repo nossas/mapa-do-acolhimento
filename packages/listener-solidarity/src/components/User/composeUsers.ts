@@ -69,6 +69,8 @@ const changeCondition = (
   return "desabilitada";
 };
 
+
+
 export default async (
   cache: FormEntry[],
   widgets: Widget[],
@@ -136,7 +138,9 @@ export default async (
     Object.keys(geocoding).map(g => {
       register["user_fields"][g] = geocoding[g];
     });
-
+    if (instance.neighborhood) {
+      register["user_fields"]["neighborhood"] = instance.neighborhood;
+    }
     if (isMsr) {
       register["user_fields"]["condition"] = changeCondition(
         formEntry.created_at,
