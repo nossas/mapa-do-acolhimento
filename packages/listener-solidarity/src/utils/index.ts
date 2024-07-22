@@ -128,12 +128,13 @@ export const getMsrPayload = (msr: User) => {
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
     .replace("'", " ")
-    .replace(/ *\([^)]*\) */g, "");
+    .replace(/ *\([^)]*\) */g, "")
+    .toUpperCase();
   const neighborhood = msr.user_fields.neighborhood
     ? capitalize(msr.user_fields.neighborhood)
     : "not_found";
 
-  let firstName = capitalize(msr.name);
+  let firstName = capitalize(msr.name.trim());
   if (firstName.indexOf(" ") > 0)
     firstName = firstName.substring(0, firstName.indexOf(" "));
 
