@@ -65,7 +65,7 @@ jobs:
         uses: codecov/codecov-action@v2
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          fail_ci_if_error: true
+          fail_ci_if_error: false
           files: ./packages/cli-mautic/coverage/coverage-final.json,./packages/cli-zendesk/coverage/coverage-final.json,./packages/components/coverage/coverage-final.json,./packages/listener-match/coverage/coverage-final.json,./packages/webhooks-mautic-zendesk/coverage/coverage-final.json,./packages/listener-solidarity/coverage/coverage-final.json,./packages/webhooks-solidarity-count/coverage/coverage-final.json
           #directory: ./packages/**/coverage/*
           flags: unittests
