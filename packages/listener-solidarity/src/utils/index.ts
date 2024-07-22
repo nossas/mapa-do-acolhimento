@@ -131,12 +131,17 @@ export const getMsrPayload = (msr: User) => {
     .replace(/ *\([^)]*\) */g, "");
   const neighborhood = msr.user_fields.neighborhood
     ? capitalize(msr.user_fields.neighborhood)
-    : "";
+    : "not_found";
+
+  let firstName = capitalize(msr.name);
+  if (firstName.indexOf(" ") > 0)
+    firstName = firstName.substring(0, firstName.indexOf(" "));
+
   return {
     msrZendeskUserId: (msr.user_id as unknown) as bigint,
     email: msr.email,
     phone: phone,
-    firstName: msr.name,
+    firstName: firstName,
     city: city,
     state: msr.user_fields.state?.toUpperCase(),
     neighborhood: neighborhood,
