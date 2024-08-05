@@ -16,10 +16,10 @@ const log = logger.child({ module: "geolocation" });
 const getCityStateAndZipcode = (
   addressComponents: AddressComponent
 ): Array<string> => {
-  let state = "";
-  let city = "";
-  let zipcode = "";
-  let country = "";
+  let state = "not_found";
+  let city = "not_found";
+  let zipcode = "not_found";
+  let country = "BR";
 
   addressComponents.forEach(({ types, short_name: shortName }) => {
     if (types.includes("postal_code")) {
@@ -59,9 +59,9 @@ const geolocationUnkown = ({
   latitude: null,
   longitude: null,
   address: `Endereço não encontrado - ${address || zipcode}`,
-  state: null,
-  city: "ZERO_RESULTS",
-  cep: zipcode || null
+  state: "not_found",
+  city: "not_found",
+  cep: zipcode || "not_found"
 });
 
 const parseZipcode = (zipcode: string): string => {
