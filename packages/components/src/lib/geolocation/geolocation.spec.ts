@@ -57,9 +57,9 @@ describe("geolocation tests", () => {
     latitude: null,
     longitude: null,
     address: `Endereço não encontrado - ${validOutput.address}`,
-    state: null,
-    city: "ZERO_RESULTS",
-    cep: null
+    state: "not_found",
+    city: "not_found",
+    cep: "not_found"
   };
 
   it("should return valid output if there are results", () => {
