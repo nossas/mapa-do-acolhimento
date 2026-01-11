@@ -7,7 +7,7 @@
     "debug": "^4.3.2",
     "dotenv": "^8.6.0",
     "elastic-apm-node": "^3.21.1",
-    "express": "^4.17.1",
+    "express": "^4.22.0",
     "pino": "^6.13.3",
     "source-map-support": "^0.5.20",
     "url-join": "^4.0.1",
